@@ -1,0 +1,1 @@
+include ':app',  ':streamaxia-opensdk', ':streamaxia-player'

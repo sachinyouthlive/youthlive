@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/appbar"
+            >
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="@color/colorPrimary"
+                app:titleEnabled="false"
+                android:fitsSystemWindows="true"
+                app:expandedTitleTextAppearance="@style/ExpandedAppBar"
+                app:collapsedTitleTextAppearance="@style/CollapsedAppBar"
+                app:expandedTitleGravity="center_horizontal|bottom"
+                app:expandedTitleMarginBottom="10dp"
+                app:collapsedTitleGravity="start|center_vertical"
+                app:toolbarId="@id/toolbar"
+                >
+
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="280dp">
+
+
+                    <android.support.v4.view.ViewPager
+                        android:layout_width="match_parent"
+                        android:layout_height="280dp"
+                        android:id="@+id/cover_pager"
+                        />
+
+                    <!--<ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="280dp"
+                        android:src="@drawable/cover"
+                        android:scaleType="centerCrop"
+                        />-->
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="280dp"
+                        android:src="@drawable/gradient"
+                        />
+
+                    <me.relex.circleindicator.CircleIndicator
+                        android:id="@+id/indicator"
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_height="18dp"/>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_alignParentBottom="true"
+                        >
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                >
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/followings"
+                                    android:textSize="20sp"
+                                    android:text="234"
+                                    android:textColor="#ffffff"
+                                    android:gravity="center_vertical"
+                                    android:layout_gravity="center_horizontal"
+                                    />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:text="Followings"
+                                    android:textColor="#ffffff"
+                                    android:paddingBottom="10dp"
+                                    />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:background="#ffffff"
+                                />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                >
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="167"
+                                    android:id="@+id/fans"
+                                    android:textSize="20sp"
+                                    android:textColor="#ffffff"
+                                    android:gravity="center_vertical"
+                                    android:layout_gravity="center_horizontal"
+                                    />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:text="Fans"
+                                    android:textColor="#ffffff"
+                                    android:paddingBottom="10dp"
+                                    />
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        app:civ_border_width="1dp"
+                        app:civ_border_color="#ffffff"
+                        android:src="@drawable/default1"
+                        android:elevation="8dp"
+                        />
+
+                </RelativeLayout>
+
+
+                <android.support.v7.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    app:titleTextColor="#ffffff"
+                    app:subtitleTextColor="#ffffff"
+                    android:id="@+id/toolbar"
+                    app:title="Youth Live"
+                    app:subtitle="Youyh ID - 123456"
+                    app:collapseIcon="@drawable/user_default"
+                    app:layout_collapseMode="pin"/>
+
+
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:elevation="4dp"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
+
+
+
+            <android.support.design.widget.TabLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tabs"
+                app:tabGravity="fill"
+                android:visibility="gone"
+                app:tabMode="fixed"
+                android:background="@color/colorPrimary"
+                app:tabIndicatorColor="#ffffff"
+                android:elevation="4dp"
+                app:tabSelectedTextColor="#ffffff"
+                app:tabTextColor="#ababab"
+                />
+
+            <android.support.v4.view.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/pager"
+                android:fillViewport="true"
+                />
+
+        </LinearLayout>
+
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/progress"
+        />
+
+
+
+
+
+</RelativeLayout>

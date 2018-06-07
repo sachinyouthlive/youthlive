@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="350dp"
+    android:background="@drawable/white_round_dialog"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update your details"
+            android:textColor="@color/colorAccent"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Phone"
+            android:textColor="#000000"
+            android:drawableStart="@drawable/phone_black"
+            android:id="@+id/phone"
+            android:gravity="center_vertical"
+            android:drawablePadding="10dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/phone_hide"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:textColor="#7aa933"
+                android:text="On changing phone number, you will get logged out from the app"
+                android:gravity="center_horizontal"
+                android:paddingStart="20dp"
+                android:paddingBottom="5dp"
+                android:paddingEnd="20dp"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:hint="Country Code"
+                android:drawableStart="@drawable/plus"
+                android:drawablePadding="10dp"
+                android:layout_marginStart="8dp"
+                android:id="@+id/country"
+                android:inputType="number"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/comment_sendback"
+                />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:hint="Enter Phone"
+                android:layout_marginStart="8dp"
+                android:id="@+id/phone_number"
+                android:inputType="phone"
+                android:layout_marginBottom="10dp"
+                android:drawableEnd="@drawable/arrow_right"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/comment_sendback"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            android:background="#cdcdcd"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Password"
+            android:visibility="gone"
+            android:textColor="#000000"
+            android:drawableStart="@drawable/password_black"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:id="@+id/password"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/password_hide"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:textColor="#7aa933"
+                android:text="On changing password, you will get logged out from the app"
+                android:gravity="center_horizontal"
+                android:paddingStart="20dp"
+                android:paddingBottom="5dp"
+                android:paddingEnd="20dp"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:hint="Old Password"
+                android:layout_marginStart="8dp"
+                android:id="@+id/old_password"
+                android:inputType="textPassword"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/comment_sendback"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:hint="New Password"
+                android:id="@+id/new_password"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="10dp"
+                android:inputType="textPassword"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/comment_sendback"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:hint="Confirm New Password"
+                android:layout_marginStart="8dp"
+                android:id="@+id/confirm_new"
+                android:inputType="textPassword"
+                android:layout_marginBottom="10dp"
+                android:drawableEnd="@drawable/arrow_right"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/comment_sendback"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#cdcdcd"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:drawableStart="@drawable/personal_black"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:text="Personal Details"
+            android:id="@+id/personal"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:id="@+id/personal_hide"
+            >
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:hint="Enter Username"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
+                android:inputType="textPersonName"
+                android:id="@+id/usename"
+                android:gravity="center_vertical"
+                android:background="@drawable/comment_sendback"
+                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="10dp"
+                android:drawableEnd="@drawable/arrow_right"
+                android:layout_marginEnd="8dp"
+                android:minHeight="45dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/comment_sendback"
+                >
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gender"
+                    />
+
+            </RelativeLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Choose Birth Date"
+                android:layout_marginStart="8dp"
+                android:id="@+id/birth"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
+                android:textSize="18sp"
+                android:gravity="center_vertical"
+                android:background="@drawable/comment_sendback"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:hint="Enter Bio"
+                android:id="@+id/bio"
+                android:layout_marginStart="8dp"
+                android:inputType="text"
+                android:layout_marginBottom="10dp"
+                android:drawableEnd="@drawable/arrow_right"
+                android:layout_marginEnd="8dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/comment_sendback"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/progress"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>

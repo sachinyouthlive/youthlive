@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "69401682332",
+    "firebase_url": "https://youthlive-b5adc.firebaseio.com",
+    "project_id": "youthlive-b5adc",
+    "storage_bucket": "youthlive-b5adc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69401682332:android:5b41c4ab72989780",
+        "android_client_info": {
+          "package_name": "com.yl.youthlive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69401682332-ngak8n3n2d32fv2u3poi5kgsomku2eni.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yl.youthlive",
+            "certificate_hash": "dbcce416c41ff2409ff960c1670485a8c700645f"
+          }
+        },
+        {
+          "client_id": "69401682332-jl9sqt92ngdbrnbfb7h8gu2ng95pg8v5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUTBclXo7LJLbGumv2RnLB5VhpArwQrqo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69401682332-jl9sqt92ngdbrnbfb7h8gu2ng95pg8v5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

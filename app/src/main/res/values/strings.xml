@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Youth Live</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="facebook_app_id">142335873157516</string>
+    <string name="fb_login_protocol_scheme">fb142335873157516</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="forgotepassword"> Education Title</string>
+    <string name="messege">Dont get messages and call from Amit in messenger </string>
+
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">dJ8qrsXfWmkTn5CnoJkRtMDLs</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">KLUgC6vS483sjOeKDs0vvHyTgXLLnkCaHouJiFSnBPlyGICl5g</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="Refresh">Refresh</string>
+
+</resources>
