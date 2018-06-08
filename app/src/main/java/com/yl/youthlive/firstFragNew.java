@@ -37,6 +37,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -60,9 +62,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer.AspectRatioFrameLayout;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.streamaxia.player.StreamaxiaPlayer;
+import com.streamaxia.player.listener.StreamaxiaPlayerState;
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.followPOJO.followBean;
@@ -100,7 +105,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class firstFragNew extends Fragment  {
+public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
     private MyInterface mCallback;
     RecyclerView grid;
     RecyclerView grid2;
@@ -214,7 +219,7 @@ public class firstFragNew extends Fragment  {
     TextView giftTitle;
 
 
-    FrameLayout playerLayout1;
+    AspectRatioFrameLayout playerLayout1;
 
     String access = "";
     String sid = "";
@@ -262,8 +267,9 @@ public class firstFragNew extends Fragment  {
 
     int coun = 0;
 
-   // WZPlayerView mStreamPlayerView;
+    SurfaceView mStreamPlayerView;
 
+    TextView texxt;
 
   //  protected int mWZNetworkLogLevel = WZLog.LOG_LEVEL_DEBUG;
 
@@ -277,15 +283,16 @@ public class firstFragNew extends Fragment  {
 
         toast = Toast.makeText(getContext() , "firstFrag.java" , Toast.LENGTH_SHORT);
 
+        texxt = view.findViewById(R.id.texxt);
         lvscreen = (LiveScreenNew)getActivity();
 
         mProjectionManager = (MediaProjectionManager) lvscreen.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
-        playerLayout1 = (FrameLayout) view.findViewById(R.id.player_layout1);
+        playerLayout1 = (AspectRatioFrameLayout) view.findViewById(R.id.player_layout1);
 
         viewCount = (TextView) view.findViewById(R.id.view_count);
 
-     //   mStreamPlayerView = view.findViewById(R.id.thumbnail_video_view);
+        mStreamPlayerView = view.findViewById(R.id.thumbnail_video_view);
 
         giftLayout = (LinearLayout) view.findViewById(R.id.gift_layout);
         giftIcon = (ImageView) view.findViewById(R.id.gift_icon);
@@ -876,7 +883,7 @@ public class firstFragNew extends Fragment  {
                     // now subscribe to `global` topic to receive app wide notifications
 
 
-                    Log.d("data" , intent.getStringExtra("data"));
+                    Log.d("uurrii" , intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
@@ -890,31 +897,19 @@ public class firstFragNew extends Fragment  {
 
 
 
-                        if (mode.equals("1"))
+                        if (mode.equals("2"))
                         {
 
-                         //   mStreamPlayerConfig = new WZPlayerConfig();
 
+                            Log.d("uurrii" , uri);
 
+                            StreamaxiaPlayer mStreamaxiaPlayer = new StreamaxiaPlayer();
 
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                            mStreamaxiaPlayer.initStreamaxiaPlayer(mStreamPlayerView , playerLayout1 , texxt , firstFragNew.this , getContext() , Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/vod/sample.mp4"));
 
-                         //   GoCoderSDKPrefs.saveConfigDetails(prefs , uri);
-                            //GoCoderSDKPrefs.saveConfigDetails(prefs , "sample.mp4");
+                            mStreamaxiaPlayer.play(Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + uri) , StreamaxiaPlayer.TYPE_RTMP);
 
-
-                            //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-                         //   mWZNetworkLogLevel = Integer.valueOf(prefs.getString("wz_debug_net_log_level", String.valueOf(WZLog.LOG_LEVEL_DEBUG)));
-
-
-
-                          //  if (mStreamPlayerConfig != null)
-
-                                Log.d("eeeeee" , "entered");
-
-                           // GoCoderSDKPrefs.updateConfigFromPrefs(prefs, mStreamPlayerConfig);
-
-
+                            playerLayout1.setVisibility(View.VISIBLE);
 
 
                         }
@@ -942,7 +937,6 @@ public class firstFragNew extends Fragment  {
 
 
                     //displayFirebaseRegId();
-
                 }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
@@ -1348,6 +1342,36 @@ public class firstFragNew extends Fragment  {
         }, 2500);
 
 
+    }
+
+    @Override
+    public void stateENDED() {
+Log.d("uurrii" , "ended");
+    }
+
+    @Override
+    public void stateBUFFERING() {
+        Log.d("uurrii" , "buffering");
+    }
+
+    @Override
+    public void stateIDLE() {
+        Log.d("uurrii" , "idle");
+    }
+
+    @Override
+    public void statePREPARING() {
+        Log.d("uurrii" , "preparing");
+    }
+
+    @Override
+    public void stateREADY() {
+        Log.d("uurrii" , "ready");
+    }
+
+    @Override
+    public void stateUNKNOWN() {
+        Log.d("uurrii" , "unknown");
     }
 
 

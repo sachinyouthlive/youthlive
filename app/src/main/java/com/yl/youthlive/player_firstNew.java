@@ -53,6 +53,11 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.streamaxia.android.CameraPreview;
+import com.streamaxia.android.StreamaxiaPublisher;
+import com.streamaxia.android.handlers.EncoderHandler;
+import com.streamaxia.android.handlers.RecordHandler;
+import com.streamaxia.android.handlers.RtmpHandler;
 import com.wowza.gocoder.sdk.api.WowzaGoCoder;
 import com.wowza.gocoder.sdk.api.broadcast.WZBroadcast;
 import com.wowza.gocoder.sdk.api.broadcast.WZBroadcastConfig;
@@ -81,6 +86,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +105,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-public class player_firstNew extends Fragment  {
+public class player_firstNew extends Fragment implements EncoderHandler.EncodeListener, RecordHandler.RecordListener, RtmpHandler.RtmpListener {
 
     RecyclerView grid;
     RecyclerView grid2;
@@ -183,7 +189,7 @@ public class player_firstNew extends Fragment  {
     private static final String API_KEY = "2v7690nbz6xc4vshnuc2a7yyg";
 
 
-   // private WZCameraView goCoderCameraView;
+    CameraPreview goCoderCameraView;
 
     //WZBroadcast goCoderBroadcaster;
 
@@ -287,7 +293,7 @@ public class player_firstNew extends Fragment  {
         username = (TextView) view.findViewById(R.id.name);
 
 
-      //  goCoderCameraView = (WZCameraView) view.findViewById(R.id.camera1);
+        goCoderCameraView = (CameraPreview) view.findViewById(R.id.camera1);
       // goCoderCameraView.setZOrderOnTop(true);
 
 
@@ -507,6 +513,20 @@ public class player_firstNew extends Fragment  {
                     public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
 
                         try {
+
+
+                            StreamaxiaPublisher mPublisher = new StreamaxiaPublisher(goCoderCameraView, getContext());
+
+                            mPublisher.setEncoderHandler(new EncoderHandler(player_firstNew.this));
+                            mPublisher.setRtmpHandler(new RtmpHandler(player_firstNew.this));
+                            mPublisher.setRecordEventHandler(new RecordHandler(player_firstNew.this));
+                            goCoderCameraView.startCamera();
+                            mPublisher.setVideoOutputResolution(400, 200, getContext().getResources().getConfiguration().orientation);
+
+
+                            mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + b.userId + "-" + liveId);
+
+
                             //cameraLayout1.setVisibility(View.VISIBLE);
 
 /*
@@ -1222,6 +1242,121 @@ public class player_firstNew extends Fragment  {
     }
 
     private static int IMAGES_PRODUCED;
+
+    @Override
+    public void onNetworkWeak() {
+
+    }
+
+    @Override
+    public void onNetworkResume() {
+
+    }
+
+    @Override
+    public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
+
+    }
+
+    @Override
+    public void onRecordPause() {
+
+    }
+
+    @Override
+    public void onRecordResume() {
+
+    }
+
+    @Override
+    public void onRecordStarted(String s) {
+
+    }
+
+    @Override
+    public void onRecordFinished(String s) {
+
+    }
+
+    @Override
+    public void onRecordIllegalArgumentException(IllegalArgumentException e) {
+
+    }
+
+    @Override
+    public void onRecordIOException(IOException e) {
+
+    }
+
+    @Override
+    public void onRtmpConnecting(String s) {
+
+    }
+
+    @Override
+    public void onRtmpConnected(String s) {
+
+    }
+
+    @Override
+    public void onRtmpVideoStreaming() {
+
+    }
+
+    @Override
+    public void onRtmpAudioStreaming() {
+
+    }
+
+    @Override
+    public void onRtmpStopped() {
+
+    }
+
+    @Override
+    public void onRtmpDisconnected() {
+
+    }
+
+    @Override
+    public void onRtmpVideoFpsChanged(double v) {
+
+    }
+
+    @Override
+    public void onRtmpVideoBitrateChanged(double v) {
+
+    }
+
+    @Override
+    public void onRtmpAudioBitrateChanged(double v) {
+
+    }
+
+    @Override
+    public void onRtmpSocketException(SocketException e) {
+
+    }
+
+    @Override
+    public void onRtmpIOException(IOException e) {
+
+    }
+
+    @Override
+    public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
+
+    }
+
+    @Override
+    public void onRtmpIllegalStateException(IllegalStateException e) {
+
+    }
+
+    @Override
+    public void onRtmpAuthenticationg(String s) {
+
+    }
 
     private class ImageAvailableListener implements ImageReader.OnImageAvailableListener {
         @Override

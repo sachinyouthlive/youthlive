@@ -111,7 +111,7 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
         ButterKnife.bind(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        Toast.makeText(this, "PlayerActivityNew.java", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "PlayerActivityNew.java", Toast.LENGTH_SHORT).show();
 
 
 
@@ -136,9 +136,9 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
         String liveid = getIntent().getStringExtra("liveId");
         String urinew = getIntent().getStringExtra("uri");
         String timelineid = getIntent().getStringExtra("timelineId");
-        Toast.makeText(this, "liveid"+liveid+"uri"+urinew+"timelineid"+timelineid, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "liveid"+liveid+"uri"+urinew+"timelineid"+timelineid, Toast.LENGTH_LONG).show();
 
-        uri2=Uri.parse("rtsp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/"+liveid);
+        uri2=Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/"+liveid);
         mStreamaxiaPlayer.play(uri2, STREAM_TYPE);
         surfaceView.setBackgroundColor(Color.TRANSPARENT);
         progressBar.setVisibility(View.GONE);
@@ -572,31 +572,45 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
     @Override
     public void stateENDED() {
         progressBar.setVisibility(View.GONE);
+
+        Log.d("state" , "ended");
+
+        if (popup.getVisibility() == View.GONE) {
+
+                    popup.setVisibility(View.VISIBLE);
+
+        }
+
     }
 
     @Override
     public void stateBUFFERING() {
         progressBar.setVisibility(View.VISIBLE);
+        Log.d("state" , "buffering");
     }
 
     @Override
     public void stateIDLE() {
         progressBar.setVisibility(View.VISIBLE);
+        Log.d("state" , "idle");
     }
 
     @Override
     public void statePREPARING() {
         progressBar.setVisibility(View.VISIBLE);
+        Log.d("state" , "preparing");
     }
 
     @Override
     public void stateREADY() {
         progressBar.setVisibility(View.GONE);
+        Log.d("state" , "ready");
     }
 
     @Override
     public void stateUNKNOWN() {
         progressBar.setVisibility(View.VISIBLE);
+        Log.d("state" , "unknown");
     }
 
 
