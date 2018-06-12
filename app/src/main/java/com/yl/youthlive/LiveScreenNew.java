@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -406,117 +407,117 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
 
     @Override
     public void onNetworkWeak() {
-
+        Log.d("ttaagg" , "network weak");
     }
 
     @Override
     public void onNetworkResume() {
-
+        Log.d("ttaagg" , "network resume");
     }
 
     @Override
     public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
-
+        Log.d("ttaagg" , "illegal argument: " + e.toString());
     }
 
     @Override
     public void onRecordPause() {
-
+        Log.d("ttaagg" , "record pause");
     }
 
     @Override
     public void onRecordResume() {
-
+        Log.d("ttaagg" , "record resume");
     }
 
     @Override
     public void onRecordStarted(String s) {
-
+        Log.d("ttaagg" , "record started");
     }
 
     @Override
     public void onRecordFinished(String s) {
-
+        Log.d("ttaagg" , "record finished");
     }
 
     @Override
     public void onRecordIllegalArgumentException(IllegalArgumentException e) {
-
+        Log.d("ttaagg" , "record illegeal exception: " + e.toString());
     }
 
     @Override
     public void onRecordIOException(IOException e) {
-
+        Log.d("ttaagg" , "record IO : " + e.toString());
     }
 
     @Override
     public void onRtmpConnecting(String s) {
-
+        Log.d("ttaagg" , "rtmp connecting : " + s);
     }
 
     @Override
     public void onRtmpConnected(String s) {
-
+        Log.d("ttaagg" , "rtmp connected : " + s);
     }
 
     @Override
     public void onRtmpVideoStreaming() {
-
+        //Log.d("ttaagg" , "rtmp video streaming");
     }
 
     @Override
     public void onRtmpAudioStreaming() {
-
+        //Log.d("ttaagg" , "rtmp audio streaming");
     }
 
     @Override
     public void onRtmpStopped() {
-
+        Log.d("ttaagg" , "rtmp stopped");
     }
 
     @Override
     public void onRtmpDisconnected() {
-
+        Log.d("ttaagg" , "rtmp disconnected");
     }
 
     @Override
     public void onRtmpVideoFpsChanged(double v) {
-
+        Log.d("ttaagg" , "fps changed : " + String.valueOf(v));
     }
 
     @Override
     public void onRtmpVideoBitrateChanged(double v) {
-
+        Log.d("ttaagg" , "video bitrate changed : " + String.valueOf(v));
     }
 
     @Override
     public void onRtmpAudioBitrateChanged(double v) {
-
+        Log.d("ttaagg" , "audio bitrate changed : " + String.valueOf(v));
     }
 
     @Override
     public void onRtmpSocketException(SocketException e) {
-
+        Log.d("ttaagg" , "rtmp socket exception : " + e.toString());
     }
 
     @Override
     public void onRtmpIOException(IOException e) {
-
+        Log.d("ttaagg" , "rtmp io : " + e.toString());
     }
 
     @Override
     public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-
+        Log.d("ttaagg" , "rtmp illegal argument : " + e.toString());
     }
 
     @Override
     public void onRtmpIllegalStateException(IllegalStateException e) {
-
+        Log.d("ttaagg" , "rtmp illegal state : " + e.toString());
     }
 
     @Override
     public void onRtmpAuthenticationg(String s) {
-
+        Log.d("ttaagg" , "rtmp authenticate : " + s);
     }
 
     @Override
