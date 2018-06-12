@@ -294,6 +294,8 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
         mStreamPlayerView = view.findViewById(R.id.thumbnail_video_view);
 
+        mStreamPlayerView.setZOrderOnTop(true);
+
         giftLayout = (LinearLayout) view.findViewById(R.id.gift_layout);
         giftIcon = (ImageView) view.findViewById(R.id.gift_icon);
         giftTitle = (TextView) view.findViewById(R.id.gift_title);
@@ -905,9 +907,16 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
                             StreamaxiaPlayer mStreamaxiaPlayer = new StreamaxiaPlayer();
 
-                            mStreamaxiaPlayer.initStreamaxiaPlayer(mStreamPlayerView , playerLayout1 , texxt , firstFragNew.this , getContext() , Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/vod/sample.mp4"));
 
-                            mStreamaxiaPlayer.play(Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + uri) , StreamaxiaPlayer.TYPE_RTMP);
+                            Uri uri2 = null;
+                            mStreamaxiaPlayer.initStreamaxiaPlayer(mStreamPlayerView , playerLayout1 , texxt , firstFragNew.this , getContext() , uri2);
+
+                            uri2 = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + uri);
+
+                            //mStreamaxiaPlayer.play(uri2 , StreamaxiaPlayer.TYPE_RTMP);
+                            mStreamaxiaPlayer.play(Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + liveId) , StreamaxiaPlayer.TYPE_RTMP);
+
+                            Log.d("uurrii" , uri2.toString());
 
                             playerLayout1.setVisibility(View.VISIBLE);
 
@@ -927,6 +936,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
 
                     } catch (JSONException e) {
+                        Log.d("uurrii" , e.toString());
                         e.printStackTrace();
                     }
 
@@ -1567,7 +1577,7 @@ Log.d("uurrii" , "ended");
                 public void onClick(View view) {
 
 
-                    Dialog dialog = new Dialog(getActivity());
+                    final Dialog dialog = new Dialog(getActivity());
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.connect_dialog);
                     dialog.setCancelable(true);
@@ -1613,6 +1623,8 @@ Log.d("uurrii" , "ended");
 
                                     progress.setVisibility(View.GONE);
 
+                                    dialog.dismiss();
+
                                 }
 
                                 @Override
@@ -1656,6 +1668,8 @@ Log.d("uurrii" , "ended");
 
 
                                     progress.setVisibility(View.GONE);
+
+                                    dialog.dismiss();
                                 }
 
                                 @Override
