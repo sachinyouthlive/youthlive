@@ -1114,6 +1114,7 @@ public class firstFrag extends Fragment implements WZStatusCallback {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
         Log.d("VEG" , b.userId);
+
         Log.d("VEG" , liveId);
 
                 /*Call<checkStatusBean> call1 = cr.checkStatus(b.userId, liveId);

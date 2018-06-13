@@ -126,5 +126,6 @@ dependencies {
     implementation 'com.karumi:dexter:2.3.1'
     implementation project(':streamaxia-opensdk')
     implementation project(':streamaxia-player')
+    implementation 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
 }
 apply plugin: 'com.google.gms.google-services'

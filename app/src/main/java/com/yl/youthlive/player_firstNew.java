@@ -497,81 +497,21 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                 final bean b = (bean) getContext().getApplicationContext();
 
+                StreamaxiaPublisher mPublisher = new StreamaxiaPublisher(goCoderCameraView, getContext());
 
-                progress.setVisibility(View.VISIBLE);
-
-
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                Call<acceptRejectBean> call1 = cr.acceptReject(connId, b.userId + liveId, "2");
-                call1.enqueue(new Callback<acceptRejectBean>() {
-                    @Override
-                    public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
-
-                        try {
+                mPublisher.setEncoderHandler(new EncoderHandler(player_firstNew.this));
+                mPublisher.setRtmpHandler(new RtmpHandler(player_firstNew.this));
+                mPublisher.setRecordEventHandler(new RecordHandler(player_firstNew.this));
+                goCoderCameraView.startCamera();
+                mPublisher.setVideoOutputResolution(400, 200, getContext().getResources().getConfiguration().orientation);
 
 
-                            StreamaxiaPublisher mPublisher = new StreamaxiaPublisher(goCoderCameraView, getContext());
-
-                            mPublisher.setEncoderHandler(new EncoderHandler(player_firstNew.this));
-                            mPublisher.setRtmpHandler(new RtmpHandler(player_firstNew.this));
-                            mPublisher.setRecordEventHandler(new RecordHandler(player_firstNew.this));
-                            goCoderCameraView.startCamera();
-                            mPublisher.setVideoOutputResolution(400, 200, getContext().getResources().getConfiguration().orientation);
+                mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + b.userId + liveId);
 
 
-                            mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + b.userId + liveId);
 
 
-                            //cameraLayout1.setVisibility(View.VISIBLE);
 
-/*
-                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
-                            goCoderBroadcastConfig.setPortNumber(1935);
-                            goCoderBroadcastConfig.setApplicationName("live");
-                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
-                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
-                            // Set the bitrate to 4000 Kbps
-                            goCoderBroadcastConfig.setVideoBitRate(1200);
-
-                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
-
-                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
-
-                            //if (configValidationError != null) {
-                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDescription(), Toast.LENGTH_LONG).show();
-                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
-                            // Stop the broadcast that is currently running
-                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
-                            //} else {
-                            // Start streaming
-                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
-                            //}
-
-*/
-                            accept1.setVisibility(View.GONE);
-                            reject1.setVisibility(View.GONE);
-                            reject3.setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-
-                        progress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(Call<acceptRejectBean> call, Throwable t) {
-                        progress.setVisibility(View.GONE);
-                        t.printStackTrace();
-                    }
-                });
 
 
             }
@@ -1297,6 +1237,71 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
     @Override
     public void onRtmpConnected(String s) {
+        progress.setVisibility(View.VISIBLE);
+
+        final bean b = (bean) getContext().getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+        Call<acceptRejectBean> call1 = cr.acceptReject(connId, b.userId + liveId, "2");
+        call1.enqueue(new Callback<acceptRejectBean>() {
+            @Override
+            public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+
+                try {
+
+
+
+
+                    //cameraLayout1.setVisibility(View.VISIBLE);
+
+/*
+                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
+                            goCoderBroadcastConfig.setPortNumber(1935);
+                            goCoderBroadcastConfig.setApplicationName("live");
+                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
+                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
+                            // Set the bitrate to 4000 Kbps
+                            goCoderBroadcastConfig.setVideoBitRate(1200);
+
+                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
+
+                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
+
+                            //if (configValidationError != null) {
+                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDescription(), Toast.LENGTH_LONG).show();
+                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
+                            // Stop the broadcast that is currently running
+                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
+                            //} else {
+                            // Start streaming
+                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
+                            //}
+
+*/
+                    accept1.setVisibility(View.GONE);
+                    reject1.setVisibility(View.GONE);
+                    reject3.setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                progress.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                progress.setVisibility(View.GONE);
+                t.printStackTrace();
+            }
+        });
 
     }
 

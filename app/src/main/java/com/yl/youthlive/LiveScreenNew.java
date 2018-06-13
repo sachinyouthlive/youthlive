@@ -592,6 +592,9 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
     private void setStreamerDefaultValues() {
         List<Size> sizes = mPublisher.getSupportedPictureSizes(getResources().getConfiguration().orientation);
         Size resolution = sizes.get(0);
+
+        Log.d("width" , String.valueOf(resolution.width));
+        Log.d("height" , String.valueOf(resolution.height));
         mPublisher.setVideoOutputResolution(resolution.width, resolution.height, this.getResources().getConfiguration().orientation);
     }
 }
