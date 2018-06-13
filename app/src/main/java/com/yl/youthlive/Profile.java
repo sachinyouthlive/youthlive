@@ -36,11 +36,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.Activitys.FollowingActivity;
 import com.yl.youthlive.Activitys.MessaageActivity;
 import com.yl.youthlive.Activitys.MyVlog;
-import com.yl.youthlive.Activitys.MycheckinActivity;
 import com.yl.youthlive.Activitys.PersonalInfo;
 import com.yl.youthlive.Activitys.RattingActivity;
 import com.yl.youthlive.DBHandler.SessionManager;
 import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.checkin.CheckinActivity;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
 import com.yl.youthlive.updateProfilePOJO.updateProfileBean;
@@ -176,7 +176,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         mycheckin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MycheckinActivity.class);
+                Intent intent = new Intent(getActivity(), CheckinActivity.class);
                 startActivity(intent);
 
             }
