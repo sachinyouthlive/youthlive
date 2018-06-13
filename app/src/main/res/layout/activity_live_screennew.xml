@@ -39,6 +39,10 @@
         app:layout_constraintStart_toStartOf="@+id/pager"
         app:layout_constraintTop_toTopOf="@+id/pager" />
 
+    <Chronometer
+        android:id="@+id/simpleChronometer"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
 
 
 

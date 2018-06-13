@@ -180,6 +180,12 @@
         <activity android:name=".Activitys.MycheckinActivity" />
         <activity android:name=".VideoBroadcaster" />
         <activity android:name=".VideoPlayer"></activity>
+        <activity
+            android:name=".checkin.CheckinActivity"
+            android:parentActivityName=".HomeActivity"></activity>
+        <activity
+            android:name=".checkin.CheckInDetailActivity"
+            android:parentActivityName=".checkin.CheckinActivity"></activity>
     </application>
 
 </manifest>
