@@ -61,8 +61,8 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
         goLive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(getContext() , VideoBroadcaster.class);
-                Intent intent = new Intent(getContext() , LiveScreenNew.class);
+                Intent intent = new Intent(getContext() , VideoBroadcaster.class);
+                //Intent intent = new Intent(getContext() , LiveScreenNew.class);
                 //Intent intent = new Intent(getContext() , WowzaLive.class);
                 //intent.putExtra("title" , title.getText().toString());
                 startActivity(intent);

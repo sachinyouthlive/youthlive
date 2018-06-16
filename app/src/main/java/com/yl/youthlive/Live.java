@@ -304,8 +304,8 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                     String[] dd = name.split("-");
 
 
-                    Intent intent = new Intent(context, PlayerActivityNew.class);
-                    //Intent intent = new Intent(context, VideoPlayer.class);
+                    //Intent intent = new Intent(context, PlayerActivityNew.class);
+                    Intent intent = new Intent(context, VideoPlayer.class);
                     intent.putExtra("uri", name);
                     intent.putExtra("liveId", name);
                     intent.putExtra("timelineId", String.valueOf(item.getUserId()));

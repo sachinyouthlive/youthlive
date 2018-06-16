@@ -178,8 +178,12 @@
         </receiver>
 
         <activity android:name=".Activitys.MycheckinActivity" />
-        <activity android:name=".VideoBroadcaster" />
-        <activity android:name=".VideoPlayer"></activity>
+        <activity android:name=".VideoBroadcaster"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity android:name=".VideoPlayer"
+            android:screenOrientation="portrait"
+            ></activity>
     </application>
 
 </manifest>

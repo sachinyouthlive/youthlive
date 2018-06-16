@@ -84,8 +84,9 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
 
                 List<Size> sizes = mPublisher.getSupportedPictureSizes(getResources().getConfiguration().orientation);
                 Size resolution = sizes.get(0);
-                mPublisher.setVideoOutputResolution(resolution.width / 2, resolution.height / 2, VideoPlayer.this.getResources().getConfiguration().orientation);
+                mPublisher.setVideoOutputResolution(   176, 144, VideoPlayer.this.getResources().getConfiguration().orientation);
 
+                mPublisher.setVideoBitRate(56000);
 
                 mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/videochat/demo");
 
