@@ -184,6 +184,14 @@
         <activity android:name=".VideoPlayer"
             android:screenOrientation="portrait"
             ></activity>
+
+
+        <activity
+            android:name=".checkin.CheckinActivity"
+            android:parentActivityName=".HomeActivity"></activity>
+        <activity
+            android:name=".checkin.CheckInDetailActivity"
+            android:parentActivityName=".checkin.CheckinActivity"></activity>
     </application>
 
 </manifest>

@@ -4,15 +4,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,54 +22,34 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.wowza.gocoder.sdk.api.WowzaGoCoder;
-import com.wowza.gocoder.sdk.api.broadcast.WZBroadcast;
-import com.wowza.gocoder.sdk.api.broadcast.WZBroadcastConfig;
-import com.wowza.gocoder.sdk.api.configuration.WZMediaConfig;
-import com.wowza.gocoder.sdk.api.devices.WZAudioDevice;
-import com.wowza.gocoder.sdk.api.devices.WZCamera;
-import com.wowza.gocoder.sdk.api.devices.WZCameraView;
-import com.wowza.gocoder.sdk.api.errors.WZStreamingError;
-import com.wowza.gocoder.sdk.api.status.WZState;
-import com.wowza.gocoder.sdk.api.status.WZStatus;
-import com.wowza.gocoder.sdk.api.status.WZStatusCallback;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Chronometer;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.streamaxia.android.CameraPreview;
 import com.streamaxia.android.StreamaxiaPublisher;
 import com.streamaxia.android.handlers.EncoderHandler;
 import com.streamaxia.android.handlers.RecordHandler;
 import com.streamaxia.android.handlers.RtmpHandler;
 import com.streamaxia.android.utils.Size;
+import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.checkinPostPOJO.CheckinPostPOJO;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-import java.io.IOException;
+import static com.yl.youthlive.bean.getContext;
 
 public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.RtmpListener, RecordHandler.RecordListener,
         EncoderHandler.EncodeListener, MyInterface {
@@ -123,6 +104,8 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
 
     private StreamaxiaPublisher mPublisher;
 
+    Chronometer simpleChronometer;
+
 
 
     @Override
@@ -151,7 +134,7 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
         end = popup.findViewById(R.id.end);
         cancel = popup.findViewById(R.id.cancel);
 
-
+        simpleChronometer = findViewById(R.id.simpleChronometer);
         FragAdapter adap = new FragAdapter(getSupportFragmentManager());
 
         pager.setAdapter(adap);
@@ -473,6 +456,11 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
     @Override
     public void onRtmpStopped() {
         Log.d("ttaagg" , "rtmp stopped");
+        long elapsedMillis = SystemClock.elapsedRealtime() - simpleChronometer.getBase();
+        simpleChronometer.stop();
+        simpleChronometer.setBase(SystemClock.elapsedRealtime());
+        loadData(elapsedMillis);
+
     }
 
     @Override
@@ -596,5 +584,51 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
         Log.d("width" , String.valueOf(resolution.width));
         Log.d("height" , String.valueOf(resolution.height));
         mPublisher.setVideoOutputResolution(resolution.width, resolution.height, this.getResources().getConfiguration().orientation);
+    }
+
+    public void loadData(long millis) {
+        //   progress.setVisibility(View.VISIBLE);
+        Calendar c1 = Calendar.getInstance();
+        int iMonth = c1.get(Calendar.MONTH) + 1;
+
+        int iDay = c1.get(Calendar.DATE);
+
+        final bean b = (bean) getContext().getApplicationContext();
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+        Call<CheckinPostPOJO> call = cr.postcheckin(Integer.parseInt(b.userId), iDay, iMonth, millis);
+
+        Log.d("userId", b.userId);
+
+        call.enqueue(new Callback<CheckinPostPOJO>() {
+            @Override
+            public void onResponse(Call<CheckinPostPOJO> call, Response<CheckinPostPOJO> response) {
+
+                try {
+                    if (!response.body().getInformation().toString().isEmpty()) {
+                        Toast.makeText(LiveScreenNew.this, "data uploaded", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LiveScreenNew.this, "data not uploaded", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                //  progress.setVisibility(View.GONE);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<CheckinPostPOJO> call, Throwable t) {
+                //   progress.setVisibility(View.GONE);
+            }
+
+        });
     }
 }

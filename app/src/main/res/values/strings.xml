@@ -17,5 +17,6 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="Refresh">Refresh</string>
+    <string name="spinner_title">month</string>
 
 </resources>

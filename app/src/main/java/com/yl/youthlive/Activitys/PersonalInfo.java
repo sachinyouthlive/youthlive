@@ -137,7 +137,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                     public void onResponse(Call<followBean> call, Response<followBean> response) {
 
                         Toast.makeText(PersonalInfo.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-
+//test
                         progress.setVisibility(View.GONE);
 
                     }

@@ -10,6 +10,8 @@ import com.yl.youthlive.addVideoPOJO.addVideoBean;
 import com.yl.youthlive.addWalletPOJO.addWalletBean;
 import com.yl.youthlive.allMessagePOJO.allMessageBean;
 import com.yl.youthlive.checkStatusPOJO.checkStatusBean;
+import com.yl.youthlive.checkinPOJO.CheckinPOJO;
+import com.yl.youthlive.checkinPostPOJO.CheckinPostPOJO;
 import com.yl.youthlive.commentPOJO.commentBean;
 import com.yl.youthlive.deleteCareerPOJO.deleteCareerBean;
 import com.yl.youthlive.deleteVLOGPOJO.deleteVLOGBean;
@@ -72,6 +74,24 @@ public interface AllAPIs {
             @Part("countryCode") String code
     );
 
+    // get checkin data
+    @Multipart
+    @POST("api/checkin/getcheckin.php")
+    Call<CheckinPOJO> getcheckin(
+            @Part("userId") String userId,
+            @Part("day") String day,
+            @Part("month") String month
+    );
+
+    // post checkin data
+    @Multipart
+    @POST("api/checkin/postcheckin.php")
+    Call<CheckinPostPOJO> postcheckin(
+            @Part("userId") Integer userId,
+            @Part("day") Integer day,
+            @Part("month") Integer month,
+            @Part("broadcast_duration") Long broadcast_duration
+    );
 
     @Multipart
     @POST("api/socialsign_up.php")
