@@ -13,14 +13,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -50,7 +48,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-
+import com.yl.youthlive.Activitys.SearchActivity;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.addVideoPOJO.addVideoBean;
 import com.yl.youthlive.feedBackPOJO.feedBackBean;
@@ -65,7 +63,6 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 
-import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -437,7 +434,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 break;
             case R.id.action_search:
 
-                Toast.makeText(this, "search clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+                startActivity(intent);
+                HomeActivity.this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
 
                 break;
             case R.id.video:

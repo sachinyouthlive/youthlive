@@ -17,9 +17,11 @@ import com.yl.youthlive.deleteCareerPOJO.deleteCareerBean;
 import com.yl.youthlive.deleteVLOGPOJO.deleteVLOGBean;
 import com.yl.youthlive.editCareerPOJO.editCareerBean;
 import com.yl.youthlive.editEducationPOJO.editEducationBean;
+import com.yl.youthlive.fan_listPOJO.FanListPOJO;
 import com.yl.youthlive.feedBackPOJO.feedBackBean;
 import com.yl.youthlive.followListPOJO.followListBean;
 import com.yl.youthlive.followPOJO.followBean;
+import com.yl.youthlive.friendListPOJO.FriendListPOJO;
 import com.yl.youthlive.getConnectionPOJO.getConnectionBean;
 import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
 import com.yl.youthlive.getLivePOJO.getLiveBean;
@@ -33,6 +35,7 @@ import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
 import com.yl.youthlive.otpPOJO.otpBean;
 import com.yl.youthlive.reportPOJO.reportBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
+import com.yl.youthlive.searchlistPOJO.SearchListPOJO;
 import com.yl.youthlive.sendGiftPOJO.sendGiftBean;
 import com.yl.youthlive.sendMessagePOJO.sendMessageBean;
 import com.yl.youthlive.sharePOJO.shareBean;
@@ -115,6 +118,13 @@ public interface AllAPIs {
     );
 
     @Multipart
+    @POST("api/follow_unfollow_check.php")
+    Call<followBean> followcheck(
+            @Part("userId") String userId,
+            @Part("friendId") String friendId
+    );
+
+    @Multipart
     @POST("api/user_add_beans.php")
     Call<addWalletBean> addBeans(
             @Part("userId") String userId,
@@ -139,6 +149,18 @@ public interface AllAPIs {
     @Multipart
     @POST("api/follow_list.php")
     Call<followListBean> followList(
+            @Part("userId") String userId
+    );
+
+    @Multipart
+    @POST("api/fan_list.php")
+    Call<FanListPOJO> fanList(
+            @Part("userId") String userId
+    );
+
+    @Multipart
+    @POST("api/friend_list.php")
+    Call<FriendListPOJO> friendList(
             @Part("userId") String userId
     );
 
@@ -335,6 +357,12 @@ public interface AllAPIs {
     @POST("api/get_timelinelist.php")
     Call<timelineBean> getTimeline(
             @Part("userId") String userId
+    );
+
+    @Multipart
+    @POST("api/search.php")
+    Call<SearchListPOJO> getSearchList(
+            @Part("search") String search
     );
 
 

@@ -4,31 +4,31 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yl.youthlive.Activitys.FanActivity;
+import com.yl.youthlive.Activitys.FollowingActivity;
+import com.yl.youthlive.Activitys.FriendActivity;
 import com.yl.youthlive.Activitys.MessaageActivity;
-import com.yl.youthlive.Activitys.PersonalInfo;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.followPOJO.followBean;
-import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
 import com.yl.youthlive.sendMessagePOJO.sendMessageBean;
 import com.yl.youthlive.timelineProfilePOJO.Data;
 import com.yl.youthlive.timelineProfilePOJO.timelineProfileBean;
@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,12 +51,12 @@ public class TimelineProfile extends AppCompatActivity {
     Toolbar toolbar;
     ViewPager pager;
     ProgressBar progress;
-    CircleImageView profile;
+    ImageView profile;
 
     static String userid;
 
     TextView fans;
-    TextView followings;
+    TextView followings, friends;
 
     Button following , messgae;
 
@@ -68,6 +67,7 @@ public class TimelineProfile extends AppCompatActivity {
 
     public Context appContext, myContext;
     public FragmentManager fm;
+    LinearLayout followclick, fanclick, friendClick;
 
     String userName , userImage;
 
@@ -79,16 +79,51 @@ public class TimelineProfile extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         pager = findViewById(R.id.pager);
         progress = findViewById(R.id.progress);
-        profile = findViewById(R.id.profile);
+        profile = findViewById(R.id.profileimg);
         Toast.makeText(this, "TimelineProfile.java", Toast.LENGTH_SHORT).show();
 
         follow = (Button)findViewById(R.id.follow);
-        following = (Button)findViewById(R.id.following);
+        //  following = (Button)findViewById(R.id.following);
         messgae = (Button)findViewById(R.id.message);
+        followclick = findViewById(R.id.followings_click);
+        fanclick = findViewById(R.id.fans_click);
+        friendClick = findViewById(R.id.friends_click);
 
         userid = getIntent().getStringExtra("userId");
 
 
+        followclick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(TimelineProfile.this, FollowingActivity.class);
+                intent.putExtra("userId", userid);
+                startActivity(intent);
+
+            }
+        });
+
+        fanclick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(TimelineProfile.this, FanActivity.class);
+                intent.putExtra("userId", userid);
+                startActivity(intent);
+
+            }
+        });
+        friendClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(TimelineProfile.this, FriendActivity.class);
+                intent.putExtra("userId", userid);
+                startActivity(intent);
+                finish();
+
+            }
+        });
         messgae.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,8 +147,7 @@ public class TimelineProfile extends AppCompatActivity {
 
                         String comm = comment.getText().toString();
 
-                        if (comm.length() > 0)
-                        {
+                        if (comm.length() > 0) {
 
                             progress.setVisibility(View.VISIBLE);
 
@@ -141,7 +175,6 @@ public class TimelineProfile extends AppCompatActivity {
                                     startActivity(intent);
 
 
-
                                     bar.setVisibility(View.GONE);
 
                                 }
@@ -160,21 +193,15 @@ public class TimelineProfile extends AppCompatActivity {
                 });
 
 
-
-
-
             }
         });
 
 
         bean b = (bean)getApplicationContext();
 
-        if (Objects.equals(userid, b.userId))
-        {
+        if (Objects.equals(userid, b.userId)) {
             follow.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             follow.setVisibility(View.VISIBLE);
         }
 
@@ -203,15 +230,24 @@ public class TimelineProfile extends AppCompatActivity {
                     public void onResponse(Call<followBean> call, Response<followBean> response) {
 
                         try {
-                            Toast.makeText(TimelineProfile.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
 
+                            if (response.body().getMessage().equals("Follow Success")) {
+                                follow.setText("UNFOLLOW");
+                                follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
+                                Toast.makeText(TimelineProfile.this, "You started to follow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                            }
+                            if (response.body().getMessage().equals("Unfollow Success")) {
+                                follow.setText("FOLLOW");
+                                follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_white, 0, 0, 0);
+                                Toast.makeText(TimelineProfile.this, "You Unfollowed " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                            }
                             loadData();
-                        }catch (Exception e)
-                        {
+
+
+                        } catch (Exception e) {
                             e.printStackTrace();
                             Toast.makeText(TimelineProfile.this , "Some Error Occurred, Please try again" , Toast.LENGTH_SHORT).show();
                         }
-
 
 
                         progress.setVisibility(View.GONE);
@@ -230,7 +266,7 @@ public class TimelineProfile extends AppCompatActivity {
             }
         });
 
-        following.setOnClickListener(new View.OnClickListener() {
+/*        following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -258,9 +294,19 @@ public class TimelineProfile extends AppCompatActivity {
                     public void onResponse(Call<followBean> call, Response<followBean> response) {
 
                         try {
-                            Toast.makeText(TimelineProfile.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-
                             loadData();
+                            if(response.body().getMessage().equals("Follow Success"))
+                            {
+                                following.setText("UNFOLLOW");
+                                follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
+                                Toast.makeText(TimelineProfile.this , "You started to follow "+toolbar.getTitle().toString() , Toast.LENGTH_SHORT).show();
+                            }
+                            if(response.body().getMessage().equals("Unfollow Success"))
+                            {
+                                following.setText("FOLLOW");
+                                follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus, 0, 0, 0);
+                                Toast.makeText(TimelineProfile.this , "You started to Unfollow "+toolbar.getTitle().toString() , Toast.LENGTH_SHORT).show();
+                            }
 
                         }catch (Exception e)
                         {
@@ -283,13 +329,14 @@ public class TimelineProfile extends AppCompatActivity {
 
 
             }
-        });
+        });*/
 
         coverPager = findViewById(R.id.cover_pager);
         indicator = findViewById(R.id.indicator);
 
         fans = findViewById(R.id.fans);
         followings = findViewById(R.id.followings);
+        friends = findViewById(R.id.friends);
 
         appContext = getApplicationContext();
         myContext = this;
@@ -307,16 +354,125 @@ public class TimelineProfile extends AppCompatActivity {
         });
 
 
+        //   loadfollowstatus();
+        //    followingstatus();
+
+    }
+
+    public void loadfollowstatus(String userids) {
+        final bean b = (bean) getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
+        Call<followBean> call = cr.followcheck(b.userId, userids);
+
+        call.enqueue(new Callback<followBean>() {
+            @Override
+            public void onResponse(Call<followBean> call, Response<followBean> response) {
+
+                try {
+
+
+                    // Toast.makeText(TimelineProfile.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                    if (response.body().getMessage().equals("Following")) {
+                        follow.setText("UNFOLLOW");
+                        follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
+                        Toast.makeText(TimelineProfile.this, "You started to follow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+
+                    }
+                    if (response.body().getMessage().equals("Not Following")) {
+                        follow.setText("FOLLOW");
+                        follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus, 0, 0, 0);
+                        Toast.makeText(TimelineProfile.this, "You started to notfollow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(TimelineProfile.this, "Some Error Occurred, Please try again follow", Toast.LENGTH_SHORT).show();
+                }
+
+
+                progress.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onFailure(Call<followBean> call, Throwable t) {
+
+                progress.setVisibility(View.GONE);
+
+            }
+        });
+
+
+    }
+
+    public void followingstatus(String userids) {
+        final bean b = (bean) getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+        Call<followBean> call = cr.followcheck(b.userId, userids);
+
+        call.enqueue(new Callback<followBean>() {
+            @Override
+            public void onResponse(Call<followBean> call, Response<followBean> response) {
+
+                try {
+
+                    if (response.body().getMessage().equals("Following")) {
+                        following.setText("UNFOLLOW");
+                        following.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
+                        Toast.makeText(TimelineProfile.this, "You started to following " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                    if (response.body().getMessage().equals("Not Following")) {
+                        following.setText("FOLLOW");
+                        following.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus, 0, 0, 0);
+                        Toast.makeText(TimelineProfile.this, "You started to notfollowing " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(TimelineProfile.this, "Some Error Occurred, Please try again following", Toast.LENGTH_SHORT).show();
+                }
+
+
+                progress.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onFailure(Call<followBean> call, Throwable t) {
+
+                progress.setVisibility(View.GONE);
+
+            }
+        });
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-
         loadData();
+        loadfollowstatus(userid);
+        followingstatus(userid);
+
 
 
     }
@@ -327,7 +483,7 @@ public class TimelineProfile extends AppCompatActivity {
 
         progress.setVisibility(View.VISIBLE);
 
-        bean b = (bean) appContext;
+        final bean b = (bean) appContext;
 
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(b.BASE_URL)
@@ -361,15 +517,21 @@ public class TimelineProfile extends AppCompatActivity {
                         toolbar.setTitle(response.body().getData().getUserName());
                         fans.setText(String.valueOf(response.body().getData().getFans()));
                         followings.setText(String.valueOf(response.body().getData().getFollowings()));
+                        friends.setText(String.valueOf(response.body().getData().getFriends()));
 
                         FragStatePAgerAdapter adapter = new FragStatePAgerAdapter(fm, response.body().getData());
                         pager.setAdapter(adapter);
 
 
+                        if (response.body().getData().getUserId().equals(b.userId)) {
+                            follow.setVisibility(View.GONE);
+                            messgae.setVisibility(View.GONE);
+                        } else {
 
+                            follow.setVisibility(View.VISIBLE);
+                        }
 
-
-                        if (Objects.equals(response.body().getData().getFriendStatus().getFriend(), "true"))
+                        if (Objects.equals(response.body().getData().getFriendStatus().getFollow(), "true"))
                         {
                             messgae.setVisibility(View.VISIBLE);
                         }
@@ -378,7 +540,7 @@ public class TimelineProfile extends AppCompatActivity {
                             messgae.setVisibility(View.GONE);
                         }
 
-
+/*
                         if (Objects.equals(response.body().getData().getFriendStatus().getFollow(), "true"))
                         {
                             following.setVisibility(View.VISIBLE);
@@ -391,14 +553,14 @@ public class TimelineProfile extends AppCompatActivity {
                         }
 
 
-                        if (Objects.equals(response.body().getData().getFriendStatus().getFriend(), "true"))
+                        if (Objects.equals(response.body().getData().getFriendStatus().getFollow(), "true"))
                         {
                             messgae.setVisibility(View.VISIBLE);
                         }
                         else
                         {
                             messgae.setVisibility(View.GONE);
-                        }
+                        }*/
 
 
                     } else {

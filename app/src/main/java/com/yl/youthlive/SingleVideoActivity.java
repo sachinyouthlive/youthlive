@@ -5,24 +5,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-
 import android.net.Uri;
 import android.os.Build;
-import android.provider.Settings;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -32,20 +27,18 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import com.yl.youthlive.Activitys.PersonalInfo;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.commentPOJO.commentBean;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 import com.yl.youthlive.sharePOJO.shareBean;
 import com.yl.youthlive.singleVideoPOJO.Comment;
 import com.yl.youthlive.singleVideoPOJO.singleVideoBean;
-import com.yl.youthlive.vlogListPOJO.vlogListBean;
 
 import java.nio.ByteBuffer;
 import java.text.ParseException;
@@ -66,13 +59,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import tcking.github.com.giraffeplayer2.GiraffePlayer;
 import tcking.github.com.giraffeplayer2.PlayerListener;
-import tcking.github.com.giraffeplayer2.VideoInfo;
 import tv.danmaku.ijk.media.player.IjkTimedText;
-import uk.co.jakelee.vidsta.VidstaPlayer;
 import veg.mediaplayer.sdk.MediaPlayer;
-import veg.mediaplayer.sdk.MediaPlayerConfig;
-
-import static java.security.AccessController.getContext;
 
 public class SingleVideoActivity extends AppCompatActivity implements MediaPlayer.MediaPlayerCallback,ConnectivityReceiver.ConnectivityReceiverListener {
 
@@ -110,8 +98,8 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
         url = getIntent().getStringExtra("url");
         list = new ArrayList<>();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         image = findViewById(R.id.image);
+        ImageLoader loader = ImageLoader.getInstance();
         Toast.makeText(this, "SingleVideoActivity.java", Toast.LENGTH_SHORT).show();
 
         player = (tcking.github.com.giraffeplayer2.VideoView) findViewById(R.id.player);
@@ -155,7 +143,6 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().resetViewBeforeLoading(false).cacheInMemory(true).cacheOnDisk(true).build();
 
-        ImageLoader loader = ImageLoader.getInstance();
         loader.displayImage(getIntent().getStringExtra("thumb") , image , options);
 
 
@@ -669,6 +656,27 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
             @Override
             public void onResponse(Call<singleVideoBean> call, Response<singleVideoBean> response) {
 
+
+                // setting msg time
+                String dateString = response.body().getData().getUploadTime();
+                if (dateString != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date testDate = null;
+                    try {
+                        testDate = sdf.parse(dateString);
+                    } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    String times = TimeStampConverter.getTimeAgo(testDate.getTime());
+                    time.setText(times);
+                }
+
+                //.............
+
+
+
+
                 try {
                     if (response.body().getData().getComments() != null) {
                         adapter.setGridData(response.body().getData().getComments());
@@ -726,9 +734,20 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
 
 
                 try {
-                    name.setText(response.body().getData().getTimelineName());
+                    bean b = (bean) getApplicationContext();
 
-                    time.setText(response.body().getData().getUploadTime());
+                    if (b.userId.equals(response.body().getData().getTimelineId())) {
+                        name.setText("Your Profile");
+                    } else {
+                        name.setText(response.body().getData().getTimelineName());
+                    }
+
+                    //   name.setText(response.body().getData().getTimelineName());
+
+
+                    //  Toast.makeText(SingleVideoActivity.this, "hello"+times, Toast.LENGTH_SHORT).show();
+
+
 
                     schedule();
 
@@ -934,28 +953,41 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
 
             Comment item = list.get(position);
             holder.message.setText(item.getComment());
+            // holder.msgprofileimg.setImageURI(Uri.parse(item.getUserImage()));
+            Glide.with(SingleVideoActivity.this)
+                    .load(Uri.parse(item.getUserImage())).apply(new RequestOptions()
+                    .placeholder(R.drawable.user_default)
+                    .centerCrop()
+                    .dontAnimate()
+                    .dontTransform())
+                    .into(holder.msgprofileimg);
 
-            // setting custom date format for video comment timing
-            String _Date = item.getTime();
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            SimpleDateFormat fmt2 = new SimpleDateFormat("dd MMM");
-            SimpleDateFormat fmt3 = new SimpleDateFormat("hh:mm a");
-            try {
-                Date date = fmt.parse(_Date);
-                String datepart= fmt2.format(date);
-                String timepart= fmt3.format(date);
-                holder.time.setText(timepart+", "+datepart);
+
+            // setting msg time
+            String dateString = item.getTime();
+            if (dateString != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date testDate = null;
+                try {
+                    testDate = sdf.parse(dateString);
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                // System.out.println("Milliseconds==" + testDate.getTime());
+                String mtime = TimeStampConverter.getTimeAgo(testDate.getTime());
+                holder.time.setText(mtime);
             }
-            catch(ParseException pe) {
+            //.............
 
-                Toast.makeText(SingleVideoActivity.this, "exception", Toast.LENGTH_SHORT).show();
-            }
 
-           // holder.time.setText(item.getTime());
-            holder.name.setText(item.getUserName());
+
 
             bean b = (bean) context.getApplicationContext();
-//setting comment view width at runtime
+
+
+            //setting comment view width at runtime
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             int width = displayMetrics.widthPixels;
@@ -989,7 +1021,8 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
         class ViewHolder extends RecyclerView.ViewHolder {
 
             TextView message, time, name;
-            LinearLayout bubble, container,bubblewrap;
+            LinearLayout bubble, container;
+            CircleImageView msgprofileimg;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -999,7 +1032,7 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
                 name = (TextView) itemView.findViewById(R.id.name);
                 bubble = (LinearLayout) itemView.findViewById(R.id.bubble);
                 container = (LinearLayout) itemView.findViewById(R.id.container);
-               // bubblewrap = (LinearLayout) itemView.findViewById(R.id.bubblewrap);
+                msgprofileimg = itemView.findViewById(R.id.msgprofile_pic);
 
 
 

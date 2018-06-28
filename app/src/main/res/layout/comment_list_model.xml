@@ -17,19 +17,26 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/bubblewrap"
+            android:id="@+id/bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:minWidth="100dp"
+            android:background="@drawable/bubble_me"
+            android:orientation="horizontal"
             tools:ignore="UselessParent">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/msgprofile_pic"
+                android:layout_width="35dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="2dp" />
+
             <LinearLayout
-                android:id="@+id/bubble"
+                android:id="@+id/bubblein"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bubble_me"
                 android:orientation="vertical"
+                android:minWidth="100dp"
                 tools:ignore="UselessParent">
 
 
@@ -44,7 +51,7 @@
                     android:textColor="@color/video_comment_msg"
                     android:textSize="10sp"
                     tools:ignore="RtlSymmetry"
-                    tools:name="username" />
+                    tools:text="username" />
 
 
                 <TextView

@@ -1,7 +1,7 @@
 package com.yl.youthlive;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 
 public class Terms extends AppCompatActivity {
@@ -16,7 +16,7 @@ public class Terms extends AppCompatActivity {
         web = (WebView)findViewById(R.id.web);
 
         web.getSettings().setJavaScriptEnabled(true);
-        web.loadUrl("file:///android_asset/bigo.htm");
+        web.loadUrl("file:///android_asset/youthlive.htm");
 
     }
 }

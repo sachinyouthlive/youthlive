@@ -3,7 +3,6 @@ package com.yl.youthlive;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 import com.yl.youthlive.timelinePOJO.Datum;
@@ -45,7 +43,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-import tcking.github.com.giraffeplayer2.VideoInfo;
 import tcking.github.com.giraffeplayer2.VideoView;
 
 
@@ -185,21 +182,25 @@ Log.d("userId" , b.userId);
 
             holder.likes.setText(item.getLikesCount());
 
-            // setting custom date format for video comment timing
-            String _Date = item.getUploadTime();
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            SimpleDateFormat fmt2 = new SimpleDateFormat("dd MMM");
-            SimpleDateFormat fmt3 = new SimpleDateFormat("hh:mm a");
-            try {
-                Date date = fmt.parse(_Date);
-                String datepart= fmt2.format(date);
-                String timepart= fmt3.format(date);
-                holder.time.setText(timepart+", "+datepart);
-            }
-            catch(ParseException pe) {
 
-                Toast.makeText(getActivity(), "exception", Toast.LENGTH_SHORT).show();
+            // setting msg time
+            String dateString = item.getUploadTime();
+            if (dateString != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date testDate = null;
+                try {
+                    testDate = sdf.parse(dateString);
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                String times = TimeStampConverter.getTimeAgo(testDate.getTime());
+                holder.time.setText(times);
             }
+
+
+
+
 
 
 

@@ -1,12 +1,11 @@
 package com.yl.youthlive;
 
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class Content extends AppCompatActivity {
@@ -26,7 +25,7 @@ public class Content extends AppCompatActivity {
         web = (WebView)findViewById(R.id.web);
 
         web.getSettings().setJavaScriptEnabled(true);
-        web.loadUrl("file:///android_asset/bigo.htm");
+        web.loadUrl("file:///android_asset/youthlive.htm");
 
         setSupportActionBar(toolbar);
 

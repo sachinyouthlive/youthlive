@@ -1,6 +1,9 @@
 package com.yl.youthlive;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,7 +20,6 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yl.youthlive.Activitys.PersonalInfo;
 import com.yl.youthlive.GetRankingPOJO.Datum;
 import com.yl.youthlive.GetRankingPOJO.RankingBean;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -123,7 +125,7 @@ public class Rating1 extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
 
 
             final Datum item = list.get(position);
@@ -136,10 +138,10 @@ public class Rating1 extends Fragment {
 
             DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
                     .cacheOnDisc(true).resetViewBeforeLoading(false).build();
-            ImageLoader loader = ImageLoader.getInstance();
-            loader.displayImage(item.getUserImage() , holder.image , options);
-
-
+            if (!item.getUserImage().isEmpty()) {
+                ImageLoader loader = ImageLoader.getInstance();
+                loader.displayImage(item.getUserImage(), holder.image, options);
+            }
             holder.follow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -163,7 +165,20 @@ public class Rating1 extends Fragment {
                         @Override
                         public void onResponse(Call<followBean> call, Response<followBean> response) {
 
+                            Drawable dr = getResources().getDrawable(R.drawable.tickmark);
+                            Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
+// Scale it to 50 x 50
+                            Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 20, 20, true));
+// Set your new, scaled drawable "d"
+
                             Toast.makeText(getContext() , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                            if (response.body().getMessage().equals("Follow Success")) {
+                                holder.follow.setBackground(d);
+                            }
+                            if (response.body().getMessage().equals("Unfollow Success")) {
+                                holder.follow.setBackgroundResource(R.drawable.add);
+                            }
+
 
                             bar.setVisibility(View.GONE);
 
@@ -201,9 +216,9 @@ public class Rating1 extends Fragment {
 
         public class MyViewHolder extends RecyclerView.ViewHolder{
 
-            TextView beans , name  , change , follow;
+            TextView beans, name, change;
 
-            ImageView image;
+            ImageView image, follow;
 
 
             public MyViewHolder(View itemView) {
@@ -215,6 +230,7 @@ public class Rating1 extends Fragment {
                 change = itemView.findViewById(R.id.change);
                 image = itemView.findViewById(R.id.image);
                 follow = itemView.findViewById(R.id.follow);
+                follow.setBackgroundResource(R.drawable.add);
 
             }
         }

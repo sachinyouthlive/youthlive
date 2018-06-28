@@ -1,19 +1,23 @@
 package com.yl.youthlive.Activitys;
+
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -43,18 +46,20 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
     Toolbar toolbar;
     ViewPager pager;
     ProgressBar progress;
-    CircleImageView profile;
+    ImageView profile;
 
     static String userid;
 
     TextView fans;
-    TextView followings;
+    TextView followings, friends;
 
     ViewPager coverPager;
     CircleIndicator indicator;
 
+
     public Context appContext, myContext;
     public FragmentManager fm;
+    LinearLayout followclick, fanclick, friendclick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +69,46 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
         toolbar = findViewById(R.id.toolbar);
         pager = findViewById(R.id.pager);
         progress = findViewById(R.id.progress);
-        profile = findViewById(R.id.profile);
-
+        profile = findViewById(R.id.profileimg);
+        followclick = findViewById(R.id.followings_click);
+        fanclick = findViewById(R.id.fans_click);
+        friendclick = findViewById(R.id.friends_click);
 
         userid = getIntent().getStringExtra("userId");
+
+
+        followclick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MyVlog.this, FollowingActivity.class);
+                intent.putExtra("userId", userid);
+                startActivity(intent);
+
+            }
+        });
+
+        fanclick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MyVlog.this, FanActivity.class);
+                intent.putExtra("userId", userid);
+                startActivity(intent);
+
+            }
+        });
+
+        friendclick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MyVlog.this, FriendActivity.class);
+                intent.putExtra("userId", userid);
+                startActivity(intent);
+
+            }
+        });
 
 
         coverPager = findViewById(R.id.cover_pager);
@@ -75,6 +116,7 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
 
         fans = findViewById(R.id.fans);
         followings = findViewById(R.id.followings);
+        friends = findViewById(R.id.friends);
 
         appContext = getApplicationContext();
         myContext = this;
@@ -208,6 +250,7 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
 
                     fans.setText(String.valueOf(response.body().getData().getFans()));
                     followings.setText(String.valueOf(response.body().getData().getFollowings()));
+                    friends.setText(String.valueOf(response.body().getData().getFriends()));
 
                     FragStatePAgerAdapter adapter = new FragStatePAgerAdapter(fm, response.body().getData());
                     pager.setAdapter(adapter);

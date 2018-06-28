@@ -5,28 +5,25 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.Address;
-import com.yl.youthlive.Career;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
 import com.yl.youthlive.bean;
@@ -54,18 +51,18 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
     ViewPager pager;
     ProgressBar progress;
     CircleImageView profile;
+    ImageView profileimg;
 
     static String userid;
 
-    TextView fans;
-    TextView followings;
+    TextView followings, friends, fans;
 
     ViewPager coverPager;
     CircleIndicator indicator;
 
     Button follow;
 
-    LinearLayout followingClick;
+    LinearLayout followingClick, fanClick, friendClick;
 
     public Context appContext, myContext;
     public FragmentManager fm;
@@ -82,11 +79,15 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         profile = findViewById(R.id.profile);
 
         follow = (Button)findViewById(R.id.follow);
+        profileimg = findViewById(R.id.profileimg);
 
         userid = getIntent().getStringExtra("userId");
 
 
         followingClick = (LinearLayout)findViewById(R.id.followings_click);
+        fanClick = (LinearLayout) findViewById(R.id.fans_click);
+        friendClick = findViewById(R.id.friends_click);
+
 
 
         bean b = (bean)getApplicationContext();
@@ -107,11 +108,35 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
             public void onClick(View v) {
 
                 Intent intent = new Intent(PersonalInfo.this, FollowingActivity.class);
+                intent.putExtra("userId", userid);
                 startActivity(intent);
+                finish();
 
             }
         });
 
+        fanClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(PersonalInfo.this, FanActivity.class);
+                intent.putExtra("userId", userid);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+        friendClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(PersonalInfo.this, FriendActivity.class);
+                intent.putExtra("userId", userid);
+                startActivity(intent);
+                finish();
+
+            }
+        });
 
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,8 +162,26 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                     public void onResponse(Call<followBean> call, Response<followBean> response) {
 
                         Toast.makeText(PersonalInfo.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                        try {
+
+                            if (response.body().getMessage().equals("Follow Success")) {
+                                follow.setText("UNFOLLOW");
+                                follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
+                                Toast.makeText(PersonalInfo.this, "You started to follow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                            }
+                            if (response.body().getMessage().equals("Unfollow Success")) {
+                                follow.setText("FOLLOW");
+                                follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_white, 0, 0, 0);
+                                Toast.makeText(PersonalInfo.this, "You Unfollowed " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                            }
+                            loadData();
 //test
-                        progress.setVisibility(View.GONE);
+                            progress.setVisibility(View.GONE);
+                        } catch (Exception e) {
+                            progress.setVisibility(View.GONE);
+                            e.printStackTrace();
+                            Toast.makeText(PersonalInfo.this, "Some Error Occurred, Please try again", Toast.LENGTH_SHORT).show();
+                        }
 
                     }
 
@@ -160,6 +203,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
 
         fans = findViewById(R.id.fans);
         followings = findViewById(R.id.followings);
+        friends = findViewById(R.id.friends);
 
         appContext = getApplicationContext();
         myContext = this;
@@ -189,6 +233,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
     protected void onResume() {
         super.onResume();
      // register connection status listener
+        loadfollowstatus(userid);
         bean.getInstance().setConnectivityListener(this);
         loadData();
 
@@ -290,11 +335,13 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
 
                     ImageLoader loader = ImageLoader.getInstance();
                     loader.displayImage(response.body().getData().getUserImage(), profile);
+                    loader.displayImage(response.body().getData().getUserImage(), profileimg);
 
                     toolbar.setTitle(response.body().getData().getUserName());
 
                     fans.setText(String.valueOf(response.body().getData().getFans()));
                     followings.setText(String.valueOf(response.body().getData().getFollowings()));
+                    friends.setText(String.valueOf(response.body().getData().getFriends()));
 
                     FragStatePAgerAdapter adapter = new FragStatePAgerAdapter(fm, response.body().getData());
                     pager.setAdapter(adapter);
@@ -418,5 +465,58 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         }
     }
 
+    public void loadfollowstatus(String userids) {
+        final bean b = (bean) getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+        Call<followBean> call = cr.followcheck(b.userId, userids);
+
+        call.enqueue(new Callback<followBean>() {
+            @Override
+            public void onResponse(Call<followBean> call, Response<followBean> response) {
+
+                try {
+                    // Toast.makeText(TimelineProfile.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                    if (response.body().getMessage().equals("Following")) {
+                        follow.setText("UNFOLLOW");
+                        follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
+                        Toast.makeText(PersonalInfo.this, "You started to follow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+
+                    }
+                    if (response.body().getMessage().equals("Not Following")) {
+                        follow.setText("FOLLOW");
+                        follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus, 0, 0, 0);
+                        Toast.makeText(PersonalInfo.this, "You started to notfollow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(PersonalInfo.this, "Some Error Occurred, Please try again follow", Toast.LENGTH_SHORT).show();
+                }
+
+
+                progress.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onFailure(Call<followBean> call, Throwable t) {
+
+                progress.setVisibility(View.GONE);
+
+            }
+        });
+
+
+    }
 
 }

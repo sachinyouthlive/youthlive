@@ -11,17 +11,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
 
@@ -45,7 +40,7 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
         tabs.addTab(tabs.newTab().setText("HOT"));
-        tabs.addTab(tabs.newTab().setText("NEARBY"));
+        tabs.addTab(tabs.newTab().setText("POPULAR"));
 
         /*FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getChildFragmentManager(), FragmentPagerItems.with(getContext())

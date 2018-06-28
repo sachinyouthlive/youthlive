@@ -10,13 +10,14 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.ChatScreen;
-import com.yl.youthlive.HotAdapter;
 import com.yl.youthlive.R;
+import com.yl.youthlive.TimeStampConverter;
 import com.yl.youthlive.allMessagePOJO.Datum;
 
-import org.w3c.dom.Text;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,13 +47,31 @@ public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewH
     @Override
     public void onBindViewHolder(MsgViewHolder msgViewHolder, int i) {
 
+
         final Datum item = list.get(i);
 
         ImageLoader loader = ImageLoader.getInstance();
         loader.displayImage(item.getFriendImage() , msgViewHolder.image);
 
         msgViewHolder.name.setText(item.getFriendName());
-        msgViewHolder.msg.setText(item.getLastMsgTime());
+
+        // setting msg time
+        String dateString = item.getLastMsgTime();
+        if (dateString != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date testDate = null;
+            try {
+                testDate = sdf.parse(dateString);
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            // System.out.println("Milliseconds==" + testDate.getTime());
+            String mtime = TimeStampConverter.getTimeAgo(testDate.getTime());
+            msgViewHolder.msgtime.setText(mtime);
+        }
+        //.............
 
         if (i == list.size() - 1)
         {
@@ -93,7 +112,7 @@ public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewH
     public  class MsgViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView image;
-        TextView name , msg;
+        TextView name, msgtime;
         TextView line;
 
         public MsgViewHolder(View itemView) {
@@ -101,7 +120,7 @@ public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewH
 
             image = (CircleImageView)itemView.findViewById(R.id.image);
             name = (TextView)itemView.findViewById(R.id.name);
-            msg = (TextView)itemView.findViewById(R.id.msg);
+            msgtime = (TextView) itemView.findViewById(R.id.msg_time);
             line = (TextView)itemView.findViewById(R.id.line);
 
         }
