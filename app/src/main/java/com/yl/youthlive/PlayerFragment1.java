@@ -25,9 +25,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -40,11 +42,13 @@ import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -694,53 +698,32 @@ public class PlayerFragment1 extends Fragment {
             public void onClick(View v) {
 
 
-                progress.setVisibility(View.VISIBLE);
-
-                final bean b = (bean) getContext().getApplicationContext();
-
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
+                final Dialog dialog = new Dialog(player);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCancelable(true);
+                dialog.setContentView(R.layout.gift_popup);
+                dialog.show();
 
 
-                retrofit2.Call<sendGiftBean> call = cr.sendGift("22", liveId, timelineId, "1", "1", "5");
+                RecyclerView giftGrid = dialog.findViewById(R.id.grid);
+                ProgressBar bar = dialog.findViewById(R.id.progressBar8);
+                ImageView dialogClose = dialog.findViewById(R.id.close);
 
 
-
-
-                call.enqueue(new retrofit2.Callback<sendGiftBean>() {
+                dialogClose.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onResponse(retrofit2.Call<sendGiftBean> call, retrofit2.Response<sendGiftBean> response) {
-
-                        //Log.d("Asdasdsa", response.body().getMessage());
-
-
-                        try {
-                            if (Objects.equals(response.body().getStatus(), "0")) {
-                                Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-
-                        } catch (Exception e) {
-                            Toast.makeText(getContext(), "Some Error Occurred, Please try again", Toast.LENGTH_SHORT).show();
-
-                            e.printStackTrace();
-                        }
-
-
-                        progress.setVisibility(View.GONE);
-
-                    }
-
-                    @Override
-                    public void onFailure(retrofit2.Call<sendGiftBean> call, Throwable t) {
-                        Log.d("asdasd", t.toString());
-                        progress.setVisibility(View.GONE);
+                    public void onClick(View v) {
+                        dialog.dismiss();
                     }
                 });
+
+                GridLayoutManager giftManager = new GridLayoutManager(player , 2);
+
+                GiftAdapter giftAdapter = new GiftAdapter(player , bar , dialog);
+
+                giftGrid.setLayoutManager(giftManager);
+                giftGrid.setAdapter(giftAdapter);
 
 
 
@@ -1570,6 +1553,139 @@ public class PlayerFragment1 extends Fragment {
         liveId = getArguments().getString("liveId");
         schedule(liveId);
 
+    }
+
+
+    class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder>
+    {
+
+        Context context;
+        ProgressBar progressBar;
+        Dialog dialog;
+        Integer gifs[] = new Integer[]
+                {
+                        R.drawable.gif1,
+                        R.drawable.gif2,
+                        R.drawable.gif3,
+                        R.drawable.gif4,
+                        R.drawable.gif5,
+                        R.drawable.gif6,
+                        R.drawable.gif7,
+                        R.drawable.gif8,
+                        R.drawable.gif9,
+                        R.drawable.gif10,
+                        R.drawable.gif11,
+                        R.drawable.gif12,
+                        R.drawable.gif13,
+                        R.drawable.gif14
+                };
+
+        public GiftAdapter(Context context , ProgressBar progress , Dialog dialog)
+        {
+            this.context = context;
+            this.progressBar = progress;
+            this.dialog = dialog;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.gift_model , parent , false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+
+
+            Glide.with(context).load(gifs[position]).into(holder.image);
+
+            holder.send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    final bean b = (bean) getContext().getApplicationContext();
+
+                    final Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.BASE_URL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                    retrofit2.Call<sendGiftBean> call = cr.sendGift(b.userId, liveId, timelineId, String.valueOf(position + 1), "1", "1");
+
+
+
+
+                    call.enqueue(new retrofit2.Callback<sendGiftBean>() {
+                        @Override
+                        public void onResponse(retrofit2.Call<sendGiftBean> call, retrofit2.Response<sendGiftBean> response) {
+
+                            //Log.d("Asdasdsa", response.body().getMessage());
+
+
+                            try {
+                                if (Objects.equals(response.body().getStatus(), "1")) {
+                                    Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                }
+                                else
+                                {
+                                    Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+
+                            } catch (Exception e) {
+                                Toast.makeText(getContext(), "Some Error Occurred, Please try again", Toast.LENGTH_SHORT).show();
+
+                                e.printStackTrace();
+                            }
+
+
+                            progressBar.setVisibility(View.GONE);
+
+                        }
+
+                        @Override
+                        public void onFailure(retrofit2.Call<sendGiftBean> call, Throwable t) {
+                            Log.d("asdasd", t.toString());
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    });
+
+
+
+
+                }
+            });
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 14;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder
+        {
+
+            ImageView image;
+            Button send;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+
+                image = itemView.findViewById(R.id.imageView12);
+                send = itemView.findViewById(R.id.button8);
+
+            }
+        }
     }
 
 

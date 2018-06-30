@@ -300,10 +300,6 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         }
 
 
-        String type = pref.getString("type", "");
-        String em = pref.getString("user", "");
-        String pa = pref.getString("pass", "");
-
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -395,164 +391,10 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         });
 
 
-        if (Objects.equals(type, "social")) {
-
-            socialLogin(em, pa);
-
-        } else if (Objects.equals(type, "phone")) {
-
-            phoneLogin(em, pa);
-
-        }
 
 
     }
 
-
-    public void phoneLogin(final String phone, final String pass) {
-
-        progress.setVisibility(View.VISIBLE);
-
-        final bean b = (bean) getApplicationContext();
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<login2Bean> call = cr.signIn(phone, pass);
-
-        call.enqueue(new Callback<login2Bean>() {
-            @Override
-            public void onResponse(Call<login2Bean> call, retrofit2.Response<login2Bean> response) {
-
-
-                if (Objects.equals(response.body().getStatus(), "1")) {
-                    Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-
-                    b.userId = response.body().getData().getUserId();
-                    b.userName = response.body().getData().getUserName();
-
-                    try {
-                        b.userImage = response.body().getData().getUserImage();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    edit.putString("type", "phone");
-                    edit.putString("user", phone);
-                    edit.putString("pass", pass);
-                    edit.commit();
-
-                    Intent Inbt = new Intent(Login.this, HomeActivity.class);
-                    Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(Inbt);
-
-                } else {
-                    Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                }
-
-
-                progress.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onFailure(Call<login2Bean> call, Throwable t) {
-                progress.setVisibility(View.GONE);
-            }
-        });
-
-
-    }
-
-
-    public void socialLogin(final String email, final String pid) {
-        progress.setVisibility(View.VISIBLE);
-
-        final bean b = (bean) getApplicationContext();
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<socialBean> call = cr.socialSignIn(pid, email);
-
-        call.enqueue(new Callback<socialBean>() {
-            @Override
-            public void onResponse(Call<socialBean> call, retrofit2.Response<socialBean> response) {
-
-                if (response.body().getData().getUserName().length() > 0) {
-
-                    b.userId = response.body().getData().getUserId();
-                    b.userName = response.body().getData().getUserName();
-
-                    try {
-                        b.userImage = response.body().getData().getUserImage();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-
-                    edit.putString("type", "social");
-                    edit.putString("user", email);
-                    edit.putString("pass", pid);
-                    edit.commit();
-
-                    Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Login.this, HomeActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-
-
-                } else {
-
-                    b.userId = response.body().getData().getUserId();
-                    b.userName = response.body().getData().getUserName();
-
-                    try {
-                        b.userImage = response.body().getData().getUserImage();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-
-                    edit.putString("type", "social");
-                    edit.putString("user", email);
-                    edit.putString("pass", pid);
-                    edit.commit();
-
-                    Toast.makeText(Login.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Login.this, UserInformation.class);
-                    intent.putExtra("userId", response.body().getData().getUserId());
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-
-
-                }
-
-
-                progress.setVisibility(View.GONE);
-
-
-            }
-
-            @Override
-            public void onFailure(Call<socialBean> call, Throwable t) {
-                progress.setVisibility(View.GONE);
-            }
-        });
-
-
-    }
 
 
     public void Alredyaccount(View view) {

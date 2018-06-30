@@ -66,7 +66,6 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         liveId = getIntent().getStringExtra("uri");
 
