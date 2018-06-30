@@ -718,7 +718,7 @@ public class player_first extends Fragment implements WZStatusCallback {
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    retrofit2.Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess);
+                    retrofit2.Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess , "basic");
 
                     call.enqueue(new retrofit2.Callback<liveCommentBean>() {
                         @Override

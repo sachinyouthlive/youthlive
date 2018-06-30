@@ -676,7 +676,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess);
+                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess , "basic");
 
                     call.enqueue(new Callback<liveCommentBean>() {
                         @Override

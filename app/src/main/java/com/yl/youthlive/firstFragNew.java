@@ -507,7 +507,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess);
+                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess , "basic");
 
 
                     call.enqueue(new Callback<liveCommentBean>() {

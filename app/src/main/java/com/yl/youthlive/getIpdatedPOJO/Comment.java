@@ -22,6 +22,9 @@ public class Comment {
     @SerializedName("time")
     @Expose
     private String time;
+    @SerializedName("type")
+    @Expose
+    private String type;
     @SerializedName("userName")
     @Expose
     private String userName;
@@ -59,6 +62,14 @@ public class Comment {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getUserName() {

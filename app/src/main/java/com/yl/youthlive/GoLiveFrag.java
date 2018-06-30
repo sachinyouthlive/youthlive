@@ -20,7 +20,12 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.otaliastudios.cameraview.CameraView;
+import com.otaliastudios.cameraview.Facing;
+import com.streamaxia.android.CameraPreview;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
+
+import org.apache.http.protocol.HttpExpectationVerifier;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -32,6 +37,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
 
     Button goLive;
     CircleImageView profile;
+    CameraView cameraPreview;
 
     @Nullable
     @Override
@@ -41,11 +47,18 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
         Toast.makeText(getActivity(), "GoLiveFrag.java", Toast.LENGTH_SHORT).show();
 
 
+        cameraPreview = view.findViewById(R.id.preview);
+
+        cameraPreview.setFacing(Facing.FRONT);
+
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getContext()));
 
 
         profile = (CircleImageView)view.findViewById(R.id.profile);
         goLive = (Button)view.findViewById(R.id.golive);
+
+
+
 
 
 
@@ -61,8 +74,8 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
         goLive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(getContext() , VideoBroadcaster.class);
-                Intent intent = new Intent(getContext() , LiveScreenNew.class);
+                Intent intent = new Intent(getContext() , VideoBroadcaster.class);
+                //Intent intent = new Intent(getContext() , LiveScreenNew.class);
                 //Intent intent = new Intent(getContext() , WowzaLive.class);
                 //intent.putExtra("title" , title.getText().toString());
                 startActivity(intent);
@@ -77,6 +90,17 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
         super.onResume();
         // register connection status listener
         bean.getInstance().setConnectivityListener(this);
+
+
+        try {
+
+            cameraPreview.start();
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     ////////////////////internet connectivity check///////////////
@@ -126,6 +150,14 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     }
 
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        cameraPreview.stop();
+    }
+
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showalert(isConnected);
@@ -133,4 +165,9 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        cameraPreview.destroy();
     }
+}

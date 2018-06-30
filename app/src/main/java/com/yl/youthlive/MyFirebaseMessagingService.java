@@ -144,7 +144,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
             }
+            else if (type.equals("live_end"))
+            {
+                String dat = data2.getString("data");
 
+                Log.d("status" , "called");
+
+                Intent registrationComplete = new Intent("live_end");
+                registrationComplete.putExtra("data", dat.toString());
+
+                LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+            }
 
 
 

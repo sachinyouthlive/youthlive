@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'youthlive'
+            keyPassword 'youthlive@123'
+            storeFile file('C:/Users/lenovo/Desktop/youthlive/youthlive.jks')
+            storePassword 'youthlive@123'
+        }
+    }
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
     useLibrary 'org.apache.http.legacy'
@@ -8,13 +16,14 @@ android {
         applicationId "com.yl.youthlive"
         minSdkVersion 21
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.2"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
         }
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
@@ -108,14 +117,13 @@ dependencies {
     //implementation project(':streamaxia-opensdk')
     implementation 'com.github.tcking:giraffeplayer2:0.1.19-full'
     /*compile 'com.github.tcking:ijkplayer-arm64:0.8.8-full'
-        //support arm64
-        compile 'com.github.tcking:ijkplayer-armv5:0.8.8-full'
-        //support armv5
-        compile 'com.github.tcking:ijkplayer-x86:0.8.8-full'
-        //support x86
-        compile 'com.github.tcking:ijkplayer-x86_64:0.8.8-full'*/
+            //support arm64
+            compile 'com.github.tcking:ijkplayer-armv5:0.8.8-full'
+            //support armv5
+            compile 'com.github.tcking:ijkplayer-x86:0.8.8-full'
+            //support x86
+            compile 'com.github.tcking:ijkplayer-x86_64:0.8.8-full'*/
     //support x86_64
-
     implementation 'com.github.nisrulz:screenshott:2.0.0'
     implementation 'com.github.tarek360:instacapture:2.0.0'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.2.31'
@@ -127,5 +135,9 @@ dependencies {
     implementation project(':streamaxia-opensdk')
     implementation project(':streamaxia-player')
     implementation 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
+    implementation 'com.otaliastudios:cameraview:1.5.1'
+    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
+
+
 }
 apply plugin: 'com.google.gms.google-services'
