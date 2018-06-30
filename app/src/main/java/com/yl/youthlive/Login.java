@@ -112,8 +112,6 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         // Manually checking internet connection
 
 
-        Toast.makeText(this, "Login.java", Toast.LENGTH_SHORT).show();
-
         LoginManager.getInstance().registerCallback(mCallbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override

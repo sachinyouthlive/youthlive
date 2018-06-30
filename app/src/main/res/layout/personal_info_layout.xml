@@ -45,12 +45,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="280dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/cover" />
+                        tools:src="@drawable/cover" />
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="280dp"
-                        android:src="@drawable/gradient" />
+                        android:src="@drawable/gradientnew" />
 
                     <me.relex.circleindicator.CircleIndicator
                         android:id="@+id/indicator"
