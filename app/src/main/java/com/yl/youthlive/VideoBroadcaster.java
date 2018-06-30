@@ -48,6 +48,7 @@ import com.streamaxia.android.utils.Size;
 import com.streamaxia.player.StreamaxiaPlayer;
 import com.streamaxia.player.listener.StreamaxiaPlayerState;
 import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.endLivePOJO.endLiveBean;
 import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.getIpdatedPOJO.Comment;
 import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
@@ -66,6 +67,7 @@ import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -90,7 +92,11 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
     Toast toast;
 
+    View popup;
+    Button end , cancel;
     //ImageButton start;
+
+    String liveId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,13 +109,17 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
         cameraPreview = findViewById(R.id.preview);
         progress = findViewById(R.id.progressBar5);
 
+        popup = findViewById(R.id.finish_popup);
+        end = popup.findViewById(R.id.end);
+        cancel = popup.findViewById(R.id.cancel);
+
 
         frameLayout = findViewById(R.id.video_frame);
         surfaceView = findViewById(R.id.surface_view);
 
         pager = findViewById(R.id.pager);
 
-        surfaceView.setZOrderOnTop(true);
+        surfaceView.setZOrderMediaOverlay(true);
 
         stateText = findViewById(R.id.textView3);
         //start = findViewById(R.id.imageButton2);
@@ -139,7 +149,7 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
 
         List<Size> sizes = mPublisher.getSupportedPictureSizes(getResources().getConfiguration().orientation);
-        Size resolution = sizes.get(0);
+        final Size resolution = sizes.get(0);
         mPublisher.setVideoOutputResolution(320, 180, this.getResources().getConfiguration().orientation);
 
         mPublisher.setVideoBitRate(800000);
@@ -153,6 +163,64 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
 
 
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                popup.setVisibility(View.GONE);
+
+            }
+        });
+
+        end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                progress.setVisibility(View.VISIBLE);
+
+                bean b = (bean)getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                Call<endLiveBean> call = cr.endLive(b.userId , liveId);
+
+                call.enqueue(new Callback<endLiveBean>() {
+                    @Override
+                    public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
+
+
+                        if (response.body().getStatus().equals("1"))
+                        {
+
+                            Intent intent = new Intent(VideoBroadcaster.this , LiveEndedBroadcaster.class);
+                            intent.putExtra("liveTime" , response.body().getData().getLiveTime());
+                            intent.putExtra("views" , response.body().getData().getViewers());
+                            startActivity(intent);
+                            finish();
+
+                        }
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<endLiveBean> call, Throwable t) {
+
+                    }
+                });
+
+
+            }
+        });
 
 
 
@@ -383,4 +451,20 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
         mPublisher.switchCamera();
     }
 
+
+    public void endLive(String liveId)
+    {
+        this.liveId = liveId;
+        popup.setVisibility(View.VISIBLE);
+    }
+
+    public void setLiveId(String liveId)
+    {
+        this.liveId = liveId;
+    }
+
+    @Override
+    public void onBackPressed() {
+        endLive(liveId);
+    }
 }

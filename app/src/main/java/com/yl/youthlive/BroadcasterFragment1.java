@@ -40,6 +40,7 @@ import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,7 +88,7 @@ public class BroadcasterFragment1 extends Fragment {
 
     private int current_page = 1;
 
-    ImageButton emoji , message , send , flash , camera , crop;
+    ImageButton emoji, message, send, flash, camera, crop;
 
     EmojiconEditText comment;
 
@@ -98,6 +99,8 @@ public class BroadcasterFragment1 extends Fragment {
 
     BroadcastReceiver commentReceiver;
     BroadcastReceiver likeReceiver;
+    BroadcastReceiver viewReceiver;
+    BroadcastReceiver giftReceiver;
     View rootView;
     private EmojIconActions emojIcon;
 
@@ -126,17 +129,33 @@ public class BroadcasterFragment1 extends Fragment {
 
     int count = 0;
 
+    ImageButton heart;
+
+    CircleImageView timelineProfile;
+    TextView timelineName;
+    TextView liveUsers;
+    TextView totalBeans;
+    ImageButton end;
+    RecyclerView viewersGrid;
+    LinearLayoutManager viewersManager;
+    ViewsAdapter viewsAdapter;
+    List<com.yl.youthlive.getIpdatedPOJO.View> viewsList;
+
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.broadcaster_fragment_layout1 , container , false);
+        View view = inflater.inflate(R.layout.broadcaster_fragment_layout1, container, false);
 
-        broadcaster = (VideoBroadcaster)getActivity();
+        broadcaster = (VideoBroadcaster) getActivity();
 
         mProjectionManager = (MediaProjectionManager) broadcaster.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
 
         bubbleView = (BubbleView) view.findViewById(R.id.bubble);
+
+
         List<Drawable> drawableList = new ArrayList<>();
         drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_indigo_900_24dp));
         drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
@@ -150,6 +169,7 @@ public class BroadcasterFragment1 extends Fragment {
         bubbleView.setDrawableList(drawableList);
 
         commentList = new ArrayList<>();
+        viewsList = new ArrayList<>();
 
         newMessage = view.findViewById(R.id.textView4);
         likeCount = view.findViewById(R.id.textView5);
@@ -167,6 +187,19 @@ public class BroadcasterFragment1 extends Fragment {
 
         comment = view.findViewById(R.id.editText);
         commentGrid = view.findViewById(R.id.comment_grid);
+
+        heart = view.findViewById(R.id.imageButton);
+
+        timelineProfile = view.findViewById(R.id.image);
+        timelineName = view.findViewById(R.id.name);
+        liveUsers = view.findViewById(R.id.view_count);
+        totalBeans = view.findViewById(R.id.beans);
+        end = view.findViewById(R.id.imageButton10);
+        viewersGrid = view.findViewById(R.id.viewers_grid);
+        viewersManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        viewsAdapter = new ViewsAdapter(getContext(), viewsList);
+        viewersGrid.setAdapter(viewsAdapter);
+        viewersGrid.setLayoutManager(viewersManager);
 
 
         emojIcon = new EmojIconActions(getActivity(), rootView, comment, emoji);
@@ -195,7 +228,7 @@ public class BroadcasterFragment1 extends Fragment {
                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                        Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess);
+                        Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
 
                         call.enqueue(new Callback<liveCommentBean>() {
                             @Override
@@ -219,9 +252,6 @@ public class BroadcasterFragment1 extends Fragment {
                     }
 
 
-
-
-
                     return true;
                 }
                 return false;
@@ -229,11 +259,9 @@ public class BroadcasterFragment1 extends Fragment {
         });
 
 
+        commentsManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true);
 
-
-        commentsManager = new LinearLayoutManager(getContext() , LinearLayoutManager.VERTICAL , true);
-
-        commentsAdapter = new CommentsAdapter(getContext() , commentList);
+        commentsAdapter = new CommentsAdapter(getContext(), commentList);
 
         commentGrid.setAdapter(commentsAdapter);
         commentGrid.setLayoutManager(commentsManager);
@@ -271,7 +299,10 @@ public class BroadcasterFragment1 extends Fragment {
                     //Toast.makeText(LiveScreen.this, "You are now live", Toast.LENGTH_SHORT).show();
                     liveId = response.body().getData().getLiveId();
 
-                    Log.d("lliivvee" , liveId);
+                    broadcaster.setLiveId(liveId);
+
+                    Log.d("lliivvee", liveId);
+                    Log.d("lliivvee", b.userId);
 
                     broadcaster.startPublish(liveId);
 
@@ -290,6 +321,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                 progress.setVisibility(View.GONE);
             }
+
             @Override
             public void onFailure(Call<goLiveBean> call, Throwable t) {
                 progress.setVisibility(View.GONE);
@@ -317,14 +349,25 @@ public class BroadcasterFragment1 extends Fragment {
         });*/
 
 
+        heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+
+
+            }
+        });
+
+
         commentGrid.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (dy > 0)
-                {
+                if (dy > 0) {
                     visibleItemCount = recyclerView.getChildCount();
                     totalItemCount = commentsManager.getItemCount();
                     firstVisibleItem = commentsManager.findFirstVisibleItemPosition();
@@ -348,14 +391,11 @@ public class BroadcasterFragment1 extends Fragment {
                         loading = true;
                     }
 
-                }
-                else if (dy < 0)
-                {
+                } else if (dy < 0) {
 
                     loading = false;
 
                 }
-
 
 
             }
@@ -371,25 +411,22 @@ public class BroadcasterFragment1 extends Fragment {
                     // now subscribe to `global` topic to receive app wide notifications
 
 
-                    Log.d("data" , intent.getStringExtra("data"));
+                    Log.d("data", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
                     Gson gson = new Gson();
 
-                    Comment item = gson.fromJson( json, Comment.class );
+                    Comment item = gson.fromJson(json, Comment.class);
 
                     commentsAdapter.addComment(item);
 
-                    if (loading)
-                    {
+                    if (loading) {
                         commentGrid.scrollToPosition(0);
                         loading = true;
                         newMessage.setVisibility(View.GONE);
-                    }
-                    else
-                    {
-                        Log.d("lloogg" , "new message");
+                    } else {
+                        Log.d("lloogg", "new message");
 
                         newMessage.setVisibility(View.VISIBLE);
                     }
@@ -420,16 +457,17 @@ public class BroadcasterFragment1 extends Fragment {
                     // now subscribe to `global` topic to receive app wide notifications
 
 
-                    Log.d("data" , intent.getStringExtra("data"));
+                    Log.d("data", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
                     int count1 = Integer.parseInt(json);
 
                     if (count1 > count) {
-                        for (int i = 0; i < count1 - count; i++)
-
+                        for (int i = 0; i < count1 - count; i++) {
                             bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+                        }
+
 
                         likeCount.setText(json);
 
@@ -451,6 +489,98 @@ public class BroadcasterFragment1 extends Fragment {
             }
         };
 
+        viewReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("view")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("data", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    Gson gson = new Gson();
+
+                    com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
+
+                    String id = item.getUserId();
+                    if (!id.equals(b.userId)) {
+                        viewsAdapter.addView(item);
+                    }
+
+
+                    //displayFirebaseRegId();
+
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        giftReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("gift")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("data", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    Gson gson = new Gson();
+
+                    com.yl.youthlive.getIpdatedPOJO.Gift item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.Gift.class);
+
+
+                    try {
+
+                        String giftName = item.getGiftName();
+
+                        Comment comm = new Comment();
+
+                        comm.setType("gift");
+                        comm.setUserId(item.getSenbdId());
+
+                        commentsAdapter.addComment(comm);
+
+                        //comm.set
+
+
+                        //showGift(Integer.parseInt(item.getGiftId()), item.getGiftName());
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
 
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -474,7 +604,7 @@ public class BroadcasterFragment1 extends Fragment {
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess);
+                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
 
                     call.enqueue(new Callback<liveCommentBean>() {
                         @Override
@@ -498,7 +628,6 @@ public class BroadcasterFragment1 extends Fragment {
                 }
 
 
-
             }
         });
 
@@ -506,14 +635,11 @@ public class BroadcasterFragment1 extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (comment.getVisibility() == View.GONE)
-                {
+                if (comment.getVisibility() == View.GONE) {
                     comment.setVisibility(View.VISIBLE);
                     send.setVisibility(View.VISIBLE);
                     //emoji.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     comment.setVisibility(View.GONE);
                     send.setVisibility(View.GONE);
                     //emoji.setVisibility(View.GONE);
@@ -527,7 +653,7 @@ public class BroadcasterFragment1 extends Fragment {
             public void onClick(View v) {
 
 
-                    broadcaster.switchTorch();
+                broadcaster.switchTorch();
 
 
             }
@@ -561,6 +687,23 @@ public class BroadcasterFragment1 extends Fragment {
             }
         }.start();
 
+
+
+        end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                broadcaster.endLive(liveId);
+
+
+
+            }
+        });
+
+
+
         return view;
     }
 
@@ -581,9 +724,8 @@ public class BroadcasterFragment1 extends Fragment {
         }
 
 
-        public void addComment(Comment item)
-        {
-            list.add(0 , item);
+        public void addComment(Comment item) {
+            list.add(0, item);
             notifyItemInserted(0);
         }
 
@@ -612,18 +754,87 @@ public class BroadcasterFragment1 extends Fragment {
                 holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
 
-            final String uid = item.getUserId().replace("\"" , "");
+            final String uid = item.getUserId().replace("\"", "");
 
-            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
-
-            ImageLoader loader = ImageLoader.getInstance();
-
-            String im = item.getUserImage().replace("\"" , "");
-
-            loader.displayImage(im , holder.index, options);
 
             final bean b = (bean) context.getApplicationContext();
 
+
+            String type = item.getType().replace("\"", "");
+
+
+            if (type.equals("basic")) {
+
+                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+                ImageLoader loader = ImageLoader.getInstance();
+
+                String im = item.getUserImage().replace("\"", "");
+
+                loader.displayImage(im, holder.index, options);
+
+
+                String com = item.getComment().replace("\"", "");
+
+                String us = item.getUserName().replace("\"", "");
+
+                holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
+
+                if (Objects.equals(uid, b.userId)) {
+                    holder.add.setVisibility(View.GONE);
+                } else {
+                    holder.add.setVisibility(View.VISIBLE);
+                }
+
+                holder.container.setBackground(context.getResources().getDrawable(R.drawable.gray_round2));
+
+                holder.index.setVisibility(View.VISIBLE);
+
+                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
+                    holder.add.setBackgroundResource(R.drawable.tick);
+                } else {
+                    holder.add.setBackgroundResource(R.drawable.plus_red);
+                }
+
+
+            } else if (item.getType().equals("follow")){
+
+                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+                ImageLoader loader = ImageLoader.getInstance();
+
+                String im = item.getUserImage().replace("\"", "");
+
+                loader.displayImage(im, holder.index, options);
+
+
+                String us = item.getUserName().replace("\"", "");
+
+                holder.name.setText("YL: " + us + " became a fan. Won't miss the next live");
+
+                holder.add.setVisibility(View.GONE);
+
+                holder.container.setBackground(context.getResources().getDrawable(R.drawable.red_round2));
+
+                holder.index.setVisibility(View.GONE);
+                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
+                    holder.add.setBackgroundResource(R.drawable.tick);
+                } else {
+                    holder.add.setBackgroundResource(R.drawable.plus_red);
+                }
+
+
+            }else if (item.getType().equals("gift"))
+            {
+
+                String us = item.getUserId().replace("\"", "");
+                holder.name.setText(us + " has sent a ");
+                holder.add.setVisibility(View.GONE);
+
+                holder.container.setBackground(context.getResources().getDrawable(R.drawable.blue_round2));
+
+                holder.index.setVisibility(View.GONE);
+            }
 
 
             //holder.user.setText(us);
@@ -641,11 +852,6 @@ public class BroadcasterFragment1 extends Fragment {
 
 
 
-            if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
-                holder.add.setBackgroundResource(R.drawable.tick);
-            } else {
-                holder.add.setBackgroundResource(R.drawable.plus_red);
-            }
 
             holder.add.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -746,7 +952,7 @@ public class BroadcasterFragment1 extends Fragment {
                                 @Override
                                 public void onFailure(Call<requestConnectionBean> call, Throwable t) {
                                     progress.setVisibility(View.GONE);
-                                    Log.d("asdasdasdas" , t.toString());
+                                    Log.d("asdasdasdas", t.toString());
                                 }
                             });
 
@@ -758,21 +964,6 @@ public class BroadcasterFragment1 extends Fragment {
                 }
             });
 
-
-
-
-
-            if (Objects.equals(uid, b.userId)) {
-                holder.add.setVisibility(View.GONE);
-            } else {
-                holder.add.setVisibility(View.VISIBLE);
-            }
-
-            String com = item.getComment().replace("\"" , "");
-
-            String us = item.getUserName().replace("\"" , "");
-
-            holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
 
         }
 
@@ -786,13 +977,15 @@ public class BroadcasterFragment1 extends Fragment {
             TextView name;
             CircleImageView index;
             ImageButton add;
+            LinearLayout container;
+
 
             public ViewHolder(View itemView) {
                 super(itemView);
 
                 index = (CircleImageView) itemView.findViewById(R.id.index);
                 name = (TextView) itemView.findViewById(R.id.name);
-
+                container = itemView.findViewById(R.id.container);
                 add = (ImageButton) itemView.findViewById(R.id.add);
 
             }
@@ -800,8 +993,7 @@ public class BroadcasterFragment1 extends Fragment {
     }
 
 
-    public void schedule(String liveId)
-    {
+    public void schedule(String liveId) {
         final bean b = (bean) getActivity().getApplicationContext();
 
         final Retrofit retrofit = new Retrofit.Builder()
@@ -813,13 +1005,13 @@ public class BroadcasterFragment1 extends Fragment {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm" , Context.MODE_PRIVATE);
+        SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
-        String keey = fcmPref.getString("token" , "");
+        String keey = fcmPref.getString("token", "");
 
-        Log.d("keeey" , keey);
+        Log.d("keeey", keey);
 
-        Call<getUpdatedBean> call = cr.getUpdatedData(b.userId, liveId , keey);
+        Call<getUpdatedBean> call = cr.getUpdatedData(b.userId, liveId, keey);
 
 
         call.enqueue(new Callback<getUpdatedBean>() {
@@ -829,11 +1021,30 @@ public class BroadcasterFragment1 extends Fragment {
                 try {
 
                     commentsAdapter.setGridData(response.body().getData().getComments());
-//                    adapter.setGridData(response.body().getData().getViews());
+                    viewsAdapter.setGridData(response.body().getData().getViews());
 
                     int count1 = Integer.parseInt(response.body().getData().getLikesCount());
 
-//                    beans.setText(response.body().getData().getBeans());
+                    likeCount.setText(String.valueOf(count1));
+
+                    totalBeans.setText(response.body().getData().getBeans() + " Beans");
+
+
+                    liveUsers.setText(response.body().getData().getViewsCount());
+
+                    timelineName.setText(response.body().getData().getTimelineName());
+
+
+                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
+
+                    ImageLoader loader = ImageLoader.getInstance();
+
+                    loader.displayImage(response.body().getData().getTimelineProfileImage(), timelineProfile, options);
+
+
+                    liveUsers.setText(response.body().getData().getViewsCount());
+
+
 //                    level.setText(response.body().getData().getLevel());
 
 
@@ -866,14 +1077,17 @@ public class BroadcasterFragment1 extends Fragment {
                     }*/
 
 
-
-
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
                             new IntentFilter("commentData"));
 
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
                             new IntentFilter("like"));
 
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
+                            new IntentFilter("view"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
+                            new IntentFilter("gift"));
 
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
@@ -902,7 +1116,6 @@ public class BroadcasterFragment1 extends Fragment {
         });
 
 
-
     }
 
 
@@ -916,6 +1129,8 @@ public class BroadcasterFragment1 extends Fragment {
         super.onStop();
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(commentReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
     }
 
 
@@ -1005,8 +1220,7 @@ public class BroadcasterFragment1 extends Fragment {
             try {
 
 
-                if (coun == 0)
-                {
+                if (coun == 0) {
                     image = reader.acquireLatestImage();
                     if (image != null) {
                         Image.Plane[] planes = image.getPlanes();
@@ -1028,11 +1242,7 @@ public class BroadcasterFragment1 extends Fragment {
                         Log.e(TAG, "captured image: " + IMAGES_PRODUCED);
 
 
-
-
-
                         final String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "Title", null);
-
 
 
                         final Dialog dialog = new Dialog(broadcaster);
@@ -1042,17 +1252,17 @@ public class BroadcasterFragment1 extends Fragment {
                         dialog.setCancelable(false);
                         dialog.show();
 
-                        Log.e(TAG , "1");
+                        Log.e(TAG, "1");
 
                         RoundedImageView imeg = dialog.findViewById(R.id.imageView5);
                         ImageButton closeDialog = dialog.findViewById(R.id.imageButton8);
                         Button share = dialog.findViewById(R.id.button3);
 
-                        Log.e(TAG , "2");
+                        Log.e(TAG, "2");
 
                         imeg.setImageURI(Uri.parse(path));
 
-                        Log.e(TAG , "3");
+                        Log.e(TAG, "3");
 
                         closeDialog.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -1065,11 +1275,11 @@ public class BroadcasterFragment1 extends Fragment {
                             }
                         });
 
-                        Log.e(TAG , "4");
+                        Log.e(TAG, "4");
 
                         final Bitmap finalBitmap = bitmap;
 
-                        Log.e(TAG , "5");
+                        Log.e(TAG, "5");
                         share.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1097,11 +1307,7 @@ public class BroadcasterFragment1 extends Fragment {
                         });
 
 
-
-                        Log.e(TAG , "6");
-
-
-
+                        Log.e(TAG, "6");
 
 
                         coun++;
@@ -1111,8 +1317,6 @@ public class BroadcasterFragment1 extends Fragment {
 
                     }
                 }
-
-
 
 
             } catch (Exception e) {
@@ -1199,6 +1403,89 @@ public class BroadcasterFragment1 extends Fragment {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+
+
+    class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder> {
+
+        Context context;
+        List<com.yl.youthlive.getIpdatedPOJO.View> list = new ArrayList<>();
+
+        public ViewsAdapter(Context context, List<com.yl.youthlive.getIpdatedPOJO.View> list) {
+            this.context = context;
+            this.list = list;
+        }
+
+        public void setGridData(List<com.yl.youthlive.getIpdatedPOJO.View> list) {
+            this.list = list;
+            notifyDataSetChanged();
+        }
+
+        public void addView(com.yl.youthlive.getIpdatedPOJO.View item) {
+            list.add(0, item);
+            notifyItemInserted(0);
+            liveUsers.setText(String.valueOf(list.size() - 1));
+        }
+
+        public void removeView(com.yl.youthlive.getIpdatedPOJO.View item) {
+            list.remove(item);
+            notifyDataSetChanged();
+            liveUsers.setText(String.valueOf(list.size()));
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.viewers_model, parent, false);
+
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            holder.setIsRecyclable(false);
+
+            final com.yl.youthlive.getIpdatedPOJO.View item = list.get(position);
+
+            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+            ImageLoader loader = ImageLoader.getInstance();
+
+            loader.displayImage(item.getUserImage(), holder.image, options);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String uid = item.getUserId();
+                    uid.replace("\"", "");
+
+                    Intent intent = new Intent(context, TimelineProfile.class);
+                    intent.putExtra("userId", uid);
+                    startActivity(intent);
+
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            CircleImageView image;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                image = (CircleImageView) itemView.findViewById(R.id.image);
+
+            }
+        }
+    }
+
+
 
 
 

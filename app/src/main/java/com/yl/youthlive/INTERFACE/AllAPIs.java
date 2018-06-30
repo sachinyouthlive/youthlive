@@ -17,6 +17,7 @@ import com.yl.youthlive.deleteCareerPOJO.deleteCareerBean;
 import com.yl.youthlive.deleteVLOGPOJO.deleteVLOGBean;
 import com.yl.youthlive.editCareerPOJO.editCareerBean;
 import com.yl.youthlive.editEducationPOJO.editEducationBean;
+import com.yl.youthlive.endLivePOJO.endLiveBean;
 import com.yl.youthlive.feedBackPOJO.feedBackBean;
 import com.yl.youthlive.followListPOJO.followListBean;
 import com.yl.youthlive.followPOJO.followBean;
@@ -264,6 +265,13 @@ public interface AllAPIs {
     );
 
     @Multipart
+    @POST("api/go_live_end.php")
+    Call<endLiveBean> endLive(
+            @Part("userId") String userId,
+            @Part("liveId") String liveId
+    );
+
+    @Multipart
     @POST("api/add_education.php")
     Call<addEducationBean> addEducation(
             @Part("userId") String userId,
@@ -414,6 +422,14 @@ public interface AllAPIs {
     );
 
     @Multipart
+    @POST("api/player_updated_data.php")
+    Call<getUpdatedBean> getPlayerUpdatedData(
+            @Part("userId") String userId,
+            @Part("liveId") String liveId,
+            @Part("keey") String key
+    );
+
+    @Multipart
     @POST("api/go_live_like.php")
     Call<liveLikeBean> likeLive(
             @Part("userId") String userId,
@@ -440,7 +456,8 @@ public interface AllAPIs {
     Call<liveCommentBean> commentLive(
             @Part("userId") String userId,
             @Part("videoId") String videoId,
-            @Part("comment") String comment
+            @Part("comment") String comment,
+            @Part("type") String type
     );
 
     @Multipart

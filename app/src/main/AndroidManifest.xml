@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera2.full" />
@@ -178,20 +179,23 @@
         </receiver>
 
         <activity android:name=".Activitys.MycheckinActivity" />
-        <activity android:name=".VideoBroadcaster"
+        <activity
+            android:name=".VideoBroadcaster"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
-        <activity android:name=".VideoPlayer"
-            android:screenOrientation="portrait"
-            ></activity>
-
-
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".VideoPlayer"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".checkin.CheckinActivity"
-            android:parentActivityName=".HomeActivity"></activity>
+            android:parentActivityName=".HomeActivity" />
         <activity
             android:name=".checkin.CheckInDetailActivity"
-            android:parentActivityName=".checkin.CheckinActivity"></activity>
+            android:parentActivityName=".checkin.CheckinActivity" />
+        <activity android:name=".WalletNew" />
+        <activity android:name=".BuyDiamonds" />
+        <activity android:name=".LiveEndedPlayer" />
+        <activity android:name=".LiveEndedBroadcaster"></activity>
     </application>
 
 </manifest>

@@ -212,7 +212,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         wallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), WalletActivity.class);
+                Intent intent = new Intent(getActivity(), WalletNew.class);
                 startActivity(intent);
             }
         });

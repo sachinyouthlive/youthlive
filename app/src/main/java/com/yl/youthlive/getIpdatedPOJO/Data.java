@@ -71,6 +71,10 @@ public class Data {
     @SerializedName("gift")
     @Expose
     private List<Gift> gift = null;
+    @SerializedName("follow")
+    @Expose
+    private String follow;
+
 
     public String getUserId() {
         return userId;
@@ -232,4 +236,12 @@ public class Data {
         this.beans2 = beans2;
     }
 
+
+    public String getFollow() {
+        return follow;
+    }
+
+    public void setFollow(String follow) {
+        this.follow = follow;
+    }
 }

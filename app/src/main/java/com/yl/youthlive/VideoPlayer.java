@@ -2,15 +2,20 @@ package com.yl.youthlive;
 
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.google.android.exoplayer.AspectRatioFrameLayout;
 import com.streamaxia.android.CameraPreview;
@@ -35,14 +40,26 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
 
     private Uri uri;
 
-    CameraPreview cameraPreview;
-    ImageButton start;
 
-    Toast toast;
+    String TAG = "VideoPlayer";
+
+
+
 
     private StreamaxiaPlayer mStreamaxiaPlayer = new StreamaxiaPlayer();
 
     TextView stateText;
+
+
+    CameraPreview thumbCamera1 , thumbCamera2;
+
+    AspectRatioFrameLayout thumbFrame1 , thumbFrame2;
+
+    SurfaceView thumbSurface1 , thumbSurface2;
+
+    ViewPager pager;
+
+
 
 
     @Override
@@ -53,25 +70,36 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         liveId = getIntent().getStringExtra("uri");
 
-        toast = Toast.makeText(this , null , Toast.LENGTH_SHORT);
+
 
         frameLayout = findViewById(R.id.video_frame);
         surfaceView = findViewById(R.id.surface_view);
         progress = findViewById(R.id.progressBar4);
         stateText = findViewById(R.id.textView3);
 
-        cameraPreview = findViewById(R.id.view2);
-        start = findViewById(R.id.imageButton);
+        thumbCamera1 = findViewById(R.id.thumb_camera1);
+        thumbCamera2 = findViewById(R.id.thumb_camera2);
+        thumbFrame1 = findViewById(R.id.thumb_frame1);
+        thumbFrame2 = findViewById(R.id.thumb_frame2);
+        thumbSurface1 = findViewById(R.id.thumb_surface1);
+        thumbSurface2 = findViewById(R.id.thumb_surface2);
+
+        pager = findViewById(R.id.pager);
 
         uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + liveId);
+        //uri = Uri.parse("rtmp://192.168.1.103:1935/live/test");
+        //uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/vod/sample.mp4");
+        //uri = Uri.parse("rtmp://192.168.1.103:1935/vod/sample.mp4");
+
+        Log.d("status" , "rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + liveId);
+
         mStreamaxiaPlayer.initStreamaxiaPlayer(surfaceView, frameLayout,
                 stateText, this, this, uri);
 
+        mStreamaxiaPlayer.play(uri , StreamaxiaPlayer.TYPE_RTMP);
 
-        mStreamaxiaPlayer.play(uri, StreamaxiaPlayer.TYPE_RTMP);
 
-
-        start.setOnClickListener(new View.OnClickListener() {
+        /*start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -92,45 +120,43 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
 
 
             }
-        });
+        });*/
+
+        FragAdapter adapter = new FragAdapter(getSupportFragmentManager());
+
+        pager.setAdapter(adapter);
 
     }
 
     @Override
     public void stateENDED() {
 
-        toast.setText("ended");
-        toast.show();
+        Log.d("ssttaattuuss" , "ended");
     }
 
     @Override
     public void stateBUFFERING() {
-        toast.setText("buffering");
-        toast.show();
+        Log.d("ssttaattuuss" , "buffering");
     }
 
     @Override
     public void stateIDLE() {
-        toast.setText("idle");
-        toast.show();
+        Log.d("ssttaattuuss" , "idle");
     }
 
     @Override
     public void statePREPARING() {
-        toast.setText("preparing");
-        toast.show();
+        Log.d("ssttaattuuss" , "preparing");
     }
 
     @Override
     public void stateREADY() {
-        toast.setText("ready");
-        toast.show();
+        Log.d("ssttaattuuss" , "ready");
     }
 
     @Override
     public void stateUNKNOWN() {
-        toast.setText("unknown");
-        toast.show();
+        Log.d("ssttaattuuss" , "uunknown");
     }
 
     @Override
@@ -142,51 +168,53 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
     @Override
     public void onNetworkWeak() {
 
+        Log.d(TAG , "network is weak");
+
     }
 
     @Override
     public void onNetworkResume() {
-
+        Log.d(TAG , "network resumes");
     }
 
     @Override
     public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
-
+        Log.d(TAG , "illegal argument: " + e.toString());
     }
 
     @Override
     public void onRtmpConnecting(String s) {
-
+        Log.d(TAG , s);
     }
 
     @Override
     public void onRtmpConnected(String s) {
-
+        Log.d(TAG , s);
     }
 
     @Override
     public void onRtmpVideoStreaming() {
-
+        Log.d(TAG , "RTMP Video streaming");
     }
 
     @Override
     public void onRtmpAudioStreaming() {
-
+        Log.d(TAG , "RTMP Audio streaming");
     }
 
     @Override
     public void onRtmpStopped() {
-
+        Log.d(TAG , "RTMP stopped");
     }
 
     @Override
     public void onRtmpDisconnected() {
-
+        Log.d(TAG , "RTMP disconnected");
     }
 
     @Override
     public void onRtmpVideoFpsChanged(double v) {
-
+        Log.d(TAG , "fps changed" + String.valueOf(v));
     }
 
     @Override
@@ -254,6 +282,35 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
 
     }
 
+
+    public class FragAdapter extends FragmentStatePagerAdapter
+    {
+
+        public FragAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0)
+            {
+                PlayerFragment1 frag = new PlayerFragment1();
+                Bundle b = new Bundle();
+                b.putString("liveId" , liveId);
+                frag.setArguments(b);
+                return frag;
+            }
+            else
+            {
+                return new secondfrag();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
+    }
 
 
 }
