@@ -27,6 +27,7 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
 
 
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +55,18 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
 
         tabs.getTabAt(0).setText("HOT");
         tabs.getTabAt(1).setText("POPULAR");
+
+
+        ((HomeActivity) getActivity()).setFragmentRefreshListener(new HomeActivity.FragmentRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(com.yl.youthlive.Vlog.this).attach(com.yl.youthlive.Vlog.this).commit();
+
+            }
+        });
 
         return view;
     }

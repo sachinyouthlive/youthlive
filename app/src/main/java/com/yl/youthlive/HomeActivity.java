@@ -87,7 +87,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     ProgressBar videoProgress;
     final int REQUEST_VIDEO_CAPTURE = 1;
     Bitmap bitmap;
-
     TextView feedBack;
 
     //AHBottomNavigation bottom;
@@ -103,13 +102,25 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public final int GALLEY_REQUEST_CODE_CUSTOMER = 10;
 
 
+    private FragmentRefreshListener fragmentRefreshListener;
+
+    /// for fragment refresh on new vlog add
+    public FragmentRefreshListener getFragmentRefreshListener() {
+        return fragmentRefreshListener;
+    }
+
+    public void setFragmentRefreshListener(FragmentRefreshListener fragmentRefreshListener) {
+        this.fragmentRefreshListener = fragmentRefreshListener;
+    }
+    ////////////////
+
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_home);
-
         pref = getSharedPreferences("pref" , Context.MODE_PRIVATE);
         edit = pref.edit();
 
@@ -608,6 +619,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         return multipartTypedOutput;
     }
+
     public void uploadVideo(Uri uri)
     {
         videoProgress.setVisibility(View.VISIBLE);
@@ -659,6 +671,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         call.enqueue(new Callback<addVideoBean>() {
             @Override
             public void onResponse(Call<addVideoBean> call,retrofit2.Response<addVideoBean> response) {
+                if (getFragmentRefreshListener() != null) {
+                    videoProgress.setVisibility(View.GONE);
+                    getFragmentRefreshListener().onRefresh();
+                }
+
                 Toast.makeText(HomeActivity.this , "Video Uploaded Successfully" , Toast.LENGTH_SHORT).show();
                 videoProgress.setVisibility(View.GONE);
                 Log.d("status" , response.body().getStatus());
@@ -843,4 +860,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     {
         public void search(String searchtext);
     }
+
+    public interface FragmentRefreshListener {
+        void onRefresh();
+    }
+
 }
