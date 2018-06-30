@@ -44,6 +44,9 @@ public class Data {
     @SerializedName("followings")
     @Expose
     private String followings;
+    @SerializedName("friends")
+    @Expose
+    private String friends;
     @SerializedName("fans")
     @Expose
     private String fans;
@@ -188,6 +191,14 @@ public class Data {
 
     public void setFollowings(String followings) {
         this.followings = followings;
+    }
+
+    public String getFriends() {
+        return friends;
+    }
+
+    public void setFriends(String friends) {
+        this.friends = friends;
     }
 
     public String getFans() {

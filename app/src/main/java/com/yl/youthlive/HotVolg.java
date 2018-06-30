@@ -1,9 +1,7 @@
 package com.yl.youthlive;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,16 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.yl.youthlive.INTERFACE.AllAPIs;
-import com.yl.youthlive.vlogListPOJO.Datum;
 import com.yl.youthlive.vlogListPOJO.vlogListBean;
 import com.yl.youthlive.vlogsearchListPOJO.vlogsearchListBean;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +42,6 @@ public class HotVolg extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.hot, container, false);
-        Toast.makeText(getActivity(), "HotVolg.java", Toast.LENGTH_SHORT).show();
 
         progress = (ProgressBar) view.findViewById(R.id.progress);
 

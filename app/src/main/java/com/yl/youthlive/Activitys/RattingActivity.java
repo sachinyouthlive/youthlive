@@ -3,6 +3,7 @@ package com.yl.youthlive.Activitys;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,11 +11,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.yl.youthlive.R;
 import com.yl.youthlive.Rating1;
@@ -42,9 +41,9 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
         layout = (TabLayout)findViewById(R.id.tab_layout);
         pager = (ViewPager)findViewById(R.id.pager);
 
-        layout.addTab(layout.newTab().setText("This hour"));
-        layout.addTab(layout.newTab().setText("Last 24 hour"));
-        layout.addTab(layout.newTab().setText("Last 7 days"));
+        layout.addTab(layout.newTab().setText("Last hour"));
+        layout.addTab(layout.newTab().setText("24 hour"));
+        layout.addTab(layout.newTab().setText("7 days"));
 
         layout.setTabGravity(TabLayout.GRAVITY_FILL);
         adapter = new ViewAdapter(getSupportFragmentManager(), 3);
@@ -52,9 +51,9 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
         layout.setupWithViewPager(pager);
         pager.setAdapter(adapter);
 
-        layout.getTabAt(0).setText("This hour");
-        layout.getTabAt(1).setText("Last 24 hour");
-        layout.getTabAt(2).setText("Last 7 days");
+        layout.getTabAt(0).setText("Last hour");
+        layout.getTabAt(1).setText("24 hour");
+        layout.getTabAt(2).setText("7 days");
 
 
 
@@ -129,11 +128,9 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
         int color;
         if (isConnected) {
 
-            Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
-            Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

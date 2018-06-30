@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment"
     android:layout_height="match_parent">
 
@@ -24,35 +24,45 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <FrameLayout
                 android:id="@+id/anchor"
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="70dp">
 
 
                 <android.support.v4.view.ViewPager
                     android:layout_width="match_parent"
-                    android:layout_height="280dp"
+                    android:layout_height="160dp"
                     android:id="@+id/cover_pager"
-                    />
-
+                    android:visibility="gone" />
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="220dp"
+                    android:layout_height="200dp"
                     android:id="@+id/ivBlurProfile"
                     android:contentDescription="banner"
-                    android:src="@drawable/gradient" />
+                    android:scaleType="centerCrop" />
+
+                <ImageView
+                    android:id="@+id/choose_file"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end|top"
+                    android:layout_marginRight="@dimen/dimen_10dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:contentDescription="camera"
+                    android:src="@drawable/editblack" />
 
                 <me.relex.circleindicator.CircleIndicator
                     android:id="@+id/indicator"
                     android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_marginBottom="3dp"
                     android:layout_height="18dp"/>
 
 
-            </RelativeLayout>
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -66,6 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:id="@+id/name"
+                    tools:text="Sachin "
                     android:textColor="@color/colorAccent"
                     android:textSize="18sp" />
 
@@ -83,6 +94,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_20dp"
                 android:orientation="vertical">
 
 
@@ -98,7 +110,7 @@
                     android:drawablePadding="10dp"
                     android:drawableStart="@drawable/businessman"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:text="Personal Info" />
 
                 <TextView
@@ -113,7 +125,7 @@
                     android:id="@+id/followingAct"
                     android:drawableStart="@drawable/hand"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:text="My Followings" />
 
 
@@ -129,7 +141,7 @@
                     android:id="@+id/vlogActivity"
                     android:drawableStart="@drawable/youtube"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:text="My Vlog" />
 
 
@@ -145,7 +157,7 @@
                     android:id="@+id/messagechatee"
                     android:drawableStart="@drawable/mess"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:text="My Messages" />
 
 
@@ -161,7 +173,7 @@
                     android:drawableStart="@drawable/walle"
                     android:gravity="center_vertical"
                     android:id="@+id/wallet"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:text="Wallet" />
 
 
@@ -177,7 +189,7 @@
                     android:id="@+id/mycheckin"
                     android:drawableStart="@drawable/checkin"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:text="My CheckIn" />
                 <TextView
                     android:layout_width="match_parent"
@@ -191,7 +203,7 @@
                     android:id="@+id/ratting_act"
                     android:drawableStart="@drawable/chevron"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:text="Ranking" />
 
                 <TextView
@@ -206,7 +218,7 @@
                     android:id="@+id/beggage"
                     android:drawableStart="@drawable/lugg"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:visibility="gone"
                     android:text="Baggage" />
 
@@ -223,7 +235,7 @@
                     android:id="@+id/check"
                     android:drawableStart="@drawable/success"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:visibility="gone"
                     android:text="My Check-in" />
 
@@ -240,7 +252,7 @@
                     android:id="@+id/blocked"
                     android:drawableStart="@drawable/blocking"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:visibility="gone"
                     android:text="Blocked List" />
 
@@ -257,7 +269,7 @@
                     android:id="@+id/about"
                     android:drawableStart="@drawable/info"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:text="About Us" />
 
 
@@ -273,7 +285,7 @@
                     android:id="@+id/policy"
                     android:drawableStart="@drawable/login"
                     android:gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="14dp"
                     android:text="Privacy Policy" />
 
 
@@ -281,8 +293,8 @@
             </LinearLayout>
         </LinearLayout>
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/default1"
             app:civ_border_color="#ffffff"
             android:id="@+id/profile"
@@ -291,15 +303,6 @@
             app:layout_anchor="@+id/anchor"
             app:layout_anchorGravity="bottom|center_horizontal" />
 
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="330dp"
-            android:id="@+id/choose_file"
-            android:layout_marginStart="90dp"
-            android:contentDescription="camera"
-            android:src="@drawable/camera_black"/>
 
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.NestedScrollView>

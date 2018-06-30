@@ -13,19 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Toast;
-
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.Facing;
-import com.streamaxia.android.CameraPreview;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
-
-import org.apache.http.protocol.HttpExpectationVerifier;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,8 +36,6 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_go_live , container , false);
-
-        Toast.makeText(getActivity(), "GoLiveFrag.java", Toast.LENGTH_SHORT).show();
 
 
         cameraPreview = view.findViewById(R.id.preview);
@@ -111,7 +102,6 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     private void showalert(boolean isConnected) {
         if (isConnected) {
 
-            Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {

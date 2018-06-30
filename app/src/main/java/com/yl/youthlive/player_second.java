@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 public class player_second extends Fragment {
 
@@ -19,7 +18,6 @@ public class player_second extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.second_pager , container , false);
-        Toast.makeText(getActivity(), "player_second.java", Toast.LENGTH_SHORT).show();
 
         plactivity = (PlayerActivity)getActivity();
 

@@ -5,9 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -22,23 +22,15 @@ import com.payumoney.core.PayUmoneySdkInitializer;
 import com.payumoney.core.entity.TransactionResponse;
 import com.payumoney.sdkui.ui.utils.PayUmoneyFlowManager;
 import com.payumoney.sdkui.ui.utils.ResultModel;
-import com.yl.youthlive.Activitys.MessaageActivity;
-import com.yl.youthlive.Activitys.PersonalInfo;
 import com.yl.youthlive.ExchangeDiamondPOJO.ExchangeBean;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.addWalletPOJO.addWalletBean;
-import com.yl.youthlive.allMessagePOJO.allMessageBean;
-import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 import com.yl.youthlive.walletPOJO.walletBean;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -355,11 +347,10 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
         int color;
         if (isConnected) {
 
-            Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
-            Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

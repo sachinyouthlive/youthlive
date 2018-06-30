@@ -1,8 +1,8 @@
 package com.yl.youthlive;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +12,12 @@ import android.widget.TextView;
 
 import com.yl.youthlive.singleMessagePOJO.Datum;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Created by TBX on 11/24/2017.
@@ -54,7 +56,24 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         Datum item = list.get(position);
 
         holder.message.setText(item.getLastMsg());
-        holder.time.setText(item.getLastMsgTime());
+
+        // setting msg time
+        String dateString = item.getLastMsgTime();
+        if (dateString != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date testDate = null;
+            try {
+                testDate = sdf.parse(dateString);
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            Log.e("time stamp", dateString);
+            Log.e("time millis", String.valueOf(testDate.getTime()));
+            String mtime = TimeStampConverter.getTimeAgo(testDate.getTime());
+            holder.time.setText(mtime);
+        }
+        //.............
 
         bean b = (bean)context.getApplicationContext();
 

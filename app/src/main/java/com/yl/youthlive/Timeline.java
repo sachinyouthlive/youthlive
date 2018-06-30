@@ -1,9 +1,9 @@
 package com.yl.youthlive;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,11 +21,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 import com.yl.youthlive.timelinePOJO.Datum;
@@ -45,7 +43,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-import tcking.github.com.giraffeplayer2.VideoInfo;
 import tcking.github.com.giraffeplayer2.VideoView;
 
 
@@ -66,7 +63,6 @@ public class Timeline extends Fragment implements ConnectivityReceiver.Connectiv
 
         View view = inflater.inflate(R.layout.timeline , container , false);
         checkConnection();
-        Toast.makeText(getActivity(), "Timeline.java", Toast.LENGTH_SHORT).show();
 
 
         list = new ArrayList<>();
@@ -142,6 +138,51 @@ Log.d("userId" , b.userId);
     }
 
 
+    private void showalert(boolean isConnected) {
+        if (isConnected) {
+
+            // Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
+            //    message = "Good! Connected to Internet";
+            //    color = Color.WHITE;
+        } else {
+
+            try {
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(getActivity());
+                }
+                builder.setTitle("NO INTERNET CONNECTION")
+                        .setMessage("Please check your internet connection setting and click refresh")
+                        .setPositiveButton(R.string.Refresh, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                // Reload current fragment
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.detach(Timeline.this).attach(Timeline.this).commit();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
+            }
+        }
+
+    }
+
+    ////////////////////internet connectivity check///////////////
+    private void checkConnection() {
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        showalert(isConnected);
+    }
+
     public class LiveAdapter2 extends RecyclerView.Adapter<LiveAdapter2.ViewHolder>
     {
 
@@ -185,21 +226,25 @@ Log.d("userId" , b.userId);
 
             holder.likes.setText(item.getLikesCount());
 
-            // setting custom date format for video comment timing
-            String _Date = item.getUploadTime();
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            SimpleDateFormat fmt2 = new SimpleDateFormat("dd MMM");
-            SimpleDateFormat fmt3 = new SimpleDateFormat("hh:mm a");
-            try {
-                Date date = fmt.parse(_Date);
-                String datepart= fmt2.format(date);
-                String timepart= fmt3.format(date);
-                holder.time.setText(timepart+", "+datepart);
-            }
-            catch(ParseException pe) {
 
-                Toast.makeText(getActivity(), "exception", Toast.LENGTH_SHORT).show();
+            // setting msg time
+            String dateString = item.getUploadTime();
+            if (dateString != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date testDate = null;
+                try {
+                    testDate = sdf.parse(dateString);
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                String times = TimeStampConverter.getTimeAgo(testDate.getTime());
+                holder.time.setText(times);
             }
+
+
+
+
 
 
 
@@ -240,13 +285,13 @@ Log.d("userId" , b.userId);
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Activity activity = (Activity) context;
                     Intent intent = new Intent(context ,SingleVideoActivity.class);
                     intent.putExtra("videoId" , item.getVideoId());
                     intent.putExtra("url" , item.getVideoURL());
                     intent.putExtra("thumb", item.getThumbURL());
                     context.startActivity(intent);
-
+                    activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 }
             });
 
@@ -343,52 +388,6 @@ Log.d("userId" , b.userId);
 
             }
         }
-    }
-
-    ////////////////////internet connectivity check///////////////
-    private void checkConnection() {
-        boolean isConnected = ConnectivityReceiver.isConnected();
-        showalert(isConnected);
-    }
-    private void showalert(boolean isConnected) {
-        if (isConnected) {
-
-            Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
-            //    message = "Good! Connected to Internet";
-            //    color = Color.WHITE;
-        } else {
-
-            try {
-                AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
-                } else {
-                    builder = new AlertDialog.Builder(getActivity());
-                }
-                builder.setTitle("NO INTERNET CONNECTION")
-                        .setMessage("Please check your internet connection setting and click refresh")
-                        .setPositiveButton(R.string.Refresh, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                // Reload current fragment
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.detach(Timeline.this).attach(Timeline.this).commit();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
-            }
-        }
-
     }
 
 

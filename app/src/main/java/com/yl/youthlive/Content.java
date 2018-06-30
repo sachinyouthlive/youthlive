@@ -1,32 +1,33 @@
 package com.yl.youthlive;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.webkit.WebViewClient;
 
 public class Content extends AppCompatActivity {
 
     Toolbar toolbar;
-    WebView web;
-
+    WebView webview;
+    ProgressDialog progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
 
-        Toast.makeText(this, "content.java", Toast.LENGTH_SHORT).show();
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
 
-        web = (WebView)findViewById(R.id.web);
+        webview = (WebView) findViewById(R.id.web);
 
-        web.getSettings().setJavaScriptEnabled(true);
-        web.loadUrl("file:///android_asset/bigo.htm");
+        //  web.getSettings().setJavaScriptEnabled(true);
+
 
         setSupportActionBar(toolbar);
 
@@ -48,6 +49,38 @@ public class Content extends AppCompatActivity {
             }
         });
 
+        webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+        progressBar = ProgressDialog.show(Content.this, null, "Loading...");
+
+        webview.setWebViewClient(new WebViewClient() {
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
+                view.loadUrl(url);
+                return true;
+            }
+
+            public void onPageFinished(WebView view, String url) {
+
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+            }
+
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                alertDialog.setTitle("Error Loading, Check your Internet Connection");
+                alertDialog.setMessage(description);
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+                alertDialog.show();
+            }
+        });
+        webview.loadUrl("http://youthlive.in/youthlive_privacyabout/about_us.htm");
 
     }
 }
