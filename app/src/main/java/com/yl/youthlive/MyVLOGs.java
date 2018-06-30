@@ -17,7 +17,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -52,7 +51,6 @@ public class MyVLOGs extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.hot, container, false);
         progress = (ProgressBar) view.findViewById(R.id.progress);
-        Toast.makeText(getContext(), "MyVLOGs.java", Toast.LENGTH_SHORT).show();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         manager = new GridLayoutManager(getContext(), 2);

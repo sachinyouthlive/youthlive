@@ -109,7 +109,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_home);
-        Toast.makeText(this, "HomeActivity.java", Toast.LENGTH_SHORT).show();
 
         pref = getSharedPreferences("pref" , Context.MODE_PRIVATE);
         edit = pref.edit();
@@ -450,6 +449,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 Log.d("jg" , "video");
 
                 Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                takeVideoIntent.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 0);
                 if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
                 }

@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.yl.youthlive.Adapter.friend_adapter;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -40,14 +39,13 @@ public class FriendActivity extends AppCompatActivity implements ConnectivityRec
     LinearLayoutManager layoutmanager;
     Toolbar toolbar;
     List<Datum> list;
-    TextView nofollowmsg;
+    TextView nofriendmsg;
     String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend);
-        Toast.makeText(this, "activity following", Toast.LENGTH_SHORT).show();
         checkConnection();
         userId = getIntent().getStringExtra("userId");
         if (userId == null) {
@@ -80,7 +78,7 @@ public class FriendActivity extends AppCompatActivity implements ConnectivityRec
         recycler_following.setLayoutManager(layoutmanager);
         recycler_following.setAdapter(recAdapter);
         recycler_following.setHasFixedSize(true);
-        nofollowmsg = findViewById(R.id.nofollowingmsg);
+        nofriendmsg = findViewById(R.id.nofriendmsg);
 
 
     }
@@ -107,11 +105,9 @@ public class FriendActivity extends AppCompatActivity implements ConnectivityRec
         int color;
         if (isConnected) {
 
-            Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
-            Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -179,9 +175,8 @@ public class FriendActivity extends AppCompatActivity implements ConnectivityRec
             @Override
             public void onResponse(Call<FriendListPOJO> call, Response<FriendListPOJO> response) {
 
-                Toast.makeText(FriendActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 if (response.body().getData().isEmpty()) {
-                    nofollowmsg.setVisibility(View.VISIBLE);
+                    nofriendmsg.setVisibility(View.VISIBLE);
                 }
 
                 recAdapter.setGridData(response.body().getData());

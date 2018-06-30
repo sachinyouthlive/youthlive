@@ -109,7 +109,6 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         name = (TextView)view.findViewById(R.id.name);
         youthId = (TextView)view.findViewById(R.id.youth_id);
 
-        Toast.makeText(getActivity(), "Profile.java", Toast.LENGTH_SHORT).show();
 
 
 
@@ -153,6 +152,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 intent.putExtra("uname", shareName);
                 intent.putExtra("uimage", shareProfile);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
 
             }
@@ -170,6 +170,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 intent.putExtra("uname", shareName);
                 intent.putExtra("uimage", shareProfile);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
         personal_info = view.findViewById(R.id.personal_info);
@@ -187,6 +188,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 intent.putExtra("uname", shareName);
                 intent.putExtra("uimage", shareProfile);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
 
             }
@@ -196,6 +198,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CheckinActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });
@@ -204,6 +207,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RattingActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });
@@ -223,6 +227,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FollowingActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });
@@ -232,6 +237,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), WalletActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -240,6 +246,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MessaageActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -250,6 +257,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 Intent intent = new Intent(getActivity(), Content.class);
                 intent.putExtra("title" , "About Us");
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -257,9 +265,10 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         policy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Content.class);
+                Intent intent = new Intent(getActivity(), Terms.class);
                 intent.putExtra("title" , "Privacy Policy");
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -359,7 +368,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
     private void showalert(boolean isConnected) {
         if (isConnected) {
 
-            Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {

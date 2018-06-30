@@ -13,10 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Toast;
-
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -37,8 +33,6 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_go_live , container , false);
-
-        Toast.makeText(getActivity(), "GoLiveFrag.java", Toast.LENGTH_SHORT).show();
 
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getContext()));
@@ -87,7 +81,6 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     private void showalert(boolean isConnected) {
         if (isConnected) {
 
-            Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {

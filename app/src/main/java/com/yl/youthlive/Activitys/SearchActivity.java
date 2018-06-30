@@ -91,7 +91,7 @@ public class SearchActivity extends AppCompatActivity implements ConnectivityRec
                 if (!searchtext.getText().toString().equals("")) {
                     loadData();
                 } else {
-                    Toast.makeText(SearchActivity.this, "Enter username/ID to search", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchActivity.this, "Enter valid username/ID to search", Toast.LENGTH_SHORT).show();
                     searchtext.setText("");
                 }
             }
@@ -132,11 +132,11 @@ public class SearchActivity extends AppCompatActivity implements ConnectivityRec
         int color;
         if (isConnected) {
 
-            Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
-            Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -204,7 +204,6 @@ public class SearchActivity extends AppCompatActivity implements ConnectivityRec
             @Override
             public void onResponse(Call<SearchListPOJO> call, Response<SearchListPOJO> response) {
                 umayknow_txt.setVisibility(View.GONE);
-                Toast.makeText(SearchActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 if (response.body().getData().isEmpty()) {
                     emptylistmsg.setVisibility(View.VISIBLE);
                 }
@@ -245,7 +244,6 @@ public class SearchActivity extends AppCompatActivity implements ConnectivityRec
             @Override
             public void onResponse(Call<SearchListPOJO> call, Response<SearchListPOJO> response) {
                 umayknow_txt.setVisibility(View.VISIBLE);
-                Toast.makeText(SearchActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 if (response.body().getData().isEmpty()) {
                     emptylistmsg.setVisibility(View.VISIBLE);
                 }

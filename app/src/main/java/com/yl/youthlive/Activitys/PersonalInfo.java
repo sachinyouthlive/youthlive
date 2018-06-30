@@ -52,9 +52,9 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
     ProgressBar progress;
     CircleImageView profile;
     ImageView profileimg;
-
-    static String userid;
-
+    // public static ArrayList<String> mylist = new ArrayList<String>();
+    String userid;
+    String allItems, allItem;
     TextView followings, friends, fans;
 
     ViewPager coverPager;
@@ -80,17 +80,20 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
 
         follow = (Button)findViewById(R.id.follow);
         profileimg = findViewById(R.id.profileimg);
+        final bean b = (bean) getApplicationContext();
 
-        userid = getIntent().getStringExtra("userId");
-
-
+        String useridd = getIntent().getStringExtra("userId");
+        ///////////////
+        b.mylist.add(useridd);
+        userid = b.mylist.get(b.mylist.size() - 1);
+        /////////////////////
         followingClick = (LinearLayout)findViewById(R.id.followings_click);
         fanClick = (LinearLayout) findViewById(R.id.fans_click);
         friendClick = findViewById(R.id.friends_click);
 
 
 
-        bean b = (bean)getApplicationContext();
+
 
         if (Objects.equals(userid, b.userId))
         {
@@ -110,7 +113,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                 Intent intent = new Intent(PersonalInfo.this, FollowingActivity.class);
                 intent.putExtra("userId", userid);
                 startActivity(intent);
-                finish();
+                //finish();
 
             }
         });
@@ -122,7 +125,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                 Intent intent = new Intent(PersonalInfo.this, FanActivity.class);
                 intent.putExtra("userId", userid);
                 startActivity(intent);
-                finish();
+                //finish();
 
             }
         });
@@ -133,7 +136,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                 Intent intent = new Intent(PersonalInfo.this, FriendActivity.class);
                 intent.putExtra("userId", userid);
                 startActivity(intent);
-                finish();
+                // finish();
 
             }
         });
@@ -161,7 +164,6 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                     @Override
                     public void onResponse(Call<followBean> call, Response<followBean> response) {
 
-                        Toast.makeText(PersonalInfo.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
                         try {
 
                             if (response.body().getMessage().equals("Follow Success")) {
@@ -180,7 +182,6 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                         } catch (Exception e) {
                             progress.setVisibility(View.GONE);
                             e.printStackTrace();
-                            Toast.makeText(PersonalInfo.this, "Some Error Occurred, Please try again", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -216,6 +217,8 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // b.mylist.remove(b.mylist.size() - 1);
+
                 finish();
             }
         });
@@ -228,11 +231,21 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        bean b = (bean) appContext;
+        if (b.mylist.size() > 1) {
+            b.mylist.remove(b.mylist.size() - 1);
+        }
+
+    }
 
     @Override
     protected void onResume() {
-        super.onResume();
      // register connection status listener
+
+        super.onResume();
         loadfollowstatus(userid);
         bean.getInstance().setConnectivityListener(this);
         loadData();
@@ -249,11 +262,11 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         int color;
         if (isConnected) {
 
-            Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
-            Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -488,19 +501,19 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                     if (response.body().getMessage().equals("Following")) {
                         follow.setText("UNFOLLOW");
                         follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
-                        Toast.makeText(PersonalInfo.this, "You started to follow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(PersonalInfo.this, "You started to follow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
 
                     }
                     if (response.body().getMessage().equals("Not Following")) {
                         follow.setText("FOLLOW");
                         follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus, 0, 0, 0);
-                        Toast.makeText(PersonalInfo.this, "You started to notfollow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(PersonalInfo.this, "You started to notfollow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
 
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(PersonalInfo.this, "Some Error Occurred, Please try again follow", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(PersonalInfo.this, "Some Error Occurred, Please try again follow", Toast.LENGTH_SHORT).show();
                 }
 
 

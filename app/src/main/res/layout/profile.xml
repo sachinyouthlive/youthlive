@@ -41,9 +41,7 @@
                     android:layout_height="200dp"
                     android:id="@+id/ivBlurProfile"
                     android:contentDescription="banner"
-                    android:background="@android:color/white"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/gradient" />
+                    android:scaleType="centerCrop" />
 
                 <ImageView
                     android:id="@+id/choose_file"
@@ -295,8 +293,8 @@
             </LinearLayout>
         </LinearLayout>
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/default1"
             app:civ_border_color="#ffffff"
             android:id="@+id/profile"

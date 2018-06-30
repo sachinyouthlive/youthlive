@@ -1,7 +1,6 @@
 package com.yl.youthlive.Adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.Activitys.FriendActivity;
@@ -83,7 +81,6 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.friendad
                 Intent intent = new Intent(context, PersonalInfo.class);
                 intent.putExtra("userId", id);
                 context.startActivity(intent);
-                ((Activity) context).finish();
 
             }
         });
@@ -105,7 +102,7 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.friendad
             public void onResponse(Call<followBean> call, Response<followBean> response) {
 
                 try {
-                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     if (response.body().getMessage().equals("Following")) {
                         holder.unfollow.setText("UNFOLLOW");
 
@@ -234,7 +231,7 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.friendad
                     @Override
                     public void onResponse(Call<followBean> call, Response<followBean> response) {
 
-                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
                         con.progress.setVisibility(View.GONE);
 

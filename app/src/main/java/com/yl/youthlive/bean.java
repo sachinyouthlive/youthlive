@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by TBX on 11/8/2017.
@@ -19,7 +21,7 @@ public class bean extends Application{
     String userName = "";
     String userImage = "";
     private static Context context;
-
+    public static ArrayList<String> mylist;
     String liveId = "";
     private static bean mInstance;
     private String TAG = "myApp";
@@ -29,6 +31,9 @@ public class bean extends Application{
     }
     protected String userAgent;
 
+    public bean() {
+        mylist = new ArrayList<String>();
+    }
     @Override
     public void onCreate() {
         super.onCreate();

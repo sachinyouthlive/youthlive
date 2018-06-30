@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.yl.youthlive.Adapter.fan_adapter;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -47,7 +46,6 @@ public class FanActivity extends AppCompatActivity implements ConnectivityReceiv
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fan);
-        Toast.makeText(this, "activity fan", Toast.LENGTH_SHORT).show();
         checkConnection();
         userId = getIntent().getStringExtra("userId");
         list = new ArrayList<>();
@@ -103,11 +101,9 @@ public class FanActivity extends AppCompatActivity implements ConnectivityReceiv
         int color;
         if (isConnected) {
 
-            Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
-            Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -175,7 +171,6 @@ public class FanActivity extends AppCompatActivity implements ConnectivityReceiv
             @Override
             public void onResponse(Call<FanListPOJO> call, Response<FanListPOJO> response) {
 
-                Toast.makeText(FanActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 if (response.body().getData().isEmpty()) {
                     nofanmsg.setVisibility(View.VISIBLE);
                 }

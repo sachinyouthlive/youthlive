@@ -1,5 +1,6 @@
 package com.yl.youthlive;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -80,11 +80,13 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Activity activity = (Activity) context;
                 Intent intent = new Intent(context ,SingleVideoActivity.class);
                 intent.putExtra("videoId" , item.getVideoId());
                 intent.putExtra("url" , item.getVideoURL());
                 intent.putExtra("thumb" , item.getThumbURL());
                 context.startActivity(intent);
+                activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
     }

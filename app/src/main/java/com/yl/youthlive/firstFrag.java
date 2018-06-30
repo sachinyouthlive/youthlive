@@ -8,8 +8,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -62,28 +60,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import com.tarek360.instacapture.Instacapture;
-import com.tarek360.instacapture.listener.SimpleScreenCapturingListener;
-import com.veer.hiddenshot.HiddenShot;
-import com.wowza.gocoder.sdk.api.WowzaGoCoder;
-import com.wowza.gocoder.sdk.api.broadcast.WZBroadcast;
-import com.wowza.gocoder.sdk.api.broadcast.WZBroadcastConfig;
 import com.wowza.gocoder.sdk.api.configuration.WZMediaConfig;
-import com.wowza.gocoder.sdk.api.devices.WZAudioDevice;
 import com.wowza.gocoder.sdk.api.devices.WZCamera;
-import com.wowza.gocoder.sdk.api.devices.WZCameraView;
 import com.wowza.gocoder.sdk.api.errors.WZStreamingError;
 import com.wowza.gocoder.sdk.api.logging.WZLog;
 import com.wowza.gocoder.sdk.api.player.WZPlayerConfig;
 import com.wowza.gocoder.sdk.api.player.WZPlayerView;
-import com.wowza.gocoder.sdk.api.status.WZState;
 import com.wowza.gocoder.sdk.api.status.WZStatus;
 import com.wowza.gocoder.sdk.api.status.WZStatusCallback;
 import com.yasic.bubbleview.BubbleView;
@@ -115,17 +100,12 @@ import java.util.TimerTask;
 import javax.microedition.khronos.opengles.GL10;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import github.nisrulz.screenshott.ScreenShott;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-import rx.functions.Action1;
-import veg.mediaplayer.sdk.MediaPlayer;
 
-import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MEDIA_PROJECTION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 public class firstFrag extends Fragment implements WZStatusCallback {
@@ -303,7 +283,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.live_pager , container , false);
 
-        toast = Toast.makeText(getContext() , "firstFrag.java" , Toast.LENGTH_SHORT);
 
         lvscreen = (LiveScreen)getActivity();
 

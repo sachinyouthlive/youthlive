@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -86,7 +85,7 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
     tcking.github.com.giraffeplayer2.VideoView player;
     ImageButton play;
 
-    ImageView image;
+    //ImageView image;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -98,9 +97,8 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
         url = getIntent().getStringExtra("url");
         list = new ArrayList<>();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        image = findViewById(R.id.image);
+        // image = findViewById(R.id.image);
         ImageLoader loader = ImageLoader.getInstance();
-        Toast.makeText(this, "SingleVideoActivity.java", Toast.LENGTH_SHORT).show();
 
         player = (tcking.github.com.giraffeplayer2.VideoView) findViewById(R.id.player);
 
@@ -143,7 +141,7 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().resetViewBeforeLoading(false).cacheInMemory(true).cacheOnDisk(true).build();
 
-        loader.displayImage(getIntent().getStringExtra("thumb") , image , options);
+        //  loader.displayImage(getIntent().getStringExtra("thumb") , image , options);
 
 
 
@@ -152,7 +150,7 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
             @Override
             public void onPrepared(GiraffePlayer giraffePlayer) {
 
-                image.setVisibility(View.GONE);
+                //         image.setVisibility(View.GONE);
 
             }
 
@@ -231,8 +229,6 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
 
             }
         });
-
-
         player.getPlayer().start();
 
 
@@ -777,11 +773,11 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
         int color;
         if (isConnected) {
 
-            Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
-            Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -1033,7 +1029,6 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
                 bubble = (LinearLayout) itemView.findViewById(R.id.bubble);
                 container = (LinearLayout) itemView.findViewById(R.id.container);
                 msgprofileimg = itemView.findViewById(R.id.msgprofile_pic);
-
 
 
             }

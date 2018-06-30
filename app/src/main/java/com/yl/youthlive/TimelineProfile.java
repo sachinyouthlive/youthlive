@@ -80,7 +80,6 @@ public class TimelineProfile extends AppCompatActivity {
         pager = findViewById(R.id.pager);
         progress = findViewById(R.id.progress);
         profile = findViewById(R.id.profileimg);
-        Toast.makeText(this, "TimelineProfile.java", Toast.LENGTH_SHORT).show();
 
         follow = (Button)findViewById(R.id.follow);
         //  following = (Button)findViewById(R.id.following);

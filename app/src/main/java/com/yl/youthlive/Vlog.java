@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
@@ -34,7 +33,6 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
         View view = inflater.inflate(R.layout.vlog , container , false);
         checkConnection();
 
-        Toast.makeText(getActivity(), "Vlog.java", Toast.LENGTH_SHORT).show();
 
         tabs = (TabLayout)view.findViewById(R.id.tabs);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
@@ -55,7 +53,7 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
         tabs.setupWithViewPager(viewPager);
 
         tabs.getTabAt(0).setText("HOT");
-        tabs.getTabAt(1).setText("NEARBY");
+        tabs.getTabAt(1).setText("POPULAR");
 
         return view;
     }
@@ -85,7 +83,7 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
     private void showalert(boolean isConnected) {
         if (isConnected) {
 
-            Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {

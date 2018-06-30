@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.sendMessagePOJO.sendMessageBean;
@@ -45,7 +44,6 @@ public class ChatScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_screen);
-        Toast.makeText(this, "ChatScreen.java", Toast.LENGTH_SHORT).show();
 
         list = new ArrayList<>();
 

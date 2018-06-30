@@ -35,11 +35,11 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/nofollowingmsg"
+        android:id="@+id/nofriendmsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Not following anyone"
+        android:text="Not Friend with anyone"
         android:textColor="@android:color/darker_gray"
         android:textSize="@dimen/dimen_14sp"
         android:visibility="gone" />

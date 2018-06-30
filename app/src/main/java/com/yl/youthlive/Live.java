@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,26 +18,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.INTERFACE.AllAPIs;
-import com.yl.youthlive.engineLiveUsersPOJO.IncomingStream;
-import com.yl.youthlive.engineLiveUsersPOJO.engineLiveUsersBean;
-import com.yl.youthlive.getLivePOJO.Result;
-import com.yl.youthlive.getLivePOJO.getLiveBean;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 import com.yl.youthlive.wowzaAPIPOJO.wowzaAPIBean;
-import com.yl.youthlive.wowzaLiveStreamsPOJO.LiveStream;
-import com.yl.youthlive.wowzaLiveStreamsPOJO.getWowzaStreamBean;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,7 +51,6 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.live_layout, container, false);
         checkConnection();
-        Toast.makeText(getContext(), "Live.java", Toast.LENGTH_SHORT).show();
 
         list = new ArrayList<>();
         list2 = new ArrayList<>();
@@ -209,7 +197,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
     private void showalert(boolean isConnected) {
         if (isConnected) {
 
-            Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
