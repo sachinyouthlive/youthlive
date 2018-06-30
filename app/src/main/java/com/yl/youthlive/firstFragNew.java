@@ -21,14 +21,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -37,15 +35,12 @@ import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
-import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -281,7 +276,6 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.live_pagernew , container , false);
 
-        toast = Toast.makeText(getContext() , "firstFrag.java" , Toast.LENGTH_SHORT);
 
         texxt = view.findViewById(R.id.texxt);
         lvscreen = (LiveScreenNew)getActivity();

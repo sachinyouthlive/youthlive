@@ -1,52 +1,28 @@
 package com.yl.youthlive;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.ViewPager;
-
-import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.AppCompatActivity;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.exoplayer.AspectRatioFrameLayout;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.streamaxia.player.StreamaxiaPlayer;
 import com.streamaxia.player.listener.StreamaxiaPlayerState;
-import com.wowza.gocoder.sdk.api.WowzaGoCoder;
-import com.wowza.gocoder.sdk.api.broadcast.WZBroadcastConfig;
-import com.wowza.gocoder.sdk.api.configuration.WZMediaConfig;
-import com.wowza.gocoder.sdk.api.devices.WZAudioDevice;
-import com.wowza.gocoder.sdk.api.errors.WZStreamingError;
-import com.wowza.gocoder.sdk.api.logging.WZLog;
-import com.wowza.gocoder.sdk.api.player.WZPlayerConfig;
-import com.wowza.gocoder.sdk.api.player.WZPlayerView;
-import com.wowza.gocoder.sdk.api.status.WZState;
-import com.wowza.gocoder.sdk.api.status.WZStatus;
 
 import java.io.IOException;
 
@@ -111,7 +87,6 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
         ButterKnife.bind(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-       // Toast.makeText(this, "PlayerActivityNew.java", Toast.LENGTH_SHORT).show();
 
 
 

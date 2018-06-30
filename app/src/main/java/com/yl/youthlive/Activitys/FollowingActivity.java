@@ -3,16 +3,16 @@ package com.yl.youthlive.Activitys;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.yl.youthlive.Adapter.following_adapter;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -40,13 +40,19 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
     Toolbar toolbar;
     List<Datum> list;
     public ProgressBar progress;
+    TextView nofollowmsg;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_following);
         checkConnection();
-
+        userId = getIntent().getStringExtra("userId");
+        if (userId == null) {
+            final bean b = (bean) getApplicationContext();
+            userId = b.userId;
+        }
         list = new ArrayList<>();
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -58,7 +64,7 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationIcon(R.drawable.arrow);
 
-        toolbar.setTitle("My Followings");
+        toolbar.setTitle("Followings");
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +79,7 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
         recycler_following.setLayoutManager(layoutmanager);
         recycler_following.setAdapter(recAdapter);
         recycler_following.setHasFixedSize(true);
+        nofollowmsg = findViewById(R.id.nofollowingmsg);
 
 
 
@@ -99,11 +106,9 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
         int color;
         if (isConnected) {
 
-            Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
-            Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -167,13 +172,16 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<followListBean> call = cr.followList(b.userId);
+        Call<followListBean> call = cr.followList(userId);
 
         call.enqueue(new Callback<followListBean>() {
             @Override
             public void onResponse(Call<followListBean> call, Response<followListBean> response) {
 
-                Toast.makeText(FollowingActivity.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                // Toast.makeText(FollowingActivity.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                if (response.body().getData().isEmpty()) {
+                    nofollowmsg.setVisibility(View.VISIBLE);
+                }
 
                 recAdapter.setGridData(response.body().getData());
 

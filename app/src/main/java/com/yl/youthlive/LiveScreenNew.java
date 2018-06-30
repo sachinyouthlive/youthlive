@@ -114,7 +114,6 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
         setContentView(R.layout.activity_live_screennew);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        Toast.makeText(this, "LiveScreen.java", Toast.LENGTH_LONG).show();
         ButterKnife.bind(this);
         mPublisher = new StreamaxiaPublisher(mCameraView, this);
 

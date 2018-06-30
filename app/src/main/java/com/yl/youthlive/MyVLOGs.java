@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,14 +17,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.deleteVLOGPOJO.deleteVLOGBean;
-import com.yl.youthlive.singleVideoPOJO.singleVideoBean;
 import com.yl.youthlive.vlogListPOJO.Datum;
 import com.yl.youthlive.vlogListPOJO.vlogListBean;
 
@@ -34,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,7 +51,6 @@ public class MyVLOGs extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.hot, container, false);
         progress = (ProgressBar) view.findViewById(R.id.progress);
-        Toast.makeText(getContext(), "MyVLOGs.java", Toast.LENGTH_SHORT).show();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         manager = new GridLayoutManager(getContext(), 2);
@@ -80,7 +74,7 @@ public class MyVLOGs extends Fragment {
     }
 
     public void loadData() {
-        progress.setVisibility(View.VISIBLE);
+
         final bean b = (bean) getContext().getApplicationContext();
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(b.BASE_URL)
@@ -154,7 +148,7 @@ public class MyVLOGs extends Fragment {
             loader.displayImage(item.getThumbURL() , holder.image , options);
 
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, SingleVideoActivity.class);
@@ -190,8 +184,6 @@ public class MyVLOGs extends Fragment {
                         @Override
                         public void onResponse(Call<deleteVLOGBean> call, Response<deleteVLOGBean> response) {
 
-                            progress.setVisibility(View.GONE);
-
                             loadData();
 
                         }
@@ -216,7 +208,8 @@ public class MyVLOGs extends Fragment {
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView likes;
             ImageView image;
-            ImageButton cross;
+            ImageButton cross, play;
+
 
             public MyViewHolder(View itemView) {
                 super(itemView);
@@ -224,6 +217,7 @@ public class MyVLOGs extends Fragment {
                 likes = (TextView) itemView.findViewById(R.id.likes);
                 image = (ImageView) itemView.findViewById(R.id.image);
                 cross = (ImageButton) itemView.findViewById(R.id.cross);
+                play = itemView.findViewById(R.id.play);
 
             }
         }

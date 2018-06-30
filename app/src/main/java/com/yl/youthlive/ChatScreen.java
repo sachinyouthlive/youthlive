@@ -1,22 +1,20 @@
 package com.yl.youthlive;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.sendMessagePOJO.sendMessageBean;
 import com.yl.youthlive.singleMessagePOJO.Datum;
 import com.yl.youthlive.singleMessagePOJO.singleMessageBean;
-import com.yl.youthlive.singleVideoPOJO.singleVideoBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +44,6 @@ public class ChatScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_screen);
-        Toast.makeText(this, "ChatScreen.java", Toast.LENGTH_SHORT).show();
 
         list = new ArrayList<>();
 
@@ -110,7 +107,9 @@ public class ChatScreen extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<sendMessageBean> call, Response<sendMessageBean> response) {
 
+                            comment.setText("");
                             progress.setVisibility(View.GONE);
+
 
                         }
 

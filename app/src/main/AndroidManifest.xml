@@ -69,6 +69,9 @@
 
         <activity
             android:name=".Login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -76,9 +79,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SplashActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".Register"
             android:screenOrientation="portrait" />
@@ -186,6 +186,7 @@
         <activity
             android:name=".VideoPlayer"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".checkin.CheckinActivity"
             android:parentActivityName=".HomeActivity" />
@@ -196,6 +197,10 @@
         <activity android:name=".BuyDiamonds" />
         <activity android:name=".LiveEndedPlayer" />
         <activity android:name=".LiveEndedBroadcaster"></activity>
+            android:parentActivityName=".checkin.CheckinActivity" />
+        <activity android:name=".Activitys.FanActivity" />
+        <activity android:name=".Activitys.FriendActivity" />
+        <activity android:name=".Activitys.SearchActivity"></activity>
     </application>
 
 </manifest>

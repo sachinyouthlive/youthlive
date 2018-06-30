@@ -8,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.wowza.gocoder.sdk.api.errors.WZStreamingError;
 import com.wowza.gocoder.sdk.api.status.WZStatus;
 import com.wowza.gocoder.sdk.api.status.WZStatusCallback;
 
@@ -24,8 +22,6 @@ public class secondfrag extends Fragment implements WZStatusCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.second_pager , container , false);
-
-        Toast.makeText(getActivity(), "secondfrag.java", Toast.LENGTH_SHORT).show();
 
         lvscreen = (LiveScreen)getActivity();
 

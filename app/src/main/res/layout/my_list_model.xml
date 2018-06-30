@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    app:cardElevation="3dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
 
 
@@ -16,7 +17,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp">
+            android:id="@+id/videothumb"
+            android:layout_height="120dp">
 
 
             <ImageView
@@ -25,38 +27,48 @@
                 android:layout_height="150dp"
                 android:scaleType="centerCrop" />
 
+            <ImageButton
+                android:id="@+id/play"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerInParent="true"
+                android:background="@android:drawable/ic_media_play" />
+        </RelativeLayout>
 
-            <RelativeLayout
+
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:background="#55000000"
-                android:orientation="vertical">
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/cross"
+                android:layout_width="@dimen/dimen_30dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="bottom"
+                android:layout_margin="6dp"
+                android:background="@drawable/deletecross"
+
+                android:scaleType="fitCenter" />
 
                 <TextView
                     android:id="@+id/likes"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignBaseline="@+id/cross"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="bottom"
                     android:layout_marginBottom="5dp"
                     android:layout_marginEnd="10dp"
                     android:drawablePadding="5dp"
                     android:drawableStart="@drawable/heart"
                     android:gravity="center"
+                    android:layout_gravity="bottom"
                     android:padding="5dp"
                     android:text="22"
                     android:textColor="#fff" />
 
-            </RelativeLayout>
-
-            <ImageButton
-                android:id="@+id/cross"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/cross" />
 
         </RelativeLayout>
     </LinearLayout>

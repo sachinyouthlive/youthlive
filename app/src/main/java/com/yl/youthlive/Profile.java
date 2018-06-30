@@ -85,7 +85,8 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
     SessionManager session;
     String shareProfile;
     String shareyouth, shareName;
-    CircleImageView profile;
+    CircleImageView profileimage;
+    ImageView profileimg;
     ProgressBar progress;
 
     ViewPager coverPager;
@@ -108,7 +109,6 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         name = (TextView)view.findViewById(R.id.name);
         youthId = (TextView)view.findViewById(R.id.youth_id);
 
-        Toast.makeText(getActivity(), "Profile.java", Toast.LENGTH_SHORT).show();
 
 
 
@@ -131,7 +131,8 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
         //profileimage = view.findViewById(R.id.profile_imagee);
 
-        profile = (CircleImageView)view.findViewById(R.id.profile);
+        profileimage = (CircleImageView) view.findViewById(R.id.profile);
+        profileimg = view.findViewById(R.id.ivBlurProfile);
         progress = (ProgressBar)view.findViewById(R.id.progress);
 
         // profile_imagee=view.findViewById(R.id.profile_image);
@@ -139,6 +140,23 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         session = new SessionManager(getActivity());
         user = session.getUserDetails();
         userID = user.get(SessionManager.USER_ID);
+
+        profileimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PersonalInfo.class);
+                bean b = (bean) getContext().getApplicationContext();
+
+                intent.putExtra("userId", b.userId);
+                intent.putExtra("ythlive", shareyouth);
+                intent.putExtra("uname", shareName);
+                intent.putExtra("uimage", shareProfile);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+
+            }
+        });
 
         vlogActivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,6 +170,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 intent.putExtra("uname", shareName);
                 intent.putExtra("uimage", shareProfile);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
         personal_info = view.findViewById(R.id.personal_info);
@@ -169,6 +188,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 intent.putExtra("uname", shareName);
                 intent.putExtra("uimage", shareProfile);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
 
             }
@@ -178,6 +198,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CheckinActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });
@@ -186,6 +207,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RattingActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });
@@ -205,6 +227,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FollowingActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });
@@ -214,6 +237,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), WalletNew.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -222,6 +246,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MessaageActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -232,6 +257,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 Intent intent = new Intent(getActivity(), Content.class);
                 intent.putExtra("title" , "About Us");
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -239,9 +265,10 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         policy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Content.class);
+                Intent intent = new Intent(getActivity(), Terms.class);
                 intent.putExtra("title" , "Privacy Policy");
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -257,10 +284,10 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 dialog.setContentView(R.layout.profile_coverdialog);
                 dialog.show();
 
-                LinearLayout cover = (LinearLayout)dialog.findViewById(R.id.cover_image);
+                //   LinearLayout cover = (LinearLayout)dialog.findViewById(R.id.cover_image);
                 LinearLayout profile = (LinearLayout)dialog.findViewById(R.id.profile_image);
 
-                cover.setOnClickListener(new View.OnClickListener() {
+            /*    cover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
@@ -271,7 +298,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                         dialog.dismiss();
 
                     }
-                });
+                });*/
 
                 profile.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -341,7 +368,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
     private void showalert(boolean isConnected) {
         if (isConnected) {
 
-            Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
@@ -420,7 +447,8 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                         b.userImage = response.body().getData().getUserImage();
 
                         ImageLoader loader = ImageLoader.getInstance();
-                        loader.displayImage(response.body().getData().getUserImage() , profile);
+                        loader.displayImage(response.body().getData().getUserImage(), profileimage);
+                        // loader.displayImage(response.body().getData().getUserImage() , profileimg);
 
                         name.setText(response.body().getData().getUserName());
                         youthId.setText(Html.fromHtml("Youth Live ID: <b>" + response.body().getData().getYouthLiveId() + "</b>"));

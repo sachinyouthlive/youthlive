@@ -47,6 +47,9 @@ public class Data {
     @SerializedName("fans")
     @Expose
     private String fans;
+    @SerializedName("friends")
+    @Expose
+    private String friends;
     @SerializedName("topFans")
     @Expose
     private List<TopFan> topFans = null;
@@ -193,6 +196,14 @@ public class Data {
 
     public void setFans(String fans) {
         this.fans = fans;
+    }
+
+    public String getFriends() {
+        return friends;
+    }
+
+    public void setFriends(String friends) {
+        this.friends = friends;
     }
 
     public List<TopFan> getTopFans() {

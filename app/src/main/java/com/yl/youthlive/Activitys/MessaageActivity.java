@@ -3,16 +3,15 @@ package com.yl.youthlive.Activitys;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.yl.youthlive.Adapter.MassageAdapter;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -94,11 +93,9 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
         int color;
         if (isConnected) {
 
-            Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
-            Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -167,7 +164,6 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
             @Override
             public void onResponse(Call<allMessageBean> call, Response<allMessageBean> response) {
 
-                Toast.makeText(MessaageActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
                 holder.setgrid(response.body().getData());
 
