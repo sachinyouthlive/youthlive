@@ -42,6 +42,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,9 @@ import com.yl.youthlive.goLivePOJO.goLiveBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -73,6 +77,7 @@ import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -101,6 +106,8 @@ public class BroadcasterFragment1 extends Fragment {
     BroadcastReceiver likeReceiver;
     BroadcastReceiver viewReceiver;
     BroadcastReceiver giftReceiver;
+    BroadcastReceiver statusReceiver;
+    BroadcastReceiver connectionReceiver;
     View rootView;
     private EmojIconActions emojIcon;
 
@@ -141,7 +148,11 @@ public class BroadcasterFragment1 extends Fragment {
     ViewsAdapter viewsAdapter;
     List<com.yl.youthlive.getIpdatedPOJO.View> viewsList;
 
+    RelativeLayout playerFrame1;
 
+    ImageButton reject1;
+
+    String connId;
 
     @Nullable
     @Override
@@ -154,7 +165,11 @@ public class BroadcasterFragment1 extends Fragment {
 
 
         bubbleView = (BubbleView) view.findViewById(R.id.bubble);
+        playerFrame1 = view.findViewById(R.id.view3);
 
+        reject1 = view.findViewById(R.id.reject1);
+
+        reject1.setZ(21);
 
         List<Drawable> drawableList = new ArrayList<>();
         drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_indigo_900_24dp));
@@ -360,6 +375,48 @@ public class BroadcasterFragment1 extends Fragment {
             }
         });
 
+        reject1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                progress.setVisibility(View.VISIBLE);
+
+                final bean b = (bean) getContext().getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                Call<String> call = cr.endConnection(connId);
+
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                    }
+                });
+
+
+
+
+
+
+            }
+        });
 
         commentGrid.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -583,6 +640,113 @@ public class BroadcasterFragment1 extends Fragment {
         };
 
 
+        statusReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("status")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("uurrii", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject obj = new JSONObject(json);
+
+                        connId = obj.getString("connId");
+
+                        String mode = obj.getString("status");
+                        String uri = obj.getString("uri");
+
+
+                        if (mode.equals("2")) {
+
+
+                            Log.d("uurrii", uri);
+
+
+                            playerFrame1.setVisibility(View.VISIBLE);
+                            broadcaster.startThumbPlayer1(uri);
+
+                        } else {
+
+                            Toast.makeText(broadcaster, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
+
+
+                        }
+
+
+                    } catch (JSONException e) {
+                        Log.d("uurrii", e.toString());
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+        connectionReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("connection_end")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("uurrii", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject obj = new JSONObject(json);
+
+
+                        String conn = obj.getString("connId");
+                        String uid = obj.getString("userId");
+
+
+
+                        playerFrame1.setVisibility(View.GONE);
+                        broadcaster.endThumbPlayer1();
+
+
+
+                    } catch (JSONException e) {
+                        Log.d("uurrii", e.toString());
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -688,20 +852,16 @@ public class BroadcasterFragment1 extends Fragment {
         }.start();
 
 
-
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-
                 broadcaster.endLive(liveId);
-
 
 
             }
         });
-
 
 
         return view;
@@ -797,7 +957,7 @@ public class BroadcasterFragment1 extends Fragment {
                 }
 
 
-            } else if (item.getType().equals("follow")){
+            } else if (item.getType().equals("follow")) {
 
                 DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
@@ -824,8 +984,7 @@ public class BroadcasterFragment1 extends Fragment {
                 }
 
 
-            }else if (item.getType().equals("gift"))
-            {
+            } else if (item.getType().equals("gift")) {
 
                 String us = item.getUserId().replace("\"", "");
                 holder.name.setText(us + " has sent a ");
@@ -851,14 +1010,12 @@ public class BroadcasterFragment1 extends Fragment {
             });
 
 
-
-
             holder.add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
 
-                    Dialog dialog = new Dialog(context);
+                    final Dialog dialog = new Dialog(context);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.connect_dialog);
                     dialog.setCancelable(true);
@@ -869,6 +1026,7 @@ public class BroadcasterFragment1 extends Fragment {
                     TextView name = (TextView) dialog.findViewById(R.id.name);
                     Button follo = (Button) dialog.findViewById(R.id.follow);
                     Button connect = (Button) dialog.findViewById(R.id.connect);
+                    final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
 
 
                     ImageLoader loader1 = ImageLoader.getInstance();
@@ -881,7 +1039,7 @@ public class BroadcasterFragment1 extends Fragment {
                         @Override
                         public void onClick(View view) {
 
-                            progress.setVisibility(View.VISIBLE);
+                            bar.setVisibility(View.VISIBLE);
 
                             final bean b = (bean) context.getApplicationContext();
 
@@ -902,14 +1060,16 @@ public class BroadcasterFragment1 extends Fragment {
 
                                     Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
-                                    progress.setVisibility(View.GONE);
+                                    bar.setVisibility(View.GONE);
+
+                                    dialog.dismiss();
 
                                 }
 
                                 @Override
                                 public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
 
-                                    progress.setVisibility(View.GONE);
+                                    bar.setVisibility(View.GONE);
 
                                 }
                             });
@@ -923,7 +1083,7 @@ public class BroadcasterFragment1 extends Fragment {
                         public void onClick(View view) {
 
 
-                            progress.setVisibility(View.VISIBLE);
+                            bar.setVisibility(View.VISIBLE);
 
                             final bean b = (bean) context.getApplicationContext();
 
@@ -943,15 +1103,15 @@ public class BroadcasterFragment1 extends Fragment {
                                 public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
 
 
-                                    //playerLayout1.setVisibility(View.VISIBLE);
+                                    dialog.dismiss();
 
 
-                                    progress.setVisibility(View.GONE);
+                                    bar.setVisibility(View.GONE);
                                 }
 
                                 @Override
                                 public void onFailure(Call<requestConnectionBean> call, Throwable t) {
-                                    progress.setVisibility(View.GONE);
+                                    bar.setVisibility(View.GONE);
                                     Log.d("asdasdasdas", t.toString());
                                 }
                             });
@@ -1088,6 +1248,10 @@ public class BroadcasterFragment1 extends Fragment {
 
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
                             new IntentFilter("gift"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
+                            new IntentFilter("status"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionReceiver,
+                            new IntentFilter("connection_end"));
 
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
@@ -1131,6 +1295,8 @@ public class BroadcasterFragment1 extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
     }
 
 
@@ -1484,9 +1650,6 @@ public class BroadcasterFragment1 extends Fragment {
             }
         }
     }
-
-
-
 
 
 }

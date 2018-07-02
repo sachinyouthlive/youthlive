@@ -96,6 +96,8 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     Button end , cancel;
     //ImageButton start;
 
+    private StreamaxiaPlayer mStreamaxiaPlayer = new StreamaxiaPlayer();
+
     String liveId;
 
     @Override
@@ -119,7 +121,7 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
         pager = findViewById(R.id.pager);
 
-        surfaceView.setZOrderMediaOverlay(true);
+        surfaceView.setZOrderOnTop(true);
 
         stateText = findViewById(R.id.textView3);
         //start = findViewById(R.id.imageButton2);
@@ -145,14 +147,15 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
 
 
-        cameraPreview.setScalingMode(ScalingMode.TRIM);
+        //cameraPreview.setScalingMode(ScalingMode.TRIM);
+
 
 
         List<Size> sizes = mPublisher.getSupportedPictureSizes(getResources().getConfiguration().orientation);
         final Size resolution = sizes.get(0);
-        mPublisher.setVideoOutputResolution(320, 180, this.getResources().getConfiguration().orientation);
+        mPublisher.setVideoOutputResolution(540, 270, this.getResources().getConfiguration().orientation);
 
-        mPublisher.setVideoBitRate(800000);
+        //mPublisher.setVideoBitRate(800000);
 
 
 
@@ -268,6 +271,14 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        try {
+            mStreamaxiaPlayer.stop();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
         mPublisher.stopPublish();
         mPublisher.stopRecord();
     }
@@ -442,7 +453,7 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
     public void startPublish(String liveId)
     {
-        mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + liveId);
+        mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/videochat/" + liveId);
     }
 
 
@@ -467,4 +478,35 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     public void onBackPressed() {
         endLive(liveId);
     }
+
+
+    public void startThumbPlayer1(String connId)
+    {
+
+        Log.d("uurrii" , connId);
+
+        //Uri uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/vod/sample.mp4");
+
+        Uri uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + connId);
+
+        frameLayout.setVisibility(View.VISIBLE);
+        surfaceView.setVisibility(View.VISIBLE);
+
+        mStreamaxiaPlayer.initStreamaxiaPlayer(surfaceView, frameLayout,
+                stateText, this, this, uri);
+
+        mStreamaxiaPlayer.play(uri , StreamaxiaPlayer.TYPE_RTMP);
+
+    }
+
+    public void endThumbPlayer1()
+    {
+        mStreamaxiaPlayer.stop();
+
+        frameLayout.setVisibility(View.GONE);
+        surfaceView.setVisibility(View.GONE);
+
+    }
+
+
 }

@@ -21,37 +21,29 @@
 
 
     <ImageButton
-        android:id="@+id/close"
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="end"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:id="@+id/imageButton10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/close"
-        app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_action_navigation_close"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:background="@drawable/grey_round"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image"
@@ -74,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="5dp"
-                android:paddingEnd="10dp"
+                android:paddingEnd="5dp"
                 android:textColor="#000000"
                 android:textSize="14sp" />
 
@@ -83,36 +75,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="5dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="5dp"
+                android:paddingEnd="5dp"
+                android:drawableStart="@drawable/ic_user"
+                android:gravity="center_vertical"
+                android:drawablePadding="2dp"
                 android:textColor="#000000"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:visibility="visible" />
 
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/follow"
+            android:id="@+id/folloview_friends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/add"
-            android:visibility="gone" />
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="1dp"
+            android:background="@drawable/circle"
+            android:src="@drawable/add"
+            android:padding="8dp"
+            android:visibility="visible" />
 
     </LinearLayout>
 
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/linearLayout4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/grey_round"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintStart_toStartOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
 
         <ImageView
@@ -120,7 +116,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             android:padding="5dp"
-            android:src="@drawable/coffeebean" />
+            android:src="@drawable/coffee2" />
 
 
         <TextView
@@ -132,220 +128,58 @@
             android:gravity="center"
             android:paddingStart="5dp"
             android:paddingEnd="10dp"
+
             android:textColor="#000000" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/grey_round"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout3"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:padding="5dp"
-            android:src="@drawable/star" />
-
-        <TextView
-            android:id="@+id/level"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:drawablePadding="5dp"
-            android:gravity="center"
-            android:paddingStart="5dp"
-            android:paddingEnd="10dp"
-            android:textColor="#000000" />
-
     </LinearLayout>
 
 
     <RelativeLayout
         android:id="@+id/camera_layout1"
-        android:layout_width="80dp"
+        android:layout_width="120dp"
         android:layout_height="160dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
+        android:layout_marginBottom="110dp"
+        android:layout_marginEnd="8dp"
         android:elevation="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
 
         <com.streamaxia.android.CameraPreview
             android:id="@+id/camera1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
 
 
-        <ImageButton
-            android:id="@+id/accept1"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:elevation="1dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/accept" />
 
 
-        <ImageButton
-            android:id="@+id/reject1"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:elevation="1dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/reject" />
 
 
-        <ImageButton
-            android:id="@+id/reject3"
-            android:layout_width="40dp"
-            android:elevation="1dp"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            android:visibility="gone"
-            android:background="@drawable/red_round"
-            android:src="@drawable/hang_up" />
 
 
     </RelativeLayout>
 
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/grid"
+        android:id="@+id/comment_grid"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/close"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <LinearLayout
-        android:id="@+id/actions"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/gradient_black"
-        android:orientation="horizontal"
-        android:padding="6dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/editText"
+        app:layout_constraintEnd_toStartOf="@+id/camera_layout1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
 
-        <ImageButton
-            android:id="@+id/chat_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="4dp"
-            android:background="@drawable/circle"
-            android:padding="10dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/chatting" />
 
 
-        <ImageButton
-            android:id="@+id/switch_camera"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="4dp"
-            android:background="@drawable/circle"
-            android:padding="5dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/rotate1"
-            android:visibility="gone" />
 
 
-        <ImageButton
-            android:id="@+id/crop"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="4dp"
-            android:background="@drawable/circle"
-            android:padding="10dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/crop2" />
 
 
-        <ImageButton
-            android:id="@+id/gift"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="4dp"
-            android:background="@drawable/circle"
-            android:padding="10dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/gift" />
-
-
-        <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="4dp"
-            android:background="@drawable/circle"
-            android:padding="10dp"
-            android:id="@+id/report"
-            android:scaleType="centerInside"
-            android:src="@drawable/block1" />
-
-
-    </LinearLayout>
-
-
-    <com.yasic.bubbleview.BubbleView
-        android:id="@+id/bubble"
-        android:layout_width="100dp"
-        android:layout_height="250dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
-    <ImageButton
-        android:id="@+id/heart"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/lover"
-        app:layout_constraintBottom_toBottomOf="@+id/bubble"
-        app:layout_constraintEnd_toEndOf="@+id/bubble"
-        app:layout_constraintHorizontal_bias="0.97"
-        app:layout_constraintStart_toStartOf="@+id/bubble" />
-
-
-    <TextView
-        android:id="@+id/like_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="8dp"
-        android:textColor="#ffffff"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/heart" />
 
 
     <LinearLayout
@@ -378,196 +212,202 @@
     </LinearLayout>
 
 
-    <LinearLayout
-        android:id="@+id/ggift"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+
+
+
+
+
+
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:srcCompat="@drawable/gradient" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/gift_back"
-        android:elevation="8dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/actions"
-        app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:layout_constraintStart_toStartOf="@+id/imageView4">
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="10dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="5dp"
-            android:text="Send Gifts"
-            android:textColor="#ffffff" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/gift_beans"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:drawableStart="@drawable/coffee"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:text="2300"
-                android:textColor="#ffffff" />
-
-            <TextView
-                android:id="@+id/gift_diamond"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:drawableStart="@drawable/diamond"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:text="2300"
-                android:textColor="#ffffff" />
-
-
-            <TextView
-                android:id="@+id/gift_coin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:drawableStart="@drawable/dollar"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:text="2300"
-                android:textColor="#ffffff" />
-
-
-        </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/gift_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-        <Button
-            android:id="@+id/send_gift"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="5dp"
-            android:background="@drawable/gift_back"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="10dp"
-            android:text="SEND"
-            android:textColor="#ffffff"
-            android:visibility="visible" />
-
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/chat"
-        android:layout_width="344dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="#00ffffff"
-        android:elevation="8dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/actions"
-        app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:layout_constraintStart_toStartOf="@+id/imageView4">
-
-
-        <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/emoji"
-            android:visibility="gone" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layoutDirection="rtl"
-            android:orientation="horizontal">
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/send"
-                app:backgroundTint="#ffffff" />
-
-            <EditText
-                android:id="@+id/comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/comment_sendback"
-                android:cursorVisible="true"
-                android:gravity="center_vertical|start"
-                android:hint="Add a comment"
-                android:padding="10dp" />
-
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/grid2"
-        android:layout_width="250dp"
-        android:layout_height="200dp"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/chat"
+        android:background="@drawable/circle"
+        android:padding="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/chatting"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/circle"
+        android:padding="10dp"
+        android:src="@drawable/emoji"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editText" />
+
+    <ImageButton
+        android:id="@+id/imageButton5"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/circle"
+        android:src="@drawable/send"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editText" />
+
+    <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
+        android:id="@+id/editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/comment_sendback"
+        android:ems="10"
+        android:hint="tap to enter"
+        android:imeOptions="actionSend"
+        android:inputType="textPersonName"
+        android:padding="10dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton3"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton5"
+        app:layout_constraintStart_toEndOf="@+id/imageButton4" />
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/cyan_round"
+        android:padding="8dp"
+        android:text="New Message"
+        android:textColor="#ffffff"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/comment_grid"
+        app:layout_constraintEnd_toEndOf="@+id/comment_grid"
+        app:layout_constraintStart_toStartOf="@+id/comment_grid" />
+
+    <ImageButton
+        android:id="@+id/imageButton6"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/circle"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageButton3"
+        android:src="@drawable/gift" />
+
 
 
     <ProgressBar
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:layout_constraintStart_toStartOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button2"
+        android:id="@+id/progressBar3"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Button"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/circle"
+        android:layout_marginStart="8dp"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageButton6"
+        android:src="@drawable/networking" />
+
+    <ImageButton
+        android:id="@+id/imageButton7"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/circle"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/crop2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageButton2" />
+
+    <RelativeLayout
+        android:id="@+id/bubble1"
+        android:layout_width="100dp"
+        android:layout_height="250dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <com.yasic.bubbleview.BubbleView
+            android:id="@+id/bubble"
+            android:layout_width="100dp"
+            android:layout_height="250dp"
+            android:paddingBottom="50dp"
+            />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:scaleType="fitCenter"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/lover"
+            android:background="#00000000"/>
+
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="0"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton5" />
 
 
 </android.support.constraint.ConstraintLayout>

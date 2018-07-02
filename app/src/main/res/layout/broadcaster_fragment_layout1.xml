@@ -245,10 +245,11 @@
         app:layout_constraintStart_toEndOf="@+id/imageButton3"
         android:src="@drawable/light" />
 
-    <View
+    <RelativeLayout
         android:id="@+id/view3"
         android:layout_width="120dp"
         android:layout_height="160dp"
+        android:visibility="gone"
         android:layout_marginBottom="110dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
@@ -256,13 +257,28 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0" >
+
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/reject"
+            android:id="@+id/reject1"
+            android:layout_margin="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            />
+
+
+    </RelativeLayout>
 
     <View
         android:id="@+id/view4"
         android:layout_width="120dp"
         android:layout_height="160dp"
         android:layout_marginBottom="8dp"
+        android:visibility="gone"
         android:layout_marginEnd="8dp"
         android:background="@drawable/frame_back"
         app:layout_constraintBottom_toTopOf="@+id/view3"

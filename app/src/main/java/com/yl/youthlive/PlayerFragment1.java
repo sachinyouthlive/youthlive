@@ -45,6 +45,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,8 +53,14 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.streamaxia.android.CameraPreview;
+import com.streamaxia.android.StreamaxiaPublisher;
+import com.streamaxia.android.handlers.EncoderHandler;
+import com.streamaxia.android.handlers.RecordHandler;
+import com.streamaxia.android.handlers.RtmpHandler;
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 import com.yl.youthlive.endLivePOJO.Data;
 import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.getIpdatedPOJO.Comment;
@@ -64,10 +71,14 @@ import com.yl.youthlive.liveLikePOJO.liveLikeBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
 import com.yl.youthlive.sendGiftPOJO.sendGiftBean;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,11 +89,12 @@ import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class PlayerFragment1 extends Fragment {
+public class PlayerFragment1 extends Fragment implements RecordHandler.RecordListener, RtmpHandler.RtmpListener, EncoderHandler.EncodeListener {
 
     TextView newMessage;
 
@@ -107,6 +119,9 @@ public class PlayerFragment1 extends Fragment {
     BroadcastReceiver viewReceiver;
     BroadcastReceiver giftReceiver;
     BroadcastReceiver endReceiver;
+    BroadcastReceiver requestReceiver;
+    BroadcastReceiver connectionReceiver;
+
     View rootView;
     private EmojIconActions emojIcon;
 
@@ -116,7 +131,7 @@ public class PlayerFragment1 extends Fragment {
 
     ImageButton timeLineFollow;
 
-
+    CameraPreview thumbCamera1;
 
     private static final int REQUEST_CODE = 100;
 
@@ -134,6 +149,8 @@ public class PlayerFragment1 extends Fragment {
     TextView likeCount;
 
     private BubbleView bubbleView;
+
+    String connId;
 
     int count = 0;
 
@@ -155,9 +172,14 @@ public class PlayerFragment1 extends Fragment {
 
     String image;
 
+
+    RelativeLayout thumbCameraContainer1;
+
+    ImageButton reject1;
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.player_fragment_layout1 , container , false);
 
 
@@ -166,9 +188,16 @@ public class PlayerFragment1 extends Fragment {
         mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
 
+        reject1 = view.findViewById(R.id.reject1);
+
+        reject1.setZ(21);
+
+        thumbCameraContainer1 = view.findViewById(R.id.view3);
+
         bubbleView = (BubbleView) view.findViewById(R.id.bubble);
         timeLineFollow = view.findViewById(R.id.folloview_friends);
 
+        thumbCamera1 = view.findViewById(R.id.thumb_camera1);
 
         List<Drawable> drawableList = new ArrayList<>();
         drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_indigo_900_24dp));
@@ -341,6 +370,50 @@ public class PlayerFragment1 extends Fragment {
                     @Override
                     public void onFailure(retrofit2.Call<liveLikeBean> call, Throwable t) {
 
+                    }
+                });
+
+
+
+
+
+
+            }
+        });
+
+
+        reject1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                progress.setVisibility(View.VISIBLE);
+
+                final bean b = (bean) getContext().getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                Call<String> call = cr.endConnection(connId);
+
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
                     }
                 });
 
@@ -625,6 +698,212 @@ public class PlayerFragment1 extends Fragment {
             }
         };
 
+        requestReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("request")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+                    Log.d("data", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    connId = json;
+
+
+
+                    final Dialog dialog = new Dialog(player);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setCancelable(false);
+                    dialog.setContentView(R.layout.new_connection_dialog);
+                    dialog.show();
+
+                    Button accept = dialog.findViewById(R.id.button11);
+                    Button deny = dialog.findViewById(R.id.button12);
+                    final ProgressBar dp = dialog.findViewById(R.id.progressBar9);
+
+
+                    accept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+
+                            /*final bean b = (bean) player.getApplicationContext();
+
+                            mPublisher = new StreamaxiaPublisher(thumbCamera1, player);
+
+                            mPublisher.setEncoderHandler(new EncoderHandler(PlayerFragment1.this));
+                            mPublisher.setRtmpHandler(new RtmpHandler(PlayerFragment1.this));
+                            mPublisher.setRecordEventHandler(new RecordHandler(PlayerFragment1.this));
+                            thumbCamera1.startCamera();
+                            mPublisher.setVideoOutputResolution(160, 120, getResources().getConfiguration().orientation);
+
+
+                            mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + liveId + b.userId);
+*/
+                            //thumbCamera1.setVisibility(View.VISIBLE);
+
+
+thumbCameraContainer1.setVisibility(View.VISIBLE);
+
+                            player.startThumbCamera1(connId);
+                            dialog.dismiss();
+                        }
+                    });
+
+
+                    deny.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            dp.setVisibility(View.VISIBLE);
+
+                            final bean b = (bean) player.getApplicationContext();
+
+                            final Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.BASE_URL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+
+                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                            Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1");
+                            call1.enqueue(new Callback<acceptRejectBean>() {
+                                @Override
+                                public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+
+                                    try {
+
+
+
+
+                                        //cameraLayout1.setVisibility(View.VISIBLE);
+
+/*
+                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
+                            goCoderBroadcastConfig.setPortNumber(1935);
+                            goCoderBroadcastConfig.setApplicationName("live");
+                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
+                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
+                            // Set the bitrate to 4000 Kbps
+                            goCoderBroadcastConfig.setVideoBitRate(1200);
+
+                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
+
+                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
+
+                            //if (configValidationError != null) {
+                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDescription(), Toast.LENGTH_LONG).show();
+                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
+                            // Stop the broadcast that is currently running
+                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
+                            //} else {
+                            // Start streaming
+                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
+                            //}
+
+*/
+
+
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    dialog.dismiss();
+
+                                    dp.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                                    dp.setVisibility(View.GONE);
+                                    t.printStackTrace();
+                                }
+                            });
+
+
+                        }
+                    });
+
+
+
+
+
+
+
+                    //displayFirebaseRegId();
+
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        connectionReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("connection_end")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("uurrii", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject obj = new JSONObject(json);
+
+
+                        String conn = obj.getString("connId");
+                        String uid = obj.getString("userId");
+
+
+                        if (uid.equals(b.userId))
+                        {
+
+
+                            player.endThumbCamera1();
+                            thumbCameraContainer1.setVisibility(View.GONE);
+                        }
+
+
+
+
+
+                    } catch (JSONException e) {
+                        Log.d("uurrii", e.toString());
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
 
 
 
@@ -812,6 +1091,185 @@ public class PlayerFragment1 extends Fragment {
         return view;
     }
 
+    @Override
+    public void onRecordPause() {
+
+    }
+
+    @Override
+    public void onRecordResume() {
+
+    }
+
+    @Override
+    public void onRecordStarted(String s) {
+
+    }
+
+    @Override
+    public void onRecordFinished(String s) {
+
+    }
+
+    @Override
+    public void onRecordIllegalArgumentException(IllegalArgumentException e) {
+
+    }
+
+    StreamaxiaPublisher mPublisher;
+
+    @Override
+    public void onRecordIOException(IOException e) {
+
+    }
+
+    @Override
+    public void onRtmpConnecting(String s) {
+
+    }
+
+    @Override
+    public void onRtmpConnected(String s) {
+        progress.setVisibility(View.VISIBLE);
+
+        final bean b = (bean) getContext().getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+        Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId + b.userId, "2");
+        call1.enqueue(new Callback<acceptRejectBean>() {
+            @Override
+            public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+
+                try {
+
+
+                    //cameraLayout1.setVisibility(View.VISIBLE);
+
+/*
+                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
+                            goCoderBroadcastConfig.setPortNumber(1935);
+                            goCoderBroadcastConfig.setApplicationName("live");
+                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
+                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
+                            // Set the bitrate to 4000 Kbps
+                            goCoderBroadcastConfig.setVideoBitRate(1200);
+
+                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
+
+                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
+
+                            //if (configValidationError != null) {
+                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDescription(), Toast.LENGTH_LONG).show();
+                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
+                            // Stop the broadcast that is currently running
+                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
+                            //} else {
+                            // Start streaming
+                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
+                            //}
+
+*/
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                progress.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                progress.setVisibility(View.GONE);
+                t.printStackTrace();
+            }
+        });
+
+    }
+
+    @Override
+    public void onRtmpVideoStreaming() {
+
+    }
+
+    @Override
+    public void onRtmpAudioStreaming() {
+
+    }
+
+    @Override
+    public void onRtmpStopped() {
+
+    }
+
+    @Override
+    public void onRtmpDisconnected() {
+
+    }
+
+    @Override
+    public void onRtmpVideoFpsChanged(double v) {
+
+    }
+
+    @Override
+    public void onRtmpVideoBitrateChanged(double v) {
+
+    }
+
+    @Override
+    public void onRtmpAudioBitrateChanged(double v) {
+
+    }
+
+    @Override
+    public void onRtmpSocketException(SocketException e) {
+
+    }
+
+    @Override
+    public void onRtmpIOException(IOException e) {
+
+    }
+
+    @Override
+    public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
+
+    }
+
+    @Override
+    public void onRtmpIllegalStateException(IllegalStateException e) {
+
+    }
+
+    @Override
+    public void onRtmpAuthenticationg(String s) {
+
+    }
+
+    @Override
+    public void onNetworkWeak() {
+
+    }
+
+    @Override
+    public void onNetworkResume() {
+
+    }
+
+    @Override
+    public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
+
+    }
+
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
 
@@ -885,11 +1343,7 @@ public class PlayerFragment1 extends Fragment {
 
                 holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
 
-                if (Objects.equals(uid, b.userId)) {
-                    holder.add.setVisibility(View.GONE);
-                } else {
-                    holder.add.setVisibility(View.VISIBLE);
-                }
+
 
                 holder.container.setBackground(context.getResources().getDrawable(R.drawable.gray_round2));
 
@@ -897,6 +1351,12 @@ public class PlayerFragment1 extends Fragment {
 
                 holder.index.setVisibility(View.GONE);
                 if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
+                    holder.add.setVisibility(View.GONE);
+                } else {
+                    holder.add.setVisibility(View.VISIBLE);
+                }
+
+                if (Objects.equals(uid, b.userId)) {
                     holder.add.setVisibility(View.GONE);
                 } else {
                     holder.add.setVisibility(View.VISIBLE);
@@ -1148,6 +1608,10 @@ public class PlayerFragment1 extends Fragment {
 
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(endReceiver,
                             new IntentFilter("live_end"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver,
+                            new IntentFilter("request"));
+LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionReceiver,
+                            new IntentFilter("connection_end"));
 
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
@@ -1192,6 +1656,8 @@ public class PlayerFragment1 extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(endReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
     }
 
 

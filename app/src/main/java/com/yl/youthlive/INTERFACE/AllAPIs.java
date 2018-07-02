@@ -190,6 +190,12 @@ public interface AllAPIs {
     );
 
     @Multipart
+    @POST("api/finishConnection.php")
+    Call<String> endConnection(
+            @Part("requestId") String position
+    );
+
+    @Multipart
     @POST("api/edit_career.php")
     Call<editCareerBean> editCareer(
             @Part("userId") String userId,

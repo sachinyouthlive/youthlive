@@ -228,7 +228,7 @@ public class player_first extends Fragment implements WZStatusCallback {
 
         mProjectionManager = (MediaProjectionManager) plactivity.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
-        toggle = view.findViewById(R.id.button2);
+        //toggle = view.findViewById(R.id.button2);
 
         cameraLayout1 = (RelativeLayout) view.findViewById(R.id.camera_layout1);
 
@@ -239,7 +239,7 @@ public class player_first extends Fragment implements WZStatusCallback {
         reject1 = (ImageButton) view.findViewById(R.id.reject1);
         reject3 = (ImageButton) view.findViewById(R.id.reject3);
 
-        report = (ImageButton) view.findViewById(R.id.report);
+        //report = (ImageButton) view.findViewById(R.id.report);
 
         follow = (ImageButton) view.findViewById(R.id.follow);
 

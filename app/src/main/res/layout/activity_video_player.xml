@@ -21,9 +21,8 @@
 
         <SurfaceView
             android:id="@+id/surface_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_gravity="center" />
@@ -65,15 +64,27 @@
         android:layout_marginBottom="110dp"
         android:layout_marginEnd="8dp"
         android:elevation="4dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.streamaxia.android.CameraPreview
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/thumb_camera1"
+            android:id="@+id/thumb_camera_layout1"
             android:visibility="gone"
-            />
+            >
+
+            <com.streamaxia.android.CameraPreview
+                android:layout_width="120dp"
+                android:layout_height="160dp"
+                android:id="@+id/thumb_camera1"
+                />
+
+
+
+        </RelativeLayout>
+
 
 
         <com.google.android.exoplayer.AspectRatioFrameLayout
@@ -81,12 +92,13 @@
             android:layout_height="match_parent"
             android:id="@+id/thumb_frame1"
             android:visibility="gone"
-            android:background="#000000">
+            >
 
             <SurfaceView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/thumb_surface1"
+                android:visibility="gone"
 
                 />
 
@@ -101,6 +113,7 @@
         android:layout_height="160dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="parent" >
 
