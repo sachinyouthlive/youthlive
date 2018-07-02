@@ -1,6 +1,7 @@
 package com.yl.youthlive;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.PixelFormat;
 import android.graphics.Region;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -10,17 +11,21 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
 import com.google.android.exoplayer.AspectRatioFrameLayout;
+import com.otaliastudios.cameraview.AspectRatio;
 import com.streamaxia.android.CameraPreview;
 import com.streamaxia.android.StreamaxiaPublisher;
 import com.streamaxia.android.handlers.EncoderHandler;
@@ -75,6 +80,9 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
 
     RelativeLayout player_camera_layout1;
 
+    RelativeLayout container;
+    ImageView loading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,11 +90,14 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         liveId = getIntent().getStringExtra("uri");
 
+        loading = findViewById(R.id.loading);
 
         frameLayout = findViewById(R.id.video_frame);
         surfaceView = findViewById(R.id.surface_view);
         progress = findViewById(R.id.progressBar4);
         stateText = findViewById(R.id.textView3);
+
+        container = findViewById(R.id.view2);
 
         player_camera_layout1 = findViewById(R.id.thumb_camera_layout1);
 
@@ -100,14 +111,23 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
         pager = findViewById(R.id.pager);
 
 
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        float ratio = ((float)metrics.heightPixels / (float)metrics.widthPixels
+        );
+
+        frameLayout.setAspectRatio(ratio);
 
 
         surfaceView.setZOrderOnTop(false);
 
-        //frameLayout.setZ(6);
-        player_camera_layout1.setZ(12);
+        SurfaceHolder holder = surfaceView.getHolder();
+        holder.setFormat(PixelFormat.UNKNOWN);
+        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
-        player_camera_layout1.getParent().requestTransparentRegion(frameLayout);
+        surfaceView.setZ(6);
+        container.setZ(12);
+
+        container.getParent().requestTransparentRegion(surfaceView);
 
         uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/videochat/" + liveId);
         //uri = Uri.parse("rtmp://192.168.1.103:1935/live/test");
@@ -171,12 +191,14 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
 
     @Override
     public void statePREPARING() {
+        loading.setVisibility(View.VISIBLE);
         Log.d("ssttaattuuss", "preparing");
     }
 
     @Override
     public void stateREADY() {
         Log.d("ssttaattuuss", "ready");
+        loading.setVisibility(View.GONE);
     }
 
     @Override
@@ -444,8 +466,15 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
             e.printStackTrace();
         }
         player_camera_layout1.setVisibility(View.GONE);
-        thumbCamera1.setVisibility(View.GONE);
+        //thumbCamera1.setVisibility(View.INVISIBLE);
 
+
+
+        //surfaceView.setVisibility(View.GONE);
+        //surfaceView.setVisibility(View.VISIBLE);
+
+        surfaceView.getHolder().setFormat(PixelFormat.TRANSPARENT);
+        surfaceView.getHolder().setFormat(PixelFormat.OPAQUE);
 
     }
 
