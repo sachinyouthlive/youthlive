@@ -186,7 +186,6 @@
         <activity
             android:name=".VideoPlayer"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".checkin.CheckinActivity"
             android:parentActivityName=".HomeActivity" />
@@ -196,11 +195,12 @@
         <activity android:name=".WalletNew" />
         <activity android:name=".BuyDiamonds" />
         <activity android:name=".LiveEndedPlayer" />
-        <activity android:name=".LiveEndedBroadcaster"></activity>
-            android:parentActivityName=".checkin.CheckinActivity" />
+        <activity android:name=".LiveEndedBroadcaster" />
+        android:parentActivityName=".checkin.CheckinActivity" />
         <activity android:name=".Activitys.FanActivity" />
         <activity android:name=".Activitys.FriendActivity" />
-        <activity android:name=".Activitys.SearchActivity"></activity>
+        <activity android:name=".Activitys.SearchActivity" />
+        <activity android:name=".ExoTest"></activity>
     </application>
 
 </manifest>

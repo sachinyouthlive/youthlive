@@ -1,5 +1,6 @@
 package com.yl.youthlive;
 
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,12 +13,15 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.followPOJO.followBean;
 
 import org.w3c.dom.Text;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.blurry.Blurry;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -63,8 +67,33 @@ public class LiveEndedPlayer extends AppCompatActivity {
 
         ImageLoader loader = ImageLoader.getInstance();
 
-        loader.displayImage(image , background , options);
-        loader.displayImage(image , profile , options);
+        loader.loadImage(image, options, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                Blurry.with(LiveEndedPlayer.this).from(loadedImage).into(background);
+                profile.setImageBitmap(loadedImage);
+
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+
+        //loader.displayImage(image , background , options);
+        //loader.displayImage(image , profile , options);
 
         username.setText(name);
         viewers.setText(views);

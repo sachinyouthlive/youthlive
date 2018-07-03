@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,69 +7,44 @@
     tools:context=".VideoPlayer">
 
 
-    <com.google.android.exoplayer.AspectRatioFrameLayout
-        android:id="@+id/video_frame"
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/main_player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <SurfaceView
-            android:id="@+id/surface_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_gravity="center" />
-
-    </com.google.android.exoplayer.AspectRatioFrameLayout>
+        app:surface_type="texture_view"
+        app:resize_mode="fill"
+        android:layout_centerInParent="true"/>
 
     <ImageView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="fitCenter"
-        android:background="#ffffff"
         android:id="@+id/loading"
-        android:src="@drawable/youthlive_logo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:scaleType="centerCrop"
+        />
 
 
     <ProgressBar
         android:id="@+id/progressBar4"
-        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="#ffffff"
-        android:visibility="gone"
-        android:background="#000000"
         android:layout_marginTop="8dp"
+        android:background="#000000"
         android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="#ffffff"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/view2"
@@ -78,45 +53,30 @@
         android:layout_marginBottom="110dp"
         android:layout_marginEnd="8dp"
         android:elevation="4dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="visible">
 
         <RelativeLayout
+            android:id="@+id/thumb_camera_layout1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/thumb_camera_layout1"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <com.streamaxia.android.CameraPreview
-                android:layout_width="120dp"
-                android:layout_height="160dp"
                 android:id="@+id/thumb_camera1"
-                />
-
+                android:layout_width="120dp"
+                android:layout_height="160dp" />
 
 
         </RelativeLayout>
 
 
-
-        <com.google.android.exoplayer.AspectRatioFrameLayout
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/thumb_frame1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/thumb_frame1"
-            android:visibility="gone"
-            >
-
-            <SurfaceView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/thumb_surface1"
-                android:visibility="gone"
-
-                />
-
-        </com.google.android.exoplayer.AspectRatioFrameLayout>
+            android:visibility="gone"/>
 
 
     </RelativeLayout>
@@ -127,50 +87,32 @@
         android:layout_height="160dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/view2"
-        app:layout_constraintEnd_toEndOf="parent" >
-
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/view2"
+        android:visibility="gone">
 
 
         <com.streamaxia.android.CameraPreview
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:id="@+id/thumb_camera2"
-            android:visibility="gone"
-            />
-
-
-        <com.google.android.exoplayer.AspectRatioFrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone" />
+
+
+        <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/thumb_frame2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="#000000"
-            android:visibility="gone"
-            >
-
-            <SurfaceView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/thumb_surface2"
-                />
-
-        </com.google.android.exoplayer.AspectRatioFrameLayout>
-
-
-
+            android:visibility="gone"/>
 
 
     </RelativeLayout>
 
     <android.support.v4.view.ViewPager
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/pager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

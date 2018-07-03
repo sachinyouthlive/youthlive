@@ -1,6 +1,9 @@
 package com.yl.youthlive;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Region;
 import android.net.Uri;
@@ -24,7 +27,31 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.google.android.exoplayer.AspectRatioFrameLayout;
+import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultAllocator;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.otaliastudios.cameraview.AspectRatio;
 import com.streamaxia.android.CameraPreview;
 import com.streamaxia.android.StreamaxiaPublisher;
@@ -33,8 +60,7 @@ import com.streamaxia.android.handlers.RecordHandler;
 import com.streamaxia.android.handlers.RtmpHandler;
 import com.streamaxia.android.utils.ScalingMode;
 import com.streamaxia.android.utils.Size;
-import com.streamaxia.player.StreamaxiaPlayer;
-import com.streamaxia.player.listener.StreamaxiaPlayerState;
+
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 
@@ -42,6 +68,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.util.List;
 
+import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,11 +76,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerState, EncoderHandler.EncodeListener, RtmpHandler.RtmpListener, RecordHandler.RecordListener {
+public class VideoPlayer extends AppCompatActivity implements EncoderHandler.EncodeListener, RtmpHandler.RtmpListener, RecordHandler.RecordListener, Player.EventListener {
 
     String liveId;
-    AspectRatioFrameLayout frameLayout;
-    SurfaceView surfaceView;
+
+
     ProgressBar progress;
 
     private Uri uri;
@@ -62,19 +89,22 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
     String TAG = "VideoPlayer";
 
 
+
+
     String connId;
 
 
-    private StreamaxiaPlayer mStreamaxiaPlayer = new StreamaxiaPlayer();
+
 
     TextView stateText;
 
 
     CameraPreview thumbCamera1, thumbCamera2;
 
-    AspectRatioFrameLayout thumbFrame1, thumbFrame2;
 
-    SurfaceView thumbSurface1, thumbSurface2;
+
+    String loadingpic;
+
 
     ViewPager pager;
 
@@ -83,17 +113,56 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
     RelativeLayout container;
     ImageView loading;
 
+    PlayerView mainPlayerView;
+    SimpleExoPlayer mainPlayer;
+
+    PlayerView thumbSurface1 , thumbSurface2;
+    SimpleExoPlayer thumbPlayer1 , thumbPlayer2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         liveId = getIntent().getStringExtra("uri");
+        loadingpic = getIntent().getStringExtra("pic");
 
         loading = findViewById(R.id.loading);
 
-        frameLayout = findViewById(R.id.video_frame);
-        surfaceView = findViewById(R.id.surface_view);
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
+
+        ImageLoader loader = ImageLoader.getInstance();
+
+        loader.loadImage(loadingpic, options, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                Blurry.with(VideoPlayer.this).from(loadedImage).into(loading);
+
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+
+
+
+
+
+        mainPlayerView = findViewById(R.id.main_player);
+
         progress = findViewById(R.id.progressBar4);
         stateText = findViewById(R.id.textView3);
 
@@ -103,31 +172,23 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
 
         thumbCamera1 = findViewById(R.id.thumb_camera1);
         thumbCamera2 = findViewById(R.id.thumb_camera2);
-        thumbFrame1 = findViewById(R.id.thumb_frame1);
-        thumbFrame2 = findViewById(R.id.thumb_frame2);
-        thumbSurface1 = findViewById(R.id.thumb_surface1);
-        thumbSurface2 = findViewById(R.id.thumb_surface2);
+
+
+        thumbSurface1 = findViewById(R.id.thumb_frame1);
+        thumbSurface2 = findViewById(R.id.thumb_frame2);
 
         pager = findViewById(R.id.pager);
 
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        float ratio = ((float)metrics.heightPixels / (float)metrics.widthPixels
-        );
 
-        frameLayout.setAspectRatio(ratio);
+        //SurfaceHolder holder = surfaceView.getHolder();
+        //holder.setFormat(PixelFormat.UNKNOWN);
+        //holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
+        //surfaceView.setZ(6);
+        //thumbCamera1.setZ(12);
 
-        surfaceView.setZOrderOnTop(false);
-
-        SurfaceHolder holder = surfaceView.getHolder();
-        holder.setFormat(PixelFormat.UNKNOWN);
-        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
-        surfaceView.setZ(6);
-        container.setZ(12);
-
-        container.getParent().requestTransparentRegion(surfaceView);
+        //thumbCamera1.getParent().requestTransparentRegion(surfaceView);
 
         uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/videochat/" + liveId);
         //uri = Uri.parse("rtmp://192.168.1.103:1935/live/test");
@@ -136,80 +197,52 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
 
         Log.d("status", "rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + liveId);
 
-        mStreamaxiaPlayer.initStreamaxiaPlayer(surfaceView, frameLayout,
-                stateText, this, this, uri);
 
-        mStreamaxiaPlayer.play(uri, StreamaxiaPlayer.TYPE_RTMP);
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+//Create the player
+        mainPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
+                new DefaultAllocator(true, 1000),
+                200,  // min buffer 0.5s
+                500, //max buffer 3s
+                500, // playback 1s
+                500,   //playback after rebuffer 1s
+                1,
+                true
+        ));
+
+        mainPlayerView.setPlayer(mainPlayer);
+
+        mainPlayerView.setUseController(false);
+
+        RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
+// This is the MediaSource representing the media to be played.
+        final MediaSource videoSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
+                .createMediaSource(uri);
+
+        mainPlayer.prepare(videoSource);
+
+        mainPlayer.setPlayWhenReady(true);
+
+        mainPlayer.addListener(VideoPlayer.this);
 
 
 
 
-        /*start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                StreamaxiaPublisher mPublisher = new StreamaxiaPublisher(cameraPreview, VideoPlayer.this);
-
-                mPublisher.setEncoderHandler(new EncoderHandler(VideoPlayer.this));
-                mPublisher.setRtmpHandler(new RtmpHandler(VideoPlayer.this));
-                mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
-                cameraPreview.startCamera();
-
-                List<Size> sizes = mPublisher.getSupportedPictureSizes(getResources().getConfiguration().orientation);
-                Size resolution = sizes.get(0);
-                mPublisher.setVideoOutputResolution(   176, 144, VideoPlayer.this.getResources().getConfiguration().orientation);
-
-                mPublisher.setVideoBitRate(56000);
-
-                mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/videochat/demo");
-
-
-            }
-        });*/
 
         FragAdapter adapter = new FragAdapter(getSupportFragmentManager());
 
         pager.setAdapter(adapter);
-
     }
 
-    @Override
-    public void stateENDED() {
-
-        Log.d("ssttaattuuss", "ended");
-    }
-
-    @Override
-    public void stateBUFFERING() {
-        Log.d("ssttaattuuss", "buffering");
-    }
-
-    @Override
-    public void stateIDLE() {
-        Log.d("ssttaattuuss", "idle");
-    }
-
-    @Override
-    public void statePREPARING() {
-        loading.setVisibility(View.VISIBLE);
-        Log.d("ssttaattuuss", "preparing");
-    }
-
-    @Override
-    public void stateREADY() {
-        Log.d("ssttaattuuss", "ready");
-        loading.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void stateUNKNOWN() {
-        Log.d("ssttaattuuss", "uunknown");
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mStreamaxiaPlayer.stop();
+        mainPlayer.stop();
 
         try {
             mPublisher.stopPublish();
@@ -262,42 +295,6 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
         call1.enqueue(new Callback<acceptRejectBean>() {
             @Override
             public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
-
-                try {
-
-
-                    //cameraLayout1.setVisibility(View.VISIBLE);
-
-/*
-                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
-                            goCoderBroadcastConfig.setPortNumber(1935);
-                            goCoderBroadcastConfig.setApplicationName("live");
-                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
-                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
-                            // Set the bitrate to 4000 Kbps
-                            goCoderBroadcastConfig.setVideoBitRate(1200);
-
-                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
-
-                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
-
-                            //if (configValidationError != null) {
-                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDescription(), Toast.LENGTH_LONG).show();
-                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
-                            // Stop the broadcast that is currently running
-                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
-                            //} else {
-                            // Start streaming
-                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
-                            //}
-
-*/
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
 
                 progress.setVisibility(View.GONE);
             }
@@ -404,6 +401,61 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
         Log.d("recordloistener" , e.toString());
     }
 
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
+        if (playWhenReady)
+        {
+            loading.setVisibility(View.GONE);
+        }
+
+    }
+
+    @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity(int reason) {
+
+    }
+
+    @Override
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+    }
+
+    @Override
+    public void onSeekProcessed() {
+
+    }
+
 
     public class FragAdapter extends FragmentStatePagerAdapter {
 
@@ -458,9 +510,11 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
     {
 
         try {
+
             mPublisher.stopPublish();
             mPublisher.stopRecord();
             thumbCamera1.stopCamera();
+
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -468,13 +522,6 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
         player_camera_layout1.setVisibility(View.GONE);
         //thumbCamera1.setVisibility(View.INVISIBLE);
 
-
-
-        //surfaceView.setVisibility(View.GONE);
-        //surfaceView.setVisibility(View.VISIBLE);
-
-        surfaceView.getHolder().setFormat(PixelFormat.TRANSPARENT);
-        surfaceView.getHolder().setFormat(PixelFormat.OPAQUE);
 
     }
 
@@ -503,6 +550,5 @@ public class VideoPlayer extends AppCompatActivity implements StreamaxiaPlayerSt
         //cameraPreview.stopCamera();
 
     }
-
 
 }

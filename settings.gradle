@@ -1,1 +1,1 @@
-include ':app',  ':streamaxia-opensdk', ':streamaxia-player'
+include ':app',  ':streamaxia-opensdk'

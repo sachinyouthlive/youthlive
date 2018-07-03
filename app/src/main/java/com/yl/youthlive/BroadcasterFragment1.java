@@ -50,7 +50,7 @@ import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.streamaxia.player.StreamaxiaPlayer;
+//import com.streamaxia.player.StreamaxiaPlayer;
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.followPOJO.followBean;
@@ -153,6 +153,10 @@ public class BroadcasterFragment1 extends Fragment {
     ImageButton reject1;
 
     String connId;
+
+    String thumbPic1;
+
+    boolean isConnection = false;
 
     @Nullable
     @Override
@@ -399,7 +403,6 @@ public class BroadcasterFragment1 extends Fragment {
                     public void onResponse(Call<String> call, Response<String> response) {
 
 
-
                         progress.setVisibility(View.GONE);
 
                     }
@@ -409,10 +412,6 @@ public class BroadcasterFragment1 extends Fragment {
                         progress.setVisibility(View.GONE);
                     }
                 });
-
-
-
-
 
 
             }
@@ -670,10 +669,11 @@ public class BroadcasterFragment1 extends Fragment {
 
 
                             playerFrame1.setVisibility(View.VISIBLE);
-                            broadcaster.startThumbPlayer1(uri);
+                            broadcaster.startThumbPlayer1(uri, thumbPic1);
 
                         } else {
 
+                            isConnection = false;
                             Toast.makeText(broadcaster, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
 
 
@@ -721,10 +721,9 @@ public class BroadcasterFragment1 extends Fragment {
                         String uid = obj.getString("userId");
 
 
-
+                        isConnection = false;
                         playerFrame1.setVisibility(View.GONE);
                         broadcaster.endThumbPlayer1();
-
 
 
                     } catch (JSONException e) {
@@ -1083,39 +1082,48 @@ public class BroadcasterFragment1 extends Fragment {
                         public void onClick(View view) {
 
 
-                            bar.setVisibility(View.VISIBLE);
+                            if (!isConnection) {
+                                bar.setVisibility(View.VISIBLE);
 
-                            final bean b = (bean) context.getApplicationContext();
+                                final bean b = (bean) context.getApplicationContext();
 
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
+                                final Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl(b.BASE_URL)
+                                        .addConverterFactory(ScalarsConverterFactory.create())
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
 
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                            Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
-
-                            call.enqueue(new Callback<requestConnectionBean>() {
-                                @Override
-                                public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+                                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                    dialog.dismiss();
+                                Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
+
+                                call.enqueue(new Callback<requestConnectionBean>() {
+                                    @Override
+                                    public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+
+                                        String im = item.getUserImage().replace("\"", "");
+                                        thumbPic1 = im;
+
+                                        isConnection = true;
+                                        dialog.dismiss();
 
 
-                                    bar.setVisibility(View.GONE);
-                                }
+                                        bar.setVisibility(View.GONE);
+                                    }
 
-                                @Override
-                                public void onFailure(Call<requestConnectionBean> call, Throwable t) {
-                                    bar.setVisibility(View.GONE);
-                                    Log.d("asdasdasdas", t.toString());
-                                }
-                            });
+                                    @Override
+                                    public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+                                        thumbPic1 = item.getUserImage();
+                                        bar.setVisibility(View.GONE);
+                                        Log.d("asdasdasdas", t.toString());
+                                    }
+                                });
 
+
+                            } else {
+                                Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
+                            }
 
                         }
                     });
@@ -1619,7 +1627,7 @@ public class BroadcasterFragment1 extends Fragment {
 
             loader.displayImage(item.getUserImage(), holder.image, options);
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            /*holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -1632,7 +1640,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                 }
             });
-
+*/
         }
 
         @Override

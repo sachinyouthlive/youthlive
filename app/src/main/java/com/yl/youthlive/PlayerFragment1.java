@@ -1056,7 +1056,7 @@ thumbCameraContainer1.setVisibility(View.VISIBLE);
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<followBean> call = cr.follow(b.userId , timelineId);
+                retrofit2.Call<followBean> call = cr.followLiveUser(b.userId , timelineId , liveId);
 
                 call.enqueue(new retrofit2.Callback<followBean>() {
                     @Override
@@ -2063,7 +2063,6 @@ LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionRecei
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-
 
             Glide.with(context).load(gifs[position]).into(holder.image);
 

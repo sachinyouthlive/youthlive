@@ -57,12 +57,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.google.android.exoplayer.AspectRatioFrameLayout;
+//import com.google.android.exoplayer.AspectRatioFrameLayout;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.streamaxia.player.StreamaxiaPlayer;
-import com.streamaxia.player.listener.StreamaxiaPlayerState;
+//import com.streamaxia.player.StreamaxiaPlayer;
+//import com.streamaxia.player.listener.StreamaxiaPlayerState;
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.followPOJO.followBean;
@@ -100,8 +100,9 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
-    private MyInterface mCallback;
+public class firstFragNew extends Fragment //implements StreamaxiaPlayerState
+{
+    /*private MyInterface mCallback;
     RecyclerView grid;
     RecyclerView grid2;
 
@@ -270,8 +271,8 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
 
    // private WZPlayerConfig mStreamPlayerConfig = null;
-
-    @Nullable
+*/
+  /*  @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.live_pagernew , container , false);
@@ -362,7 +363,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
             public void onClick(View view) {
 
                 mCallback.switchCamera();
-            /*    lvscreen.goCoderCameraView.switchCamera();
+            *//*    lvscreen.goCoderCameraView.switchCamera();
 
                 if (lvscreen.goCoder != null && lvscreen.goCoderCameraView != null) {
                     if (lvscreen.mAutoFocusDetector == null)
@@ -372,7 +373,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                     if (activeCamera != null && activeCamera.hasCapability(WZCamera.FOCUS_MODE_CONTINUOUS))
                         activeCamera.setFocusMode(WZCamera.FOCUS_MODE_CONTINUOUS);
                 }
-*/
+*//*
             }
         });
 
@@ -401,7 +402,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
 
 
-        /*goCoderCameraView.setOnClickListener(new View.OnClickListener() {
+        *//*goCoderCameraView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (goCoderCameraView.getCamera().hasCapability(WZCamera.FOCUS_MODE_AUTO))
@@ -413,7 +414,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                     goCoderCameraView.getCamera().setFocusMode(WZCamera.FOCUS_MODE_CONTINUOUS);
                 }
             }
-        });*/
+        });*//*
 
 
 
@@ -550,18 +551,18 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
                 startProjection();
 
-                               /*HiddenShot.getInstance().buildShotAndShare(getActivity(),"Check this out");*/
+                               *//*HiddenShot.getInstance().buildShotAndShare(getActivity(),"Check this out");*//*
 
 
 
-/*
+*//*
                 Instacapture.INSTANCE.capture(lvscreen, new SimpleScreenCapturingListener() {
                     @Override
                     public void onCaptureComplete(Bitmap bitmap) {
                         //Your code here..
 
-                        */
-/*Intent i = new Intent(Intent.ACTION_SEND);
+                        *//*
+*//*Intent i = new Intent(Intent.ACTION_SEND);
 
                         i.setType("image/*");
 
@@ -572,16 +573,16 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                         } catch (android.content.ActivityNotFoundException ex) {
 
                             ex.printStackTrace();
-                        }*//*
+                        }*//**//*
 
 
 
                     }
                 });
-*/
+*//*
 
 // or in Rx way
-                /*Instacapture.INSTANCE.captureRx(lvscreen).subscribe(new Action1<Bitmap>() {
+                *//*Instacapture.INSTANCE.captureRx(lvscreen).subscribe(new Action1<Bitmap>() {
                     @Override
                     public void call(Bitmap bitmap) {
                         //Your code here..
@@ -602,18 +603,18 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                         }
 
                     }
-                });*/
+                });*//*
 
 
 
                 //Bitmap bitmap_rootview = ScreenShott.getInstance().takeScreenShotOfView(lvscreen.goCoderCameraView);
 
-                /*View rv = lvscreen.main.getRootView();
+                *//*View rv = lvscreen.main.getRootView();
 
                 Bitmap saveBitmap = Bitmap.createBitmap(rv.getWidth(), rv.getHeight(), Bitmap.Config.ARGB_8888);
                 Canvas c = new Canvas(saveBitmap);
                 rv.draw(c);
-*/
+*//*
 
 
 
@@ -637,24 +638,24 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
         bubbleView.setDrawableList(drawableList);
 
 
-        /*Timer t = new Timer();
+        *//*Timer t = new Timer();
         t.schedule(new TimerTask() {
             @Override
             public void run() {
 
 
-*//*
+*//**//*
                 if (mBroadcaster.canStartBroadcasting()) {
                     mBroadcaster.startBroadcast();
                 }
-*//*
+*//**//*
 
 
             }
-        }, 3000);*/
+        }, 3000);*//*
 
 
-        /*progress.setVisibility(View.VISIBLE);
+        *//*progress.setVisibility(View.VISIBLE);
 
 
         final Retrofit retrofit = new Retrofit.Builder()
@@ -681,7 +682,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                     Log.d("liveId", liveId);
                     Log.d("userId", b.userId);
 
-*//*
+*//**//*
                     lvscreen.goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
                     lvscreen.goCoderBroadcastConfig.setPortNumber(1935);
                     lvscreen.goCoderBroadcastConfig.setApplicationName("live");
@@ -706,7 +707,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
                     //connectToRoom("123" , "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzM2NDRiMWZmNjkwYTM1Y2ZjOGZiNTFmYWYyMWI0NTY4LTE1MTkyOTYyODYiLCJpc3MiOiJTSzM2NDRiMWZmNjkwYTM1Y2ZjOGZiNTFmYWYyMWI0NTY4Iiwic3ViIjoiQUNmOWQwZTVhMTk4NmIxZTg2NzI0Y2I3ZmJiNjEyOTk2MCIsImV4cCI6MTUxOTI5OTg4NiwiZ3JhbnRzIjp7ImlkZW50aXR5IjoiY2xpZW50MiIsInZpZGVvIjp7InJvb20iOiIxMjMifX19.ULAQN_l_H1iEqNHM1-iNWWlk_ACs71zR1oiQDl0SGew");
 
-*//*
+*//**//*
 
 
 
@@ -736,7 +737,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                 Toast.makeText(getContext() , "Error in going Live" , Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             }
-        });*/
+        });*//*
 
 
 
@@ -766,7 +767,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -774,7 +775,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
 
@@ -809,7 +810,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -817,7 +818,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
 
@@ -856,7 +857,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -864,7 +865,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
 
@@ -941,7 +942,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
 
                     //displayFirebaseRegId();
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -949,7 +950,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
 
@@ -982,7 +983,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -990,7 +991,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
 
@@ -1040,11 +1041,11 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
         Log.d("hgfjhg", vid);
 
-        /*t = new Timer();
+        *//*t = new Timer();
         t.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-*/
+*//*
         final bean b = (bean) getContext().getApplicationContext();
 
         final Retrofit retrofit = new Retrofit.Builder()
@@ -1058,7 +1059,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
         Log.d("VEG" , b.userId);
         Log.d("VEG" , liveId);
 
-                /*Call<checkStatusBean> call1 = cr.checkStatus(b.userId, liveId);
+                *//*Call<checkStatusBean> call1 = cr.checkStatus(b.userId, liveId);
                 call1.enqueue(new Callback<checkStatusBean>() {
                     @Override
                     public void onResponse(Call<checkStatusBean> call, retrofit2.Response<checkStatusBean> response) {
@@ -1107,7 +1108,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
 
 
-                                    *//*player.setVideoURI(Uri.parse("rtsp://ec2-18-219-154-44.us-east-2.compute.amazonaws.com:554/live/" + response.body().getData().get(0).getUrl()));
+                                    *//**//*player.setVideoURI(Uri.parse("rtsp://ec2-18-219-154-44.us-east-2.compute.amazonaws.com:554/live/" + response.body().getData().get(0).getUrl()));
 
                                     player.requestFocus();
 
@@ -1118,7 +1119,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                                             player.start();
 
                                         }
-                                    });*//*
+                                    });*//**//*
 
 
 
@@ -1131,7 +1132,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                             }
 
 
-*//*
+*//**//*
 
 
                                 BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -1151,12 +1152,12 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
 
                                 simpleExoPlayerView.setUseController(false);
-*//*
+*//**//*
 
 
                             //if (!playing) {
 
-                                *//*playerLayout1.setVisibility(View.VISIBLE);
+                                *//**//*playerLayout1.setVisibility(View.VISIBLE);
 
                                 String ur = "rtsp://ec2-18-219-154-44.us-east-2.compute.amazonaws.com:1935/sublive/" + response.body().getData().get(0).getUrl();
 
@@ -1165,12 +1166,12 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                                 //surface.setDataSource(ur);
                                 //surface.play();
 
-                                *//**//*rtmpDataSourceFactory = new RtmpDataSourceFactory();
+                                *//**//**//**//*rtmpDataSourceFactory = new RtmpDataSourceFactory();
 
                                 ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
                                 MediaSource videoSource = new ExtractorMediaSource(Uri.parse(ur),
                                         rtmpDataSourceFactory, extractorsFactory, null, null);
-*//**//*
+*//**//**//**//*
 
                                 Log.d("player" , "entered");
 
@@ -1198,14 +1199,14 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
                                 player.Open(wzPlayerConfig, LiveScreen.this);
 
 
-                                playing = true;*//*
+                                playing = true;*//**//*
 
                             //}
 
 
                             //player.prepare(videoSource);
 
-*//*                                player.setPlayWhenReady(true);*//*
+*//**//*                                player.setPlayWhenReady(true);*//**//*
 
                             //connId = response.body().getData().get(0).getId();
 
@@ -1224,7 +1225,7 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
 
                     }
                 });
-*/
+*//*
 
 
 
@@ -1312,8 +1313,8 @@ public class firstFragNew extends Fragment implements StreamaxiaPlayerState {
             }
         });
 
-      /*      }
-        }, 0, 1000);*/
+      *//*      }
+        }, 0, 1000);*//*
 
     }
 
@@ -1383,18 +1384,18 @@ Log.d("uurrii" , "ended");
 
 
 
-/*
+*//*
 
     public void BlockPersson(View view) {
         PersonBlock();
     }
-*/
+*//*
 
 
 
 
 
-    /*@Override
+    *//*@Override
     public int Status(int i) {
         Log.e("VEG", "From Native listitem status: " + i);
         return 0;
@@ -1404,7 +1405,7 @@ Log.d("uurrii" , "ended");
     public int OnReceiveData(ByteBuffer byteBuffer, int i, long l) {
         Log.e("VEG", "Form Native listitem OnReceiveData: size: " + i + ", pts: " + l);
         return 0;
-    }*/
+    }*//*
 
     public class LiveAdapter extends RecyclerView.Adapter<LiveAdapter.ViewHolder> {
 
@@ -2092,5 +2093,5 @@ Log.d("uurrii" , "ended");
             }
 
             });
-    }
+    }*/
 }

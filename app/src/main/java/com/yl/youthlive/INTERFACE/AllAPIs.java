@@ -556,6 +556,15 @@ public interface AllAPIs {
 
 
     @Multipart
+    @POST("api/follow_live_user.php")
+    Call<followBean> followLiveUser(
+            @Part("userId") String userId,
+            @Part("friendId") String friendId,
+            @Part("liveId") String liveId
+    );
+
+
+    @Multipart
     @POST("api/fan_list.php")
     Call<FanListPOJO> fanList(
             @Part("userId") String userId
