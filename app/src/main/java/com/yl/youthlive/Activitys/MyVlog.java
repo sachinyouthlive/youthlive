@@ -50,7 +50,7 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
 
     static String userid;
 
-    TextView fans;
+    TextView fans, emptymsg;
     TextView followings, friends;
 
     ViewPager coverPager;
@@ -73,6 +73,7 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
         followclick = findViewById(R.id.followings_click);
         fanclick = findViewById(R.id.fans_click);
         friendclick = findViewById(R.id.friends_click);
+        emptymsg = findViewById(R.id.emptyvlogmsg);
 
         userid = getIntent().getStringExtra("userId");
 

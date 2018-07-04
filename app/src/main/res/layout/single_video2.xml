@@ -34,7 +34,7 @@
                 android:layout_gravity="center_vertical|start"
                 app:civ_border_color="#ffffff"
                 app:civ_border_width="1dp"
-                tools:src="@drawable/default1" />
+                android:src="@drawable/user_default" />
 
             <TextView
                 android:id="@+id/name"

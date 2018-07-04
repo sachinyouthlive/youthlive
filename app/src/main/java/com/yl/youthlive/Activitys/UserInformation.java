@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -23,7 +24,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -56,8 +56,10 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -80,7 +82,7 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
     public static final String ALLOW_KEY = "ALLOWED";
     public static final String CAMERA_PREF = "camera_pref";
     String Username, Birthdate, BioData, gender, userid1="", Female, str, encodedImage = "", imgDecodableString, pImage = "";
-    RadioButton radioMale, radioFemale;
+    RadioButton radioMale, radioFemale, radioButton;
     RadioGroup rg;
     CircleImageView userimage;
     AlertDialog.Builder builder;
@@ -88,6 +90,8 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
     ImageView uploadpic;
     private int year, month, day;
     Uri imageuri, selectedImage;
+    EditText edittext;
+    Calendar myCalendar;
 
     ProgressBar progress;
 
@@ -101,7 +105,7 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
         userid1 = settings.getString("userid", "");
         builder = new AlertDialog.Builder(UserInformation.this);
         user_name = (EditText) findViewById(R.id.user_name);
-        BirthDay = (EditText) findViewById(R.id.password_edit);
+        BirthDay = (EditText) findViewById(R.id.birthday);
         rg = (RadioGroup) findViewById(R.id.radioSex);
         Biodata = (EditText) findViewById(R.id.conform_passwor);
         signup_button = (Button) findViewById(R.id.signup_button);
@@ -116,21 +120,46 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
                 SelectImage();
             }
         });
-        final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
-        BirthDay.setOnClickListener(new View.OnClickListener() {
+
+////// picking birthday date//////////////
+        myCalendar = Calendar.getInstance();
+
+        edittext = (EditText) findViewById(R.id.birthday);
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+
+        edittext.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                showDialog(DATE_PICKER_ID);
+                // TODO Auto-generated method stub
+                new DatePickerDialog(UserInformation.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+////////////////
 
         signup_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // get selected radio button from radioGroup
+                int selectedId = rg.getCheckedRadioButtonId();
+                // find the radiobutton by returned id
+                radioButton = (RadioButton) findViewById(selectedId);
 
+                gender = radioButton.getText().toString();
 
                 updateDetails();
 
@@ -628,11 +657,11 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
         int color;
         if (isConnected) {
 
-            Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
             //    message = "Good! Connected to Internet";
             //    color = Color.WHITE;
         } else {
-            Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -679,6 +708,13 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
     public void onNetworkConnectionChanged(boolean isConnected) {
         showAlert(isConnected);
 
+    }
+
+    private void updateLabel() {
+        String myFormat = "dd/MM/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        edittext.setText(sdf.format(myCalendar.getTime()));
     }
 
 }

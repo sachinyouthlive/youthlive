@@ -387,7 +387,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        toolbar.setTitle("Live Room");
+        toolbar.setTitle("Live Users");
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Live frag1 = new Live();
@@ -672,7 +672,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onResponse(Call<addVideoBean> call,retrofit2.Response<addVideoBean> response) {
                 if (getFragmentRefreshListener() != null) {
-                    videoProgress.setVisibility(View.GONE);
+                    videoProgress.setVisibility(View.VISIBLE);
                     getFragmentRefreshListener().onRefresh();
                 }
 

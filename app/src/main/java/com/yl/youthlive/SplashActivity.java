@@ -4,16 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.yl.youthlive.Activitys.UserInformation;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.login2POJO.login2Bean;
@@ -51,7 +47,7 @@ public class SplashActivity extends AppCompatActivity {
         bg = findViewById(R.id.splashbg);
 
 
-        Glide.with(this).load(R.drawable.filling).into(bg);
+        //  Glide.with(this).load(R.drawable.splashyl).into(bg);
 
 
 
@@ -96,7 +92,7 @@ public class SplashActivity extends AppCompatActivity {
                     finish();
 
                 }
-            } , 3500);
+            }, 4000);
 
         }
 
@@ -104,7 +100,7 @@ public class SplashActivity extends AppCompatActivity {
 
     public void phoneLogin(final String phone, final String pass) {
 
-        progress.setVisibility(View.VISIBLE);
+        // progress.setVisibility(View.VISIBLE);
 
         final bean b = (bean) getApplicationContext();
 
@@ -144,18 +140,19 @@ public class SplashActivity extends AppCompatActivity {
                     Intent Inbt = new Intent(SplashActivity.this, HomeActivity.class);
                     Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(Inbt);
+                    SplashActivity.this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
                 } else {
                     Toast.makeText(SplashActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
 
-                progress.setVisibility(View.GONE);
+                //   progress.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(Call<login2Bean> call, Throwable t) {
-                progress.setVisibility(View.GONE);
+                //  progress.setVisibility(View.GONE);
             }
         });
 
@@ -164,7 +161,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
     public void socialLogin(final String email, final String pid) {
-        progress.setVisibility(View.VISIBLE);
+        //  progress.setVisibility(View.VISIBLE);
 
         final bean b = (bean) getApplicationContext();
 
@@ -204,6 +201,7 @@ public class SplashActivity extends AppCompatActivity {
                     Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+                    SplashActivity.this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
 
                 } else {
@@ -233,14 +231,14 @@ public class SplashActivity extends AppCompatActivity {
                 }
 
 
-                progress.setVisibility(View.GONE);
+                //      progress.setVisibility(View.GONE);
 
 
             }
 
             @Override
             public void onFailure(Call<socialBean> call, Throwable t) {
-                progress.setVisibility(View.GONE);
+                //   progress.setVisibility(View.GONE);
             }
         });
 

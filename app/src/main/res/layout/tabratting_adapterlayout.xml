@@ -6,7 +6,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:cardBackgroundColor="#ffffff"
     app:cardCornerRadius="8dp"
-    app:cardElevation="2dp"
+    android:id="@+id/ratingcard"
+    app:cardElevation="1dp"
     app:cardUseCompatPadding="true"
     android:orientation="vertical">
 
@@ -14,8 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginEnd="6dp"
-        android:orientation="horizontal"
-        android:padding="@dimen/dimen_2dp">
+        android:orientation="horizontal">
 
         <FrameLayout
             android:id="@+id/medalframe"
@@ -25,8 +25,10 @@
 
             <ImageView
                 android:layout_width="match_parent"
+                android:id="@+id/medal_img"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:visibility="gone"
                 android:src="@drawable/ratingmedal" />
 
             <TextView
@@ -35,14 +37,30 @@
             android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="8dp"
+                android:layout_marginLeft="@dimen/dimen_2dp"
                 android:gravity="center"
-                android:text="12"
-                android:textColor="#000"
+                android:text="1"
+                android:textColor="#666666"
+                android:textSize="@dimen/dimen_14sp"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/rankno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:textColor="#666666"
+                android:textSize="@dimen/dimen_16sp"
+                android:textStyle="bold"
+                android:visibility="gone"
                 tools:ignore="RtlSymmetry" />
         </FrameLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
+            android:id="@+id/profilelayout_click"
+            android:layout_marginRight="@dimen/dimen_10dp"
 
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -63,7 +81,7 @@
                 android:layout_marginStart="@dimen/dimen_8dp"
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/image"
-                android:textColor="#000000"
+                android:textColor="#4c4c4c"
                 android:textSize="18sp"
                 tools:text="User Name" />
 
@@ -101,6 +119,7 @@
             android:id="@+id/follow"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:scaleType="fitCenter"
             android:layout_gravity="center_vertical" />
 
 

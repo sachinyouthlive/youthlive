@@ -2,13 +2,13 @@ package com.yl.youthlive;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,11 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yl.youthlive.Activitys.RattingActivity;
 import com.yl.youthlive.GetRankingPOJO.Datum;
 import com.yl.youthlive.GetRankingPOJO.RankingBean;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -35,6 +36,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by USER on 12/18/2017.
@@ -138,6 +141,17 @@ public class Rating3 extends Fragment {
             holder.name.setText(item.getUserName());
             holder.beans.setText("Beans - " + item.getBeans());
             holder.change.setText(String.valueOf(position + 1 ));
+            holder.rankno.setText(String.valueOf(position + 1));
+            if (position < 3) {
+                holder.rankno.setVisibility(View.GONE);
+                holder.medalimg.setVisibility(View.VISIBLE);
+                holder.change.setVisibility(View.VISIBLE);
+            } else {
+                holder.rankno.setVisibility(View.VISIBLE);
+                holder.medalimg.setVisibility(View.GONE);
+                holder.change.setVisibility(View.GONE);
+
+            }
 
 
             DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -146,6 +160,63 @@ public class Rating3 extends Fragment {
                 ImageLoader loader = ImageLoader.getInstance();
                 loader.displayImage(item.getUserImage(), holder.image, options);
             }
+
+
+            //////////////////check follow status/////////////////////////
+
+
+            final bean b = (bean) getApplicationContext();
+
+            final Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(b.BASE_URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+            Call<followBean> call = cr.followcheck(b.userId, item.getUserId());
+
+            call.enqueue(new Callback<followBean>() {
+                @Override
+                public void onResponse(Call<followBean> call, Response<followBean> response) {
+
+                    try {
+                        if (!item.getUserId().equals(b.userId)) {
+                            if (response.body().getMessage().equals("Following")) {
+                                holder.follow.setBackgroundResource(R.drawable.rightcheck);
+                            }
+                            if (response.body().getMessage().equals("Not Following")) {
+                                holder.follow.setBackgroundResource(R.drawable.plussign);
+                            }
+
+                        } else {
+                            holder.follow.setVisibility(View.GONE);
+                            holder.ratingcard.setCardBackgroundColor(Color.parseColor("#ffef99"));
+                        }
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        // Toast.makeText(PersonalInfo.this, "Some Error Occurred, Please try again follow", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                    bar.setVisibility(View.GONE);
+
+                }
+
+                @Override
+                public void onFailure(Call<followBean> call, Throwable t) {
+
+                    bar.setVisibility(View.GONE);
+
+                }
+            });
+
+
+            ////////////////////////////////////////////////////////////////
 
             holder.follow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -170,22 +241,20 @@ public class Rating3 extends Fragment {
                         @Override
                         public void onResponse(Call<followBean> call, Response<followBean> response) {
 
-                            Drawable dr = getResources().getDrawable(R.drawable.tickmark);
-                            Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
-// Scale it to 50 x 50
-                            Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 20, 20, true));
-// Set your new, scaled drawable "d"
+                            if (!item.getUserId().equals(b.userId)) {
+                                if (response.body().getMessage().equals("Follow Success")) {
+                                    holder.follow.setBackgroundResource(R.drawable.rightcheck);
+                                }
+                                if (response.body().getMessage().equals("Unfollow Success")) {
+                                    holder.follow.setBackgroundResource(R.drawable.plussign);
+                                }
+                                ((RattingActivity) getActivity()).methodd();
+                                bar.setVisibility(View.GONE);
 
-                            Toast.makeText(getContext() , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-                            if (response.body().getMessage().equals("Follow Success")) {
-                                holder.follow.setBackground(d);
+                            } else {
+                                holder.follow.setVisibility(View.GONE);
+                                holder.ratingcard.setCardBackgroundColor(Color.parseColor("#ffef99"));
                             }
-                            if (response.body().getMessage().equals("Unfollow Success")) {
-                                holder.follow.setBackgroundResource(R.drawable.add);
-                            }
-
-                            bar.setVisibility(View.GONE);
-
                         }
 
                         @Override
@@ -199,6 +268,15 @@ public class Rating3 extends Fragment {
 
 
 
+                }
+            });
+
+            holder.profilelayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), TimelineProfile.class);
+                    intent.putExtra("userId", item.getUserId());
+                    startActivity(intent);
                 }
             });
 
@@ -221,9 +299,11 @@ public class Rating3 extends Fragment {
 
         public class MyViewHolder extends RecyclerView.ViewHolder{
 
-            TextView beans, name, change;
+            TextView beans, name, change, rankno;
 
-            ImageView image, follow;
+            ImageView image, follow, medalimg;
+            RelativeLayout profilelayout;
+            CardView ratingcard;
 
 
             public MyViewHolder(View itemView) {
@@ -235,7 +315,10 @@ public class Rating3 extends Fragment {
                 change = itemView.findViewById(R.id.change);
                 image = itemView.findViewById(R.id.image);
                 follow = itemView.findViewById(R.id.follow);
-                follow.setBackgroundResource(R.drawable.add);
+                profilelayout = itemView.findViewById(R.id.profilelayout_click);
+                medalimg = itemView.findViewById(R.id.medal_img);
+                rankno = itemView.findViewById(R.id.rankno);
+                ratingcard = itemView.findViewById(R.id.ratingcard);
 
             }
         }

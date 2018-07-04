@@ -5,12 +5,20 @@
 
 
     <ImageView
-        android:id="@+id/splashbg"
+        android:id="@+id/splashb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
         android:src="@drawable/ylbgsplash" />
+
+    <ImageView
+        android:id="@+id/splashbg"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/yl" />
 
     <ProgressBar
         android:layout_width="wrap_content"

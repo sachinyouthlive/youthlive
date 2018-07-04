@@ -74,8 +74,7 @@ public interface AllAPIs {
     @Multipart
     @POST("api/sign_up.php")
     Call<loginResponseBean> signUp(
-            @Part("phone") String phone,
-            @Part("countryCode") String code
+            @Part("phone") String phone
     );
 
     // get checkin data

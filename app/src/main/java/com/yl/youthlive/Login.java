@@ -43,13 +43,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.yl.youthlive.Activitys.UserInformation;
 import com.yl.youthlive.DBHandler.SessionManager;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
-import com.yl.youthlive.login2POJO.login2Bean;
 import com.yl.youthlive.socialPOJO.socialBean;
 
 import org.json.JSONObject;
@@ -58,7 +55,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -171,7 +167,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                                                         edit.putString("pass", id);
                                                         edit.apply();
 
-                                                        Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                                        //    Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                                         Intent intent = new Intent(Login.this, HomeActivity.class);
                                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
@@ -311,7 +307,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         /*GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         updateUI(account);*/
 
-        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(Login.this));
+
 
 
         if (!hasPermissions(this, PERMISSIONS)) {
@@ -695,7 +691,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                         edit.putString("pass", account.getId());
                         edit.commit();
 
-                        Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        //   Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Login.this, HomeActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

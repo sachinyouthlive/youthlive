@@ -19,9 +19,9 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.Activitys.FanActivity;
 import com.yl.youthlive.Activitys.MessaageActivity;
-import com.yl.youthlive.Activitys.PersonalInfo;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.TimelineProfile;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.fan_listPOJO.Datum;
 import com.yl.youthlive.followPOJO.followBean;
@@ -79,7 +79,7 @@ public class fan_adapter extends RecyclerView.Adapter<fan_adapter.fanadapter> {
             @Override
             public void onClick(View view) {
                 String id = item.getUserId();
-                Intent intent = new Intent(context, PersonalInfo.class);
+                Intent intent = new Intent(context, TimelineProfile.class);
                 intent.putExtra("userId", id);
                 context.startActivity(intent);
 

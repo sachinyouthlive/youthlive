@@ -174,13 +174,16 @@ public class FriendActivity extends AppCompatActivity implements ConnectivityRec
         call.enqueue(new Callback<FriendListPOJO>() {
             @Override
             public void onResponse(Call<FriendListPOJO> call, Response<FriendListPOJO> response) {
+                if (response.body().getData() == null) {
 
-                if (response.body().getData().isEmpty()) {
                     nofriendmsg.setVisibility(View.VISIBLE);
+                } else {
+                    if (response.body().getData().isEmpty()) {
+                        nofriendmsg.setVisibility(View.VISIBLE);
+                    } else {
+                        recAdapter.setGridData(response.body().getData());
+                    }
                 }
-
-                recAdapter.setGridData(response.body().getData());
-
                 progress.setVisibility(View.GONE);
 
             }

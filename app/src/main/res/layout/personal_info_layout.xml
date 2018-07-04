@@ -45,7 +45,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="280dp"
                         android:scaleType="centerCrop"
-                        tools:src="@drawable/cover" />
+                        android:src="@drawable/user_default" />
 
                     <ImageView
                         android:layout_width="match_parent"

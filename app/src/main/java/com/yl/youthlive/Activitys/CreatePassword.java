@@ -1,12 +1,9 @@
 package com.yl.youthlive.Activitys;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.SmsManager;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,10 +18,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.yl.youthlive.INTERFACE.AllAPIs;
-import com.yl.youthlive.OTP;
 import com.yl.youthlive.R;
 import com.yl.youthlive.bean;
-import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
 import com.yl.youthlive.otpPOJO.otpBean;
 
 import org.json.JSONException;
@@ -47,7 +42,7 @@ public class CreatePassword extends AppCompatActivity {
 
     ProgressBar progress;
 
-    String CREATEapi="http://nationproducts.in/youthlive/api/create_password.php";
+    String CREATEapi = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/create_password.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +107,6 @@ public class CreatePassword extends AppCompatActivity {
                         if (Objects.equals(response.body().getStatus(), "1"))
                         {
 
-                            Toast.makeText(CreatePassword.this , "Password created, Please update your Info" , Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(CreatePassword.this, UserInformation.class);
                             intent.putExtra("userId" , getIntent().getStringExtra("userId"));
                             startActivity(intent);
@@ -121,7 +115,7 @@ public class CreatePassword extends AppCompatActivity {
                         }
                         else
                         {
-                            Toast.makeText(CreatePassword.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(CreatePassword.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -171,7 +165,7 @@ public class CreatePassword extends AppCompatActivity {
                     }else {
 
                         str=jObj.getString("message");
-                        Toast.makeText(CreatePassword.this, str, Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(CreatePassword.this, str, Toast.LENGTH_SHORT).show();
                     }
 
                    /* Intent intent=new Intent(getApplicationContext(),CreatePassword.class);

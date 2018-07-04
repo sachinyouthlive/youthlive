@@ -74,42 +74,6 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
 
     }
 
-    public class ViewAdapter extends FragmentStatePagerAdapter{
-
-        int tabs;
-
-        public ViewAdapter(FragmentManager fm , int list) {
-            super(fm);
-
-            this.tabs = list;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-
-            if (position == 0){
-
-                return new Rating1();
-            }
-
-            else if (position == 1){
-
-                return new Rating2();
-            }
-
-           else if (position == 2){
-
-                return new Rating3();
-            }
-
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -117,6 +81,16 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
         bean.getInstance().setConnectivityListener(this);
 
 
+    }
+
+    public void methodd() {
+        if (!(adapter == null)) {
+            adapter.notifyDataSetChanged();
+            layout.getTabAt(0).setText("Last hour");
+            layout.getTabAt(1).setText("24 hour");
+            layout.getTabAt(2).setText("7 days");
+
+        }
     }
     ///////////////////internet connectivity check///////////////
     private void checkConnection() {
@@ -179,8 +153,43 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
 
     }
 
+    public class ViewAdapter extends FragmentStatePagerAdapter {
 
+        int tabs;
 
+        public ViewAdapter(FragmentManager fm, int list) {
+            super(fm);
+
+            this.tabs = list;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            if (position == 0) {
+
+                return new Rating1();
+            } else if (position == 1) {
+
+                return new Rating2();
+            } else if (position == 2) {
+
+                return new Rating3();
+            }
+
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+    }
 
 
 

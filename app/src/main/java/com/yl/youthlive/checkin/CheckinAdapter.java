@@ -49,11 +49,11 @@ public class CheckinAdapter extends RecyclerView.Adapter<CheckinAdapter.MyViewHo
         final Information item = list.get(position);
 
         int duration = item.getBroadcastDuration();
+        duration = duration * 1000;
         // long millis = 3600000;
         String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(duration),
                 TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration)),
                 TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration)));
-
 
         holder.timetxt.setText(hms);
         holder.beantxt.setText(item.getBean().toString());

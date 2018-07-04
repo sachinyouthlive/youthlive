@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -89,6 +90,9 @@ public class MyVLOGs extends Fragment {
         call.enqueue(new Callback<vlogListBean>() {
             @Override
             public void onResponse(Call<vlogListBean> call, Response<vlogListBean> response) {
+                if (response.body().getData().isEmpty()) {
+                    Toast.makeText(getContext(), "your VlOG is empty", Toast.LENGTH_LONG).show();
+                }
                 adapter.setGridData(response.body().getData());
                 progress.setVisibility(View.GONE);
             }

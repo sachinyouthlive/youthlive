@@ -295,7 +295,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            tools:src="@drawable/default1"
+            android:src="@drawable/user_default"
             app:civ_border_color="#ffffff"
             android:id="@+id/profile"
             android:background="@drawable/circle_white"

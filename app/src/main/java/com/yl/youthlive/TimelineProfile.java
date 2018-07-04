@@ -53,7 +53,7 @@ public class TimelineProfile extends AppCompatActivity {
     ProgressBar progress;
     ImageView profile;
 
-    static String userid;
+    String userid;
 
     TextView fans;
     TextView followings, friends;
@@ -87,8 +87,12 @@ public class TimelineProfile extends AppCompatActivity {
         followclick = findViewById(R.id.followings_click);
         fanclick = findViewById(R.id.fans_click);
         friendClick = findViewById(R.id.friends_click);
-
-        userid = getIntent().getStringExtra("userId");
+        final bean b = (bean) getApplicationContext();
+        String useridd = getIntent().getStringExtra("userId");
+        ///////////////
+        b.mylist.add(useridd);
+        userid = b.mylist.get(b.mylist.size() - 1);
+        /////////////////////
 
 
         followclick.setOnClickListener(new View.OnClickListener() {
@@ -196,7 +200,6 @@ public class TimelineProfile extends AppCompatActivity {
         });
 
 
-        bean b = (bean)getApplicationContext();
 
         if (Objects.equals(userid, b.userId)) {
             follow.setVisibility(View.GONE);
@@ -233,19 +236,19 @@ public class TimelineProfile extends AppCompatActivity {
                             if (response.body().getMessage().equals("Follow Success")) {
                                 follow.setText("UNFOLLOW");
                                 follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
-                                Toast.makeText(TimelineProfile.this, "You started to follow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(TimelineProfile.this, "You started to follow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
                             }
                             if (response.body().getMessage().equals("Unfollow Success")) {
                                 follow.setText("FOLLOW");
                                 follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_white, 0, 0, 0);
-                                Toast.makeText(TimelineProfile.this, "You Unfollowed " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                                //  Toast.makeText(TimelineProfile.this, "You Unfollowed " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
                             }
                             loadData();
 
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(TimelineProfile.this , "Some Error Occurred, Please try again" , Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(TimelineProfile.this , "Some Error Occurred, Please try again" , Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -383,19 +386,19 @@ public class TimelineProfile extends AppCompatActivity {
                     if (response.body().getMessage().equals("Following")) {
                         follow.setText("UNFOLLOW");
                         follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
-                        Toast.makeText(TimelineProfile.this, "You started to follow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(TimelineProfile.this, "You started to follow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
 
                     }
                     if (response.body().getMessage().equals("Not Following")) {
                         follow.setText("FOLLOW");
                         follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus, 0, 0, 0);
-                        Toast.makeText(TimelineProfile.this, "You started to notfollow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(TimelineProfile.this, "You started to notfollow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
 
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(TimelineProfile.this, "Some Error Occurred, Please try again follow", Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(TimelineProfile.this, "Some Error Occurred, Please try again follow", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -437,17 +440,17 @@ public class TimelineProfile extends AppCompatActivity {
                     if (response.body().getMessage().equals("Following")) {
                         following.setText("UNFOLLOW");
                         following.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
-                        Toast.makeText(TimelineProfile.this, "You started to following " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(TimelineProfile.this, "You started to following " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
                     }
                     if (response.body().getMessage().equals("Not Following")) {
                         following.setText("FOLLOW");
                         following.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus, 0, 0, 0);
-                        Toast.makeText(TimelineProfile.this, "You started to notfollowing " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(TimelineProfile.this, "You started to notfollowing " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(TimelineProfile.this, "Some Error Occurred, Please try again following", Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(TimelineProfile.this, "Some Error Occurred, Please try again following", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -464,6 +467,15 @@ public class TimelineProfile extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        bean b = (bean) appContext;
+        if (b.mylist.size() > 1) {
+            b.mylist.remove(b.mylist.size() - 1);
+        }
+
+    }
 
     @Override
     protected void onResume() {
@@ -532,7 +544,9 @@ public class TimelineProfile extends AppCompatActivity {
 
                         if (Objects.equals(response.body().getData().getFriendStatus().getFollow(), "true"))
                         {
-                            messgae.setVisibility(View.VISIBLE);
+                            if (!b.userId.equals(userid)) {
+                                messgae.setVisibility(View.VISIBLE);
+                            }
                         }
                         else
                         {
@@ -569,7 +583,7 @@ public class TimelineProfile extends AppCompatActivity {
                 }catch (Exception e)
                 {
                     e.printStackTrace();
-                    Toast.makeText(TimelineProfile.this , "Some Error Occurred, Please try again" , Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(TimelineProfile.this , "Some Error Occurred, Please try again" , Toast.LENGTH_SHORT).show();
                 }
 
 

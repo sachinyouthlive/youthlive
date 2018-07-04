@@ -92,6 +92,7 @@
                     android:backgroundTint="@color/colorPrimary"
                     android:padding="10dp"
                     android:text="Male"
+                    android:checked="true"
                     android:textColor="#FFF"
                     android:textSize="18sp" />
 
@@ -107,7 +108,7 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/password_edit"
+            android:id="@+id/birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -121,7 +122,8 @@
             android:drawableStart="@drawable/user"
             android:gravity="center_vertical"
             android:hint="Birthday"
-            android:inputType="number"
+            android:clickable="true"
+            android:editable="false"
             android:padding="10dp"
             android:paddingStart="15sp"
             android:textColor="#FFFFFF"
@@ -140,7 +142,7 @@
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/user"
             android:gravity="center_vertical"
-            android:hint="BIO"
+            android:hint="Status"
             android:padding="10dp"
             android:paddingStart="15sp"
             android:textColor="#FFFFFF"

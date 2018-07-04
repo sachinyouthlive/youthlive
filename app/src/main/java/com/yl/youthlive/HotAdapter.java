@@ -44,6 +44,7 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyViewHolder> {
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.hot_list_model , parent , false);
+
         return new MyViewHolder(view);
     }
     @Override

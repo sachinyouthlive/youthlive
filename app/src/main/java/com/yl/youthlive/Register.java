@@ -1,4 +1,5 @@
 package com.yl.youthlive;
+
 import android.Manifest;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -8,11 +9,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,18 +31,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
-import com.facebook.GraphRequestAsyncTask;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -50,8 +49,6 @@ import com.google.android.gms.tasks.Task;
 import com.yl.youthlive.Activitys.UserInformation;
 import com.yl.youthlive.DBHandler.SessionManager;
 import com.yl.youthlive.INTERFACE.AllAPIs;
-import com.yl.youthlive.Response.FacebookResponse;
-import com.yl.youthlive.Response.TwiterResponse;
 import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
 import com.yl.youthlive.socialPOJO.socialBean;
 
@@ -63,7 +60,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -71,10 +67,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static com.yl.youthlive.R.id.Signup;
-import static com.yl.youthlive.Signin.MyPREFERENCES;
 
 public class Register extends AppCompatActivity {
-    EditText counrt_code, Phone_no;
+    private static final String BASEESIGNUP_URL = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/sign_up.php";
     Button signup_button;
     int flag=0;
     CallbackManager callbackManager;
@@ -94,9 +89,8 @@ public class Register extends AppCompatActivity {
 
     private static final String TWITTER_KEY = "LBbbEwhJEotJqr3hfXlRHGtUk";
     private static final String TWITTER_SECRET = "RQL5V4FKdtqMLdWs6DkldiCoM7bkN4szL5s8oZKEHXXmHARWNR";
-
-    private static final String BASEESIGNUP_URL = "http://nationproducts.in/youthlive/api/sign_up.php";
-    private static final String BASEOTP_URL = "http://nationproducts.in/youthlive/api/sign_up.php";
+    private static final String BASEOTP_URL = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/sign_up.php";
+    EditText Phone_no;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS =0 ;
     private static final String KEY_COUNTRY = "Contery";
     private static final String KEY_PASS = "passs";
@@ -104,7 +98,7 @@ public class Register extends AppCompatActivity {
     private static final String TAG = "ERROR";
     BroadcastReceiver smsSentReceiver, smsDeliveredReceiver;
     private static final String OTP = "otp";
-    String Counter_code, Phonenumber ,Msg,opt_Phone,str,verificationCode,userId;
+    String Phonenumber, Msg, opt_Phone, str, verificationCode, userId;
     AlertDialog.Builder builder;
     private ProgressDialog pDialog;
     String jsonResponse;
@@ -170,7 +164,7 @@ public class Register extends AppCompatActivity {
                                                         edit.putString("pass" , id);
                                                         edit.apply();
 
-                                                        Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                                                        //  Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
                                                         Intent intent = new Intent(Register.this , HomeActivity.class);
                                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
@@ -245,7 +239,6 @@ public class Register extends AppCompatActivity {
         pDialog.setCancelable(false);
         checkLocationPermission1();
         builder =new AlertDialog.Builder(Register.this);
-        counrt_code = findViewById(R.id.counrt_code);
         relative=findViewById(R.id.relative);
         Phone_no = findViewById(R.id.phone_no);
         signup_button = findViewById(Signup);
@@ -298,11 +291,10 @@ public class Register extends AppCompatActivity {
     public void signUp()
     {
 
-        String code = counrt_code.getText().toString();
+
         String phone = Phone_no.getText().toString();
 
-        if (code.length() > 0)
-        {
+
 
             if (phone.length() > 0)
             {
@@ -320,7 +312,7 @@ public class Register extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<loginResponseBean> call = cr.signUp(phone , code);
+                Call<loginResponseBean> call = cr.signUp(phone);
 
                 call.enqueue(new Callback<loginResponseBean>() {
                     @Override
@@ -348,7 +340,7 @@ public class Register extends AppCompatActivity {
                         }
 
 
-                        Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
 
                         progress.setVisibility(View.GONE);
                     }
@@ -366,11 +358,6 @@ public class Register extends AppCompatActivity {
                 Phone_no.setError("Invalid Phone");
             }
 
-        }
-        else
-        {
-            counrt_code.setError("Invalid Country Code");
-        }
 
 
     }
@@ -379,12 +366,11 @@ public class Register extends AppCompatActivity {
 
     private void usersign() {
         showpDialog();
-        Counter_code = counrt_code.getText().toString().trim();
         Phonenumber = Phone_no.getText().toString().trim();
-        if (Counter_code.equals("")||Phonenumber.equals(""))
+        if (Phonenumber.equals(""))
         {
             builder.setTitle("Somethimg went wrong..");
-            builder.setMessage("Please fill all the fields...");
+            builder.setMessage("Please Enter Valid Mobile Number");
             Displayalart("input_error");
         }
 
@@ -397,7 +383,6 @@ public class Register extends AppCompatActivity {
                     String status= jObj.getString("status");
                     if (!status.equals("0")){
                         JSONObject user = jObj.getJSONObject("data");
-                        Counter_code = user.getString("countryCode");
                         Phonenumber = user.getString("phone");
                         verificationCode = user.getString("verificationCode");
                         str=jObj.getString("message");
@@ -418,7 +403,7 @@ public class Register extends AppCompatActivity {
                         //OTP();
                     }else{
                         str=jObj.getString("message");
-                        Toast.makeText(Register.this, str, Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(Register.this, str, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -434,7 +419,6 @@ public class Register extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("countryCode", Counter_code);
                 params.put("phone",Phonenumber);
                 return params;
             }
@@ -452,7 +436,7 @@ public class Register extends AppCompatActivity {
                     JSONObject obj = new JSONObject(response.toString());
                     JSONObject data = obj.getJSONObject("data");
                     String code = data.getString("verificationCode");
-                    Toast.makeText(Register.this , code , Toast.LENGTH_LONG).show();
+                    // Toast.makeText(Register.this , code , Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -461,7 +445,7 @@ public class Register extends AppCompatActivity {
                 intent.putExtra("phone",Phonenumber);
                 intent.putExtra("countryCode",Counter_code);
                 startActivity(intent);*//**/
-                StringRequest sr=new StringRequest(Request.Method.POST, "http://nationproducts.in/youthlive/api/sign_up.php", new Response.Listener<String>() {
+                StringRequest sr = new StringRequest(Request.Method.POST, "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/sign_up.php", new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
@@ -477,7 +461,6 @@ public class Register extends AppCompatActivity {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> params = new HashMap<String, String>();
-                        params.put("countryCode", Counter_code);
                         params.put("phone",Phonenumber);
                         return params;
                     }
@@ -506,7 +489,6 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (code.equals("input_error")) {
-                    counrt_code.setText("");
                     Phone_no.setText("");
                 }
             }
@@ -616,7 +598,7 @@ public class Register extends AppCompatActivity {
                         edit.putString("pass" , account.getId());
                         edit.commit();
 
-                        Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Register.this , HomeActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

@@ -1,15 +1,13 @@
 package com.yl.youthlive;
 
 import android.Manifest;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -70,7 +68,6 @@ public class OTP extends AppCompatActivity {
 
         progress = (ProgressBar)findViewById(R.id.progress);
 
-        Toast.makeText(OTP.this , varifycode , Toast.LENGTH_SHORT).show();
 
 
         // phone=getIntent().getStringExtra("phone");
@@ -182,10 +179,9 @@ public class OTP extends AppCompatActivity {
             public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
 
 
+                // Toast.makeText(OTP.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(OTP.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-
-                    Toast.makeText(OTP.this , response.body().getData().getVerificationCode() , Toast.LENGTH_SHORT).show();
+                // Toast.makeText(OTP.this , response.body().getData().getVerificationCode() , Toast.LENGTH_SHORT).show();
 
 
 
@@ -234,7 +230,7 @@ public class OTP extends AppCompatActivity {
                     if (Objects.equals(response.body().getStatus(), "1"))
                     {
 
-                        Toast.makeText(OTP.this , "OTP verified, Please create a Password" , Toast.LENGTH_SHORT).show();
+                        //   Toast.makeText(OTP.this , "OTP verified, Please create a Password" , Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(OTP.this, CreatePassword.class);
                         intent.putExtra("userId" , userId);
                         startActivity(intent);
@@ -275,14 +271,14 @@ public class OTP extends AppCompatActivity {
                     String status= jObj.getString("status");
                     if (!status.equals("0"))
                     {
-                        Toast.makeText(OTP.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(OTP.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
                         Intent i=new Intent(OTP.this,CreatePassword.class);
                         startActivity(i);
                     }
                     else
                     {
                         str=jObj.getString("message");
-                        Toast.makeText(OTP.this, str, Toast.LENGTH_SHORT).show();
+                        //   Toast.makeText(OTP.this, str, Toast.LENGTH_SHORT).show();
                     }
 
 
