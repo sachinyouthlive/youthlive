@@ -5,9 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/YL2.iml" filepath="$PROJECT_DIR$/YL2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/streamaxia-opensdk/streamaxia-opensdk.iml" filepath="$PROJECT_DIR$/streamaxia-opensdk/streamaxia-opensdk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/streamaxia-player/streamaxia-player.iml" filepath="$PROJECT_DIR$/streamaxia-player/streamaxia-player.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthlive.iml" filepath="$PROJECT_DIR$/.idea/youthlive.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/youthlive2.iml" filepath="$PROJECT_DIR$/.idea/youthlive2.iml" />
       <module fileurl="file://$PROJECT_DIR$/youthlive2.iml" filepath="$PROJECT_DIR$/youthlive2.iml" />
     </modules>
   </component>

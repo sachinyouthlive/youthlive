@@ -19,18 +19,20 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.exoplayer.AspectRatioFrameLayout;
+
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.streamaxia.player.StreamaxiaPlayer;
-import com.streamaxia.player.listener.StreamaxiaPlayerState;
+
+
 
 import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPlayerState, MyPlayerInterface {
+public class PlayerActivityNew extends AppCompatActivity// implements StreamaxiaPlayerState, MyPlayerInterface
+{
 
+/*
 
     String uri;
 
@@ -77,6 +79,7 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
     ProgressBar progressBar;
     @BindView(R.id.player_state_view)
     TextView stateText;
+*/
 
 
 
@@ -84,6 +87,7 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playernew);
+/*
         ButterKnife.bind(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -198,7 +202,8 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
 
 
 
-    /*BroadcastPlayer.Observer mBroadcastPlayerObserver = new BroadcastPlayer.Observer() {
+    */
+/*BroadcastPlayer.Observer mBroadcastPlayerObserver = new BroadcastPlayer.Observer() {
         @Override
         public void onStateChange(PlayerState playerState) {
             Toast.makeText(PlayerActivity.this, playerState.toString(), Toast.LENGTH_SHORT).show();
@@ -207,7 +212,8 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
         @Override
         public void onBroadcastLoaded(boolean live, int width, int height) {
         }
-    };*/
+    };*//*
+
 
   //  @Override
   //  protected void onPause() {
@@ -224,10 +230,12 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
 
         //surface.pause();
 
-        /*mVideoSurface = null;
+        */
+/*mVideoSurface = null;
         if (mBroadcastPlayer != null)
             mBroadcastPlayer.close();
-        mBroadcastPlayer = null;*/
+        mBroadcastPlayer = null;*//*
+
   //  }
 
     @Override
@@ -272,13 +280,16 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
 
 
         //initPlayer(uri);
+*/
 
     }
+/*
 
 
 
 
-   /* @Override
+   */
+/* @Override
     public int Status(int i) {
 
 
@@ -303,11 +314,13 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
     @Override
     public int OnReceiveData(ByteBuffer byteBuffer, int i, long l) {
         return 0;
-    }*/
+    }*//*
 
 
 
-    /*void getLatestResourceUri() {
+
+    */
+/*void getLatestResourceUri() {
         Request request = new Request.Builder()
                 .url("https://api.irisplatform.io/broadcasts")
                 .addHeader("Accept", "application/vnd.bambuser.v1+json")
@@ -339,7 +352,8 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
                 }});
             }
         });
-    }*/
+    }*//*
+
 
     void initPlayer(String resourceUri) {
 
@@ -349,7 +363,8 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
             //   mPlayerStatusTextView.setText("Could not get info about latest broadcast");
             return;
         }
-        /*if (mVideoSurface == null) {
+        */
+/*if (mVideoSurface == null) {
             // UI no longer active
             return;
         }
@@ -360,22 +375,26 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
 
 
         mBroadcastPlayer.setSurfaceView(mVideoSurface);
-        mBroadcastPlayer.load();*/
+        mBroadcastPlayer.load();*//*
 
-        /*WZPlayerConfig wzPlayerConfig = new WZPlayerConfig();
+
+        */
+/*WZPlayerConfig wzPlayerConfig = new WZPlayerConfig();
 
         wzPlayerConfig.setHostAddress("ec2-18-219-154-44.us-east-2.compute.amazonaws.com");
         wzPlayerConfig.setPortNumber(1935);
         wzPlayerConfig.setApplicationName("live");
         wzPlayerConfig.setStreamName(uri);
-*/
+*//*
+
         //videoView.play();
 
 
 
 
 
-        /*videoView.play(wzPlayerConfig, new WZStatusCallback() {
+        */
+/*videoView.play(wzPlayerConfig, new WZStatusCallback() {
             @Override
             public void onWZStatus(WZStatus wzStatus) {
 
@@ -387,7 +406,8 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
             public void onWZError(WZStatus wzStatus) {
 
             }
-        });*/
+        });*//*
+
 
         String ur = "rtsp://ec2-18-219-154-44.us-east-2.compute.amazonaws.com:1935/live/" + resourceUri;
 
@@ -402,7 +422,8 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
         //surface.play();
 
 
-        /*wzPlayerConfig = new MediaPlayerConfig();
+        */
+/*wzPlayerConfig = new MediaPlayerConfig();
 
 
         wzPlayerConfig.setConnectionUrl(ur);
@@ -423,13 +444,15 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
 
 
         surfaceView.Open(wzPlayerConfig, this);
-*/
+*//*
+
 
         //wzPlayerConfig.setIsPlayback(true);
 
 
 
-        /*wzPlayerConfig.setVideoEnabled(true);
+        */
+/*wzPlayerConfig.setVideoEnabled(true);
         wzPlayerConfig.setVideoFrameWidth(640);
         wzPlayerConfig.setVideoFrameHeight(480);
         wzPlayerConfig.setVideoFramerate(30);
@@ -450,9 +473,11 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
         wzPlayerConfig.setAudioChannels(1);
         wzPlayerConfig.setAudioBitRate(64000);
 
-*/
+*//*
 
-        /*wzPlayerConfig.setHostAddress("ec2-18-219-154-44.us-east-2.compute.amazonaws.com");
+
+        */
+/*wzPlayerConfig.setHostAddress("ec2-18-219-154-44.us-east-2.compute.amazonaws.com");
         wzPlayerConfig.setApplicationName("live");
         wzPlayerConfig.setStreamName(resourceUri);
         wzPlayerConfig.setPortNumber(1935);
@@ -502,16 +527,19 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
             Log.d("asdasdas" , "ready_to_play");
 
         }
-*/
+*//*
 
 
-        /*ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+
+        */
+/*ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         MediaSource videoSource = new ExtractorMediaSource(Uri.parse(ur),
                 rtmpDataSourceFactory, extractorsFactory, null, null);
 
 
         vlcVideoLibrary.play(ur);
-*/
+*//*
+
 
 //        player.prepare(videoSource);
 
@@ -520,7 +548,8 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
 
         //vlcVideoLibrary.play(ur);
 
-        /*videoView.setVideoURI(Uri.parse(ur));
+        */
+/*videoView.setVideoURI(Uri.parse(ur));
         videoView.requestFocus();
         videoView.setKeepScreenOn(true);
         videoView.start();
@@ -534,7 +563,8 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
                 return true;
             }
         });
-*/
+*//*
+
 
     }
 
@@ -633,7 +663,8 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
     }
 
 
-    /*@Override
+    */
+/*@Override
     public void syncPreferences() {
 
 
@@ -653,7 +684,9 @@ public class PlayerActivityNew extends AppCompatActivity implements StreamaxiaPl
             Log.d("eeeeee" , "entered");
 
             GoCoderSDKPrefs.updateConfigFromPrefs(prefs, mStreamPlayerConfig);
-    }*/
+    }*//*
 
+
+*/
 
 }

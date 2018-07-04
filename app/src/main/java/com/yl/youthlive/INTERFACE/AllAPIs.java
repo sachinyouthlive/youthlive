@@ -189,6 +189,12 @@ public interface AllAPIs {
     );
 
     @Multipart
+    @POST("api/finishConnection.php")
+    Call<String> endConnection(
+            @Part("requestId") String position
+    );
+
+    @Multipart
     @POST("api/edit_career.php")
     Call<editCareerBean> editCareer(
             @Part("userId") String userId,
@@ -545,6 +551,15 @@ public interface AllAPIs {
     Call<followBean> followcheck(
             @Part("userId") String userId,
             @Part("friendId") String friendId
+    );
+
+
+    @Multipart
+    @POST("api/follow_live_user.php")
+    Call<followBean> followLiveUser(
+            @Part("userId") String userId,
+            @Part("friendId") String friendId,
+            @Part("liveId") String liveId
     );
 
 

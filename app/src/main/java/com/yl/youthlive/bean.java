@@ -43,6 +43,7 @@ public class bean extends Application{
         context = getApplicationContext();
         Log.e(TAG, "  myapp stater");
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
+
     }
     public static synchronized bean getInstance() {
         return mInstance;

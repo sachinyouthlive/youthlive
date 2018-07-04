@@ -9,36 +9,42 @@
     android:focusableInTouchMode="true"
     tools:context=".VideoBroadcaster">
 
-    <com.google.android.exoplayer.AspectRatioFrameLayout
-        android:id="@+id/video_frame"
+    <RelativeLayout
         android:layout_width="120dp"
         android:layout_height="160dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:layout_marginBottom="110dp"
+        android:id="@+id/thumb_container1"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:elevation="4dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="1.0"
+        >
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/video_frame"
+        android:layout_width="120dp"
+        android:layout_height="160dp"
+        app:surface_type="texture_view"
+        app:resize_mode="fit"
+        />
 
-        <SurfaceView
-            android:id="@+id/surface_view"
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_gravity="center"
-            android:elevation="5dp" />
+            android:scaleType="centerCrop"
+            android:visibility="visible"
+            android:id="@+id/thumb_loading1"/>
 
-    </com.google.android.exoplayer.AspectRatioFrameLayout>
+    </RelativeLayout>
+
 
     <com.streamaxia.android.CameraPreview
         android:id="@+id/preview"
@@ -54,7 +60,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <com.google.android.exoplayer.AspectRatioFrameLayout
+    <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/video_frame1"
         android:layout_width="120dp"
         android:layout_height="160dp"
@@ -64,23 +70,13 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:elevation="4dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/video_frame"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/thumb_container1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <SurfaceView
-            android:id="@+id/surface_view1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_gravity="center"
-            android:elevation="5dp" />
-
-    </com.google.android.exoplayer.AspectRatioFrameLayout>
+        app:resize_mode="fit"
+        app:surface_type="texture_view"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/textView3"
