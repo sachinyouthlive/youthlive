@@ -311,7 +311,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         /*GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         updateUI(account);*/
 
-        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(Login.this));
+
 
 
         if (!hasPermissions(this, PERMISSIONS)) {

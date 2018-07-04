@@ -1,5 +1,6 @@
 package com.yl.youthlive;
 
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,10 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+
+import jp.wasabeef.blurry.Blurry;
 
 public class LiveEndedBroadcaster extends AppCompatActivity {
 
@@ -50,7 +55,32 @@ public class LiveEndedBroadcaster extends AppCompatActivity {
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
         ImageLoader loader = ImageLoader.getInstance();
-        loader.displayImage(b.userImage , image , options);
+
+        loader.loadImage(b.userImage, options, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                Blurry.with(LiveEndedBroadcaster.this).from(loadedImage).into(image);
+
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+
+
 
 
 

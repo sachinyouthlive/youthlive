@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class bean extends Application{
         mInstance = this;
         context = getApplicationContext();
         Log.e(TAG, "  myapp stater");
+        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
 
     }
     public static synchronized bean getInstance() {
