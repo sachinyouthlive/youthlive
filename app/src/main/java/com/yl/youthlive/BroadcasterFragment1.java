@@ -40,12 +40,14 @@ import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -71,6 +73,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
@@ -158,6 +162,12 @@ public class BroadcasterFragment1 extends Fragment {
 
     boolean isConnection = false;
 
+    View giftLayout;
+    ImageView giftImage;
+    TextView giftText;
+
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -170,6 +180,11 @@ public class BroadcasterFragment1 extends Fragment {
 
         bubbleView = (BubbleView) view.findViewById(R.id.bubble);
         playerFrame1 = view.findViewById(R.id.view3);
+
+        giftImage = view.findViewById(R.id.imageView13);
+        giftText = view.findViewById(R.id.textView28);
+
+        giftLayout = view.findViewById(R.id.gift_layout);
 
         reject1 = view.findViewById(R.id.reject1);
 
@@ -617,7 +632,7 @@ public class BroadcasterFragment1 extends Fragment {
                         //comm.set
 
 
-                        //showGift(Integer.parseInt(item.getGiftId()), item.getGiftName());
+                        showGift(item.getGiftId(), item.getGiftName());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -1657,6 +1672,54 @@ public class BroadcasterFragment1 extends Fragment {
 
             }
         }
+    }
+
+
+    Integer gifts[] = new Integer[]
+            {
+                    R.drawable.gif1,
+                    R.drawable.gif2,
+                    R.drawable.gif3,
+                    R.drawable.gif4,
+                    R.drawable.gif5,
+                    R.drawable.gif6,
+                    R.drawable.gif7,
+                    R.drawable.gif8,
+                    R.drawable.gif9,
+                    R.drawable.gif10,
+                    R.drawable.gif11,
+                    R.drawable.gif12,
+                    R.drawable.gif13,
+                    R.drawable.gif14
+            };
+
+
+    public void showGift(String giftId , String text)
+    {
+
+
+        Glide.with(broadcaster).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
+        giftText.setText(text);
+
+        giftLayout.setVisibility(View.VISIBLE);
+
+        Timer t = new Timer();
+
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                giftLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        giftLayout.setVisibility(View.GONE);
+                    }
+                });
+
+            }
+        } , 1500);
+
+
     }
 
 

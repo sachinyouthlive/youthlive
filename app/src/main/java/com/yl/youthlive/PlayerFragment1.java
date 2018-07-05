@@ -83,6 +83,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
@@ -177,6 +179,11 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
     ImageButton reject1;
 
+    View giftLayout;
+    ImageView giftImage;
+    TextView giftText;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -186,6 +193,10 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         player = (VideoPlayer)getActivity();
 
         mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        giftImage = view.findViewById(R.id.imageView13);
+        giftText = view.findViewById(R.id.textView28);
+
+        giftLayout = view.findViewById(R.id.gift_layout);
 
 
         reject1 = view.findViewById(R.id.reject1);
@@ -626,7 +637,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                         //comm.set
 
 
-                        //showGift(Integer.parseInt(item.getGiftId()), item.getGiftName());
+                        showGift(item.getGiftId() , item.getGiftName());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -747,7 +758,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                             //thumbCamera1.setVisibility(View.VISIBLE);
 
 
-thumbCameraContainer1.setVisibility(View.VISIBLE);
+                            thumbCameraContainer1.setVisibility(View.VISIBLE);
 
                             player.startThumbCamera1(connId);
                             dialog.dismiss();
@@ -1610,7 +1621,7 @@ thumbCameraContainer1.setVisibility(View.VISIBLE);
                             new IntentFilter("live_end"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver,
                             new IntentFilter("request"));
-LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionReceiver,
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionReceiver,
                             new IntentFilter("connection_end"));
 
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
@@ -2153,5 +2164,51 @@ LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionRecei
         }
     }
 
+    Integer gifts[] = new Integer[]
+            {
+                    R.drawable.gif1,
+                    R.drawable.gif2,
+                    R.drawable.gif3,
+                    R.drawable.gif4,
+                    R.drawable.gif5,
+                    R.drawable.gif6,
+                    R.drawable.gif7,
+                    R.drawable.gif8,
+                    R.drawable.gif9,
+                    R.drawable.gif10,
+                    R.drawable.gif11,
+                    R.drawable.gif12,
+                    R.drawable.gif13,
+                    R.drawable.gif14
+            };
+
+
+    public void showGift(String giftId , String text)
+    {
+
+
+        Glide.with(player).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
+        giftText.setText(text);
+
+        giftLayout.setVisibility(View.VISIBLE);
+
+        Timer t = new Timer();
+
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                giftLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        giftLayout.setVisibility(View.GONE);
+                    }
+                });
+
+            }
+        } , 1500);
+
+
+    }
 
 }

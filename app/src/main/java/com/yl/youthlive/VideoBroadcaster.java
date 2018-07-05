@@ -171,6 +171,8 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordEventHandler(new RecordHandler(this));
 
+
+
         try {
             cameraPreview.startCamera();
         }catch (Exception e)
@@ -504,7 +506,7 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
     public void startPublish(String liveId)
     {
-        mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/videochat/" + liveId);
+        mPublisher.startPublish("rtmp://ec2-13-232-97-89.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId);
     }
 
 
@@ -571,7 +573,7 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
         //Uri uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/vod/sample.mp4");
 
-        Uri uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + connId);
+        Uri uri = Uri.parse("rtmp://ec2-13-232-97-89.ap-south-1.compute.amazonaws.com:1935/connection/" + connId);
 
 
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();

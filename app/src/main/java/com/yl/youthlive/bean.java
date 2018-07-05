@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class bean extends Application{
 
-    public String BASE_URL = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/";
+    public String BASE_URL = "http://ec2-13-232-97-89.ap-south-1.compute.amazonaws.com/softcode/";
 
     public String userId = "";
     String userName = "";
