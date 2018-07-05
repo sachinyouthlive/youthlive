@@ -190,7 +190,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
         //thumbCamera1.getParent().requestTransparentRegion(surfaceView);
 
-        uri = Uri.parse("rtmp://ec2-13-232-97-89.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId);
+        uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
         //uri = Uri.parse("rtmp://192.168.1.103:1935/live/test");
         //uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/vod/sample.mp4");
         //uri = Uri.parse("rtmp://192.168.1.103:1935/vod/sample.mp4");
@@ -500,7 +500,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         thumbCamera1.startCamera();
         mPublisher.setVideoOutputResolution(160, 120, getResources().getConfiguration().orientation);
 
-        mPublisher.startPublish("rtmp://ec2-13-232-97-89.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId + b.userId);
+        mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 
 
         player_camera_layout1.setVisibility(View.VISIBLE);
