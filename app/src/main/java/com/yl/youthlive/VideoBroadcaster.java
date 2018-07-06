@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -188,11 +189,9 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
         List<Size> sizes = mPublisher.getSupportedPictureSizes(getResources().getConfiguration().orientation);
         final Size resolution = sizes.get(0);
-        mPublisher.setVideoOutputResolution(540, 270, this.getResources().getConfiguration().orientation);
+        mPublisher.setVideoOutputResolution(1280, 720, this.getResources().getConfiguration().orientation);
 
-        //mPublisher.setVideoBitRate(800000);
-
-
+        //mPublisher.setVideoBitRate(192000);
 
 
         FragAdapter adapter = new FragAdapter(getSupportFragmentManager());
@@ -283,7 +282,11 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
 
-        thumbLoading1.setVisibility(View.GONE);
+        if (playWhenReady)
+        {
+            thumbLoading1.setVisibility(View.GONE);
+        }
+
 
     }
 
@@ -535,7 +538,7 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
     public void startThumbPlayer1(String connId , String thumbPic)
     {
-        Log.d("uurrii" , thumbPic);
+        /*Log.d("uurrii" , thumbPic);
 
         thumbContainer1.setVisibility(View.VISIBLE);
         thumbPlayerView1.setVisibility(View.VISIBLE);
@@ -570,7 +573,7 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
         });
 
 
-
+*/
         //Uri uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/vod/sample.mp4");
 
         Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + connId);
@@ -605,6 +608,10 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
         thumbPlayer1.prepare(videoSource);
 
         thumbPlayer1.setPlayWhenReady(true);
+
+
+
+
 
 
     }

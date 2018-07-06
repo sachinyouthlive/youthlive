@@ -167,7 +167,6 @@ public class BroadcasterFragment1 extends Fragment {
     TextView giftText;
 
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -674,7 +673,7 @@ public class BroadcasterFragment1 extends Fragment {
                         connId = obj.getString("connId");
 
                         String mode = obj.getString("status");
-                        String uri = obj.getString("uri");
+                        final String uri = obj.getString("uri");
 
 
                         if (mode.equals("2")) {
@@ -683,8 +682,23 @@ public class BroadcasterFragment1 extends Fragment {
                             Log.d("uurrii", uri);
 
 
-                            playerFrame1.setVisibility(View.VISIBLE);
-                            broadcaster.startThumbPlayer1(uri, thumbPic1);
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.d("ppllaayy", "Playing");
+
+
+                                    Toast.makeText(broadcaster , "Playing" , Toast.LENGTH_SHORT).show();
+
+                                    playerFrame1.setVisibility(View.VISIBLE);
+
+
+                                    broadcaster.startThumbPlayer1(uri, thumbPic1);
+
+                                }
+                            }, 8000);
+
 
                         } else {
 
@@ -1694,8 +1708,7 @@ public class BroadcasterFragment1 extends Fragment {
             };
 
 
-    public void showGift(String giftId , String text)
-    {
+    public void showGift(String giftId, String text) {
 
 
         Glide.with(broadcaster).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
@@ -1717,7 +1730,7 @@ public class BroadcasterFragment1 extends Fragment {
                 });
 
             }
-        } , 1500);
+        }, 1500);
 
 
     }

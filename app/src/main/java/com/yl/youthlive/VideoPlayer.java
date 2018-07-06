@@ -419,6 +419,8 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
+        Log.d("ssttaattee" , String.valueOf(playbackState));
+
         if (playWhenReady)
         {
             loading.setVisibility(View.GONE);
@@ -498,7 +500,9 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         mPublisher.setRtmpHandler(new RtmpHandler(VideoPlayer.this));
         mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
         thumbCamera1.startCamera();
-        mPublisher.setVideoOutputResolution(160, 120, getResources().getConfiguration().orientation);
+        mPublisher.setVideoOutputResolution(480, 360, getResources().getConfiguration().orientation);
+
+        //mPublisher.setVideoBitRate(128000);
 
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 
