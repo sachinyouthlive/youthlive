@@ -1,21 +1,43 @@
 package com.yl.youthlive;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.Region;
 import android.net.Uri;
-import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+
+import com.bumptech.glide.Glide;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -40,16 +62,21 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.otaliastudios.cameraview.AspectRatio;
 import com.streamaxia.android.CameraPreview;
 import com.streamaxia.android.StreamaxiaPublisher;
 import com.streamaxia.android.handlers.EncoderHandler;
 import com.streamaxia.android.handlers.RecordHandler;
 import com.streamaxia.android.handlers.RtmpHandler;
+import com.streamaxia.android.utils.ScalingMode;
+import com.streamaxia.android.utils.Size;
+
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.List;
 
 import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
@@ -65,21 +92,46 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
 
     ProgressBar progress;
+
+    private Uri uri;
+
+
     String TAG = "VideoPlayer";
+
+
+
+
     String connId;
+
+
+
+
     TextView stateText;
+
+
     CameraPreview thumbCamera1, thumbCamera2;
+
+
+
     String loadingpic;
+
+
     ViewPager pager;
+
     RelativeLayout player_camera_layout1;
+
     RelativeLayout container;
     ImageView loading;
+
     PlayerView mainPlayerView;
     SimpleExoPlayer mainPlayer;
-    PlayerView thumbSurface1, thumbSurface2;
-    SimpleExoPlayer thumbPlayer1, thumbPlayer2;
-    StreamaxiaPublisher mPublisher;
-    private Uri uri;
+
+    ProgressBar loadingProgress;
+
+    PlayerView thumbSurface1 , thumbSurface2;
+    SimpleExoPlayer thumbPlayer1 , thumbPlayer2;
+
+View loadingPopup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +141,13 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         liveId = getIntent().getStringExtra("uri");
         loadingpic = getIntent().getStringExtra("pic");
 
+        loadingPopup = findViewById(R.id.loading_popup);
+
         loading = findViewById(R.id.loading);
+        loadingProgress = findViewById(R.id.loading_progress);
+
+        DoubleBounce doubleBounce = new DoubleBounce();
+        loadingProgress.setIndeterminateDrawable(doubleBounce);
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
 
@@ -120,6 +178,9 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         });
 
 
+
+
+
         mainPlayerView = findViewById(R.id.main_player);
 
         progress = findViewById(R.id.progressBar4);
@@ -139,6 +200,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         pager = findViewById(R.id.pager);
 
 
+
         //SurfaceHolder holder = surfaceView.getHolder();
         //holder.setFormat(PixelFormat.UNKNOWN);
         //holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -155,10 +217,14 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
         Log.d("status", "rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + liveId);
 
+        loadingProgress.setVisibility(View.VISIBLE);
 
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+
+
 
 //Create the player
         mainPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
@@ -187,15 +253,27 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         mainPlayer.addListener(VideoPlayer.this);
 
 
+
+
+
+
         FragAdapter adapter = new FragAdapter(getSupportFragmentManager());
 
         pager.setAdapter(adapter);
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mainPlayer.stop();
+
+        try {
+            thumbPlayer1.stop();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         try {
             mPublisher.stopPublish();
@@ -230,8 +308,6 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
     @Override
     public void onRtmpConnected(String s) {
-        Log.d(TAG, s);
-
         progress.setVisibility(View.VISIBLE);
 
         final bean b = (bean) getApplicationContext();
@@ -244,7 +320,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-        Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId + b.userId, "2");
+        Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId + b.userId, "2" , b.userId);
         call1.enqueue(new Callback<acceptRejectBean>() {
             @Override
             public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -259,17 +335,16 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
             }
         });
 
-
     }
 
     @Override
     public void onRtmpVideoStreaming() {
-        Log.d("recordloistener", "video");
+        Log.d("recordloistener" , "video");
     }
 
     @Override
     public void onRtmpAudioStreaming() {
-        Log.d("recordloistener", "audio");
+        Log.d("recordloistener" , "audio");
     }
 
     @Override
@@ -299,59 +374,59 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
     @Override
     public void onRtmpSocketException(SocketException e) {
-        Log.d("recordloistener", e.toString());
+        Log.d("recordloistener" , e.toString());
     }
 
     @Override
     public void onRtmpIOException(IOException e) {
-        Log.d("recordloistener", e.toString());
+        Log.d("recordloistener" , e.toString());
     }
 
     @Override
     public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-        Log.d("recordloistener", e.toString());
+        Log.d("recordloistener" , e.toString());
     }
 
     @Override
     public void onRtmpIllegalStateException(IllegalStateException e) {
-        Log.d("recordloistener", e.toString());
+        Log.d("recordloistener" , e.toString());
     }
 
     @Override
     public void onRtmpAuthenticationg(String s) {
-        Log.d("recordloistener", s);
+        Log.d("recordloistener" , s);
     }
 
     @Override
     public void onRecordPause() {
 
-        Log.d("recordloistener", "paused");
+        Log.d("recordloistener" , "paused");
 
     }
 
     @Override
     public void onRecordResume() {
-        Log.d("recordloistener", "resume");
+        Log.d("recordloistener" , "resume");
     }
 
     @Override
     public void onRecordStarted(String s) {
-        Log.d("recordloistener", s);
+        Log.d("recordloistener" , s);
     }
 
     @Override
     public void onRecordFinished(String s) {
-        Log.d("recordloistener", s);
+        Log.d("recordloistener" , s);
     }
 
     @Override
     public void onRecordIllegalArgumentException(IllegalArgumentException e) {
-        Log.d("recordloistener", e.toString());
+        Log.d("recordloistener" , e.toString());
     }
 
     @Override
     public void onRecordIOException(IOException e) {
-        Log.d("recordloistener", e.toString());
+        Log.d("recordloistener" , e.toString());
     }
 
     @Override
@@ -372,10 +447,13 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
-        Log.d("ssttaattee", String.valueOf(playbackState));
+        Log.d("ssttaattee" , String.valueOf(playbackState));
 
-        if (playWhenReady) {
+        if (playWhenReady)
+        {
+            loadingPopup.setVisibility(View.GONE);
             loading.setVisibility(View.GONE);
+
         }
 
     }
@@ -393,6 +471,29 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
     @Override
     public void onPlayerError(ExoPlaybackException error) {
 
+        Log.d("eerroorr" , error.toString());
+
+
+        Dialog dialog = new Dialog(VideoPlayer.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.ended_dialog);
+        dialog.show();
+
+        Button ok = dialog.findViewById(R.id.button2);
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
+
+            }
+        });
+
+
+
+
     }
 
     @Override
@@ -409,6 +510,34 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
     public void onSeekProcessed() {
 
     }
+
+
+    public class FragAdapter extends FragmentStatePagerAdapter {
+
+        public FragAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                PlayerFragment1 frag = new PlayerFragment1();
+                Bundle b = new Bundle();
+                b.putString("liveId", liveId);
+                frag.setArguments(b);
+                return frag;
+            } else {
+                return new secondfrag();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
+    }
+
+    StreamaxiaPublisher mPublisher;
 
     public void startThumbCamera1(String connId) {
 
@@ -431,10 +560,82 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 
 
-        player_camera_layout1.setVisibility(View.VISIBLE);
+
+        new CountDownTimer(8000 , 1000)
+        {
+
+            Toast toast = Toast.makeText(VideoPlayer.this , null , Toast.LENGTH_SHORT);
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+                toast.setText(String.valueOf(millisUntilFinished / 1000));
+                toast.show();
+
+            }
+
+            @Override
+            public void onFinish() {
+
+                player_camera_layout1.setVisibility(View.VISIBLE);
+
+            }
+        }.start();
+
+
+
+
+
     }
 
-    public void endThumbCamera1() {
+
+    public void startThumbPlayer1(String connId)
+    {
+
+
+        Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + connId);
+
+        thumbSurface1.setVisibility(View.VISIBLE);
+
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+//Create the player
+        thumbPlayer1 = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
+                new DefaultAllocator(true, 1000),
+                200,  // min buffer 0.5s
+                500, //max buffer 3s
+                500, // playback 1s
+                500,   //playback after rebuffer 1s
+                1,
+                true
+        ));
+
+        thumbSurface1.setPlayer(thumbPlayer1);
+
+        thumbSurface1.setUseController(false);
+
+        thumbPlayer1.addListener(VideoPlayer.this);
+
+        RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
+// This is the MediaSource representing the media to be played.
+        final MediaSource videoSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
+                .createMediaSource(uri);
+
+        thumbPlayer1.prepare(videoSource);
+
+        thumbPlayer1.setPlayWhenReady(true);
+
+
+
+
+
+
+    }
+
+    public void endThumbCamera1()
+    {
 
         try {
 
@@ -442,12 +643,21 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
             mPublisher.stopRecord();
             thumbCamera1.stopCamera();
 
-        } catch (Exception e) {
+        }catch (Exception e)
+        {
             e.printStackTrace();
         }
         player_camera_layout1.setVisibility(View.GONE);
         //thumbCamera1.setVisibility(View.INVISIBLE);
 
+
+    }
+
+    public void endThumbPlayer1()
+    {
+        thumbPlayer1.stop();
+
+        thumbSurface1.setVisibility(View.GONE);
 
     }
 
@@ -477,29 +687,6 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
     }
 
-    public class FragAdapter extends FragmentStatePagerAdapter {
 
-        public FragAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if (position == 0) {
-                PlayerFragment1 frag = new PlayerFragment1();
-                Bundle b = new Bundle();
-                b.putString("liveId", liveId);
-                frag.setArguments(b);
-                return frag;
-            } else {
-                return new secondfrag();
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 1;
-        }
-    }
 
 }

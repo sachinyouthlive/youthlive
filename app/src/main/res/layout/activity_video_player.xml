@@ -11,28 +11,10 @@
         android:id="@+id/main_player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
+        app:surface_type="texture_view"
         app:resize_mode="fill"
-        app:surface_type="texture_view" />
+        android:layout_centerInParent="true"/>
 
-    <ImageView
-        android:id="@+id/loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:scaleType="centerCrop" />
-
-
-    <ProgressBar
-        android:id="@+id/progressBar4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textView3"
@@ -49,11 +31,11 @@
         android:id="@+id/view2"
         android:layout_width="120dp"
         android:layout_height="160dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
         android:layout_marginBottom="110dp"
         android:layout_marginEnd="8dp"
         android:elevation="4dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:visibility="visible">
 
         <RelativeLayout
@@ -75,7 +57,7 @@
             android:id="@+id/thumb_frame1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
 
     </RelativeLayout>
@@ -84,10 +66,10 @@
         android:id="@+id/view6"
         android:layout_width="120dp"
         android:layout_height="160dp"
-        android:layout_alignBottom="@+id/view2"
-        android:layout_alignParentEnd="true"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/view2"
         android:visibility="gone">
 
 
@@ -103,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#000000"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
 
     </RelativeLayout>
@@ -112,6 +94,33 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+
+    <ImageView
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:scaleType="centerCrop"
+        />
+
+    <include
+        layout="@layout/player_loading"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/loading_popup"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

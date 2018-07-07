@@ -101,7 +101,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<List<liveBean>> call = cr.getLives(b.userId);
+        Call<List<liveBean>> call = cr.getLives2(b.userId);
 
         call.enqueue(new Callback<List<liveBean>>() {
             @Override
@@ -189,13 +189,11 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
 
     }
-
     ////////////////////internet connectivity check///////////////
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showalert(isConnected);
     }
-
     private void showalert(boolean isConnected) {
         if (isConnected) {
 
@@ -228,8 +226,10 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            } catch (Exception e) {
-                Log.d("TAG", "Show Dialog: " + e.getMessage());
+            }
+            catch(Exception e)
+            {
+                Log.d("TAG", "Show Dialog: "+e.getMessage());
             }
         }
 
@@ -273,13 +273,15 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
             final liveBean item = list.get(position);
 
-            //holder.title.setText(item.getTitle());
+            holder.title.setText(item.getTitle());
 
             DisplayImageOptions options = new DisplayImageOptions.Builder().resetViewBeforeLoading(false).cacheOnDisk(true).cacheInMemory(true).build();
 
             ImageLoader loader = ImageLoader.getInstance();
 
-            loader.displayImage(item.getUserImage(), holder.image, options);
+            final bean b = (bean)context.getApplicationContext();
+
+            loader.displayImage(b.BASE_URL + item.getUserImage() , holder.image , options);
 
             holder.viewCount.setText(item.getLiveUsers());
 
@@ -288,15 +290,11 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                 public void onClick(View v) {
 
 
-                    String name = item.getName();
-                    String[] dd = name.split("-");
-
-
                     //Intent intent = new Intent(context, PlayerActivityNew.class);
                     Intent intent = new Intent(context, VideoPlayer.class);
-                    intent.putExtra("uri", name);
-                    intent.putExtra("liveId", name);
-                    intent.putExtra("pic", item.getUserImage());
+                    intent.putExtra("uri", item.getLiveId());
+                    intent.putExtra("liveId", item.getLiveId());
+                    intent.putExtra("pic",b.BASE_URL + item.getUserImage());
                     intent.putExtra("timelineId", String.valueOf(item.getUserId()));
                     startActivity(intent);
 
@@ -369,7 +367,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                 public void onClick(View v) {
 
 
-                    bean b = (bean) context.getApplicationContext();
+                    bean b = (bean)context.getApplicationContext();
 
                     b.liveId = item.getLiveId();
 

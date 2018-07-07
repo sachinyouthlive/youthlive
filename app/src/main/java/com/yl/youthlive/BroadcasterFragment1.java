@@ -18,6 +18,7 @@ import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -31,6 +32,7 @@ import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
@@ -44,14 +46,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+//import com.streamaxia.player.StreamaxiaPlayer;
+import com.payu.magicretry.MainActivity;
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.followPOJO.followBean;
@@ -85,25 +91,26 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-//import com.streamaxia.player.StreamaxiaPlayer;
-
 public class BroadcasterFragment1 extends Fragment {
 
-    private static final int REQUEST_CODE = 100;
-    private static final String SCREENCAP_NAME = "screencap";
-    private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
-    //SimpleExoPlayerView thumb;
-    private static MediaProjection sMediaProjection;
-    private static String STORE_DIRECTORY;
-    private static int IMAGES_PRODUCED;
     TextView newMessage;
+
+    private int previousTotal = 0; // The total number of items in the dataset after the last load
+    private boolean loading = true; // True if we are still waiting for the last set of data to load.
+    private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
     int firstVisibleItem, visibleItemCount, totalItemCount;
+
+    private int current_page = 1;
+
     ImageButton emoji, message, send, flash, camera, crop;
+
     EmojiconEditText comment;
+
     RecyclerView commentGrid;
     LinearLayoutManager commentsManager;
     CommentsAdapter commentsAdapter;
     List<Comment> commentList;
+
     BroadcastReceiver commentReceiver;
     BroadcastReceiver likeReceiver;
     BroadcastReceiver viewReceiver;
@@ -111,14 +118,35 @@ public class BroadcasterFragment1 extends Fragment {
     BroadcastReceiver statusReceiver;
     BroadcastReceiver connectionReceiver;
     View rootView;
+    private EmojIconActions emojIcon;
+
+
     ProgressBar progress;
     String liveId;
+
     VideoBroadcaster broadcaster;
+
+    private static final int REQUEST_CODE = 100;
+
+    private MediaProjectionManager mProjectionManager;
+    //SimpleExoPlayerView thumb;
+    private static MediaProjection sMediaProjection;
+    private Display mDisplay;
+
     String TAG = "BroadcasterFragment1";
+
+    private static String STORE_DIRECTORY;
+
     int coun = 0;
+
     TextView likeCount;
+
+    private BubbleView bubbleView;
+
     int count = 0;
+
     ImageButton heart;
+
     CircleImageView timelineProfile;
     TextView timelineName;
     TextView liveUsers;
@@ -128,47 +156,22 @@ public class BroadcasterFragment1 extends Fragment {
     LinearLayoutManager viewersManager;
     ViewsAdapter viewsAdapter;
     List<com.yl.youthlive.getIpdatedPOJO.View> viewsList;
+
     RelativeLayout playerFrame1;
+
     ImageButton reject1;
+
     String connId;
+
     String thumbPic1;
+
     boolean isConnection = false;
+
     View giftLayout;
     ImageView giftImage;
     TextView giftText;
-    Integer gifts[] = new Integer[]
-            {
-                    R.drawable.gif1,
-                    R.drawable.gif2,
-                    R.drawable.gif3,
-                    R.drawable.gif4,
-                    R.drawable.gif5,
-                    R.drawable.gif6,
-                    R.drawable.gif7,
-                    R.drawable.gif8,
-                    R.drawable.gif9,
-                    R.drawable.gif10,
-                    R.drawable.gif11,
-                    R.drawable.gif12,
-                    R.drawable.gif13,
-                    R.drawable.gif14
-            };
-    private int previousTotal = 0; // The total number of items in the dataset after the last load
-    private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
-    private int current_page = 1;
-    private EmojIconActions emojIcon;
-    private MediaProjectionManager mProjectionManager;
-    private Display mDisplay;
-    private BubbleView bubbleView;
-    private int mWidth;
-    private int mHeight;
-    private int mRotation;
-    private int mDensity;
-    private ImageReader mImageReader;
-    private VirtualDisplay mVirtualDisplay;
-    private Handler mHandler;
-    private OrientationChangeCallback mOrientationChangeCallback;
+
+
 
     @Nullable
     @Override
@@ -314,6 +317,7 @@ public class BroadcasterFragment1 extends Fragment {
         });
 
 
+
         progress.setVisibility(View.VISIBLE);
         final bean b = (bean) getActivity().getApplicationContext();
 
@@ -343,6 +347,7 @@ public class BroadcasterFragment1 extends Fragment {
                     broadcaster.startPublish(liveId);
 
 
+                    broadcaster.startCountDown();
                     schedule(liveId);
                     //actions.setVisibility(View.VISIBLE);
 
@@ -685,22 +690,36 @@ public class BroadcasterFragment1 extends Fragment {
                             Log.d("uurrii", uri);
 
 
-                            final Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
+                            new CountDownTimer(8000, 1000) {
+
+                                Toast toast = Toast.makeText(broadcaster, null, Toast.LENGTH_SHORT);
+
                                 @Override
-                                public void run() {
-                                    Log.d("ppllaayy", "Playing");
+                                public void onTick(long millisUntilFinished) {
 
+                                    toast.setText(String.valueOf(millisUntilFinished / 1000));
+                                    toast.show();
 
-                                    Toast.makeText(broadcaster, "Playing", Toast.LENGTH_SHORT).show();
+                                    Log.d("asdasdsa", String.valueOf(millisUntilFinished / 1000));
+
+                                    if (millisUntilFinished / 1000 == 1) {
+
+                                        Log.d("asdasdsa", "kjaskdh");
+                                        broadcaster.startThumbPlayer1(uri, thumbPic1);
+
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFinish() {
+
 
                                     playerFrame1.setVisibility(View.VISIBLE);
 
 
-                                    broadcaster.startThumbPlayer1(uri, thumbPic1);
-
                                 }
-                            }, 8000);
+                            }.start();
 
 
                         } else {
@@ -898,253 +917,8 @@ public class BroadcasterFragment1 extends Fragment {
         return view;
     }
 
-    public void schedule(String liveId) {
-        final bean b = (bean) getActivity().getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm", Context.MODE_PRIVATE);
-
-        String keey = fcmPref.getString("token", "");
-
-        Log.d("keeey", keey);
-
-        Call<getUpdatedBean> call = cr.getUpdatedData(b.userId, liveId, keey);
-
-
-        call.enqueue(new Callback<getUpdatedBean>() {
-            @Override
-            public void onResponse(Call<getUpdatedBean> call, retrofit2.Response<getUpdatedBean> response) {
-
-                try {
-
-                    commentsAdapter.setGridData(response.body().getData().getComments());
-                    viewsAdapter.setGridData(response.body().getData().getViews());
-
-                    int count1 = Integer.parseInt(response.body().getData().getLikesCount());
-
-                    likeCount.setText(String.valueOf(count1));
-
-                    totalBeans.setText(response.body().getData().getBeans() + " Beans");
-
-
-                    liveUsers.setText(response.body().getData().getViewsCount());
-
-                    timelineName.setText(response.body().getData().getTimelineName());
-
-
-                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
-
-                    ImageLoader loader = ImageLoader.getInstance();
-
-                    loader.displayImage(response.body().getData().getTimelineProfileImage(), timelineProfile, options);
-
-
-                    liveUsers.setText(response.body().getData().getViewsCount());
-
-
-//                    level.setText(response.body().getData().getLevel());
-
-
-//                    viewCount.setText(response.body().getData().getViewsCount());
-
-//                    username.setText(response.body().getData().getTimelineName());
-
-                    /*if (response.body().getData().getGift().size() > 0) {
-                        try {
-
-                            giftName = response.body().getData().getGift().get(0).getGiftId();
-
-                            showGift(Integer.parseInt(response.body().getData().getGift().get(0).getGiftId()), response.body().getData().getGift().get(0).getGiftName());
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }*/
-
-
-                    /*if (count1 > count) {
-                        for (int i = 0; i < count1 - count; i++)
-
-                            bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
-
-                        likeCount.setText(response.body().getData().getLikesCount());
-
-                        count = count1;
-                    }*/
-
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
-                            new IntentFilter("commentData"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
-                            new IntentFilter("like"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
-                            new IntentFilter("view"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
-                            new IntentFilter("gift"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
-                            new IntentFilter("status"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionReceiver,
-                            new IntentFilter("connection_end"));
-
-                    /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
-                            new IntentFilter("view"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
-                            new IntentFilter("like"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
-                            new IntentFilter("gift"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
-                            new IntentFilter("status"));
-*/
-                } catch (Exception e) {
-                    // e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(Call<getUpdatedBean> call, Throwable t) {
-
-                // Log.d("asdasd", t.toString());
-
-            }
-        });
-
-
-    }
-
-    private void startProjection() {
-        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(commentReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE) {
-            sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
-
-            if (sMediaProjection != null) {
-                File externalFilesDir = broadcaster.getExternalFilesDir(null);
-                if (externalFilesDir != null) {
-                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/youthive/";
-                    File storeDirectory = new File(STORE_DIRECTORY);
-                    if (!storeDirectory.exists()) {
-                        boolean success = storeDirectory.mkdirs();
-                        if (!success) {
-                            Log.e(TAG, "failed to create file storage directory.");
-                            return;
-                        }
-                    }
-                } else {
-                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
-                    return;
-                }
-
-                // display metrics
-                DisplayMetrics metrics = getResources().getDisplayMetrics();
-                mDensity = metrics.densityDpi;
-                mDisplay = broadcaster.getWindowManager().getDefaultDisplay();
-
-                // create virtual display depending on device width / height
-                createVirtualDisplay();
-
-                // register orientation change callback
-                mOrientationChangeCallback = new OrientationChangeCallback(getContext());
-                if (mOrientationChangeCallback.canDetectOrientation()) {
-                    mOrientationChangeCallback.enable();
-                }
-
-                // register media projection stop callback
-                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
-            }
-        }
-    }
-
-    private void createVirtualDisplay() {
-        // get width and height
-        Point size = new Point();
-        mDisplay.getSize(size);
-        mWidth = size.x;
-        mHeight = size.y;
-
-
-        // start capture reader
-        mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
-        mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
-        mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
-    }
-
-    private void stopProjection() {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (sMediaProjection != null) {
-                    sMediaProjection.stop();
-                }
-            }
-        });
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
-    public void showGift(String giftId, String text) {
-
-
-        Glide.with(broadcaster).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
-        giftText.setText(text);
-
-        giftLayout.setVisibility(View.VISIBLE);
-
-        Timer t = new Timer();
-
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-
-                giftLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        giftLayout.setVisibility(View.GONE);
-                    }
-                });
-
-            }
-        }, 1500);
-
-
-    }
 
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
@@ -1236,7 +1010,7 @@ public class BroadcasterFragment1 extends Fragment {
                 }
 
 
-            } else if (item.getType().equals("follow")) {
+            } else if (type.equals("follow")) {
 
                 DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
@@ -1263,7 +1037,7 @@ public class BroadcasterFragment1 extends Fragment {
                 }
 
 
-            } else if (item.getType().equals("gift")) {
+            } else if (type.equals("gift")) {
 
                 String us = item.getUserId().replace("\"", "");
                 holder.name.setText(us + " has sent a ");
@@ -1440,6 +1214,230 @@ public class BroadcasterFragment1 extends Fragment {
         }
     }
 
+
+    public void schedule(String liveId) {
+        final bean b = (bean) getActivity().getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+        SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm", Context.MODE_PRIVATE);
+
+        String keey = fcmPref.getString("token", "");
+
+        Log.d("keeey", keey);
+
+        Call<getUpdatedBean> call = cr.getUpdatedData(b.userId, liveId, keey);
+
+
+        call.enqueue(new Callback<getUpdatedBean>() {
+            @Override
+            public void onResponse(Call<getUpdatedBean> call, retrofit2.Response<getUpdatedBean> response) {
+
+                try {
+
+                    commentsAdapter.setGridData(response.body().getData().getComments());
+                    viewsAdapter.setGridData(response.body().getData().getViews());
+
+                    int count1 = Integer.parseInt(response.body().getData().getLikesCount());
+
+                    likeCount.setText(String.valueOf(count1));
+
+                    totalBeans.setText(response.body().getData().getBeans() + " Beans");
+
+
+                    liveUsers.setText(response.body().getData().getViewsCount());
+
+                    timelineName.setText(response.body().getData().getTimelineName());
+
+
+                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
+
+                    ImageLoader loader = ImageLoader.getInstance();
+
+                    loader.displayImage(response.body().getData().getTimelineProfileImage(), timelineProfile, options);
+
+
+                    liveUsers.setText(response.body().getData().getViewsCount());
+
+
+//                    level.setText(response.body().getData().getLevel());
+
+
+//                    viewCount.setText(response.body().getData().getViewsCount());
+
+//                    username.setText(response.body().getData().getTimelineName());
+
+                    /*if (response.body().getData().getGift().size() > 0) {
+                        try {
+
+                            giftName = response.body().getData().getGift().get(0).getGiftId();
+
+                            showGift(Integer.parseInt(response.body().getData().getGift().get(0).getGiftId()), response.body().getData().getGift().get(0).getGiftName());
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }*/
+
+
+                    /*if (count1 > count) {
+                        for (int i = 0; i < count1 - count; i++)
+
+                            bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+
+                        likeCount.setText(response.body().getData().getLikesCount());
+
+                        count = count1;
+                    }*/
+
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
+                            new IntentFilter("commentData"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
+                            new IntentFilter("like"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
+                            new IntentFilter("view"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
+                            new IntentFilter("gift"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
+                            new IntentFilter("status"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionReceiver,
+                            new IntentFilter("connection_end"));
+
+                    /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
+                            new IntentFilter("view"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
+                            new IntentFilter("like"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
+                            new IntentFilter("gift"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
+                            new IntentFilter("status"));
+*/
+                } catch (Exception e) {
+                    // e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<getUpdatedBean> call, Throwable t) {
+
+                // Log.d("asdasd", t.toString());
+
+            }
+        });
+
+
+    }
+
+
+    private void startProjection() {
+        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(commentReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
+
+            if (sMediaProjection != null) {
+                File externalFilesDir = broadcaster.getExternalFilesDir(null);
+                if (externalFilesDir != null) {
+                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/youthive/";
+                    File storeDirectory = new File(STORE_DIRECTORY);
+                    if (!storeDirectory.exists()) {
+                        boolean success = storeDirectory.mkdirs();
+                        if (!success) {
+                            Log.e(TAG, "failed to create file storage directory.");
+                            return;
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
+                    return;
+                }
+
+                // display metrics
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+                mDensity = metrics.densityDpi;
+                mDisplay = broadcaster.getWindowManager().getDefaultDisplay();
+
+                // create virtual display depending on device width / height
+                createVirtualDisplay();
+
+                // register orientation change callback
+                mOrientationChangeCallback = new OrientationChangeCallback(getContext());
+                if (mOrientationChangeCallback.canDetectOrientation()) {
+                    mOrientationChangeCallback.enable();
+                }
+
+                // register media projection stop callback
+                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
+            }
+        }
+    }
+
+
+    private int mWidth;
+    private int mHeight;
+    private int mRotation;
+
+    private int mDensity;
+
+    private ImageReader mImageReader;
+
+    private VirtualDisplay mVirtualDisplay;
+    private static final String SCREENCAP_NAME = "screencap";
+
+    private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
+
+    private Handler mHandler;
+
+    private void createVirtualDisplay() {
+        // get width and height
+        Point size = new Point();
+        mDisplay.getSize(size);
+        mWidth = size.x;
+        mHeight = size.y;
+
+
+        // start capture reader
+        mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
+        mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
+        mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
+    }
+
+    private static int IMAGES_PRODUCED;
+
     private class ImageAvailableListener implements ImageReader.OnImageAvailableListener {
         @Override
         public void onImageAvailable(ImageReader reader) {
@@ -1571,6 +1569,17 @@ public class BroadcasterFragment1 extends Fragment {
         }
     }
 
+    private void stopProjection() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (sMediaProjection != null) {
+                    sMediaProjection.stop();
+                }
+            }
+        });
+    }
+
     private class OrientationChangeCallback extends OrientationEventListener {
 
         OrientationChangeCallback(Context context) {
@@ -1596,6 +1605,8 @@ public class BroadcasterFragment1 extends Fragment {
         }
     }
 
+    private OrientationChangeCallback mOrientationChangeCallback;
+
     private class MediaProjectionStopCallback extends MediaProjection.Callback {
         @Override
         public void onStop() {
@@ -1611,6 +1622,16 @@ public class BroadcasterFragment1 extends Fragment {
             });
         }
     }
+
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
 
     class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder> {
 
@@ -1690,6 +1711,53 @@ public class BroadcasterFragment1 extends Fragment {
 
             }
         }
+    }
+
+
+    Integer gifts[] = new Integer[]
+            {
+                    R.drawable.gif1,
+                    R.drawable.gif2,
+                    R.drawable.gif3,
+                    R.drawable.gif4,
+                    R.drawable.gif5,
+                    R.drawable.gif6,
+                    R.drawable.gif7,
+                    R.drawable.gif8,
+                    R.drawable.gif9,
+                    R.drawable.gif10,
+                    R.drawable.gif11,
+                    R.drawable.gif12,
+                    R.drawable.gif13,
+                    R.drawable.gif14
+            };
+
+
+    public void showGift(String giftId, String text) {
+
+
+        Glide.with(broadcaster).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
+        giftText.setText(text);
+
+        giftLayout.setVisibility(View.VISIBLE);
+
+        Timer t = new Timer();
+
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                giftLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        giftLayout.setVisibility(View.GONE);
+                    }
+                });
+
+            }
+        }, 2500);
+
+
     }
 
 
