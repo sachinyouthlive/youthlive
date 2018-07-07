@@ -703,7 +703,7 @@ public class BroadcasterFragment1 extends Fragment {
                                     Log.d("asdasdsa", String.valueOf(millisUntilFinished / 1000));
 
                                     if (millisUntilFinished / 1000 == 1) {
-
+                                        isConnection = true;
                                         Log.d("asdasdsa", "kjaskdh");
                                         broadcaster.startThumbPlayer1(uri, thumbPic1);
 
@@ -1159,7 +1159,7 @@ public class BroadcasterFragment1 extends Fragment {
                                         String im = item.getUserImage().replace("\"", "");
                                         thumbPic1 = im;
 
-                                        isConnection = true;
+
                                         dialog.dismiss();
 
 

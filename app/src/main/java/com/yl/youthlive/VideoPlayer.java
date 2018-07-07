@@ -662,7 +662,14 @@ View loadingPopup;
 
     public void endThumbPlayer1()
     {
-        thumbPlayer1.stop();
+
+        try {
+            thumbPlayer1.stop();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
 
         thumbSurface1.setVisibility(View.GONE);
 
