@@ -534,6 +534,14 @@ public interface AllAPIs {
             @Part("userId") String uid
     );
 
+    @Multipart
+    @POST("api/accept_reject_connection.php")
+    Call<String> acceptReject2(
+            @Part("requestId") String requestId,
+            @Part("url") String url,
+            @Part("status") String status,
+            @Part("userId") String uid
+    );
 
     @Multipart
     @POST("api/request_connection.php")

@@ -310,6 +310,10 @@ View loadingPopup;
     public void onRtmpConnected(String s) {
         progress.setVisibility(View.VISIBLE);
 
+        Log.d("rreess" , connId);
+
+
+
         final bean b = (bean) getApplicationContext();
 
         final Retrofit retrofit = new Retrofit.Builder()
@@ -320,17 +324,20 @@ View loadingPopup;
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-        Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId + b.userId, "2" , b.userId);
-        call1.enqueue(new Callback<acceptRejectBean>() {
+        Call<String> call1 = cr.acceptReject2(connId, liveId + b.userId, "2" , b.userId);
+        call1.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
+
+                Log.d("rreess" , response.body());
 
                 progress.setVisibility(View.GONE);
             }
 
             @Override
-            public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 progress.setVisibility(View.GONE);
+                Log.d("rreess" , t.toString());
                 t.printStackTrace();
             }
         });
