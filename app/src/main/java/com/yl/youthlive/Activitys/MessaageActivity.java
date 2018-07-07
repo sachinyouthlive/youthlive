@@ -31,7 +31,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class MessaageActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener  {
+public class MessaageActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     MassageAdapter holder;
     RecyclerView recyclerView;
@@ -48,7 +48,7 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
 
         recyclerView = (RecyclerView) findViewById(R.id.messagerecycler);
         progress = (ProgressBar) findViewById(R.id.progress);
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -88,6 +88,7 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
         boolean isConnected = ConnectivityReceiver.isConnected();
         showAlert(isConnected);
     }
+
     private void showAlert(boolean isConnected) {
         String message;
         int color;
@@ -120,10 +121,8 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
             //      message = "Sorry! Not connected to internet";
             //     color = Color.RED;
@@ -138,6 +137,7 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
         snackbar.show();
         */
     }
+
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showAlert(isConnected);

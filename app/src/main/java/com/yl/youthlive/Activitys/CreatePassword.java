@@ -37,27 +37,28 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class CreatePassword extends AppCompatActivity {
     Button btncreate;
-    EditText userid,password;
-    String userid1,Pass="",User,str;
+    EditText userid, password;
+    String userid1, Pass = "", User, str;
 
     ProgressBar progress;
 
     String CREATEapi = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/create_password.php";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_password);
         SharedPreferences settings = getSharedPreferences("mypref", MODE_PRIVATE);
-        userid1=settings.getString("userid","");
-        btncreate=(Button)findViewById(R.id.btncreate);
-        userid=(EditText)findViewById(R.id.userid);
-        password=(EditText)findViewById(R.id.password);
+        userid1 = settings.getString("userid", "");
+        btncreate = (Button) findViewById(R.id.btncreate);
+        userid = (EditText) findViewById(R.id.userid);
+        password = (EditText) findViewById(R.id.password);
         SharedPreferences pass = getSharedPreferences("mypref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pass.edit();
-        editor.putString("password",Pass);
+        editor.putString("password", Pass);
         editor.apply();
 
-        progress = (ProgressBar)findViewById(R.id.progress);
+        progress = (ProgressBar) findViewById(R.id.progress);
 
         btncreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,18 +71,14 @@ public class CreatePassword extends AppCompatActivity {
     }
 
 
-
-    public void create()
-    {
+    public void create() {
 
         String pass = userid.getText().toString();
         String ret = password.getText().toString();
 
-        if (pass.length() > 0)
-        {
+        if (pass.length() > 0) {
 
-            if (Objects.equals(ret, pass))
-            {
+            if (Objects.equals(ret, pass)) {
 
 
                 progress.setVisibility(View.VISIBLE);
@@ -97,24 +94,21 @@ public class CreatePassword extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<otpBean> call = cr.createPassword(getIntent().getStringExtra("userId") , pass);
+                Call<otpBean> call = cr.createPassword(getIntent().getStringExtra("userId"), pass);
 
                 call.enqueue(new Callback<otpBean>() {
                     @Override
                     public void onResponse(Call<otpBean> call, retrofit2.Response<otpBean> response) {
 
 
-                        if (Objects.equals(response.body().getStatus(), "1"))
-                        {
+                        if (Objects.equals(response.body().getStatus(), "1")) {
 
                             Intent intent = new Intent(CreatePassword.this, UserInformation.class);
-                            intent.putExtra("userId" , getIntent().getStringExtra("userId"));
+                            intent.putExtra("userId", getIntent().getStringExtra("userId"));
                             startActivity(intent);
                             finish();
 
-                        }
-                        else
-                        {
+                        } else {
                             // Toast.makeText(CreatePassword.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
                         }
 
@@ -129,42 +123,36 @@ public class CreatePassword extends AppCompatActivity {
                 });
 
 
-            }
-            else
-            {
+            } else {
                 password.setError("Password did not match");
             }
 
-        }
-        else
-        {
+        } else {
             userid.setError("Invalid Password");
         }
 
     }
 
 
-    public void createpassword()
-    {
+    public void createpassword() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, CREATEapi, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    String status=jObj.getString("status");
-                    if (!status.equals("0"))
-                    {
+                    String status = jObj.getString("status");
+                    if (!status.equals("0")) {
                         JSONObject user = jObj.getJSONObject("data");
-                        userid1=user.getString("userId");
-                        Pass=user.getString("password");
+                        userid1 = user.getString("userId");
+                        Pass = user.getString("password");
                         Toast.makeText(CreatePassword.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
                         //String verificationCode=jObj.getString("message");
-                        Intent i=new Intent(CreatePassword.this,UserInformation.class);
+                        Intent i = new Intent(CreatePassword.this, UserInformation.class);
                         startActivity(i);
 
-                    }else {
+                    } else {
 
-                        str=jObj.getString("message");
+                        str = jObj.getString("message");
                         //  Toast.makeText(CreatePassword.this, str, Toast.LENGTH_SHORT).show();
                     }
 
@@ -181,15 +169,15 @@ public class CreatePassword extends AppCompatActivity {
                 Toast.makeText(CreatePassword.this, error.toString(), Toast.LENGTH_SHORT).show();
 
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("userId", userid1);
-                params.put("password",Pass);
+                params.put("password", Pass);
                 return params;
             }
-        } ;
+        };
         RequestQueue requestQueue = Volley.newRequestQueue(CreatePassword.this);
         requestQueue.add(stringRequest);
     }

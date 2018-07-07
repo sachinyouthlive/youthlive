@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +26,7 @@ import com.anjlab.android.iab.v3.TransactionDetails;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.IBillingHandler{
+public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.IBillingHandler {
 
     BillingProcessor bp;
     ArrayList<String> ids;
@@ -47,7 +47,6 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
         setContentView(R.layout.activity_buy_diamonds);
 
 
-
         ids = new ArrayList<>();
         skus = new ArrayList<>();
 
@@ -62,22 +61,20 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
         String liscense = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgyeBlAF+Tb5RcId3Y9sAnK7EoGEklDr24FByrgxwhQNsIOkhYfDH+KW4OGxqR47D+RjH3uHBgtKjD62qgvSsqiJR4KiHAq5gVZLZJ3nP0YDvnfWwyhg+t6FYnchGVGt2FbuNyw+XqPuZvoxUQmfB4qsIOQlbf9HI69uisnOZzuJ5b2VIVg3yIymF45jAm9+U5DdqP3vO7pHF4Y3yycOS6EIYs3VoZJ8JmJIOVHpFc//fxBaV4OKgKJij/28v5C94RRay55wHO0+ysW4fAQW52SxXX2vsQMGWYRmMzLs+N87PUixYJP96BbkUh4mkGFC1RMq8iUaeWLKIut74VhmCLQIDAQAB";
 
 
-
-
         toolbar = findViewById(R.id.toolbar);
         grid = findViewById(R.id.grid);
-        manager = new GridLayoutManager(this , 1);
+        manager = new GridLayoutManager(this, 1);
         progress = findViewById(R.id.progress);
 
 
-        adapter = new DiamomdsAdapter(this , skus);
+        adapter = new DiamomdsAdapter(this, skus);
 
         grid.setAdapter(adapter);
         grid.setLayoutManager(manager);
 
 
         progress.setVisibility(View.VISIBLE);
-        bp = new BillingProcessor(this , liscense , this);
+        bp = new BillingProcessor(this, liscense, this);
         //
 
         setSupportActionBar(toolbar);
@@ -93,20 +90,18 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
         });
 
 
-
-
     }
 
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
 
-        Log.d(TAG , "purchased: " + productId);
+        Log.d(TAG, "purchased: " + productId);
 
     }
 
     @Override
     public void onPurchaseHistoryRestored() {
-        Log.d(TAG , "history restored: ");
+        Log.d(TAG, "history restored: ");
     }
 
     @Override
@@ -116,7 +111,7 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
 
     @Override
     public void onBillingInitialized() {
-        Log.d(TAG , "initialized: ");
+        Log.d(TAG, "initialized: ");
 
         progress.setVisibility(View.GONE);
 
@@ -142,19 +137,16 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
     }
 
 
-    class DiamomdsAdapter extends RecyclerView.Adapter<DiamomdsAdapter.ViewHolder>
-    {
+    class DiamomdsAdapter extends RecyclerView.Adapter<DiamomdsAdapter.ViewHolder> {
         List<SkuDetails> list = new ArrayList<>();
         Context context;
 
-        public DiamomdsAdapter(Context context , List<SkuDetails> list)
-        {
+        public DiamomdsAdapter(Context context, List<SkuDetails> list) {
             this.context = context;
             this.list = list;
         }
 
-        public void setGridData(List<SkuDetails> list)
-        {
+        public void setGridData(List<SkuDetails> list) {
             this.list = list;
             notifyDataSetChanged();
         }
@@ -162,8 +154,8 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.diamond_list_model , parent , false);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.diamond_list_model, parent, false);
             return new ViewHolder(view);
         }
 
@@ -180,7 +172,7 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
                 @Override
                 public void onClick(View v) {
 
-                    bp.purchase((Activity) context , item.productId);
+                    bp.purchase((Activity) context, item.productId);
 
                 }
             });
@@ -193,8 +185,7 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
             return list.size();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder
-        {
+        class ViewHolder extends RecyclerView.ViewHolder {
 
             TextView quantity;
             Button buy;

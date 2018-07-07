@@ -2,14 +2,11 @@ package com.yl.youthlive;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
-import android.util.Config;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -23,7 +20,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //if(remoteMessage.getData().size() > 0){
 
         //    Log.d("asdasd" , "asdasasdasdasd");
-            //handle the data message here
+        //handle the data message here
         //}
 
 
@@ -65,7 +62,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
 
-
     private void handleDataMessage(JSONObject data2) {
         Log.e(TAG, "push json: " + data2.toString());
 
@@ -76,90 +72,71 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String type = data2.getString("type");
 
 
-
-
-
-
-            if (type.equals("comment"))
-            {
+            if (type.equals("comment")) {
                 JSONObject dat = data2.getJSONObject("data");
                 Intent registrationComplete = new Intent("commentData");
                 registrationComplete.putExtra("data", dat.toString());
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
 
-            }
-            else if (type.equals("view"))
-            {
+            } else if (type.equals("view")) {
 
                 JSONObject dat = data2.getJSONObject("data");
-                Log.d("view" , "called");
+                Log.d("view", "called");
 
                 Intent registrationComplete = new Intent("view");
                 registrationComplete.putExtra("data", dat.toString());
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
-            }
-            else if (type.equals("gift"))
-            {
+            } else if (type.equals("gift")) {
 
                 JSONObject dat = data2.getJSONObject("data");
-                Log.d("view" , "called");
+                Log.d("view", "called");
 
                 Intent registrationComplete = new Intent("gift");
                 registrationComplete.putExtra("data", dat.toString());
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
-            }
-            else if (type.equals("like"))
-            {
+            } else if (type.equals("like")) {
                 String dat = data2.getString("data");
 
-                Log.d("view" , "called");
+                Log.d("view", "called");
 
                 Intent registrationComplete = new Intent("like");
                 registrationComplete.putExtra("data", dat.toString());
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
-            }
-            else if (type.equals("request"))
-            {
+            } else if (type.equals("request")) {
                 String dat = data2.getString("data");
 
-                Log.d("request" , "called");
+                Log.d("request", "called");
 
                 Intent registrationComplete = new Intent("request");
                 registrationComplete.putExtra("data", dat.toString());
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
-            }
-            else if (type.equals("status"))
-            {
+            } else if (type.equals("status")) {
                 String dat = data2.getString("data");
 
-                Log.d("status" , "called");
+                Log.d("status", "called");
 
                 Intent registrationComplete = new Intent("status");
                 registrationComplete.putExtra("data", dat.toString());
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
-            }
-            else if (type.equals("live_end"))
-            {
+            } else if (type.equals("live_end")) {
                 String dat = data2.getString("data");
 
-                Log.d("status" , "called");
+                Log.d("status", "called");
 
                 Intent registrationComplete = new Intent("live_end");
                 registrationComplete.putExtra("data", dat.toString());
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
-            }
-            else if (type.equals("connection_end"))
-            {
+            } else if (type.equals("connection_end")) {
                 String dat = data2.getString("data");
 
-                Log.d("status" , "called");
+                Log.d("status", "called");
 
                 Intent registrationComplete = new Intent("connection_end");
                 registrationComplete.putExtra("data", dat.toString());
@@ -168,19 +145,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
 
 
-
-
-
         } catch (Exception e) {
             Log.e(TAG, "Exception: " + e.getMessage());
         }
     }
 
 
-
     private void handleNotification(String message) {
 
-        Log.d("notificationData" , message);
+        Log.d("notificationData", message);
 
         /*if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
             // app is in foreground, broadcast the push message

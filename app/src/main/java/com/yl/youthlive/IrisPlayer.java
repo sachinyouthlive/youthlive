@@ -1,72 +1,7 @@
 package com.yl.youthlive;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
-
-
-
-import com.bumptech.glide.Glide;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.veer.hiddenshot.HiddenShot;
-import com.wowza.gocoder.sdk.api.errors.WZStreamingError;
-import com.yasic.bubbleview.BubbleView;
-import com.yl.youthlive.INTERFACE.AllAPIs;
-import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
-import com.yl.youthlive.feedBackPOJO.feedBackBean;
-import com.yl.youthlive.followPOJO.followBean;
-import com.yl.youthlive.getConnectionPOJO.getConnectionBean;
-import com.yl.youthlive.getIpdatedPOJO.Comment;
-import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
-import com.yl.youthlive.giftPOJO.Datum;
-import com.yl.youthlive.giftPOJO.giftBean;
-import com.yl.youthlive.goLivePOJO.goLiveBean;
-import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
-import com.yl.youthlive.liveLikePOJO.liveLikeBean;
-import com.yl.youthlive.sendGiftPOJO.sendGiftBean;
-import com.yl.youthlive.startStreamPOJO.startStreamBean;
-import com.yl.youthlive.streamPOJO.LiveStream;
-import com.yl.youthlive.streamPOJO.streamBean;
-import com.yl.youthlive.streamResponsePOJO.streamResponseBean;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
+import android.support.v7.app.AppCompatActivity;
 
 public class IrisPlayer extends AppCompatActivity {
 

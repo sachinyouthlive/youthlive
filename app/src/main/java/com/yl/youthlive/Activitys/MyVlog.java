@@ -43,22 +43,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
+    static String userid;
+    public Context appContext, myContext;
+    public FragmentManager fm;
     Toolbar toolbar;
     ViewPager pager;
     ProgressBar progress;
     ImageView profile;
-
-    static String userid;
-
     TextView fans, emptymsg;
     TextView followings, friends;
-
     ViewPager coverPager;
     CircleIndicator indicator;
-
-
-    public Context appContext, myContext;
-    public FragmentManager fm;
     LinearLayout followclick, fanclick, friendclick;
 
     @Override
@@ -135,9 +130,7 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
         });
 
 
-
     }
-
 
 
     @Override
@@ -149,11 +142,13 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
 
 
     }
+
     ///////////////////internet connectivity check///////////////
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showAlert(isConnected);
     }
+
     private void showAlert(boolean isConnected) {
         String message;
         int color;
@@ -186,10 +181,8 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
             //      message = "Sorry! Not connected to internet";
             //     color = Color.RED;
@@ -204,6 +197,7 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
         snackbar.show();
         */
     }
+
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showAlert(isConnected);

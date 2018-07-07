@@ -15,7 +15,7 @@ public class Message extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.message , container , false);
+        View view = inflater.inflate(R.layout.message, container, false);
         Toast.makeText(getContext(), "Message.java", Toast.LENGTH_SHORT).show();
         return view;
     }

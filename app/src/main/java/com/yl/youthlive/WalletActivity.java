@@ -46,7 +46,7 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
     EditText amount;
     Button add;
     TextView diamond;
-    TextView diamonds , beans , coins;
+    TextView diamonds, beans, coins;
     ProgressBar progress;
 
     Dialog dialog;
@@ -54,6 +54,25 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
 
     private PayUmoneySdkInitializer.PaymentParam mPaymentParams;
 
+    public static String hashCal(String str) {
+        byte[] hashseq = str.getBytes();
+        StringBuilder hexString = new StringBuilder();
+        try {
+            MessageDigest algorithm = MessageDigest.getInstance("SHA-512");
+            algorithm.reset();
+            algorithm.update(hashseq);
+            byte messageDigest[] = algorithm.digest();
+            for (byte aMessageDigest : messageDigest) {
+                String hex = Integer.toHexString(0xFF & aMessageDigest);
+                if (hex.length() == 1) {
+                    hexString.append("0");
+                }
+                hexString.append(hex);
+            }
+        } catch (NoSuchAlgorithmException ignored) {
+        }
+        return hexString.toString();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +80,14 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
         setContentView(R.layout.activity_wallet);
         checkConnection();
 
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
-        amount = (EditText)findViewById(R.id.amount);
-        add = (Button)findViewById(R.id.add);
-        diamonds = (TextView)findViewById(R.id.diamonds);
-        beans = (TextView)findViewById(R.id.beans);
-        coins = (TextView)findViewById(R.id.coins);
-        diamond = (TextView)findViewById(R.id.diamond);
-        progress = (ProgressBar)findViewById(R.id.progress);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        amount = (EditText) findViewById(R.id.amount);
+        add = (Button) findViewById(R.id.add);
+        diamonds = (TextView) findViewById(R.id.diamonds);
+        beans = (TextView) findViewById(R.id.beans);
+        coins = (TextView) findViewById(R.id.coins);
+        diamond = (TextView) findViewById(R.id.diamond);
+        progress = (ProgressBar) findViewById(R.id.progress);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -116,21 +135,19 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                        Call<ExchangeBean> call = cr.exchange(b.userId ,"",bean.getText().toString());
+                        Call<ExchangeBean> call = cr.exchange(b.userId, "", bean.getText().toString());
 
                         call.enqueue(new Callback<ExchangeBean>() {
                             @Override
                             public void onResponse(Call<ExchangeBean> call, Response<ExchangeBean> response) {
 
 
-                                Toast.makeText(WalletActivity.this,response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(WalletActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
                                 loadData();
                                 dialog.dismiss();
 
                                 progress.setVisibility(View.GONE);
-
-
 
 
                             }
@@ -144,15 +161,8 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
                         });
 
 
-
-
                     }
                 });
-
-
-
-
-
 
 
             }
@@ -165,11 +175,10 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
 
                 String am = amount.getText().toString();
 
-                if (am.length() > 0)
-                {
+                if (am.length() > 0) {
 
 
-                    bean b = (bean)getApplicationContext();
+                    bean b = (bean) getApplicationContext();
 
                     Random random = new Random();
 
@@ -184,12 +193,6 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
                     String udf4 = "";
                     String udf5 = "";
                     String salt = "jPU0s1mj8V";
-
-
-
-
-
-
 
 
                     PayUmoneySdkInitializer.PaymentParam.Builder builder = new
@@ -221,34 +224,27 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
                             .setIsDebug(false);
 
 
-
-
-
-
-
-                            // Payment amount
-                            //.setTxnId(txnid)                                             // Transaction ID
-                            //.setPhone("9991262626")                                           // User Phone number
-                            //.setProductName("Beans")                   // Product Name or description
-                            //.setFirstName(firstname)                              // User First name
-                            //.setEmail(email)                                            // User Email ID
-                            //.setsUrl("https://test.payumoney.com/mobileapp/payumoney/success.php")                     // Success URL (surl)
-                            //.setfUrl("https://test.payumoney.com/mobileapp/payumoney/failure.php")                     //Failure URL (furl)
-                            //.setUdf1(udf1)
-                            //.setUdf2(udf2)
-                            //.setUdf3(udf3)
-                            //.setUdf4(udf4)
-                            //.setUdf5(udf5)
-                            //.setUdf6("")
-                            //.setUdf7("")
-                            //.setUdf8("")
-                            //.setUdf9("")
-                            //.setUdf10("")
-                            //.setIsDebug(true)                              // Integration environment - true (Debug)/ false(Production)
-                            //.setKey(key)                        // Merchant key
-                            //.setMerchantId("5979090");
-
-
+                    // Payment amount
+                    //.setTxnId(txnid)                                             // Transaction ID
+                    //.setPhone("9991262626")                                           // User Phone number
+                    //.setProductName("Beans")                   // Product Name or description
+                    //.setFirstName(firstname)                              // User First name
+                    //.setEmail(email)                                            // User Email ID
+                    //.setsUrl("https://test.payumoney.com/mobileapp/payumoney/success.php")                     // Success URL (surl)
+                    //.setfUrl("https://test.payumoney.com/mobileapp/payumoney/failure.php")                     //Failure URL (furl)
+                    //.setUdf1(udf1)
+                    //.setUdf2(udf2)
+                    //.setUdf3(udf3)
+                    //.setUdf4(udf4)
+                    //.setUdf5(udf5)
+                    //.setUdf6("")
+                    //.setUdf7("")
+                    //.setUdf8("")
+                    //.setUdf9("")
+                    //.setUdf10("")
+                    //.setIsDebug(true)                              // Integration environment - true (Debug)/ false(Production)
+                    //.setKey(key)                        // Merchant key
+                    //.setMerchantId("5979090");
 
 
                     mPaymentParams = builder.build();
@@ -268,8 +264,6 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
 */
 
 
-
-
                 }
 
 
@@ -277,9 +271,7 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
         });
 
 
-
     }
-
 
     private PayUmoneySdkInitializer.PaymentParam calculateServerSideHashAndInitiatePayment1(final PayUmoneySdkInitializer.PaymentParam paymentParam) {
 
@@ -306,28 +298,6 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
         return paymentParam;
     }
 
-
-    public static String hashCal(String str) {
-        byte[] hashseq = str.getBytes();
-        StringBuilder hexString = new StringBuilder();
-        try {
-            MessageDigest algorithm = MessageDigest.getInstance("SHA-512");
-            algorithm.reset();
-            algorithm.update(hashseq);
-            byte messageDigest[] = algorithm.digest();
-            for (byte aMessageDigest : messageDigest) {
-                String hex = Integer.toHexString(0xFF & aMessageDigest);
-                if (hex.length() == 1) {
-                    hexString.append("0");
-                }
-                hexString.append(hex);
-            }
-        } catch (NoSuchAlgorithmException ignored) {
-        }
-        return hexString.toString();
-    }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -337,11 +307,13 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
         loadData();
 
     }
+
     ////////////////////internet connectivity check///////////////
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showSnack(isConnected);
     }
+
     private void showSnack(boolean isConnected) {
         String message;
         int color;
@@ -375,10 +347,8 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
             //      message = "Sorry! Not connected to internet";
             //     color = Color.RED;
@@ -422,7 +392,6 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
             public void onResponse(Call<walletBean> call, Response<walletBean> response) {
 
 
-
                 beans.setText(response.body().getData().getBeans());
                 diamonds.setText(response.body().getData().getDiamond());
                 coins.setText(response.body().getData().getCoin());
@@ -462,7 +431,7 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
                     progress.setVisibility(View.VISIBLE);
 
 
-                    bean b = (bean)getApplicationContext();
+                    bean b = (bean) getApplicationContext();
 
 
                     final Retrofit retrofit = new Retrofit.Builder()
@@ -474,13 +443,13 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<addWalletBean> call = cr.addBeans(b.userId , amount.getText().toString());
+                    Call<addWalletBean> call = cr.addBeans(b.userId, amount.getText().toString());
 
                     call.enqueue(new Callback<addWalletBean>() {
                         @Override
                         public void onResponse(Call<addWalletBean> call, Response<addWalletBean> response) {
 
-                            Toast.makeText(WalletActivity.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(WalletActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
                             loadData();
 
@@ -495,7 +464,6 @@ public class WalletActivity extends AppCompatActivity implements ConnectivityRec
 
                         }
                     });
-
 
 
                 } else {

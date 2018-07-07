@@ -42,56 +42,51 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class OTP extends AppCompatActivity {
-    private static final String OTPBASEVERFRY_URL="http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/varify_code.php";
-    private static final String OTPBASERESEND_URL="http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/resend_code.php";
-
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private static final String OTPBASEVERFRY_URL = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/varify_code.php";
+    private static final String OTPBASERESEND_URL = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/resend_code.php";
     private static final String TAG = "RESPONSE";
     EditText verify_otpnumber;
-    String VerifyNumber1,userId,countryCode,phone,str,varifycode,verificationCode;
+    String VerifyNumber1, userId, countryCode, phone, str, varifycode, verificationCode;
     TextView regeneratepassword;
-    private ProgressDialog pDialog;
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
-
     ProgressBar progress;
-
-
     Button verify;
+    private ProgressDialog pDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
         checkLocationPermission1();
-        verify_otpnumber=(EditText)findViewById(R.id.verify_otpnumber);
-        varifycode=getIntent().getStringExtra("code");
-        userId=getIntent().getStringExtra("userId");
+        verify_otpnumber = (EditText) findViewById(R.id.verify_otpnumber);
+        varifycode = getIntent().getStringExtra("code");
+        userId = getIntent().getStringExtra("userId");
 
-        progress = (ProgressBar)findViewById(R.id.progress);
-
+        progress = (ProgressBar) findViewById(R.id.progress);
 
 
         // phone=getIntent().getStringExtra("phone");
         // countryCode=getIntent().getStringExtra("countryCode");
-        regeneratepassword=(TextView)findViewById(R.id.regeneratepassword);
+        regeneratepassword = (TextView) findViewById(R.id.regeneratepassword);
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
-        verify = (Button)findViewById(R.id.verify);
+        verify = (Button) findViewById(R.id.verify);
         verify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                VerifyNumber1=verify_otpnumber.getText().toString().trim();
-                if(VerifyNumber1.equals("")){ Toast.makeText(OTP.this, "enter otp number", Toast.LENGTH_SHORT).show();}
-                else{
+                VerifyNumber1 = verify_otpnumber.getText().toString().trim();
+                if (VerifyNumber1.equals("")) {
+                    Toast.makeText(OTP.this, "enter otp number", Toast.LENGTH_SHORT).show();
+                } else {
                     //VerifyOtp();
                     verify();
-                     }
+                }
             }
         });
         regeneratepassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
 
                 regenerateOTP();
@@ -154,9 +149,7 @@ public class OTP extends AppCompatActivity {
     }
 
 
-
-    public void regenerateOTP()
-    {
+    public void regenerateOTP() {
 
 
         progress.setVisibility(View.VISIBLE);
@@ -172,7 +165,7 @@ public class OTP extends AppCompatActivity {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<loginResponseBean> call = cr.resend(getIntent().getStringExtra("phone") , getIntent().getStringExtra("country"));
+        Call<loginResponseBean> call = cr.resend(getIntent().getStringExtra("phone"), getIntent().getStringExtra("country"));
 
         call.enqueue(new Callback<loginResponseBean>() {
             @Override
@@ -182,7 +175,6 @@ public class OTP extends AppCompatActivity {
                 // Toast.makeText(OTP.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
 
                 // Toast.makeText(OTP.this , response.body().getData().getVerificationCode() , Toast.LENGTH_SHORT).show();
-
 
 
                 progress.setVisibility(View.GONE);
@@ -198,14 +190,11 @@ public class OTP extends AppCompatActivity {
     }
 
 
-
-    public void verify()
-    {
+    public void verify() {
 
         String codee = verify_otpnumber.getText().toString();
 
-        if (codee.length() > 0)
-        {
+        if (codee.length() > 0) {
 
             progress.setVisibility(View.VISIBLE);
 
@@ -220,26 +209,23 @@ public class OTP extends AppCompatActivity {
             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-            Call<otpBean> call = cr.verify(userId , codee);
+            Call<otpBean> call = cr.verify(userId, codee);
 
             call.enqueue(new Callback<otpBean>() {
                 @Override
                 public void onResponse(Call<otpBean> call, retrofit2.Response<otpBean> response) {
 
 
-                    if (Objects.equals(response.body().getStatus(), "1"))
-                    {
+                    if (Objects.equals(response.body().getStatus(), "1")) {
 
                         //   Toast.makeText(OTP.this , "OTP verified, Please create a Password" , Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(OTP.this, CreatePassword.class);
-                        intent.putExtra("userId" , userId);
+                        intent.putExtra("userId", userId);
                         startActivity(intent);
                         finish();
 
-                    }
-                    else
-                    {
-                        Toast.makeText(OTP.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(OTP.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -260,24 +246,20 @@ public class OTP extends AppCompatActivity {
     private void VerifyOtp() {
 
 
-
-        VerifyNumber1=verify_otpnumber.getText().toString().trim();
+        VerifyNumber1 = verify_otpnumber.getText().toString().trim();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, OTPBASEVERFRY_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, response.toString());
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    String status= jObj.getString("status");
-                    if (!status.equals("0"))
-                    {
+                    String status = jObj.getString("status");
+                    if (!status.equals("0")) {
                         //  Toast.makeText(OTP.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
-                        Intent i=new Intent(OTP.this,CreatePassword.class);
+                        Intent i = new Intent(OTP.this, CreatePassword.class);
                         startActivity(i);
-                    }
-                    else
-                    {
-                        str=jObj.getString("message");
+                    } else {
+                        str = jObj.getString("message");
                         //   Toast.makeText(OTP.this, str, Toast.LENGTH_SHORT).show();
                     }
 
@@ -292,18 +274,19 @@ public class OTP extends AppCompatActivity {
                 Toast.makeText(OTP.this, error.toString(), Toast.LENGTH_SHORT).show();
                 hidepDialog();
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("userId", userId);
-                params.put("code",varifycode);
+                params.put("code", varifycode);
                 return params;
             }
-        } ;
+        };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
     private void showpDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
@@ -313,6 +296,7 @@ public class OTP extends AppCompatActivity {
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
+
     public boolean checkLocationPermission1() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)

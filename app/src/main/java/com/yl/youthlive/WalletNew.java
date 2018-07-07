@@ -1,13 +1,13 @@
 package com.yl.youthlive;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -40,7 +40,6 @@ public class WalletNew extends AppCompatActivity {
         });
 
 
-
         tabs.addTab(tabs.newTab().setText("DIAMONDS"));
         tabs.addTab(tabs.newTab().setText("BEANS"));
 
@@ -57,8 +56,7 @@ public class WalletNew extends AppCompatActivity {
     }
 
 
-    class PagerAdapter extends FragmentStatePagerAdapter
-    {
+    class PagerAdapter extends FragmentStatePagerAdapter {
 
         public PagerAdapter(FragmentManager fm) {
             super(fm);
@@ -66,12 +64,9 @@ public class WalletNew extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 0)
-            {
+            if (position == 0) {
                 return new Diamonds();
-            }
-            else
-            {
+            } else {
                 return new Beans();
             }
         }

@@ -1,9 +1,8 @@
 package com.yl.youthlive;
 
 import android.graphics.Bitmap;
-import android.media.Image;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,8 +17,6 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.followPOJO.followBean;
 
-import org.w3c.dom.Text;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.blurry.Blurry;
 import retrofit2.Retrofit;
@@ -28,14 +25,14 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class LiveEndedPlayer extends AppCompatActivity {
 
-    String image , name , id , views , time;
+    String image, name, id, views, time;
 
     ImageView background;
     CircleImageView profile;
 
-    TextView viewers , liveTime , username;
+    TextView viewers, liveTime, username;
 
-    Button follow , back;
+    Button follow, back;
 
 
     ProgressBar progress;
@@ -127,18 +124,16 @@ public class LiveEndedPlayer extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<followBean> call = cr.follow(b.userId , id);
+                retrofit2.Call<followBean> call = cr.follow(b.userId, id);
 
                 call.enqueue(new retrofit2.Callback<followBean>() {
                     @Override
                     public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
 
-                        if (response.body().getStatus().equals("1"))
-                        {
+                        if (response.body().getStatus().equals("1")) {
                             Toast.makeText(LiveEndedPlayer.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             follow.setVisibility(View.GONE);
                         }
-
 
 
                         progress.setVisibility(View.GONE);
@@ -152,7 +147,6 @@ public class LiveEndedPlayer extends AppCompatActivity {
 
                     }
                 });
-
 
 
             }

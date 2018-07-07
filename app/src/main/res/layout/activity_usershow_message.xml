@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.yl.youthlive.Activitys.UsershowMessage">
-    <include android:layout_height="wrap_content"
-        android:layout_width="match_parent"
+
+    <include
         android:id="@+id/user"
-        layout="@layout/usershowmsgtool"/>
+        layout="@layout/usershowmsgtool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -18,15 +19,16 @@
 
 
     </android.support.v7.widget.RecyclerView>
+
     <LinearLayout
         android:id="@+id/mesgbox_layout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:background="@color/comment"
+        android:baselineAligned="false"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,6 +45,7 @@
                 android:cursorVisible="true"
                 android:hint="Type your message" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

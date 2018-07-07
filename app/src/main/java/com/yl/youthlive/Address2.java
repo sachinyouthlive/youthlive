@@ -35,8 +35,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-
-import com.yl.youthlive.Activitys.PersonalInfo;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
 import com.yl.youthlive.updatePOJO.updateBean;
@@ -60,13 +58,11 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
 
     FloatingActionButton editer;
     TextView username, youthId, phone, gender, birth, bio;
+    TimelineProfile per;
+    String userId;
     private GoogleApiClient mGoogleApiClient;
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
-
-    TimelineProfile per;
-
-    String userId;
 
     @Nullable
     @Override
@@ -74,7 +70,7 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
         FacebookSdk.sdkInitialize(getContext().getApplicationContext());
         View view = inflater.inflate(R.layout.address_layout, container, false);
 
-        per = (TimelineProfile)getActivity();
+        per = (TimelineProfile) getActivity();
 
         userId = getArguments().getString("userId");
 
@@ -91,21 +87,15 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
         editer = view.findViewById(R.id.edit);
 
         Bundle b = getArguments();
-        bean b1 = (bean)getContext().getApplicationContext();
+        bean b1 = (bean) getContext().getApplicationContext();
 
-        if (!Objects.equals(userId, b1.userId))
-        {
+        if (!Objects.equals(userId, b1.userId)) {
             editer.setVisibility(View.GONE);
             phone.setText("(mobile number not public)");
-        }
-        else
-        {
+        } else {
             editer.setVisibility(View.VISIBLE);
             phone.setText(b.getString("phone"));
         }
-
-
-
 
 
         try {
@@ -236,7 +226,7 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
                                     progress.setVisibility(View.VISIBLE);
 
 
-                                    Log.d("neetu" , "log");
+                                    Log.d("neetu", "log");
                                     bean b = (bean) getContext().getApplicationContext();
 
                                     final Retrofit retrofit = new Retrofit.Builder()
@@ -260,7 +250,7 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
                                                     signOut();
                                                 }
 
-                                                Log.d("kamal" , "response");
+                                                Log.d("kamal", "response");
 
                                                 LoginManager.getInstance().logOut();
 
@@ -285,7 +275,7 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
                                         @Override
                                         public void onFailure(Call<loginResponseBean> call, Throwable t) {
 
-                                            Log.d("nisha" , t.toString());
+                                            Log.d("nisha", t.toString());
                                             progress.setVisibility(View.GONE);
                                         }
                                     });
@@ -474,7 +464,7 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
                 .requestEmail()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .enableAutoManage(getActivity() , new GoogleApiClient.OnConnectionFailedListener() {
+                .enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 

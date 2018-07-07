@@ -7,6 +7,8 @@ package com.yl.youthlive.Model;
 public class Commentmodel {
     String comment;
     String createddate;
+    String commenthash;
+    String userid;
 
     public String getComment() {
         return comment;
@@ -39,7 +41,4 @@ public class Commentmodel {
     public void setUserid(String userid) {
         this.userid = userid;
     }
-
-    String commenthash;
-    String userid;
 }

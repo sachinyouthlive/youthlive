@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minWidth="350dp"
     android:background="@drawable/white_round_dialog"
-    >
+    android:minWidth="350dp"
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal"
-
             android:layout_height="wrap_content"
+            android:gravity="center"
+
+            android:orientation="horizontal"
             tools:ignore="UseCompoundDrawables">
+
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/dngicon"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:textColor="#000"
-            android:text=" Please Choose"/>
+                android:src="@drawable/dngicon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=" Please Choose"
+                android:textColor="#000"
+                android:textSize="20sp" />
         </LinearLayout>
         <!-- <LinearLayout
              android:layout_width="match_parent"
@@ -45,18 +49,19 @@
                  android:text="Add Cover Image"/>
          </LinearLayout>-->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:padding="10dp"
             android:id="@+id/profile_image"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
                 android:gravity="center"
+                android:text="Change Profile Image"
                 android:textColor="#000"
-                android:text="Change Profile Image"/>
+                android:textSize="16sp" />
         </LinearLayout>
 
     </LinearLayout>

@@ -46,9 +46,9 @@
             android:gravity="center">
 
             <EditText
+                android:id="@+id/txtphoneno"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtphoneno"
                 android:background="@drawable/forgotback"
                 android:gravity="center"
                 android:hint="Enter your Number"
@@ -67,9 +67,9 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/txtok"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
-                android:id="@+id/txtok"
                 android:layout_weight="1"
                 android:gravity="center">
 

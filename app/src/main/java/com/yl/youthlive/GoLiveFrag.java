@@ -26,7 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by TBX on 11/22/2017.
  */
 
-public class GoLiveFrag extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener{
+public class GoLiveFrag extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     Button goLive;
     CircleImageView profile;
@@ -35,7 +35,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_go_live , container , false);
+        View view = inflater.inflate(R.layout.activity_go_live, container, false);
 
 
         cameraPreview = view.findViewById(R.id.preview);
@@ -45,27 +45,21 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getContext()));
 
 
-        profile = (CircleImageView)view.findViewById(R.id.profile);
-        goLive = (Button)view.findViewById(R.id.golive);
+        profile = (CircleImageView) view.findViewById(R.id.profile);
+        goLive = (Button) view.findViewById(R.id.golive);
 
 
-
-
-
-
-
-        bean b = (bean)getContext().getApplicationContext();
+        bean b = (bean) getContext().getApplicationContext();
 
         ImageLoader loader = ImageLoader.getInstance();
 
 
-
-        loader.displayImage(b.userImage , profile);
+        loader.displayImage(b.userImage, profile);
 
         goLive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext() , VideoBroadcaster.class);
+                Intent intent = new Intent(getContext(), VideoBroadcaster.class);
                 //Intent intent = new Intent(getContext() , LiveScreenNew.class);
                 //Intent intent = new Intent(getContext() , WowzaLive.class);
                 //intent.putExtra("title" , title.getText().toString());
@@ -74,8 +68,9 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
         });
 
 
-        return  view;
+        return view;
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -87,8 +82,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
 
             cameraPreview.start();
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -99,6 +93,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
         boolean isConnected = ConnectivityReceiver.isConnected();
         showalert(isConnected);
     }
+
     private void showalert(boolean isConnected) {
         if (isConnected) {
 
@@ -130,15 +125,12 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
         }
 
     }
-
 
 
     @Override

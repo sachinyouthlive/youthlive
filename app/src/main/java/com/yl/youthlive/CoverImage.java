@@ -22,16 +22,16 @@ public class CoverImage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.cober_image_layout , container , false);
+        View view = inflater.inflate(R.layout.cober_image_layout, container, false);
 
         url = getArguments().getString("url");
-        image = (ImageView)view.findViewById(R.id.image);
+        image = (ImageView) view.findViewById(R.id.image);
 
         ImageLoader loader = ImageLoader.getInstance();
-        loader.displayImage(url , image);
+        loader.displayImage(url, image);
 
 
-        return  view;
+        return view;
     }
 
 }

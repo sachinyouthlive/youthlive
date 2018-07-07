@@ -1,7 +1,6 @@
 package com.yl.youthlive;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +23,6 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.GridLayoutManager;
@@ -68,11 +66,8 @@ import com.yl.youthlive.feedBackPOJO.feedBackBean;
 import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.getIpdatedPOJO.Comment;
 import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
-import com.yl.youthlive.giftPOJO.Datum;
-import com.yl.youthlive.giftPOJO.giftBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.liveLikePOJO.liveLikeBean;
-import com.yl.youthlive.reportPOJO.reportBean;
 import com.yl.youthlive.sendGiftPOJO.sendGiftBean;
 
 import java.io.ByteArrayOutputStream;
@@ -84,8 +79,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
@@ -98,83 +91,51 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-
 public class player_firstNew extends Fragment implements EncoderHandler.EncodeListener, RecordHandler.RecordListener, RtmpHandler.RtmpListener {
 
+    private static final int REQUEST_CODE = 100;
+    private static final String SCREENCAP_NAME = "screencap";
+    private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
+    //SimpleExoPlayerView thumb;
+    private static MediaProjection sMediaProjection;
+    private static String STORE_DIRECTORY;
+    private static int IMAGES_PRODUCED;
+    final OkHttpClient mOkHttpClient = new OkHttpClient();
     TextView newMessage;
-
-    private int previousTotal = 0; // The total number of items in the dataset after the last load
-    private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
     int firstVisibleItem, visibleItemCount, totalItemCount;
-
-    private int current_page = 1;
-
     ImageButton emoji, message, send, gift, connect, crop;
-
     EmojiconEditText comment;
-
     RecyclerView commentGrid;
     LinearLayoutManager commentsManager;
     CommentsAdapter commentsAdapter;
     List<Comment> commentList;
-
     BroadcastReceiver commentReceiver;
     BroadcastReceiver likeReceiver;
     BroadcastReceiver viewReceiver;
     BroadcastReceiver giftReceiver;
     BroadcastReceiver endReceiver;
     BroadcastReceiver requestReceiver;
-
     View rootView;
-    private EmojIconActions emojIcon;
-
-
     ProgressBar progress;
     String liveId;
-
     ImageButton timeLineFollow;
-
-
-    final OkHttpClient mOkHttpClient = new OkHttpClient();
-
-
-    CameraPreview goCoderCameraView;
 
     //WZBroadcast goCoderBroadcaster;
 
     // The GoCoder SDK audio device
-   // private WZAudioDevice goCoderAudioDevice;
+    // private WZAudioDevice goCoderAudioDevice;
 
     // The broadcast configuration settings
-   // private WZBroadcastConfig goCoderBroadcastConfig;
+    // private WZBroadcastConfig goCoderBroadcastConfig;
 
-   // private WowzaGoCoder goCoder;
-
-    private static final int REQUEST_CODE = 100;
-
-    private MediaProjectionManager mProjectionManager;
-    //SimpleExoPlayerView thumb;
-    private static MediaProjection sMediaProjection;
-    private Display mDisplay;
-
+    // private WowzaGoCoder goCoder;
+    CameraPreview goCoderCameraView;
     String TAG = "BroadcasterFragment1";
-
-    private static String STORE_DIRECTORY;
-
     int coun = 0;
-
     TextView likeCount;
-
-    private BubbleView bubbleView;
-
     String connId;
-
     int count = 0;
-
     ImageButton heart;
-
     CircleImageView timelineProfile;
     TextView timelineName;
     TextView liveUsers;
@@ -184,17 +145,26 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
     LinearLayoutManager viewersManager;
     ViewsAdapter viewsAdapter;
     List<com.yl.youthlive.getIpdatedPOJO.View> viewsList;
-
     VideoPlayer player;
-
     String timelineId;
-
     String image;
-
-
     RelativeLayout cameraLayout1;
-
-
+    private int previousTotal = 0; // The total number of items in the dataset after the last load
+    private boolean loading = true; // True if we are still waiting for the last set of data to load.
+    private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
+    private int current_page = 1;
+    private EmojIconActions emojIcon;
+    private MediaProjectionManager mProjectionManager;
+    private Display mDisplay;
+    private BubbleView bubbleView;
+    private int mWidth;
+    private int mHeight;
+    private int mRotation;
+    private int mDensity;
+    private ImageReader mImageReader;
+    private VirtualDisplay mVirtualDisplay;
+    private Handler mHandler;
+    private OrientationChangeCallback mOrientationChangeCallback;
 
     @Nullable
     @Override
@@ -202,7 +172,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
         View view = inflater.inflate(R.layout.player_first_frag, container, false);
 
 
-        player = (VideoPlayer)getActivity();
+        player = (VideoPlayer) getActivity();
 
         mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
@@ -214,9 +184,8 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
         cameraLayout1 = (RelativeLayout) view.findViewById(R.id.camera_layout1);
 
 
-
         goCoderCameraView = (CameraPreview) view.findViewById(R.id.camera1);
-      // goCoderCameraView.setZOrderOnTop(true);
+        // goCoderCameraView.setZOrderOnTop(true);
 
 
 
@@ -517,7 +486,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
             }
         });*/
 
-        final bean b = (bean)getContext().getApplicationContext();
+        final bean b = (bean) getContext().getApplicationContext();
 
         heart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -550,10 +519,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                     }
                 });
-
-
-
-
 
 
             }
@@ -803,12 +768,12 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                     try {
 
-                        Intent intent1 = new Intent(getContext() , LiveEndedPlayer.class);
-                        intent1.putExtra("image" , image);
-                        intent1.putExtra("id" , timelineId);
-                        intent1.putExtra("name" , timelineName.getText().toString());
-                        intent1.putExtra("time" , item.getLiveTime());
-                        intent1.putExtra("views" , item.getViewers());
+                        Intent intent1 = new Intent(getContext(), LiveEndedPlayer.class);
+                        intent1.putExtra("image", image);
+                        intent1.putExtra("id", timelineId);
+                        intent1.putExtra("name", timelineName.getText().toString());
+                        intent1.putExtra("time", item.getLiveTime());
+                        intent1.putExtra("views", item.getViewers());
                         startActivity(intent1);
                         getActivity().finish();
 
@@ -846,7 +811,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     String json = intent.getStringExtra("data");
 
                     connId = json;
-
 
 
                     final Dialog dialog = new Dialog(player);
@@ -911,8 +875,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                                     try {
 
 
-
-
                                         //cameraLayout1.setVisibility(View.VISIBLE);
 
 /*
@@ -941,7 +903,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 */
 
 
-
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -963,11 +924,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     });
 
 
-
-
-
-
-
                     //displayFirebaseRegId();
 
                 }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
@@ -981,8 +937,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                 }*/
             }
         };
-
-
 
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -1075,13 +1029,12 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     }
                 });
 
-                GridLayoutManager giftManager = new GridLayoutManager(player , 2);
+                GridLayoutManager giftManager = new GridLayoutManager(player, 2);
 
-                GiftAdapter giftAdapter = new GiftAdapter(player , bar , dialog);
+                GiftAdapter giftAdapter = new GiftAdapter(player, bar, dialog);
 
                 giftGrid.setLayoutManager(giftManager);
                 giftGrid.setAdapter(giftAdapter);
-
 
 
             }
@@ -1134,18 +1087,16 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<followBean> call = cr.follow(b.userId , timelineId);
+                retrofit2.Call<followBean> call = cr.follow(b.userId, timelineId);
 
                 call.enqueue(new retrofit2.Callback<followBean>() {
                     @Override
                     public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
 
-                        if (response.body().getStatus().equals("1"))
-                        {
+                        if (response.body().getStatus().equals("1")) {
                             Toast.makeText(player, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             timeLineFollow.setVisibility(View.GONE);
                         }
-
 
 
                         progress.setVisibility(View.GONE);
@@ -1161,14 +1112,12 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                 });
 
 
-
             }
         });
 
 
         return view;
     }
-
 
     @Override
     public void onNetworkWeak() {
@@ -1279,6 +1228,36 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
     }
 
+
+
+
+/*    public void showGift(final int pos, String title) {
+
+        giftLayout1.setVisibility(View.VISIBLE);
+
+        Glide.with(getContext().getApplicationContext()).load(gfts[pos - 1]).into(giftIcon);
+
+        giftTitle.setText(title);
+
+        Timer t = new Timer();
+
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+
+                giftLayout1.getHandler().post(new Runnable() {
+                    public void run() {
+                        giftLayout1.setVisibility(View.GONE);
+                    }
+                });
+
+            }
+        }, 2500);
+
+
+    }*/
+
     @Override
     public void onRtmpDisconnected() {
 
@@ -1323,8 +1302,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
     public void onRtmpAuthenticationg(String s) {
 
     }
-
-
 
     public void schedule(final String vid) {
 
@@ -1416,14 +1393,11 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     liveUsers.setText(response.body().getData().getViewsCount());
 
 
-                    if (response.body().getData().getFollow().equals("true"))
-                    {
+                    if (response.body().getData().getFollow().equals("true")) {
 
                         timeLineFollow.setVisibility(View.GONE);
 
-                    }
-                    else
-                    {
+                    } else {
                         timeLineFollow.setVisibility(View.VISIBLE);
                     }
 
@@ -1506,7 +1480,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
     }
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -1514,36 +1487,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
         mOkHttpClient.dispatcher().cancelAll();
 
     }
-
-
-
-
-/*    public void showGift(final int pos, String title) {
-
-        giftLayout1.setVisibility(View.VISIBLE);
-
-        Glide.with(getContext().getApplicationContext()).load(gfts[pos - 1]).into(giftIcon);
-
-        giftTitle.setText(title);
-
-        Timer t = new Timer();
-
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-
-
-                giftLayout1.getHandler().post(new Runnable() {
-                    public void run() {
-                        giftLayout1.setVisibility(View.GONE);
-                    }
-                });
-
-            }
-        }, 2500);
-
-
-    }*/
 
     public void BlockPersson(View view) {
         PersonBlock();
@@ -1624,7 +1567,252 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
     }
 
+    /* public void schedule(String liveId) {
+         final bean b = (bean) getActivity().getApplicationContext();
 
+         final Retrofit retrofit = new Retrofit.Builder()
+                 .baseUrl(b.BASE_URL)
+                 .addConverterFactory(ScalarsConverterFactory.create())
+                 .addConverterFactory(GsonConverterFactory.create())
+                 .build();
+
+         final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+         SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm", Context.MODE_PRIVATE);
+
+         String keey = fcmPref.getString("token", "");
+
+         Log.d("keeey", keey);
+
+         Call<getUpdatedBean> call = cr.getPlayerUpdatedData(b.userId, liveId, keey);
+
+
+         call.enqueue(new Callback<getUpdatedBean>() {
+             @Override
+             public void onResponse(Call<getUpdatedBean> call, retrofit2.Response<getUpdatedBean> response) {
+
+                 try {
+
+                     timelineId = response.body().getData().getTimelineId();
+
+                     commentsAdapter.setGridData(response.body().getData().getComments());
+                     viewsAdapter.setGridData(response.body().getData().getViews());
+
+                     int count1 = Integer.parseInt(response.body().getData().getLikesCount());
+
+                     likeCount.setText(String.valueOf(count1));
+
+                     totalBeans.setText(response.body().getData().getBeans2() + " Beans");
+
+
+                     liveUsers.setText(response.body().getData().getViewsCount());
+
+                     timelineName.setText(response.body().getData().getTimelineName());
+
+                     image = response.body().getData().getTimelineProfileImage();
+
+                     DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
+
+                     ImageLoader loader = ImageLoader.getInstance();
+
+                     loader.displayImage(response.body().getData().getTimelineProfileImage(), timelineProfile, options);
+
+
+                     liveUsers.setText(response.body().getData().getViewsCount());
+
+
+                     if (response.body().getData().getFollow().equals("true"))
+                     {
+
+                         timeLineFollow.setVisibility(View.GONE);
+
+                     }
+                     else
+                     {
+                         timeLineFollow.setVisibility(View.VISIBLE);
+                     }
+
+
+ //                    level.setText(response.body().getData().getLevel());
+
+
+ //                    viewCount.setText(response.body().getData().getViewsCount());
+
+ //                    username.setText(response.body().getData().getTimelineName());
+
+                     *//*if (response.body().getData().getGift().size() > 0) {
+                        try {
+
+                            giftName = response.body().getData().getGift().get(0).getGiftId();
+
+                            showGift(Integer.parseInt(response.body().getData().getGift().get(0).getGiftId()), response.body().getData().getGift().get(0).getGiftName());
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }*//*
+
+
+     *//*if (count1 > count) {
+                        for (int i = 0; i < count1 - count; i++)
+
+                            bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+
+                        likeCount.setText(response.body().getData().getLikesCount());
+
+                        count = count1;
+                    }*//*
+
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
+                            new IntentFilter("commentData"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
+                            new IntentFilter("like"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
+                            new IntentFilter("view"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
+                            new IntentFilter("gift"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(endReceiver,
+                            new IntentFilter("live_end"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver,
+                            new IntentFilter("request"));
+
+                    *//*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
+                            new IntentFilter("view"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
+                            new IntentFilter("like"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
+                            new IntentFilter("gift"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
+                            new IntentFilter("status"));
+*//*
+                } catch (Exception e) {
+                    // e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<getUpdatedBean> call, Throwable t) {
+
+                // Log.d("asdasd", t.toString());
+
+            }
+        });
+
+
+    }
+
+*/
+    private void startProjection() {
+        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(commentReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(endReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
+
+            if (sMediaProjection != null) {
+                File externalFilesDir = player.getExternalFilesDir(null);
+                if (externalFilesDir != null) {
+                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/youthive/";
+                    File storeDirectory = new File(STORE_DIRECTORY);
+                    if (!storeDirectory.exists()) {
+                        boolean success = storeDirectory.mkdirs();
+                        if (!success) {
+                            Log.e(TAG, "failed to create file storage directory.");
+                            return;
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
+                    return;
+                }
+
+                // display metrics
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+                mDensity = metrics.densityDpi;
+                mDisplay = player.getWindowManager().getDefaultDisplay();
+
+                // create virtual display depending on device width / height
+                createVirtualDisplay();
+
+                // register orientation change callback
+                mOrientationChangeCallback = new OrientationChangeCallback(getContext());
+                if (mOrientationChangeCallback.canDetectOrientation()) {
+                    mOrientationChangeCallback.enable();
+                }
+
+                // register media projection stop callback
+                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
+            }
+        }
+    }
+
+    private void createVirtualDisplay() {
+        // get width and height
+        Point size = new Point();
+        mDisplay.getSize(size);
+        mWidth = size.x;
+        mHeight = size.y;
+
+
+        // start capture reader
+        mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
+        mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
+        mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
+    }
+
+    private void stopProjection() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (sMediaProjection != null) {
+                    sMediaProjection.stop();
+                }
+            }
+        });
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        liveId = getArguments().getString("liveId");
+        schedule(liveId);
+
+    }
 
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
@@ -1700,7 +1888,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                 holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
 
 
-
                 holder.container.setBackground(context.getResources().getDrawable(R.drawable.gray_round2));
 
                 holder.index.setVisibility(View.VISIBLE);
@@ -1718,7 +1905,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     holder.add.setVisibility(View.VISIBLE);
                 }
 
-            } else if (item.getType().equals("follow")){
+            } else if (item.getType().equals("follow")) {
 
                 DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
@@ -1745,8 +1932,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                 }
 
 
-            }else if (item.getType().equals("gift"))
-            {
+            } else if (item.getType().equals("gift")) {
 
                 String us = item.getUserId().replace("\"", "");
                 holder.name.setText(us + " has sent a ");
@@ -1770,8 +1956,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                 }
             });
-
-
 
 
             holder.add.setOnClickListener(new View.OnClickListener() {
@@ -1798,8 +1982,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                         @Override
                         public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
 
-                            if (response.body().getStatus().equals("1"))
-                            {
+                            if (response.body().getStatus().equals("1")) {
                                 Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                 holder.add.setVisibility(View.GONE);
                             }
@@ -1816,7 +1999,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                         }
                     });
-
 
 
                 }
@@ -1849,246 +2031,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
             }
         }
     }
-
-
-   /* public void schedule(String liveId) {
-        final bean b = (bean) getActivity().getApplicationContext();
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm", Context.MODE_PRIVATE);
-
-        String keey = fcmPref.getString("token", "");
-
-        Log.d("keeey", keey);
-
-        Call<getUpdatedBean> call = cr.getPlayerUpdatedData(b.userId, liveId, keey);
-
-
-        call.enqueue(new Callback<getUpdatedBean>() {
-            @Override
-            public void onResponse(Call<getUpdatedBean> call, retrofit2.Response<getUpdatedBean> response) {
-
-                try {
-
-                    timelineId = response.body().getData().getTimelineId();
-
-                    commentsAdapter.setGridData(response.body().getData().getComments());
-                    viewsAdapter.setGridData(response.body().getData().getViews());
-
-                    int count1 = Integer.parseInt(response.body().getData().getLikesCount());
-
-                    likeCount.setText(String.valueOf(count1));
-
-                    totalBeans.setText(response.body().getData().getBeans2() + " Beans");
-
-
-                    liveUsers.setText(response.body().getData().getViewsCount());
-
-                    timelineName.setText(response.body().getData().getTimelineName());
-
-                    image = response.body().getData().getTimelineProfileImage();
-
-                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
-
-                    ImageLoader loader = ImageLoader.getInstance();
-
-                    loader.displayImage(response.body().getData().getTimelineProfileImage(), timelineProfile, options);
-
-
-                    liveUsers.setText(response.body().getData().getViewsCount());
-
-
-                    if (response.body().getData().getFollow().equals("true"))
-                    {
-
-                        timeLineFollow.setVisibility(View.GONE);
-
-                    }
-                    else
-                    {
-                        timeLineFollow.setVisibility(View.VISIBLE);
-                    }
-
-
-//                    level.setText(response.body().getData().getLevel());
-
-
-//                    viewCount.setText(response.body().getData().getViewsCount());
-
-//                    username.setText(response.body().getData().getTimelineName());
-
-                    *//*if (response.body().getData().getGift().size() > 0) {
-                        try {
-
-                            giftName = response.body().getData().getGift().get(0).getGiftId();
-
-                            showGift(Integer.parseInt(response.body().getData().getGift().get(0).getGiftId()), response.body().getData().getGift().get(0).getGiftName());
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }*//*
-
-
-                    *//*if (count1 > count) {
-                        for (int i = 0; i < count1 - count; i++)
-
-                            bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
-
-                        likeCount.setText(response.body().getData().getLikesCount());
-
-                        count = count1;
-                    }*//*
-
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
-                            new IntentFilter("commentData"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
-                            new IntentFilter("like"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
-                            new IntentFilter("view"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
-                            new IntentFilter("gift"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(endReceiver,
-                            new IntentFilter("live_end"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver,
-                            new IntentFilter("request"));
-
-                    *//*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
-                            new IntentFilter("view"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
-                            new IntentFilter("like"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
-                            new IntentFilter("gift"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
-                            new IntentFilter("status"));
-*//*
-                } catch (Exception e) {
-                    // e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(Call<getUpdatedBean> call, Throwable t) {
-
-                // Log.d("asdasd", t.toString());
-
-            }
-        });
-
-
-    }
-
-*/
-    private void startProjection() {
-        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
-    }
-
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(commentReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(endReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE) {
-            sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
-
-            if (sMediaProjection != null) {
-                File externalFilesDir = player.getExternalFilesDir(null);
-                if (externalFilesDir != null) {
-                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/youthive/";
-                    File storeDirectory = new File(STORE_DIRECTORY);
-                    if (!storeDirectory.exists()) {
-                        boolean success = storeDirectory.mkdirs();
-                        if (!success) {
-                            Log.e(TAG, "failed to create file storage directory.");
-                            return;
-                        }
-                    }
-                } else {
-                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
-                    return;
-                }
-
-                // display metrics
-                DisplayMetrics metrics = getResources().getDisplayMetrics();
-                mDensity = metrics.densityDpi;
-                mDisplay = player.getWindowManager().getDefaultDisplay();
-
-                // create virtual display depending on device width / height
-                createVirtualDisplay();
-
-                // register orientation change callback
-                mOrientationChangeCallback = new OrientationChangeCallback(getContext());
-                if (mOrientationChangeCallback.canDetectOrientation()) {
-                    mOrientationChangeCallback.enable();
-                }
-
-                // register media projection stop callback
-                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
-            }
-        }
-    }
-
-
-    private int mWidth;
-    private int mHeight;
-    private int mRotation;
-
-    private int mDensity;
-
-    private ImageReader mImageReader;
-
-    private VirtualDisplay mVirtualDisplay;
-    private static final String SCREENCAP_NAME = "screencap";
-
-    private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
-
-    private Handler mHandler;
-
-    private void createVirtualDisplay() {
-        // get width and height
-        Point size = new Point();
-        mDisplay.getSize(size);
-        mWidth = size.x;
-        mHeight = size.y;
-
-
-        // start capture reader
-        mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
-        mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
-        mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
-    }
-
-    private static int IMAGES_PRODUCED;
 
     private class ImageAvailableListener implements ImageReader.OnImageAvailableListener {
         @Override
@@ -2221,17 +2163,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
         }
     }
 
-    private void stopProjection() {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (sMediaProjection != null) {
-                    sMediaProjection.stop();
-                }
-            }
-        });
-    }
-
     private class OrientationChangeCallback extends OrientationEventListener {
 
         OrientationChangeCallback(Context context) {
@@ -2257,8 +2188,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
         }
     }
 
-    private OrientationChangeCallback mOrientationChangeCallback;
-
     private class MediaProjectionStopCallback extends MediaProjection.Callback {
         @Override
         public void onStop() {
@@ -2274,16 +2203,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
             });
         }
     }
-
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
 
     class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder> {
 
@@ -2365,18 +2284,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        liveId = getArguments().getString("liveId");
-        schedule(liveId);
-
-    }
-
-
-    class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder>
-    {
+    class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
 
         Context context;
         ProgressBar progressBar;
@@ -2399,8 +2307,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                         R.drawable.gif14
                 };
 
-        public GiftAdapter(Context context , ProgressBar progress , Dialog dialog)
-        {
+        public GiftAdapter(Context context, ProgressBar progress, Dialog dialog) {
             this.context = context;
             this.progressBar = progress;
             this.dialog = dialog;
@@ -2409,8 +2316,8 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.gift_model , parent , false);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.gift_model, parent, false);
             return new ViewHolder(view);
         }
 
@@ -2440,8 +2347,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     retrofit2.Call<sendGiftBean> call = cr.sendGift(b.userId, liveId, timelineId, String.valueOf(position + 1), "1", "1");
 
 
-
-
                     call.enqueue(new retrofit2.Callback<sendGiftBean>() {
                         @Override
                         public void onResponse(retrofit2.Call<sendGiftBean> call, retrofit2.Response<sendGiftBean> response) {
@@ -2453,9 +2358,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                                 if (Objects.equals(response.body().getStatus(), "1")) {
                                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
-                                }
-                                else
-                                {
+                                } else {
                                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
 
@@ -2478,8 +2381,6 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     });
 
 
-
-
                 }
             });
 
@@ -2491,8 +2392,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
             return 14;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder
-        {
+        class ViewHolder extends RecyclerView.ViewHolder {
 
             ImageView image;
             Button send;

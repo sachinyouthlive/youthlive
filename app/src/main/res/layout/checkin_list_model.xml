@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="@dimen/dimen_4dp"
     android:backgroundTint="#FFC"
     android:orientation="vertical"
@@ -56,9 +56,9 @@
                     android:layout_height="75dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    tools:text="1134"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="1134" />
 
 
                 <TextView
@@ -67,9 +67,9 @@
                     android:layout_height="75dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    tools:text="999"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="999" />
 
 
             </TableRow>
@@ -118,8 +118,8 @@
                 android:drawablePadding="5dp"
                 android:gravity="center"
                 android:padding="5dp"
-                tools:text="11:20 PM"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                tools:text="11:20 PM" />
 
 
             <TextView

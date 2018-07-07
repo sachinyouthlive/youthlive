@@ -1,53 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/image"
         android:contentDescription="back"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/image" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="gradient"
-        android:src="@drawable/dark_shade"
-        />
+        android:src="@drawable/dark_shade" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_centerInParent="true"
-        >
+        android:orientation="vertical">
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/white"
+            android:gravity="center"
             android:hint="enter Your OTP"
             android:inputType="number"
-            android:layout_gravity="center_vertical"
-            android:gravity="center"
-            android:textColor="#6b6a6a"
             android:padding="10dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:background="@drawable/white"/>
+            android:textColor="#6b6a6a" />
 
         <Button
+            android:id="@+id/verify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="18dp"
             android:background="@drawable/red_stroke"
             android:text="login"
-            android:textColor="#fff"
-            android:id="@+id/verify"
-            android:layout_marginTop="18dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            />
+            android:textColor="#fff" />
     </LinearLayout>
 
 

@@ -35,8 +35,8 @@
                 android:id="@+id/bubblein"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:minWidth="100dp"
+                android:orientation="vertical"
                 tools:ignore="UselessParent">
 
 
@@ -65,13 +65,14 @@
                     android:textSize="16sp"
 
                     />
+
                 <TextView
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|right"
-                    android:paddingEnd="6dp"
                     android:paddingBottom="2dp"
+                    android:paddingEnd="6dp"
                     android:text="1212121212"
                     android:textColor="#7e7e7e"
                     android:textSize="10sp" />

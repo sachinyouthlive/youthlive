@@ -39,67 +39,92 @@ import java.io.IOException;
 public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
 
 
-
-
     private static final int PERMISSIONS_REQUEST_CODE = 0x1;
-    private boolean mPermissionsGranted = true;
-
-    private String[] mRequiredPermissions = new String[]{
-            android.Manifest.permission.CAMERA,
-            android.Manifest.permission.RECORD_AUDIO
-    };
-
-
-
-
     public WowzaGoCoder goCoder;
-
     // The GoCoder SDK camera view
     public WZCameraView goCoderCameraView;
-
-    WZBroadcast goCoderBroadcaster;
-
-    // The GoCoder SDK audio device
-    private WZAudioDevice goCoderAudioDevice;
-
     // The broadcast configuration settings
     public WZBroadcastConfig goCoderBroadcastConfig;
-
-
-
     protected GestureDetectorCompat mAutoFocusDetector = null;
-
-    private String TAG = "ddfsdf";
-
+    WZBroadcast goCoderBroadcaster;
+    ViewPager pager;
+    View popup;
+    Button end, cancel;
+    SharedPreferences pref;
 
 
     //private VideoView player;
 
 
-  //  MediaPlayerConfig wzPlayerConfig;
-
-
-
-    ViewPager pager;
-
-
-    View popup;
-    Button end , cancel;
-
-
-    SharedPreferences pref;
+    //  MediaPlayerConfig wzPlayerConfig;
     SharedPreferences.Editor edit;
-
-
     View main;
+    boolean started = false;
+    boolean playing = false;
+    private boolean mPermissionsGranted = true;
+    private String[] mRequiredPermissions = new String[]{
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.RECORD_AUDIO
+    };
+    // The GoCoder SDK audio device
+    private WZAudioDevice goCoderAudioDevice;
+    private String TAG = "ddfsdf";
 
+
+
+
+    /*private void connectToRoom(String roomName, String accessToken) {
+        //configureAudio(true);
+        ConnectOptions.Builder connectOptionsBuilder = new ConnectOptions.Builder(accessToken)
+                .roomName(roomName);
+
+        *//*
+     * Add local audio track to connect options to share with participants.
+     *//*
+        if (localAudioTrack != null) {
+            connectOptionsBuilder
+                    .audioTracks(Collections.singletonList(localAudioTrack));
+        }
+
+        //cameraCapturerCompat = new CameraCapturerCompat(this, getAvailableCameraSource());
+        cameraCapturerCompat = new CameraCapturerCompat(this, CameraCapturer.CameraSource.BACK_CAMERA);
+
+        if (localVideoTrack == null) {
+            localVideoTrack = LocalVideoTrack.create(this, true, cameraCapturerCompat.getVideoCapturer());
+//            localVideoTrack.addRenderer(localVideoView);
+
+            *//*
+     * If connected to a Room then share the local video track.
+     *//*
+
+        }
+
+        *//*
+     * Add local video track to connect options to share with participants.
+     *//*
+        if (localVideoTrack != null) {
+            connectOptionsBuilder.videoTracks(Collections.singletonList(localVideoTrack));
+        }
+        room = Video.connect(this, connectOptionsBuilder.build(), roomListener());
+        //setDisconnectAction();
+    }*/
+
+    //
+// Utility method to check the status of a permissions request for an array of permission identifiers
+//
+    private static boolean hasPermissions(Context context, String[] permissions) {
+        for (String permission : permissions)
+            if (context.checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED)
+                return false;
+
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_screen);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
 
 
         main = findViewById(R.id.main);
@@ -117,11 +142,9 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
         pager.setAdapter(adap);
 
 
-
         goCoder = WowzaGoCoder.init(this, "GOSK-1B45-0103-ADB6-6B32-7145");
 
         //GOSK-1145-0103-BC29-9CE5-F808
-
 
 
         //toast = Toast.makeText(LiveScreen.this , null , Toast.LENGTH_SHORT);
@@ -147,7 +170,6 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
         goCoderBroadcastConfig.setVideoBroadcaster(goCoderCameraView);
 
 
-
         if (mPermissionsGranted && goCoderCameraView != null) {
             if (goCoderCameraView.isPreviewPaused())
                 goCoderCameraView.onResume();
@@ -161,14 +183,9 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
         //title = getIntent().getStringExtra("title");
 
 
-
-
-
-
         end.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
 
                 new Thread(new Runnable() {
@@ -184,7 +201,6 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
                         }
                     }
                 }).start();
-
 
 
                 WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
@@ -208,7 +224,6 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
         });
 
 
-
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,54 +234,7 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
         });
 
 
-
     }
-
-
-
-
-
-    boolean started = false;
-
-
-
-
-    /*private void connectToRoom(String roomName, String accessToken) {
-        //configureAudio(true);
-        ConnectOptions.Builder connectOptionsBuilder = new ConnectOptions.Builder(accessToken)
-                .roomName(roomName);
-
-        *//*
-         * Add local audio track to connect options to share with participants.
-         *//*
-        if (localAudioTrack != null) {
-            connectOptionsBuilder
-                    .audioTracks(Collections.singletonList(localAudioTrack));
-        }
-
-        //cameraCapturerCompat = new CameraCapturerCompat(this, getAvailableCameraSource());
-        cameraCapturerCompat = new CameraCapturerCompat(this, CameraCapturer.CameraSource.BACK_CAMERA);
-
-        if (localVideoTrack == null) {
-            localVideoTrack = LocalVideoTrack.create(this, true, cameraCapturerCompat.getVideoCapturer());
-//            localVideoTrack.addRenderer(localVideoView);
-
-            *//*
-             * If connected to a Room then share the local video track.
-             *//*
-
-        }
-
-        *//*
-         * Add local video track to connect options to share with participants.
-         *//*
-        if (localVideoTrack != null) {
-            connectOptionsBuilder.videoTracks(Collections.singletonList(localVideoTrack));
-        }
-        room = Video.connect(this, connectOptionsBuilder.build(), roomListener());
-        //setDisconnectAction();
-    }*/
-
 
     private void PersonBlock() {
         final Dialog dialog = new Dialog(LiveScreen.this);
@@ -274,18 +242,6 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
         dialog.setContentView(R.layout.blockpersom_dialog);
         dialog.show();
     }
-
-
-
-
-    boolean playing = false;
-
-
-
-
-
-
-
 
     @Override
     public void onPause() {
@@ -327,7 +283,6 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
         //mBroadcaster.onActivityResume();
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         mPermissionsGranted = true;
@@ -343,18 +298,6 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
         }
     }
 
-    //
-// Utility method to check the status of a permissions request for an array of permission identifiers
-//
-    private static boolean hasPermissions(Context context, String[] permissions) {
-        for (String permission : permissions)
-            if (context.checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED)
-                return false;
-
-        return true;
-    }
-
-
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
@@ -362,8 +305,6 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
         closeConnection();
 
     }
-
-
 
 
     @Override
@@ -447,58 +388,15 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
         });
     }
 
-
-    public class FragAdapter extends FragmentStatePagerAdapter
-    {
-
-        public FragAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if (position == 0)
-            {
-                return new firstFrag();
-            }
-            else
-            {
-                return new secondfrag();
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-    }
+    public void closeConnection() {
 
 
-
-
-    public void closeConnection()
-    {
-
-
-
-
-
-
-        if (popup.getVisibility() == View.GONE)
-        {
+        if (popup.getVisibility() == View.GONE) {
             popup.setVisibility(View.VISIBLE);
         }
 
 
-
-
-
-
-
-
-
     }
-
 
     @Override
     protected void onStop() {
@@ -507,6 +405,26 @@ public class LiveScreen extends AppCompatActivity implements WZStatusCallback {
         goCoderCameraView.stopPreview();
 
 
+    }
 
+    public class FragAdapter extends FragmentStatePagerAdapter {
+
+        public FragAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return new firstFrag();
+            } else {
+                return new secondfrag();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
 }

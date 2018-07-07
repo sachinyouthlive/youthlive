@@ -1,9 +1,6 @@
 package com.yl.youthlive;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -13,9 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -38,34 +33,25 @@ public abstract class GoCoderSDKActivityBase extends AppCompatActivity
 
     private static final String SDK_SAMPLE_APP_LICENSE_KEY = "GOSK-1B45-0103-ADB6-6B32-7145";
     private static final int PERMISSIONS_REQUEST_CODE = 0x1;
-
-    protected String[] mRequiredPermissions = {};
-
-    private static Object sBroadcastLock = new Object();
-    private static boolean sBroadcastEnded = true;
-
     // indicates whether this is a full screen activity or note
     protected static boolean sFullScreenActivity = true;
-
     // GoCoder SDK top level interface
     protected static WowzaGoCoder sGoCoderSDK = null;
-
+    private static Object sBroadcastLock = new Object();
+    private static boolean sBroadcastEnded = true;
+    protected String[] mRequiredPermissions = {};
     protected boolean mPermissionsGranted = false;
-    private boolean hasRequestedPermissions = false;
-
     protected WZBroadcast mWZBroadcast = null;
-
     protected int mWZNetworkLogLevel = WZLog.LOG_LEVEL_DEBUG;
+    protected GoCoderSDKPrefs mGoCoderSDKPrefs;
+    protected WZBroadcastConfig mWZBroadcastConfig = null;
+    private boolean hasRequestedPermissions = false;
+    private CameraActivityBase.PermissionCallbackInterface callbackFunction = null;
 
     public WZBroadcast getBroadcast() {
         return mWZBroadcast;
     }
 
-    protected GoCoderSDKPrefs mGoCoderSDKPrefs;
-
-    private CameraActivityBase.PermissionCallbackInterface callbackFunction = null;
-
-    protected WZBroadcastConfig mWZBroadcastConfig = null;
     public WZBroadcastConfig getBroadcastConfig() {
         return mWZBroadcastConfig;
     }
@@ -107,7 +93,7 @@ public abstract class GoCoderSDKActivityBase extends AppCompatActivity
         }
     }
 
-    protected void hasDevicePermissionToAccess(CameraActivityBase.PermissionCallbackInterface callback){
+    protected void hasDevicePermissionToAccess(CameraActivityBase.PermissionCallbackInterface callback) {
         this.callbackFunction = callback;
         if (mWZBroadcast != null) {
             boolean result = true;
@@ -116,20 +102,18 @@ public abstract class GoCoderSDKActivityBase extends AppCompatActivity
                 if (!result && !hasRequestedPermissions) {
                     ActivityCompat.requestPermissions(this, mRequiredPermissions, PERMISSIONS_REQUEST_CODE);
                     hasRequestedPermissions = true;
-                }
-                else {
+                } else {
                     this.callbackFunction.onPermissionResult(result);
                 }
-            }
-            else {
+            } else {
                 this.callbackFunction.onPermissionResult(result);
             }
         }
     }
 
-    protected boolean hasDevicePermissionToAccess(String source){
+    protected boolean hasDevicePermissionToAccess(String source) {
 
-        String[] permissionRequestArr = new String[] {
+        String[] permissionRequestArr = new String[]{
                 source
         };
         boolean result = false;
@@ -142,7 +126,7 @@ public abstract class GoCoderSDKActivityBase extends AppCompatActivity
         return result;
     }
 
-    protected boolean hasDevicePermissionToAccess(){
+    protected boolean hasDevicePermissionToAccess() {
         boolean result = false;
         if (mWZBroadcast != null) {
             result = true;
@@ -166,7 +150,7 @@ public abstract class GoCoderSDKActivityBase extends AppCompatActivity
         super.onResume();
 
         mPermissionsGranted = this.hasDevicePermissionToAccess();
-        if (mPermissionsGranted){
+        if (mPermissionsGranted) {
             syncPreferences();
         }
     }
@@ -188,7 +172,7 @@ public abstract class GoCoderSDKActivityBase extends AppCompatActivity
 
     // Return correctly from any fragments launched and placed on the back stack
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         FragmentManager fm = getFragmentManager();
         if (fm.getBackStackEntryCount() > 0) {
             fm.popBackStack();
@@ -202,14 +186,14 @@ public abstract class GoCoderSDKActivityBase extends AppCompatActivity
         mPermissionsGranted = true;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_CODE: {
-                for(int grantResult : grantResults) {
+                for (int grantResult : grantResults) {
                     if (grantResult != PackageManager.PERMISSION_GRANTED) {
                         mPermissionsGranted = false;
                     }
                 }
             }
         }
-        if(this.callbackFunction!=null)
+        if (this.callbackFunction != null)
             this.callbackFunction.onPermissionResult(mPermissionsGranted);
     }
 
@@ -367,15 +351,16 @@ public abstract class GoCoderSDKActivityBase extends AppCompatActivity
                     }
                 });
 
-                while(!sBroadcastEnded) {
-                    try{
+                while (!sBroadcastEnded) {
+                    try {
                         sBroadcastLock.wait();
-                    } catch (InterruptedException e) {}
+                    } catch (InterruptedException e) {
+                    }
                 }
             } else {
                 mWZBroadcast.endBroadcast(this);
             }
-        }  else {
+        } else {
             WZLog.error(TAG, "endBroadcast() called without an active broadcast");
         }
     }
@@ -388,7 +373,7 @@ public abstract class GoCoderSDKActivityBase extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 
-        bean b = (bean)getApplicationContext();
+        bean b = (bean) getApplicationContext();
 
 
         //GoCoderSDKPrefs.saveConfigDetails(prefs , b.liveId);
@@ -416,11 +401,11 @@ public abstract class GoCoderSDKActivityBase extends AppCompatActivity
 //        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
         //AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         //builder.setMessage(errorMessage)
-          //      .setTitle(R.string.dialog_title_error);
+        //      .setTitle(R.string.dialog_title_error);
         //builder.setPositiveButton(R.string.dialog_button_close, new DialogInterface.OnClickListener() {
-  //          public void onClick(DialogInterface dialog, int id) {
-          //      dialog.dismiss();
-    //        }
+        //          public void onClick(DialogInterface dialog, int id) {
+        //      dialog.dismiss();
+        //        }
         //});
 
         //builder.create().show();

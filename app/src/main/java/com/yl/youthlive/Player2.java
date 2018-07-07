@@ -1,7 +1,7 @@
 package com.yl.youthlive;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,13 +20,13 @@ public class Player2 extends AppCompatActivity implements MediaPlayer.MediaPlaye
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player2);
 
-        player = (MediaPlayer)findViewById(R.id.player);
+        player = (MediaPlayer) findViewById(R.id.player);
 
         config = new MediaPlayerConfig();
 
         Toast.makeText(this, "Player2.java", Toast.LENGTH_SHORT).show();
         String ur = "rtsp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + getIntent().getStringExtra("uri");
-           // Log.d("rtmpserverpath",ur);
+        // Log.d("rtmpserverpath",ur);
 
         config.setConnectionUrl(ur);
 
@@ -42,7 +42,7 @@ public class Player2 extends AppCompatActivity implements MediaPlayer.MediaPlaye
         config.setNumberOfCPUCores(0);
 
 
-        player.Open(config , this);
+        player.Open(config, this);
 
 
     }
@@ -54,8 +54,7 @@ public class Player2 extends AppCompatActivity implements MediaPlayer.MediaPlaye
             return 0;*/
 
         Log.e("VEG", "From Native listitem status: " + i);
-        switch (MediaPlayer.PlayerNotifyCodes.forValue(i))
-        {
+        switch (MediaPlayer.PlayerNotifyCodes.forValue(i)) {
             default:
                 Message msg = new Message();
                 /*msg.obj = status;

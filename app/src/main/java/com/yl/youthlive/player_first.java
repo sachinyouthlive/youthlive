@@ -101,6 +101,19 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class player_first extends Fragment implements WZStatusCallback {
 
+    private static final String APPLICATION_ID = "gA1JdKySejF0GfA0ChIvVA";
+    private static final String API_KEY = "2v7690nbz6xc4vshnuc2a7yyg";
+    private static final int REQUEST_CODE = 100;
+    private static final String SCREENCAP_NAME = "screencap";
+    private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
+    private static String STORE_DIRECTORY;
+    private static int IMAGES_PRODUCED;
+    //SimpleExoPlayerView thumb;
+    private static MediaProjection sMediaProjection;
+    //SurfaceView mVideoSurface;
+    //BroadcastPlayer mBroadcastPlayer;
+    //TextView mPlayerStatusTextView;
+    final OkHttpClient mOkHttpClient = new OkHttpClient();
     RecyclerView grid;
     RecyclerView grid2;
     LinearLayoutManager manager;
@@ -108,17 +121,12 @@ public class player_first extends Fragment implements WZStatusCallback {
     LiveAdapter2 adapter2;
     LinearLayoutManager manager2;
     ImageButton heart;
-    private BubbleView bubbleView;
     ImageButton close;
-
     String giftURL = "", giftName = "";
-
     ProgressDialog progressDialog;
-
     LinearLayout giftLayout1;
     ImageView giftIcon;
     TextView giftTitle;
-
     Integer[] gfts = {
             R.drawable.gift1,
             R.drawable.gift2,
@@ -127,26 +135,13 @@ public class player_first extends Fragment implements WZStatusCallback {
             R.drawable.gift5,
             R.drawable.gift6
     };
-
     GiftAdapter gAdapter;
-
     String connId = "";
-
-    //SurfaceView mVideoSurface;
-    //BroadcastPlayer mBroadcastPlayer;
-    //TextView mPlayerStatusTextView;
-    final OkHttpClient mOkHttpClient = new OkHttpClient();
-
     String liveId = "";
-
-
     int count = 0;
-
     String timelineId;
-
     List<Comment> cList;
     List<com.yl.youthlive.getIpdatedPOJO.View> vList;
-
     ImageButton chatIcon, switchCamera, crop, gift;
     LinearLayout chat, actions;
     EditText comment;
@@ -154,67 +149,50 @@ public class player_first extends Fragment implements WZStatusCallback {
     CircleImageView image;
     ProgressBar progress;
     TextView username;
-
     TextView likeCount;
-
     String uri;
-
     LinearLayout giftLayout;
     TextView giftBean, giftDiamond, giftCoin;
-
     TextView beans, level;
-
     RecyclerView giftList;
     Button sendGift;
-
     TextView viewCount;
-
     List<Datum> list;
     LinearLayoutManager gManager;
-
     ImageButton follow;
-
-
     RelativeLayout cameraLayout1, cameraLayout2;
-
     ImageButton accept1, accept2, reject1, reject2, reject3, report;
-
-    private static final String APPLICATION_ID = "gA1JdKySejF0GfA0ChIvVA";
-    private static final String API_KEY = "2v7690nbz6xc4vshnuc2a7yyg";
-
-
-    private WZCameraView goCoderCameraView;
-
     WZBroadcast goCoderBroadcaster;
-
-    // The GoCoder SDK audio device
-    private WZAudioDevice goCoderAudioDevice;
-
-    // The broadcast configuration settings
-    private WZBroadcastConfig goCoderBroadcastConfig;
-
-    private WowzaGoCoder goCoder;
-
     String key;
-
-
     BroadcastReceiver commentReceiver;
     BroadcastReceiver viewReceiver;
     BroadcastReceiver likeReceiver;
     BroadcastReceiver giftReceiver;
     BroadcastReceiver requestReceiver;
-
     int PERMISSION_CODE = 12;
-
-
-
     Button toggle;
-
-
-
     PlayerActivity plactivity;
     int coun = 0;
     Toast toast;
+    private BubbleView bubbleView;
+    private WZCameraView goCoderCameraView;
+    // The GoCoder SDK audio device
+    private WZAudioDevice goCoderAudioDevice;
+    // The broadcast configuration settings
+    private WZBroadcastConfig goCoderBroadcastConfig;
+    private WowzaGoCoder goCoder;
+    private int mWidth;
+    private int mHeight;
+    private int mRotation;
+    private ImageReader mImageReader;
+    private VirtualDisplay mVirtualDisplay;
+    private Handler mHandler;
+    private String TAG = "ddfsdf";
+    private int mDensity;
+    private OrientationChangeCallback mOrientationChangeCallback;
+    private MediaProjectionManager mProjectionManager;
+    private Display mDisplay;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -691,9 +669,6 @@ public class player_first extends Fragment implements WZStatusCallback {
         });
 
 
-
-
-
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -714,7 +689,7 @@ public class player_first extends Fragment implements WZStatusCallback {
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    retrofit2.Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess , "basic");
+                    retrofit2.Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
 
                     call.enqueue(new retrofit2.Callback<liveCommentBean>() {
                         @Override
@@ -973,7 +948,6 @@ public class player_first extends Fragment implements WZStatusCallback {
         };
 
 
-
         requestReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -992,7 +966,6 @@ public class player_first extends Fragment implements WZStatusCallback {
                     cameraLayout1.setVisibility(View.VISIBLE);
 
 
-
                     //displayFirebaseRegId();
 
                 }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
@@ -1006,8 +979,6 @@ public class player_first extends Fragment implements WZStatusCallback {
                 }*/
             }
         };
-
-
 
 
         likeReceiver = new BroadcastReceiver() {
@@ -1135,10 +1106,6 @@ public class player_first extends Fragment implements WZStatusCallback {
         return view;
     }
 
-    private static final int REQUEST_CODE = 100;
-
-    private static String STORE_DIRECTORY;
-
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -1191,23 +1158,6 @@ public class player_first extends Fragment implements WZStatusCallback {
         }
     }
 
-    private int mWidth;
-    private int mHeight;
-    private int mRotation;
-
-    private ImageReader mImageReader;
-
-    private VirtualDisplay mVirtualDisplay;
-    private static final String SCREENCAP_NAME = "screencap";
-
-    private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
-
-    private Handler mHandler;
-
-    private String TAG = "ddfsdf";
-
-    private int mDensity;
-
     private void createVirtualDisplay() {
         // get width and height
         Point size = new Point();
@@ -1221,90 +1171,6 @@ public class player_first extends Fragment implements WZStatusCallback {
         mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
     }
 
-    private static int IMAGES_PRODUCED;
-
-    private class ImageAvailableListener implements ImageReader.OnImageAvailableListener {
-        @Override
-        public void onImageAvailable(ImageReader reader) {
-            Image image = null;
-            FileOutputStream fos = null;
-            Bitmap bitmap = null;
-
-            try {
-
-
-                if (coun == 0)
-                {
-                    image = reader.acquireLatestImage();
-                    if (image != null) {
-                        Image.Plane[] planes = image.getPlanes();
-                        ByteBuffer buffer = planes[0].getBuffer();
-                        int pixelStride = planes[0].getPixelStride();
-                        int rowStride = planes[0].getRowStride();
-                        int rowPadding = rowStride - pixelStride * mWidth;
-
-                        // create bitmap
-
-                        bitmap = Bitmap.createBitmap(mWidth + rowPadding / pixelStride, mHeight, Bitmap.Config.ARGB_8888);
-                        bitmap.copyPixelsFromBuffer(buffer);
-
-                        // write bitmap to a file
-                        fos = new FileOutputStream(STORE_DIRECTORY + "/myscreen_" + IMAGES_PRODUCED + ".png");
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-
-                        IMAGES_PRODUCED++;
-                        Log.e(TAG, "captured image: " + IMAGES_PRODUCED);
-
-
-                        Intent i = new Intent(Intent.ACTION_SEND);
-
-                        i.setType("image/*");
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        byte[] bytes = stream.toByteArray();
-
-
-                        i.putExtra(Intent.EXTRA_STREAM, getImageUri(getContext(), bitmap));
-                        try {
-                            startActivity(Intent.createChooser(i, "Share Screenshot..."));
-                        } catch (android.content.ActivityNotFoundException ex) {
-
-                            ex.printStackTrace();
-                        }
-
-
-                        coun++;
-
-
-                        stopProjection();
-
-                    }
-                }
-
-
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (fos != null) {
-                    try {
-                        fos.close();
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
-                    }
-                }
-
-                if (bitmap != null) {
-                    bitmap.recycle();
-                }
-
-                if (image != null) {
-                    image.close();
-                }
-            }
-        }
-    }
-
     private void stopProjection() {
         mHandler.post(new Runnable() {
             @Override
@@ -1315,50 +1181,6 @@ public class player_first extends Fragment implements WZStatusCallback {
             }
         });
     }
-
-    private class OrientationChangeCallback extends OrientationEventListener {
-
-        OrientationChangeCallback(Context context) {
-            super(context);
-        }
-
-        @Override
-        public void onOrientationChanged(int orientation) {
-            final int rotation = mDisplay.getRotation();
-            if (rotation != mRotation) {
-                mRotation = rotation;
-                try {
-                    // clean up
-                    if (mVirtualDisplay != null) mVirtualDisplay.release();
-                    if (mImageReader != null) mImageReader.setOnImageAvailableListener(null, null);
-
-                    // re-create virtual display depending on device width / height
-                    createVirtualDisplay();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private OrientationChangeCallback mOrientationChangeCallback;
-
-    private class MediaProjectionStopCallback extends MediaProjection.Callback {
-        @Override
-        public void onStop() {
-            Log.e("ScreenCapture", "stopping projection.");
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mVirtualDisplay != null) mVirtualDisplay.release();
-                    if (mImageReader != null) mImageReader.setOnImageAvailableListener(null, null);
-                    if (mOrientationChangeCallback != null) mOrientationChangeCallback.disable();
-                    sMediaProjection.unregisterCallback(MediaProjectionStopCallback.this);
-                }
-            });
-        }
-    }
-
 
     public void schedule(final String vid) {
 
@@ -1686,6 +1508,129 @@ public class player_first extends Fragment implements WZStatusCallback {
         });
     }
 
+    private void startProjection() {
+        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
+    }
+
+    private class ImageAvailableListener implements ImageReader.OnImageAvailableListener {
+        @Override
+        public void onImageAvailable(ImageReader reader) {
+            Image image = null;
+            FileOutputStream fos = null;
+            Bitmap bitmap = null;
+
+            try {
+
+
+                if (coun == 0) {
+                    image = reader.acquireLatestImage();
+                    if (image != null) {
+                        Image.Plane[] planes = image.getPlanes();
+                        ByteBuffer buffer = planes[0].getBuffer();
+                        int pixelStride = planes[0].getPixelStride();
+                        int rowStride = planes[0].getRowStride();
+                        int rowPadding = rowStride - pixelStride * mWidth;
+
+                        // create bitmap
+
+                        bitmap = Bitmap.createBitmap(mWidth + rowPadding / pixelStride, mHeight, Bitmap.Config.ARGB_8888);
+                        bitmap.copyPixelsFromBuffer(buffer);
+
+                        // write bitmap to a file
+                        fos = new FileOutputStream(STORE_DIRECTORY + "/myscreen_" + IMAGES_PRODUCED + ".png");
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+
+                        IMAGES_PRODUCED++;
+                        Log.e(TAG, "captured image: " + IMAGES_PRODUCED);
+
+
+                        Intent i = new Intent(Intent.ACTION_SEND);
+
+                        i.setType("image/*");
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        byte[] bytes = stream.toByteArray();
+
+
+                        i.putExtra(Intent.EXTRA_STREAM, getImageUri(getContext(), bitmap));
+                        try {
+                            startActivity(Intent.createChooser(i, "Share Screenshot..."));
+                        } catch (android.content.ActivityNotFoundException ex) {
+
+                            ex.printStackTrace();
+                        }
+
+
+                        coun++;
+
+
+                        stopProjection();
+
+                    }
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (fos != null) {
+                    try {
+                        fos.close();
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+                }
+
+                if (bitmap != null) {
+                    bitmap.recycle();
+                }
+
+                if (image != null) {
+                    image.close();
+                }
+            }
+        }
+    }
+
+    private class OrientationChangeCallback extends OrientationEventListener {
+
+        OrientationChangeCallback(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onOrientationChanged(int orientation) {
+            final int rotation = mDisplay.getRotation();
+            if (rotation != mRotation) {
+                mRotation = rotation;
+                try {
+                    // clean up
+                    if (mVirtualDisplay != null) mVirtualDisplay.release();
+                    if (mImageReader != null) mImageReader.setOnImageAvailableListener(null, null);
+
+                    // re-create virtual display depending on device width / height
+                    createVirtualDisplay();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private class MediaProjectionStopCallback extends MediaProjection.Callback {
+        @Override
+        public void onStop() {
+            Log.e("ScreenCapture", "stopping projection.");
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mVirtualDisplay != null) mVirtualDisplay.release();
+                    if (mImageReader != null) mImageReader.setOnImageAvailableListener(null, null);
+                    if (mOrientationChangeCallback != null) mOrientationChangeCallback.disable();
+                    sMediaProjection.unregisterCallback(MediaProjectionStopCallback.this);
+                }
+            });
+        }
+    }
 
     public class LiveAdapter extends RecyclerView.Adapter<LiveAdapter.ViewHolder> {
 
@@ -1767,7 +1712,6 @@ public class player_first extends Fragment implements WZStatusCallback {
         }
     }
 
-
     public class LiveAdapter2 extends RecyclerView.Adapter<LiveAdapter2.ViewHolder> {
 
 
@@ -1826,7 +1770,6 @@ public class player_first extends Fragment implements WZStatusCallback {
             loader.displayImage(im, holder.index, options);
 
             final bean b = (bean) context.getApplicationContext();
-
 
 
             //holder.user.setText(us);
@@ -1934,7 +1877,6 @@ public class player_first extends Fragment implements WZStatusCallback {
             }
         }
     }
-
 
     public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.Viewholder> {
 
@@ -2082,21 +2024,6 @@ public class player_first extends Fragment implements WZStatusCallback {
             }
         }
 
-    }
-
-
-    private MediaProjectionManager mProjectionManager;
-    //SimpleExoPlayerView thumb;
-    private static MediaProjection sMediaProjection;
-
-
-
-
-
-    private Display mDisplay;
-
-    private void startProjection() {
-        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
     }
 
 

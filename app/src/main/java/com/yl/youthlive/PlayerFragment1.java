@@ -29,7 +29,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -65,10 +64,8 @@ import com.yl.youthlive.endLivePOJO.Data;
 import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.getIpdatedPOJO.Comment;
 import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
-import com.yl.youthlive.goLivePOJO.goLiveBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.liveLikePOJO.liveLikeBean;
-import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
 import com.yl.youthlive.sendGiftPOJO.sendGiftBean;
 
 import org.json.JSONException;
@@ -98,24 +95,21 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class PlayerFragment1 extends Fragment implements RecordHandler.RecordListener, RtmpHandler.RtmpListener, EncoderHandler.EncodeListener {
 
+    private static final int REQUEST_CODE = 100;
+    private static final String SCREENCAP_NAME = "screencap";
+    private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
+    //SimpleExoPlayerView thumb;
+    private static MediaProjection sMediaProjection;
+    private static String STORE_DIRECTORY;
+    private static int IMAGES_PRODUCED;
     TextView newMessage;
-
-    private int previousTotal = 0; // The total number of items in the dataset after the last load
-    private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
     int firstVisibleItem, visibleItemCount, totalItemCount;
-
-    private int current_page = 1;
-
     ImageButton emoji, message, send, gift, connect, crop;
-
     EmojiconEditText comment;
-
     RecyclerView commentGrid;
     LinearLayoutManager commentsManager;
     CommentsAdapter commentsAdapter;
     List<Comment> commentList;
-
     BroadcastReceiver commentReceiver;
     BroadcastReceiver likeReceiver;
     BroadcastReceiver viewReceiver;
@@ -123,41 +117,17 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
     BroadcastReceiver endReceiver;
     BroadcastReceiver requestReceiver;
     BroadcastReceiver connectionReceiver;
-
     View rootView;
-    private EmojIconActions emojIcon;
-
-
     ProgressBar progress;
     String liveId;
-
     ImageButton timeLineFollow;
-
     CameraPreview thumbCamera1;
-
-    private static final int REQUEST_CODE = 100;
-
-    private MediaProjectionManager mProjectionManager;
-    //SimpleExoPlayerView thumb;
-    private static MediaProjection sMediaProjection;
-    private Display mDisplay;
-
     String TAG = "BroadcasterFragment1";
-
-    private static String STORE_DIRECTORY;
-
     int coun = 0;
-
     TextView likeCount;
-
-    private BubbleView bubbleView;
-
     String connId;
-
     int count = 0;
-
     ImageButton heart;
-
     CircleImageView timelineProfile;
     TextView timelineName;
     TextView liveUsers;
@@ -167,30 +137,56 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
     LinearLayoutManager viewersManager;
     ViewsAdapter viewsAdapter;
     List<com.yl.youthlive.getIpdatedPOJO.View> viewsList;
-
     VideoPlayer player;
-
     String timelineId;
-
     String image;
-
-
     RelativeLayout thumbCameraContainer1;
-
     ImageButton reject1;
-
     View giftLayout;
     ImageView giftImage;
     TextView giftText;
-
+    StreamaxiaPublisher mPublisher;
+    Integer gifts[] = new Integer[]
+            {
+                    R.drawable.gif1,
+                    R.drawable.gif2,
+                    R.drawable.gif3,
+                    R.drawable.gif4,
+                    R.drawable.gif5,
+                    R.drawable.gif6,
+                    R.drawable.gif7,
+                    R.drawable.gif8,
+                    R.drawable.gif9,
+                    R.drawable.gif10,
+                    R.drawable.gif11,
+                    R.drawable.gif12,
+                    R.drawable.gif13,
+                    R.drawable.gif14
+            };
+    private int previousTotal = 0; // The total number of items in the dataset after the last load
+    private boolean loading = true; // True if we are still waiting for the last set of data to load.
+    private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
+    private int current_page = 1;
+    private EmojIconActions emojIcon;
+    private MediaProjectionManager mProjectionManager;
+    private Display mDisplay;
+    private BubbleView bubbleView;
+    private int mWidth;
+    private int mHeight;
+    private int mRotation;
+    private int mDensity;
+    private ImageReader mImageReader;
+    private VirtualDisplay mVirtualDisplay;
+    private Handler mHandler;
+    private OrientationChangeCallback mOrientationChangeCallback;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.player_fragment_layout1 , container , false);
+        View view = inflater.inflate(R.layout.player_fragment_layout1, container, false);
 
 
-        player = (VideoPlayer)getActivity();
+        player = (VideoPlayer) getActivity();
 
         mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         giftImage = view.findViewById(R.id.imageView13);
@@ -350,7 +346,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
             }
         });*/
 
-        final bean b = (bean)getContext().getApplicationContext();
+        final bean b = (bean) getContext().getApplicationContext();
 
         heart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -385,10 +381,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 });
 
 
-
-
-
-
             }
         });
 
@@ -417,7 +409,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     public void onResponse(Call<String> call, Response<String> response) {
 
 
-
                         progress.setVisibility(View.GONE);
 
                     }
@@ -427,10 +418,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                         progress.setVisibility(View.GONE);
                     }
                 });
-
-
-
-
 
 
             }
@@ -637,7 +624,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                         //comm.set
 
 
-                        showGift(item.getGiftId() , item.getGiftName());
+                        showGift(item.getGiftId(), item.getGiftName());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -680,12 +667,12 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                     try {
 
-                        Intent intent1 = new Intent(getContext() , LiveEndedPlayer.class);
-                        intent1.putExtra("image" , image);
-                        intent1.putExtra("id" , timelineId);
-                        intent1.putExtra("name" , timelineName.getText().toString());
-                        intent1.putExtra("time" , item.getLiveTime());
-                        intent1.putExtra("views" , item.getViewers());
+                        Intent intent1 = new Intent(getContext(), LiveEndedPlayer.class);
+                        intent1.putExtra("image", image);
+                        intent1.putExtra("id", timelineId);
+                        intent1.putExtra("name", timelineName.getText().toString());
+                        intent1.putExtra("time", item.getLiveTime());
+                        intent1.putExtra("views", item.getViewers());
                         startActivity(intent1);
                         getActivity().finish();
 
@@ -723,7 +710,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     String json = intent.getStringExtra("data");
 
                     connId = json;
-
 
 
                     final Dialog dialog = new Dialog(player);
@@ -790,8 +776,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                                     try {
 
 
-
-
                                         //cameraLayout1.setVisibility(View.VISIBLE);
 
 /*
@@ -820,7 +804,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 */
 
 
-
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -840,11 +823,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                         }
                     });
-
-
-
-
-
 
 
                     //displayFirebaseRegId();
@@ -884,16 +862,12 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                         String uid = obj.getString("userId");
 
 
-                        if (uid.equals(b.userId))
-                        {
+                        if (uid.equals(b.userId)) {
 
 
                             player.endThumbCamera1();
                             thumbCameraContainer1.setVisibility(View.GONE);
                         }
-
-
-
 
 
                     } catch (JSONException e) {
@@ -914,8 +888,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 }*/
             }
         };
-
-
 
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -1008,13 +980,12 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     }
                 });
 
-                GridLayoutManager giftManager = new GridLayoutManager(player , 2);
+                GridLayoutManager giftManager = new GridLayoutManager(player, 2);
 
-                GiftAdapter giftAdapter = new GiftAdapter(player , bar , dialog);
+                GiftAdapter giftAdapter = new GiftAdapter(player, bar, dialog);
 
                 giftGrid.setLayoutManager(giftManager);
                 giftGrid.setAdapter(giftAdapter);
-
 
 
             }
@@ -1067,18 +1038,16 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<followBean> call = cr.followLiveUser(b.userId , timelineId , liveId);
+                retrofit2.Call<followBean> call = cr.followLiveUser(b.userId, timelineId, liveId);
 
                 call.enqueue(new retrofit2.Callback<followBean>() {
                     @Override
                     public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
 
-                        if (response.body().getStatus().equals("1"))
-                        {
+                        if (response.body().getStatus().equals("1")) {
                             Toast.makeText(player, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             timeLineFollow.setVisibility(View.GONE);
                         }
-
 
 
                         progress.setVisibility(View.GONE);
@@ -1092,7 +1061,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                     }
                 });
-
 
 
             }
@@ -1126,8 +1094,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
     public void onRecordIllegalArgumentException(IllegalArgumentException e) {
 
     }
-
-    StreamaxiaPublisher mPublisher;
 
     @Override
     public void onRecordIOException(IOException e) {
@@ -1281,231 +1247,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
     }
 
-    public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
-
-
-        List<Comment> list = new ArrayList<>();
-        Context context;
-
-        public CommentsAdapter(Context context, List<Comment> list) {
-            this.context = context;
-            this.list = list;
-        }
-
-        public void setGridData(List<Comment> list) {
-            this.list = list;
-            notifyDataSetChanged();
-        }
-
-
-        public void addComment(Comment item) {
-            list.add(0, item);
-            notifyItemInserted(0);
-        }
-
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.chat_model, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-
-            holder.setIsRecyclable(false);
-
-            final Comment item = list.get(position);
-
-            if (position == 0) {
-
-                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.gradient_white_top, 0, 0);
-
-            } else if (position == list.size() - 1) {
-                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.gradient_white);
-            } else {
-                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            }
-
-            final String uid = item.getUserId().replace("\"", "");
-
-
-            final bean b = (bean) context.getApplicationContext();
-
-
-            String type = item.getType().replace("\"", "");
-
-
-            if (type.equals("basic")) {
-
-                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
-
-                ImageLoader loader = ImageLoader.getInstance();
-
-                String im = item.getUserImage().replace("\"", "");
-
-                loader.displayImage(im, holder.index, options);
-
-
-                String com = item.getComment().replace("\"", "");
-
-                String us = item.getUserName().replace("\"", "");
-
-                holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
-
-
-
-                holder.container.setBackground(context.getResources().getDrawable(R.drawable.gray_round2));
-
-                holder.index.setVisibility(View.VISIBLE);
-
-                holder.index.setVisibility(View.GONE);
-                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
-                    holder.add.setVisibility(View.GONE);
-                } else {
-                    holder.add.setVisibility(View.VISIBLE);
-                }
-
-                if (Objects.equals(uid, b.userId)) {
-                    holder.add.setVisibility(View.GONE);
-                } else {
-                    holder.add.setVisibility(View.VISIBLE);
-                }
-
-            } else if (item.getType().equals("follow")){
-
-                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
-
-                ImageLoader loader = ImageLoader.getInstance();
-
-                String im = item.getUserImage().replace("\"", "");
-
-                loader.displayImage(im, holder.index, options);
-
-
-                String us = item.getUserName().replace("\"", "");
-
-                holder.name.setText("YL: " + us + " became a fan. Won't miss the next live");
-
-                holder.add.setVisibility(View.GONE);
-
-                holder.container.setBackground(context.getResources().getDrawable(R.drawable.red_round2));
-
-                holder.index.setVisibility(View.GONE);
-                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
-                    holder.add.setVisibility(View.GONE);
-                } else {
-                    holder.add.setVisibility(View.VISIBLE);
-                }
-
-
-            }else if (item.getType().equals("gift"))
-            {
-
-                String us = item.getUserId().replace("\"", "");
-                holder.name.setText(us + " has sent a ");
-                holder.add.setVisibility(View.GONE);
-
-                holder.container.setBackground(context.getResources().getDrawable(R.drawable.blue_round2));
-
-                holder.index.setVisibility(View.GONE);
-            }
-
-
-            //holder.user.setText(us);
-
-            holder.index.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    /*Intent intent = new Intent(context, TimelineProfile.class);
-                    intent.putExtra("userId", uid);
-                    startActivity(intent);*/
-
-                }
-            });
-
-
-
-
-            holder.add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-
-                    progress.setVisibility(View.VISIBLE);
-
-                    final bean b = (bean) context.getApplicationContext();
-
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
-
-                    call.enqueue(new retrofit2.Callback<followBean>() {
-                        @Override
-                        public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
-
-                            if (response.body().getStatus().equals("1"))
-                            {
-                                Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                holder.add.setVisibility(View.GONE);
-                            }
-
-
-                            progress.setVisibility(View.GONE);
-
-                        }
-
-                        @Override
-                        public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
-
-                            progress.setVisibility(View.GONE);
-
-                        }
-                    });
-
-
-
-                }
-            });
-
-
-        }
-
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            TextView name;
-            CircleImageView index;
-            ImageButton add;
-            LinearLayout container;
-
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-
-                index = (CircleImageView) itemView.findViewById(R.id.index);
-                name = (TextView) itemView.findViewById(R.id.name);
-                container = itemView.findViewById(R.id.container);
-                add = (ImageButton) itemView.findViewById(R.id.add);
-
-            }
-        }
-    }
-
-
     public void schedule(String liveId) {
         final bean b = (bean) getActivity().getApplicationContext();
 
@@ -1561,14 +1302,11 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     liveUsers.setText(response.body().getData().getViewsCount());
 
 
-                    if (response.body().getData().getFollow().equals("true"))
-                    {
+                    if (response.body().getData().getFollow().equals("true")) {
 
                         timeLineFollow.setVisibility(View.GONE);
 
-                    }
-                    else
-                    {
+                    } else {
                         timeLineFollow.setVisibility(View.VISIBLE);
                     }
 
@@ -1653,11 +1391,9 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
     }
 
-
     private void startProjection() {
         startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
     }
-
 
     @Override
     public void onStop() {
@@ -1670,7 +1406,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1716,22 +1451,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         }
     }
 
-
-    private int mWidth;
-    private int mHeight;
-    private int mRotation;
-
-    private int mDensity;
-
-    private ImageReader mImageReader;
-
-    private VirtualDisplay mVirtualDisplay;
-    private static final String SCREENCAP_NAME = "screencap";
-
-    private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
-
-    private Handler mHandler;
-
     private void createVirtualDisplay() {
         // get width and height
         Point size = new Point();
@@ -1746,7 +1465,278 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
     }
 
-    private static int IMAGES_PRODUCED;
+    private void stopProjection() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (sMediaProjection != null) {
+                    sMediaProjection.stop();
+                }
+            }
+        });
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        liveId = getArguments().getString("liveId");
+        schedule(liveId);
+
+    }
+
+    public void showGift(String giftId, String text) {
+
+
+        Glide.with(player).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
+        giftText.setText(text);
+
+        giftLayout.setVisibility(View.VISIBLE);
+
+        Timer t = new Timer();
+
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+
+                giftLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        giftLayout.setVisibility(View.GONE);
+                    }
+                });
+
+            }
+        }, 1500);
+
+
+    }
+
+    public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
+
+
+        List<Comment> list = new ArrayList<>();
+        Context context;
+
+        public CommentsAdapter(Context context, List<Comment> list) {
+            this.context = context;
+            this.list = list;
+        }
+
+        public void setGridData(List<Comment> list) {
+            this.list = list;
+            notifyDataSetChanged();
+        }
+
+
+        public void addComment(Comment item) {
+            list.add(0, item);
+            notifyItemInserted(0);
+        }
+
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.chat_model, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, int position) {
+
+            holder.setIsRecyclable(false);
+
+            final Comment item = list.get(position);
+
+            if (position == 0) {
+
+                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.gradient_white_top, 0, 0);
+
+            } else if (position == list.size() - 1) {
+                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.gradient_white);
+            } else {
+                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
+
+            final String uid = item.getUserId().replace("\"", "");
+
+
+            final bean b = (bean) context.getApplicationContext();
+
+
+            String type = item.getType().replace("\"", "");
+
+
+            if (type.equals("basic")) {
+
+                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+                ImageLoader loader = ImageLoader.getInstance();
+
+                String im = item.getUserImage().replace("\"", "");
+
+                loader.displayImage(im, holder.index, options);
+
+
+                String com = item.getComment().replace("\"", "");
+
+                String us = item.getUserName().replace("\"", "");
+
+                holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
+
+
+                holder.container.setBackground(context.getResources().getDrawable(R.drawable.gray_round2));
+
+                holder.index.setVisibility(View.VISIBLE);
+
+                holder.index.setVisibility(View.GONE);
+                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
+                    holder.add.setVisibility(View.GONE);
+                } else {
+                    holder.add.setVisibility(View.VISIBLE);
+                }
+
+                if (Objects.equals(uid, b.userId)) {
+                    holder.add.setVisibility(View.GONE);
+                } else {
+                    holder.add.setVisibility(View.VISIBLE);
+                }
+
+            } else if (item.getType().equals("follow")) {
+
+                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+                ImageLoader loader = ImageLoader.getInstance();
+
+                String im = item.getUserImage().replace("\"", "");
+
+                loader.displayImage(im, holder.index, options);
+
+
+                String us = item.getUserName().replace("\"", "");
+
+                holder.name.setText("YL: " + us + " became a fan. Won't miss the next live");
+
+                holder.add.setVisibility(View.GONE);
+
+                holder.container.setBackground(context.getResources().getDrawable(R.drawable.red_round2));
+
+                holder.index.setVisibility(View.GONE);
+                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
+                    holder.add.setVisibility(View.GONE);
+                } else {
+                    holder.add.setVisibility(View.VISIBLE);
+                }
+
+
+            } else if (item.getType().equals("gift")) {
+
+                String us = item.getUserId().replace("\"", "");
+                holder.name.setText(us + " has sent a ");
+                holder.add.setVisibility(View.GONE);
+
+                holder.container.setBackground(context.getResources().getDrawable(R.drawable.blue_round2));
+
+                holder.index.setVisibility(View.GONE);
+            }
+
+
+            //holder.user.setText(us);
+
+            holder.index.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    /*Intent intent = new Intent(context, TimelineProfile.class);
+                    intent.putExtra("userId", uid);
+                    startActivity(intent);*/
+
+                }
+            });
+
+
+            holder.add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    progress.setVisibility(View.VISIBLE);
+
+                    final bean b = (bean) context.getApplicationContext();
+
+                    final Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.BASE_URL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                    retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
+
+                    call.enqueue(new retrofit2.Callback<followBean>() {
+                        @Override
+                        public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+
+                            if (response.body().getStatus().equals("1")) {
+                                Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                holder.add.setVisibility(View.GONE);
+                            }
+
+
+                            progress.setVisibility(View.GONE);
+
+                        }
+
+                        @Override
+                        public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+
+                            progress.setVisibility(View.GONE);
+
+                        }
+                    });
+
+
+                }
+            });
+
+
+        }
+
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView name;
+            CircleImageView index;
+            ImageButton add;
+            LinearLayout container;
+
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+
+                index = (CircleImageView) itemView.findViewById(R.id.index);
+                name = (TextView) itemView.findViewById(R.id.name);
+                container = itemView.findViewById(R.id.container);
+                add = (ImageButton) itemView.findViewById(R.id.add);
+
+            }
+        }
+    }
 
     private class ImageAvailableListener implements ImageReader.OnImageAvailableListener {
         @Override
@@ -1879,17 +1869,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         }
     }
 
-    private void stopProjection() {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (sMediaProjection != null) {
-                    sMediaProjection.stop();
-                }
-            }
-        });
-    }
-
     private class OrientationChangeCallback extends OrientationEventListener {
 
         OrientationChangeCallback(Context context) {
@@ -1915,8 +1894,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         }
     }
 
-    private OrientationChangeCallback mOrientationChangeCallback;
-
     private class MediaProjectionStopCallback extends MediaProjection.Callback {
         @Override
         public void onStop() {
@@ -1932,16 +1909,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
             });
         }
     }
-
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
 
     class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder> {
 
@@ -2023,18 +1990,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        liveId = getArguments().getString("liveId");
-        schedule(liveId);
-
-    }
-
-
-    class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder>
-    {
+    class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
 
         Context context;
         ProgressBar progressBar;
@@ -2057,8 +2013,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                         R.drawable.gif14
                 };
 
-        public GiftAdapter(Context context , ProgressBar progress , Dialog dialog)
-        {
+        public GiftAdapter(Context context, ProgressBar progress, Dialog dialog) {
             this.context = context;
             this.progressBar = progress;
             this.dialog = dialog;
@@ -2067,8 +2022,8 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.gift_model , parent , false);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.gift_model, parent, false);
             return new ViewHolder(view);
         }
 
@@ -2097,8 +2052,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     retrofit2.Call<sendGiftBean> call = cr.sendGift(b.userId, liveId, timelineId, String.valueOf(position + 1), "1", "1");
 
 
-
-
                     call.enqueue(new retrofit2.Callback<sendGiftBean>() {
                         @Override
                         public void onResponse(retrofit2.Call<sendGiftBean> call, retrofit2.Response<sendGiftBean> response) {
@@ -2110,9 +2063,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                                 if (Objects.equals(response.body().getStatus(), "1")) {
                                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
-                                }
-                                else
-                                {
+                                } else {
                                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
 
@@ -2135,8 +2086,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     });
 
 
-
-
                 }
             });
 
@@ -2148,8 +2097,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
             return 14;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder
-        {
+        class ViewHolder extends RecyclerView.ViewHolder {
 
             ImageView image;
             Button send;
@@ -2162,53 +2110,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
             }
         }
-    }
-
-    Integer gifts[] = new Integer[]
-            {
-                    R.drawable.gif1,
-                    R.drawable.gif2,
-                    R.drawable.gif3,
-                    R.drawable.gif4,
-                    R.drawable.gif5,
-                    R.drawable.gif6,
-                    R.drawable.gif7,
-                    R.drawable.gif8,
-                    R.drawable.gif9,
-                    R.drawable.gif10,
-                    R.drawable.gif11,
-                    R.drawable.gif12,
-                    R.drawable.gif13,
-                    R.drawable.gif14
-            };
-
-
-    public void showGift(String giftId , String text)
-    {
-
-
-        Glide.with(player).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
-        giftText.setText(text);
-
-        giftLayout.setVisibility(View.VISIBLE);
-
-        Timer t = new Timer();
-
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-
-                giftLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        giftLayout.setVisibility(View.GONE);
-                    }
-                });
-
-            }
-        } , 1500);
-
-
     }
 
 }

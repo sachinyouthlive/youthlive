@@ -74,26 +74,163 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class UserInformation extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
-    String UserInfo = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/update_user_info.php";
-    EditText user_name, BirthDay, Biodata;
-    private static final int DATE_PICKER_ID = 112;
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
-    private static final int RESULT_LOAD_IMG = 1;
     public static final String ALLOW_KEY = "ALLOWED";
     public static final String CAMERA_PREF = "camera_pref";
-    String Username, Birthdate, BioData, gender, userid1="", Female, str, encodedImage = "", imgDecodableString, pImage = "";
+    private static final int DATE_PICKER_ID = 112;
+    private static final int RESULT_LOAD_IMG = 1;
+    String UserInfo = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/update_user_info.php";
+    EditText user_name, BirthDay, Biodata;
+    String Username, Birthdate, BioData, gender, userid1 = "", Female, str, encodedImage = "", imgDecodableString, pImage = "";
     RadioButton radioMale, radioFemale, radioButton;
     RadioGroup rg;
     CircleImageView userimage;
     AlertDialog.Builder builder;
     Button signup_button;
     ImageView uploadpic;
-    private int year, month, day;
     Uri imageuri, selectedImage;
     EditText edittext;
     Calendar myCalendar;
-
     ProgressBar progress;
+    private int year, month, day;
+    private DatePickerDialog.OnDateSetListener pickerListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+            year = selectedYear;
+            month = selectedMonth;
+            day = selectedDay;
+
+            BirthDay.setText(new StringBuilder().append(month + 1)
+                    .append("-").append(day).append("-").append(year)
+                    .append(" "));
+            Birthdate = String.valueOf(year) + "-" + String.valueOf(month + 1) + "-" + String.valueOf(day);
+        }
+    };
+
+    public static void startInstalledAppDetailsActivity(final Activity context) {
+        if (context == null) {
+            return;
+        }
+        final Intent i = new Intent();
+        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        i.setData(Uri.parse("package:" + context.getPackageName()));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        context.startActivity(i);
+    }
+
+    public static Boolean getFromPref(Context context, String key) {
+        SharedPreferences myPrefs = context.getSharedPreferences(CAMERA_PREF,
+                Context.MODE_PRIVATE);
+        return (myPrefs.getBoolean(key, false));
+    }
+
+    private static String getPath(final Context context, final Uri uri) {
+        final boolean isKitKatOrAbove = true;
+
+        // DocumentProvider
+        if (DocumentsContract.isDocumentUri(context, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+
+                // TODO handle non-primary volumes
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                return getDataColumn(context, contentUri, null, null);
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{
+                        split[1]
+                };
+
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            return getDataColumn(context, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+    private static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    private static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    private static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    private static String getDataColumn(Context context, Uri uri, String selection,
+                                        String[] selectionArgs) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {
+                column
+        };
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +249,7 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
         userimage = findViewById(R.id.userimage);
         uploadpic = findViewById(R.id.uploadpic);
 
-        progress = (ProgressBar)findViewById(R.id.progress);
+        progress = (ProgressBar) findViewById(R.id.progress);
 
         uploadpic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,24 +305,19 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
         });
     }
 
-
-
-    public void updateDetails()
-    {
+    public void updateDetails() {
 
         String name = user_name.getText().toString();
 
-        if (name.length() > 0)
-        {
+        if (name.length() > 0) {
             progress.setVisibility(View.VISIBLE);
-
 
 
             MultipartBody.Part body = null;
 
             try {
 
-                String mCurrentPhotoPath = getPath(UserInformation.this , selectedImage);
+                String mCurrentPhotoPath = getPath(UserInformation.this, selectedImage);
 
                 File file = new File(mCurrentPhotoPath);
 
@@ -194,12 +326,9 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
 
                 body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
 
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
 
 
             final bean b = (bean) getApplicationContext();
@@ -212,25 +341,22 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
 
             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-            Call<loginResponseBean> call = cr.addUserData(body , name , gender , BirthDay.getText().toString() , Biodata.getText().toString() , getIntent().getStringExtra("userId"));
+            Call<loginResponseBean> call = cr.addUserData(body, name, gender, BirthDay.getText().toString(), Biodata.getText().toString(), getIntent().getStringExtra("userId"));
 
             call.enqueue(new Callback<loginResponseBean>() {
                 @Override
                 public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
 
-                    if (Objects.equals(response.body().getStatus(), "1"))
-                    {
+                    if (Objects.equals(response.body().getStatus(), "1")) {
 
-                        Toast.makeText(UserInformation.this , "Profile Updated, Continue to login" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserInformation.this, "Profile Updated, Continue to login", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(UserInformation.this , Signin.class);
+                        Intent intent = new Intent(UserInformation.this, Signin.class);
                         startActivity(intent);
                         finish();
 
-                    }
-                    else
-                    {
-                        Toast.makeText(UserInformation.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(UserInformation.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -245,9 +371,6 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
 
 
     }
-
-
-
 
     private void filldata() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, UserInfo, new Response.Listener<String>() {
@@ -331,21 +454,6 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
         }
         return null;
     }
-
-    private DatePickerDialog.OnDateSetListener pickerListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int selectedYear,
-                              int selectedMonth, int selectedDay) {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
-
-            BirthDay.setText(new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year)
-                    .append(" "));
-            Birthdate = String.valueOf(year) + "-" + String.valueOf(month + 1) + "-" + String.valueOf(day);
-        }
-    };
 
     private void SelectImage() {
         final CharSequence[] items = {"Take Photo from Camera",
@@ -465,6 +573,7 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
         } else {
         }
     }
+
     private void showSettingsAlert() {
         android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(UserInformation.this).create();
         alertDialog.setTitle("Alert");
@@ -514,131 +623,6 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
         alertDialog.show();
     }
 
-    public static void startInstalledAppDetailsActivity(final Activity context) {
-        if (context == null) {
-            return;
-        }
-        final Intent i = new Intent();
-        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        i.addCategory(Intent.CATEGORY_DEFAULT);
-        i.setData(Uri.parse("package:" + context.getPackageName()));
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        context.startActivity(i);
-    }
-    public static Boolean getFromPref(Context context, String key) {
-        SharedPreferences myPrefs = context.getSharedPreferences(CAMERA_PREF,
-                Context.MODE_PRIVATE);
-        return (myPrefs.getBoolean(key, false));
-    }
-
-    private static String getPath(final Context context, final Uri uri)
-    {
-        final boolean isKitKatOrAbove = true;
-
-        // DocumentProvider
-        if (DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }
-
-                // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
-
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
-                        split[1]
-                };
-
-                return getDataColumn(context, contentUri, selection, selectionArgs);
-            }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
-    }
-
-
-    private static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    private static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
-    private static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
-
-    private static String getDataColumn(Context context, Uri uri, String selection,
-                                        String[] selectionArgs) {
-
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {
-                column
-        };
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -647,11 +631,13 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
 
 
     }
+
     ///////////////////internet connectivity check///////////////
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showAlert(isConnected);
     }
+
     private void showAlert(boolean isConnected) {
         String message;
         int color;
@@ -686,10 +672,8 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
             //      message = "Sorry! Not connected to internet";
             //     color = Color.RED;
@@ -704,6 +688,7 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
         snackbar.show();
         */
     }
+
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showAlert(isConnected);

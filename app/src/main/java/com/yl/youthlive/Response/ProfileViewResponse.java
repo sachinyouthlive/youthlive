@@ -16,6 +16,7 @@ public class ProfileViewResponse {
     public int getSuccess() {
         return success;
     }
+
     public void setSuccess(int success) {
         this.success = success;
     }
@@ -23,6 +24,7 @@ public class ProfileViewResponse {
     public String getPrivacy_status() {
         return privacy_status;
     }
+
     public void setPrivacy_status(String privacy_status) {
         this.privacy_status = privacy_status;
     }

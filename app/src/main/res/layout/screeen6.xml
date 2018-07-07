@@ -1,163 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/ladki"
-        android:scaleType="centerCrop"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/dark_bhut"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/ladki" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/dark_bhut" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal">
-    <com.yl.youthlive.RoundedImageView
-        android:id="@+id/imageView_round"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="12dp"
-        android:src="@drawable/ladki"
-        android:scaleType="centerCrop"
-        android:layout_marginTop="18dp"
-        android:layout_marginBottom="10dp"
-        />
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.yl.youthlive.RoundedImageView
+            android:id="@+id/imageView_round"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="18dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ladki" />
     </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="110dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
-        android:textColorHint="#fff"
-        android:hint="Add a relevent title for your boardcast"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="110dp"
+            android:hint="Add a relevent title for your boardcast"
+            android:textColorHint="#fff" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#fff"/>
+            android:background="#fff" />
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="# Tag your LIVE"
-            android:textColor="#fff"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:text="# Tag your LIVE"
+            android:textColor="#fff" />
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Share"
-            android:textColor="#fff"
-            android:padding="10dp"
-            android:layout_marginTop="100dp"
             android:layout_gravity="center_horizontal"
-            android:gravity="center"/>
+            android:layout_marginTop="100dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Share"
+            android:textColor="#fff" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:baselineAligned="false">
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:gravity="end"
-                android:layout_weight="1">
+                android:orientation="horizontal">
 
 
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/facebook"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/white_circle"/>
+                    android:background="@drawable/white_circle"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:src="@drawable/facebook" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:layout_weight="1">
+                android:orientation="horizontal">
 
 
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/google"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/white_circle"/>
+                    android:background="@drawable/white_circle"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:src="@drawable/google" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
 
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/twitter"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/white_circle"/>
+                    android:background="@drawable/white_circle"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:src="@drawable/twitter" />
             </LinearLayout>
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:padding="10dp"
             android:text="Lorem Ipsum is simply dummy text of the printing
   and typesetting industry."
-            android:textColor="#fff"
-            android:padding="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"/>
+            android:textColor="#fff" />
 
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:background="@drawable/pink_button"
-            android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            android:text="GO LIVE"
-            android:textSize="20sp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="18dp"
+            android:background="@drawable/pink_button"
+            android:text="GO LIVE"
+            android:textColor="#fff"
+            android:textSize="20sp"
 
             />
 

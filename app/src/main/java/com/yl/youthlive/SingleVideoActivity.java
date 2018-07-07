@@ -61,7 +61,7 @@ import tcking.github.com.giraffeplayer2.PlayerListener;
 import tv.danmaku.ijk.media.player.IjkTimedText;
 import veg.mediaplayer.sdk.MediaPlayer;
 
-public class SingleVideoActivity extends AppCompatActivity implements MediaPlayer.MediaPlayerCallback,ConnectivityReceiver.ConnectivityReceiverListener {
+public class SingleVideoActivity extends AppCompatActivity implements MediaPlayer.MediaPlayerCallback, ConnectivityReceiver.ConnectivityReceiverListener {
 
     Toolbar toolbar;
     CircleImageView profile;
@@ -79,11 +79,9 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
     String timelineId;
 
     FloatingActionButton send;
-
-    private int mSeekPosition;
-
     tcking.github.com.giraffeplayer2.VideoView player;
     ImageButton play;
+    private int mSeekPosition;
 
     //ImageView image;
 
@@ -138,12 +136,9 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
         */
 
 
-
         DisplayImageOptions options = new DisplayImageOptions.Builder().resetViewBeforeLoading(false).cacheInMemory(true).cacheOnDisk(true).build();
 
         //  loader.displayImage(getIntent().getStringExtra("thumb") , image , options);
-
-
 
 
         player.setVideoPath(url).getPlayer().setPlayerListener(new PlayerListener() {
@@ -369,8 +364,6 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
             public void onClick(View view) {
 
 
-
-
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SingleVideoActivity.this);
                 alertDialogBuilder.setMessage("Do you want to share this VLOG to your timeline?");
                 alertDialogBuilder.setPositiveButton("Yes",
@@ -416,7 +409,7 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
                             }
                         });
 
-                alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -427,12 +420,6 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
-
-
-
-
-
-
 
 
             }
@@ -671,8 +658,6 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
                 //.............
 
 
-
-
                 try {
                     if (response.body().getData().getComments() != null) {
                         adapter.setGridData(response.body().getData().getComments());
@@ -697,15 +682,12 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
                 progress.setVisibility(View.GONE);
 
 
-                if (Objects.equals(response.body().getData().getIsLiked(), "1"))
-                {
+                if (Objects.equals(response.body().getData().getIsLiked(), "1")) {
 
-                    likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_like , 0 , 0 , 0);
+                    likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_like, 0, 0, 0);
 
-                }
-                else
-                {
-                    likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.black_heart , 0 , 0 , 0);
+                } else {
+                    likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.black_heart, 0, 0, 0);
                 }
 
 
@@ -713,7 +695,6 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
                     views.setText(response.body().getData().getViewsCount());
                     likes.setText(response.body().getData().getLikesCount());
                     comments.setText(response.body().getData().getCommentCount());
-
 
 
                 } catch (Exception e) {
@@ -744,7 +725,6 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
                     //  Toast.makeText(SingleVideoActivity.this, "hello"+times, Toast.LENGTH_SHORT).show();
 
 
-
                     schedule();
 
                 } catch (Exception e) {
@@ -768,6 +748,7 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
         boolean isConnected = ConnectivityReceiver.isConnected();
         showSnack(isConnected);
     }
+
     private void showSnack(boolean isConnected) {
         String message;
         int color;
@@ -802,10 +783,8 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
             //      message = "Sorry! Not connected to internet";
             //     color = Color.RED;
@@ -871,15 +850,12 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
                         }
 
 
-                        if (Objects.equals(response.body().getData().getIsLiked(), "1"))
-                        {
+                        if (Objects.equals(response.body().getData().getIsLiked(), "1")) {
 
-                            likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_like , 0 , 0 , 0);
+                            likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_like, 0, 0, 0);
 
-                        }
-                        else
-                        {
-                            likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.black_heart , 0 , 0 , 0);
+                        } else {
+                            likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.black_heart, 0, 0, 0);
                         }
 
 
@@ -907,7 +883,7 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
 
     @Override
     public int Status(int i) {
-        Log.d("status" , String.valueOf(i));
+        Log.d("status", String.valueOf(i));
         return 0;
     }
 
@@ -917,6 +893,11 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
         return 0;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
 
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
@@ -978,8 +959,6 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
             //.............
 
 
-
-
             bean b = (bean) context.getApplicationContext();
 
 
@@ -990,11 +969,11 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
 
             //ViewGroup.LayoutParams params = holder.bubble.getLayoutParams();
             //Changes the height and width to the specified *pixels*
-           // params.width = (width/5)*4;
-          //  holder.bubblewrap.setLayoutParams(params);
+            // params.width = (width/5)*4;
+            //  holder.bubblewrap.setLayoutParams(params);
 
             //setting message textview size to custom
-            holder.message.setMaxWidth((width/5)*4);
+            holder.message.setMaxWidth((width / 5) * 4);
 
 
             if (Objects.equals(item.getUserId(), b.userId)) {
@@ -1033,13 +1012,6 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
 
             }
         }
-
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
 
     }
 }

@@ -30,23 +30,45 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyViewHolder> {
     List<Datum> list = new ArrayList<>();
 
 
-    public HotAdapter(Context context , List<Datum> list){
+    public HotAdapter(Context context, List<Datum> list) {
         this.context = context;
         this.list = list;
     }
 
-    public void setGridData(List<Datum> list)
-    {
+    public static Bitmap retriveVideoFrameFromVideo(String videoPath)
+            throws Throwable {
+        Bitmap bitmap = null;
+        MediaMetadataRetriever mediaMetadataRetriever = null;
+        try {
+            mediaMetadataRetriever = new MediaMetadataRetriever();
+            mediaMetadataRetriever.setDataSource(videoPath, new HashMap<String, String>());
+            //   mediaMetadataRetriever.setDataSource(videoPath);
+            bitmap = mediaMetadataRetriever.getFrameAtTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Throwable(
+                    "Exception in retriveVideoFrameFromVideo(String videoPath)"
+                            + e.getMessage());
+        } finally {
+            if (mediaMetadataRetriever != null) {
+                mediaMetadataRetriever.release();
+            }
+        }
+        return bitmap;
+    }
+
+    public void setGridData(List<Datum> list) {
         this.list = list;
         notifyDataSetChanged();
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.hot_list_model , parent , false);
+        View view = LayoutInflater.from(context).inflate(R.layout.hot_list_model, parent, false);
 
         return new MyViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final Datum item = list.get(position);
@@ -56,24 +78,19 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyViewHolder> {
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
 
         ImageLoader loader = ImageLoader.getInstance();
-        loader.displayImage(item.getTimelineProfileImage() , holder.profile , options);
+        loader.displayImage(item.getTimelineProfileImage(), holder.profile, options);
 
 
-        if (Objects.equals(item.getIsLiked(), "1"))
-        {
+        if (Objects.equals(item.getIsLiked(), "1")) {
 
-            holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_like , 0 , 0 , 0);
+            holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_like, 0, 0, 0);
 
-        }
-        else
-        {
-            holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.heart , 0 , 0 , 0);
+        } else {
+            holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.heart, 0, 0, 0);
         }
 
 
-
-        loader.displayImage(item.getThumbURL() , holder.image, options);
-
+        loader.displayImage(item.getThumbURL(), holder.image, options);
 
 
         //Glide.with(context).load(item.getTimelineProfileImage()).into(holder.profile);
@@ -82,58 +99,32 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyViewHolder> {
             @Override
             public void onClick(View view) {
                 Activity activity = (Activity) context;
-                Intent intent = new Intent(context ,SingleVideoActivity.class);
-                intent.putExtra("videoId" , item.getVideoId());
-                intent.putExtra("url" , item.getVideoURL());
-                intent.putExtra("thumb" , item.getThumbURL());
+                Intent intent = new Intent(context, SingleVideoActivity.class);
+                intent.putExtra("videoId", item.getVideoId());
+                intent.putExtra("url", item.getVideoURL());
+                intent.putExtra("thumb", item.getThumbURL());
                 context.startActivity(intent);
                 activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return list.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView title , likes;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView title, likes;
         ImageView image;
         CircleImageView profile;
+
         public MyViewHolder(View itemView) {
             super(itemView);
-            title = (TextView)itemView.findViewById(R.id.title);
-            likes = (TextView)itemView.findViewById(R.id.likes);
-            image = (ImageView)itemView.findViewById(R.id.image);
-            profile = (CircleImageView)itemView.findViewById(R.id.profile);
+            title = (TextView) itemView.findViewById(R.id.title);
+            likes = (TextView) itemView.findViewById(R.id.likes);
+            image = (ImageView) itemView.findViewById(R.id.image);
+            profile = (CircleImageView) itemView.findViewById(R.id.profile);
         }
-    }
-    public static Bitmap retriveVideoFrameFromVideo(String videoPath)
-            throws Throwable
-    {
-        Bitmap bitmap = null;
-        MediaMetadataRetriever mediaMetadataRetriever = null;
-        try
-        {
-            mediaMetadataRetriever = new MediaMetadataRetriever();
-            mediaMetadataRetriever.setDataSource(videoPath, new HashMap<String, String>());
-            //   mediaMetadataRetriever.setDataSource(videoPath);
-            bitmap = mediaMetadataRetriever.getFrameAtTime();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            throw new Throwable(
-                    "Exception in retriveVideoFrameFromVideo(String videoPath)"
-                            + e.getMessage());
-        }
-        finally
-        {
-            if (mediaMetadataRetriever != null)
-            {
-                mediaMetadataRetriever.release();
-            }
-        }
-        return bitmap;
     }
 }

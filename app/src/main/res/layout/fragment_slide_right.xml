@@ -8,11 +8,11 @@
     tools:ignore="Overdraw">
 
     <LinearLayout
+        android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tablayout"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,20 +46,22 @@
                 android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>
+
     <View
-        android:layout_width="match_parent"
         android:id="@+id/Viewlayout"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
         android:layout_below="@+id/tablayout"
-        android:background="@color/comment"
-        android:layout_height="2dp"/>
+        android:background="@color/comment" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_below="@+id/Viewlayout"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Viewlayout">
+
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
 </RelativeLayout>

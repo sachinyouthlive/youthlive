@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by admin on 4/3/2017.
  */
-public class CreateSignUp{
+public class CreateSignUp {
 
     @SerializedName("message")
     private String message;
@@ -19,6 +19,7 @@ public class CreateSignUp{
     public String getMessage() {
         return message;
     }
+
     public void setMessage(String message) {
         this.message = message;
     }

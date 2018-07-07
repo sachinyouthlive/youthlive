@@ -3,12 +3,9 @@ package com.yl.youthlive.RecyclerviewItemspace;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Display;
-
-import java.lang.reflect.Method;
 
 /**
  * Created by USER on 11/13/2017.
@@ -63,22 +60,9 @@ public class CustomVideoView extends android.widget.VideoView {
 
     /**
      * set video size change listener
-     *
      */
     public void setVideoSizeChangeListener(VideoSizeChangeListener listener) {
         this.listener = listener;
-    }
-
-    public interface VideoSizeChangeListener {
-        /**
-         * when landscape
-         */
-        void onFullScreen();
-
-        /**
-         * when portrait
-         */
-        void onNormalSize();
     }
 
     @Override
@@ -112,5 +96,17 @@ public class CustomVideoView extends android.widget.VideoView {
     private void setSize(int w, int h) {
         setMeasuredDimension(w, h);
         getHolder().setFixedSize(w, h);
+    }
+
+    public interface VideoSizeChangeListener {
+        /**
+         * when landscape
+         */
+        void onFullScreen();
+
+        /**
+         * when portrait
+         */
+        void onNormalSize();
     }
 }

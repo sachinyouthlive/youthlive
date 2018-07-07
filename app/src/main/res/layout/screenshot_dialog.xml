@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="395dp"
     android:background="#00000000"
+    android:minHeight="395dp"
     android:minWidth="240dp">
 
     <com.makeramen.roundedimageview.RoundedImageView
@@ -23,21 +21,21 @@
     <ImageButton
         android:id="@+id/imageButton8"
         android:layout_width="40dp"
-        android:background="@drawable/round_close"
         android:layout_height="40dp"
+        android:background="@drawable/round_close"
+        android:src="@drawable/close"
         app:layout_constraintEnd_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toTopOf="@+id/imageView5"
-        android:src="@drawable/close" />
+        app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_grey_round"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:text="SHARE"
         android:textColor="#6aba64"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:background="@drawable/button_grey_round"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
         app:layout_constraintEnd_toEndOf="@+id/imageView5"
         app:layout_constraintStart_toStartOf="@+id/imageView5" />

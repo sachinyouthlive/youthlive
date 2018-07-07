@@ -22,6 +22,7 @@ import com.yl.youthlive.fan_listPOJO.FanListPOJO;
 import com.yl.youthlive.feedBackPOJO.feedBackBean;
 import com.yl.youthlive.followListPOJO.followListBean;
 import com.yl.youthlive.followPOJO.followBean;
+import com.yl.youthlive.forgotpasswordPOJO.ForgotPassword;
 import com.yl.youthlive.friendListPOJO.FriendListPOJO;
 import com.yl.youthlive.getConnectionPOJO.getConnectionBean;
 import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
@@ -33,6 +34,7 @@ import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.liveLikePOJO.liveLikeBean;
 import com.yl.youthlive.login2POJO.login2Bean;
 import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
+import com.yl.youthlive.newpasswordPOJO.NewPassword;
 import com.yl.youthlive.otpPOJO.otpBean;
 import com.yl.youthlive.reportPOJO.reportBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
@@ -363,13 +365,11 @@ public interface AllAPIs {
     Call<getLiveBean> getLiveList();
 
 
-
     @Headers({
             "Accept: application/json",
     })
     @GET("v2/servers/_defaultServer_/vhosts/_defaultVHost_/applications/instances/_definst_")
     Call<String> getEngineLiveList();
-
 
 
     @Headers({
@@ -386,6 +386,7 @@ public interface AllAPIs {
     Call<vlogListBean> getVlogList(
             @Part("userId") String userId
     );
+
     @Multipart
     @GET("api//vlog_video_search.php?")
     Call<vlogsearchListBean> getVlogSearchList(
@@ -451,6 +452,7 @@ public interface AllAPIs {
             @Part("userId") String userId,
             @Part("videoId") String videoId
     );
+
     @Multipart
     @POST("api/video_comment.php")
     Call<commentBean> comment(
@@ -488,7 +490,6 @@ public interface AllAPIs {
             @Part MultipartBody.Part file,
             @Part MultipartBody.Part image
     );
-
 
 
     @Multipart
@@ -589,13 +590,28 @@ public interface AllAPIs {
             @Part("comment") String comment
     );
 
+    ///  user forgot password request
+    @Multipart
+    @POST("api/password_reset/user_forgot_password.php")
+    Call<ForgotPassword> UserForgotPassword(
+            @Part("phone") String phone
+    );
+
+    ///  create new password request
+    @Multipart
+    @POST("api/password_reset/new_password.php")
+    Call<NewPassword> UserNewPassword(
+            @Part("userid") String userid,
+            @Part("password") String password
+    );
+
 
     //@Multipart
     @Headers({"Content-Type: application/json", "wsc-api-key: dicLNKTWDjmx14cgVpw1sLVuQxBQVbOVE0tpkf3y6VijiUln4sn3QJ2W5zKr3524", "wsc-access-key: tsaCoQS07GnFTTcel0L3gY59ELa7ouYykKFXLQLBApzjPV7a3IWfKXkYt0e3323e"})
     @POST("api/v1/live_streams")
     Call<streamResponseBean> createStream(
             @Body streamBean body
-            );
+    );
 
     //@Multipart
     @Headers({"Content-Type: application/json", "wsc-api-key: dicLNKTWDjmx14cgVpw1sLVuQxBQVbOVE0tpkf3y6VijiUln4sn3QJ2W5zKr3524", "wsc-access-key: tsaCoQS07GnFTTcel0L3gY59ELa7ouYykKFXLQLBApzjPV7a3IWfKXkYt0e3323e"})

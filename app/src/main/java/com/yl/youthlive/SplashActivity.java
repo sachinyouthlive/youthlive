@@ -27,13 +27,11 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 
 public class SplashActivity extends AppCompatActivity {
-    private String TAG = "splashAcctivity";
-
     ImageView bg;
     SharedPreferences pref;
     SharedPreferences.Editor edit;
     ProgressBar progress;
-
+    private String TAG = "splashAcctivity";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,23 +48,19 @@ public class SplashActivity extends AppCompatActivity {
         //  Glide.with(this).load(R.drawable.splashyl).into(bg);
 
 
-
         startApp();
 
 
     }
 
 
-
-    public void startApp()
-    {
+    public void startApp() {
 
         String type = pref.getString("type", "");
         String em = pref.getString("user", "");
         String pa = pref.getString("pass", "");
 
-        if (type.length() > 0 && em.length() > 0 && pa.length() >0)
-        {
+        if (type.length() > 0 && em.length() > 0 && pa.length() > 0) {
             if (Objects.equals(type, "social")) {
 
                 socialLogin(em, pa);
@@ -77,9 +71,7 @@ public class SplashActivity extends AppCompatActivity {
 
             }
 
-        }
-        else
-        {
+        } else {
 
             Timer t = new Timer();
 
@@ -87,7 +79,7 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    Intent intent = new Intent(SplashActivity.this , Login.class);
+                    Intent intent = new Intent(SplashActivity.this, Login.class);
                     startActivity(intent);
                     finish();
 
@@ -244,7 +236,6 @@ public class SplashActivity extends AppCompatActivity {
 
 
     }
-
 
 
 }

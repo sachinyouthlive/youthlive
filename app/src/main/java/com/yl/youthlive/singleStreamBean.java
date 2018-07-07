@@ -9,8 +9,7 @@ import java.util.List;
  * Created by TBX on 1/22/2018.
  */
 
-public class singleStreamBean
-{
+public class singleStreamBean {
 
     @SerializedName("author")
     @Expose

@@ -1,104 +1,10 @@
 package com.yl.youthlive;
 
-import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.PixelFormat;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
-import android.hardware.display.DisplayManager;
-import android.hardware.display.VirtualDisplay;
-import android.media.Image;
-import android.media.ImageReader;
-import android.media.projection.MediaProjection;
-import android.media.projection.MediaProjectionManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.OrientationEventListener;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 //import com.google.android.exoplayer.AspectRatioFrameLayout;
-import com.google.gson.Gson;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 //import com.streamaxia.player.StreamaxiaPlayer;
 //import com.streamaxia.player.listener.StreamaxiaPlayerState;
-import com.yasic.bubbleview.BubbleView;
-import com.yl.youthlive.INTERFACE.AllAPIs;
-import com.yl.youthlive.followPOJO.followBean;
-import com.yl.youthlive.getIpdatedPOJO.Comment;
-import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
-import com.yl.youthlive.goLivePOJO.goLiveBean;
-import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
-import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.microedition.khronos.opengles.GL10;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class firstFragNew extends Fragment //implements StreamaxiaPlayerState
 {
@@ -555,14 +461,14 @@ public class firstFragNew extends Fragment //implements StreamaxiaPlayerState
 
 
 
-*//*
+ *//*
                 Instacapture.INSTANCE.capture(lvscreen, new SimpleScreenCapturingListener() {
                     @Override
                     public void onCaptureComplete(Bitmap bitmap) {
                         //Your code here..
 
                         *//*
-*//*Intent i = new Intent(Intent.ACTION_SEND);
+ *//*Intent i = new Intent(Intent.ACTION_SEND);
 
                         i.setType("image/*");
 
@@ -655,7 +561,7 @@ public class firstFragNew extends Fragment //implements StreamaxiaPlayerState
         }, 3000);*//*
 
 
-        *//*progress.setVisibility(View.VISIBLE);
+ *//*progress.setVisibility(View.VISIBLE);
 
 
         final Retrofit retrofit = new Retrofit.Builder()
@@ -1395,7 +1301,7 @@ Log.d("uurrii" , "ended");
 
 
 
-    *//*@Override
+ *//*@Override
     public int Status(int i) {
         Log.e("VEG", "From Native listitem status: " + i);
         return 0;

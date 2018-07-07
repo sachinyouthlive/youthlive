@@ -1,38 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/appbar"
-            >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:contentScrim="@color/colorPrimary"
-                app:titleEnabled="false"
                 android:fitsSystemWindows="true"
-                app:expandedTitleTextAppearance="@style/ExpandedAppBar"
+                app:collapsedTitleGravity="start|center_vertical"
                 app:collapsedTitleTextAppearance="@style/CollapsedAppBar"
+                app:contentScrim="@color/colorPrimary"
                 app:expandedTitleGravity="center_horizontal|bottom"
                 app:expandedTitleMarginBottom="10dp"
-                app:collapsedTitleGravity="start|center_vertical"
-                app:toolbarId="@id/toolbar"
-                >
-
-
-
-
+                app:expandedTitleTextAppearance="@style/ExpandedAppBar"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:titleEnabled="false"
+                app:toolbarId="@id/toolbar">
 
 
                 <RelativeLayout
@@ -56,23 +50,22 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="280dp"
-                        android:src="@drawable/gradientnew"
-                        />
+                        android:src="@drawable/gradientnew" />
 
                     <me.relex.circleindicator.CircleIndicator
                         android:id="@+id/indicator"
-                        android:layout_alignParentBottom="true"
                         android:layout_width="match_parent"
+                        android:layout_height="18dp"
+                        android:layout_alignParentBottom="true"
                         android:layout_marginBottom="3dp"
-                        android:visibility="gone"
-                        android:layout_height="18dp"/>
+                        android:visibility="gone" />
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_alignParentBottom="true"
+                        android:orientation="horizontal"
                         android:weightSum="3">
 
 
@@ -176,30 +169,28 @@
                         android:id="@+id/profile"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:layout_marginBottom="20dp"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
-                        app:civ_border_width="1dp"
-                        app:civ_border_color="#ffffff"
+                        android:layout_marginBottom="20dp"
+                        android:elevation="8dp"
                         android:src="@drawable/default1"
                         android:visibility="gone"
-                        android:elevation="8dp"
-                        />
+                        app:civ_border_color="#ffffff"
+                        app:civ_border_width="1dp" />
 
                 </RelativeLayout>
 
 
                 <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    app:titleTextColor="#ffffff"
-                    app:subtitleTextColor="#ffffff"
-                    android:id="@+id/toolbar"
-                    app:title="Youth Live"
-                    app:subtitle="Youyh ID - 123456"
                     app:collapseIcon="@drawable/user_default"
-                    app:layout_collapseMode="pin"/>
-
+                    app:layout_collapseMode="pin"
+                    app:subtitle="Youyh ID - 123456"
+                    app:subtitleTextColor="#ffffff"
+                    app:title="Youth Live"
+                    app:titleTextColor="#ffffff" />
 
 
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -207,41 +198,34 @@
         </android.support.design.widget.AppBarLayout>
 
 
-
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:elevation="4dp"
             android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
-
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
             <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tabs"
-                app:tabGravity="fill"
-                android:visibility="gone"
-                app:tabMode="fixed"
                 android:background="@color/colorPrimary"
-                app:tabIndicatorColor="#ffffff"
                 android:elevation="4dp"
+                android:visibility="gone"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="#ffffff"
+                app:tabMode="fixed"
                 app:tabSelectedTextColor="#ffffff"
-                app:tabTextColor="#ababab"
-                />
+                app:tabTextColor="#ababab" />
 
             <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/pager"
                 android:layout_marginTop="@dimen/dimen_5dp"
-                android:fillViewport="true"
-                />
+                android:fillViewport="true" />
 
             <TextView
                 android:id="@+id/emptyvlogmsg"
@@ -258,21 +242,15 @@
         </LinearLayout>
 
 
-
     </android.support.design.widget.CoordinatorLayout>
 
 
-
     <ProgressBar
+        android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:id="@+id/progress"
-        />
-
-
-
+        android:visibility="gone" />
 
 
 </RelativeLayout>

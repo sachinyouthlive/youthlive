@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/dark_shade" />
+
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="120dp"
+            android:text="@string/otp_has_send"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/txt_size_18"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/otp_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header"
+            android:layout_gravity="center"
+            android:layout_marginEnd="30dp"
+            android:layout_marginLeft="@dimen/padding_too_large_30"
+            android:layout_marginRight="@dimen/padding_too_large_30"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="@dimen/padding_extra_large_20"
+            android:background="@drawable/white_stroke"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:hint="@string/otp"
+            android:inputType="phone"
+            android:padding="10dp"
+            android:paddingLeft="@dimen/padding_small_5"
+            android:paddingTop="@dimen/padding_small_5"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#fff" />
+
+
+        <TextView
+            android:id="@+id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/otp_value"
+            android:layout_marginEnd="30dp"
+            android:layout_marginLeft="@dimen/padding_too_large_30"
+            android:layout_marginRight="@dimen/padding_too_large_30"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/red_stroke"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="@string/submit"
+            android:textColor="#fff" />
+
+        <TextView
+            android:id="@+id/resend_otp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/submit"
+            android:layout_marginLeft="@dimen/padding_too_large_30"
+            android:layout_marginRight="@dimen/padding_too_large_30"
+            android:layout_marginTop="@dimen/padding_50"
+            android:background="@drawable/ripple_effect_transparentbg"
+            android:gravity="center_horizontal"
+            android:text="@string/resend_otp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/txt_size_extra_large_15"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+
+</ScrollView>

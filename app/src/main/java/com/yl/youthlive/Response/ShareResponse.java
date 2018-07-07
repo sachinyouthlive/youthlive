@@ -8,21 +8,18 @@ import com.google.gson.annotations.SerializedName;
 public class ShareResponse {
     @SerializedName("share_id")
     private int share_id;
+    @SerializedName("message")
+    private String message;
+    @SerializedName("success")
+    private int success;
 
     public int getShare_id() {
         return share_id;
     }
 
-    @SerializedName("message")
-    private String message;
-
     public String getMessage() {
         return message;
     }
-
-    @SerializedName("success")
-    private int success;
-
 
     public int getSuccess() {
         return success;

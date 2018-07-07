@@ -10,4 +10,12 @@
     <color name="black">#000000</color>
     <color name="video_comment_msg">#db2323</color>
     <color name="colortext_card">#ffd0d0</color>
+
+    <color name="txt_color">#000000</color>
+    <color name="grey">#424242</color>
+    <color name="grey_light">#9E9E9E</color>
+
+    <color name="green_light">#388E3C</color>
+    <color name="dark_gold">#bf9b30</color>
+    <color name="colorRipple">#E040FB</color>
 </resources>

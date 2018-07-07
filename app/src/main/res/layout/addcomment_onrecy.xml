@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="10dp">
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="5dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -26,11 +26,11 @@
                 app:civ_border_width="1dp" />
 
             <TextView
+                android:id="@+id/name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="13dp"
-                android:id="@+id/name_text"
                 android:text="Jenny Rock"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -50,11 +50,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AWESOME"
-            android:layout_marginTop="50dp"
-            android:layout_marginStart="60dp"
             android:layout_marginEnd="10dp"
-            />
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="50dp"
+            android:text="AWESOME" />
     </RelativeLayout>
 
 </RelativeLayout>

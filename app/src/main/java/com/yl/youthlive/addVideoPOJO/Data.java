@@ -57,6 +57,7 @@ public class Data {
     public String getVideoURL() {
         return videoURL;
     }
+
     public void setVideoURL(String videoURL) {
         this.videoURL = videoURL;
     }

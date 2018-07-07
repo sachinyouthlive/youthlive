@@ -1,4 +1,3 @@
-
 package com.yl.youthlive.FollowResponcePOJO;
 
 import com.google.gson.annotations.Expose;

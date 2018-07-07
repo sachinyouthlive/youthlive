@@ -10,13 +10,13 @@
     tools:ignore="Overdraw">
 
     <TextView
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:paddingBottom="18dp"
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
-        android:id="@+id/name"
         android:paddingTop="18dp"
         android:text="Hi, Username"
         android:textColor="#ffffff"
@@ -52,12 +52,12 @@
 
 
     <TextView
+        android:id="@+id/feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/feedback"
         android:gravity="center_vertical"
-        android:id="@+id/feedback"
         android:padding="10dp"
         android:text="Feedback" />
 
@@ -68,11 +68,11 @@
         android:background="#cdcdcd" />
 
     <TextView
+        android:id="@+id/logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/logout"
-        android:id="@+id/logout"
         android:gravity="center_vertical"
         android:padding="10dp"
         android:text="Logout" />

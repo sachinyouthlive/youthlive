@@ -14,7 +14,7 @@ public class CheckIn extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.checkin , container , false);
+        View view = inflater.inflate(R.layout.checkin, container, false);
         return view;
     }
 }

@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/YL2.iml" filepath="$PROJECT_DIR$/YL2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/streamaxia-opensdk/streamaxia-opensdk.iml" filepath="$PROJECT_DIR$/streamaxia-opensdk/streamaxia-opensdk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/youthlive.iml" filepath="$PROJECT_DIR$/.idea/youthlive.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/youthlive2.iml" filepath="$PROJECT_DIR$/.idea/youthlive2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/youthlive2.iml" filepath="$PROJECT_DIR$/youthlive2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/youthlive3.iml" filepath="$PROJECT_DIR$/.idea/youthlive3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youthliveS6.iml" filepath="$PROJECT_DIR$/youthliveS6.iml" />
     </modules>
   </component>
 </project>

@@ -9,6 +9,8 @@ import java.util.ArrayList;
  */
 public class FriendResponseList {
 
+    @SerializedName("data")
+    ArrayList<ModelFriend> data;
     @SerializedName("success")
     private int success;
 
@@ -16,41 +18,33 @@ public class FriendResponseList {
         return success;
     }
 
-    @SerializedName("data")
-    ArrayList<ModelFriend> data;
-
     public ArrayList<ModelFriend> getData() {
         return data;
     }
 
-    public class ModelFriend{
-
-
+    public class ModelFriend {
 
 
         @SerializedName("id")
         private String id;
+        @SerializedName("fname")
+        private String fname;
+        @SerializedName("lname")
+        private String lname;
+        @SerializedName("image")
+        private String image;
 
         public String getId() {
             return id;
         }
 
-        @SerializedName("fname")
-        private String fname;
-
         public String getFname() {
             return fname;
         }
 
-        @SerializedName("lname")
-        private String lname;
-
         public String getLname() {
             return lname;
         }
-
-        @SerializedName("image")
-        private String image;
 
         public String getImage() {
             return image;

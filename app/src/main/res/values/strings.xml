@@ -20,4 +20,121 @@
     <string name="Refresh">Refresh</string>
     <string name="spinner_title">month</string>
 
+
+    <string name="skip">Skip</string>
+    <string name="phone_no">Phone number</string>
+    <string name="email">Email</string>
+    <string name="password">Password (min 6 digits)</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="new_user">New User?</string>
+    <string name="signup_here">Signup Here</string>
+    <string name="or">OR</string>
+
+    <string name="already_member">Already Member?</string>
+    <string name="signin">Signin here</string>
+    <string name="submit">Submit</string>
+
+    <string name="full_name">Full name</string>
+    <string name="retype_password">retype-Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="username">Username</string>
+
+    <string name="is_invalid"> is invalid</string>
+    <string name="password_not_match">Password not matched</string>
+
+    <string name="ok">Ok</string>
+    <string name="network_not_connected"> There is no network connection right now. Please try again.</string>
+    <string name="failed_request">Please try again...</string>
+
+    <string name="otp_has_send">OTP has send to you phone number. </string>
+    <string name="otp">OTP</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="otp_not_match">OTP is incorrect</string>
+    <string name="create_new_password">Create New Password </string>
+
+    <string name="home">Home</string>
+    <string name="new_product">New Product</string>
+    <string name="my_account">My Account</string>
+    <string name="wishlist">Wish List</string>
+    <string name="logout">Logout</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <string name="new_products">New Products</string>
+    <string name="best_selling">Best Selling</string>
+    <string name="tranding">Trending</string>
+    <string name="conditional">Conditional</string>
+
+    <string name="qty">Qty.</string>
+    <string name="related_prod">Related Products</string>
+    <string name="overview">Overview</string>
+    <string name="details">Details</string>
+    <string name="review">Review</string>
+    <string name="instock">In Stock</string>
+    <string name="outofstock">Out of Stock</string>
+
+
+    <string name="write_review">Write a Review</string>
+    <string name="your_rating">Your Rating</string>
+    <string name="review_summery">Summery</string>
+    <string name="postedby">Posted By </string>
+
+    <string name="add_to_wishlist">Successfully Added into user wishlist</string>
+    <string name="fail_add_to_wishlist">Please try again, Fail to add into user wishlist.</string>
+    <string name="search">Search</string>
+    <string name="cart">Cart</string>
+    <string name="search_name">Search Name</string>
+    <string name="country">Country</string>
+    <string name="address_line1">Address line 1</string>
+    <string name="address_line2">Address line 2</string>
+    <string name="city">City</string>
+    <string name="pincode">Pincode</string>
+    <string name="state">State</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="save_continue">Save &amp; Continue</string>
+    <string name="fail_toaddaddress">Fail to add new Address. Please try again.</string>
+    <string name="fail_togetaddress">Fail to get user address, Please try again.</string>
+
+
+    <string name="address">Address : </string>
+    <string name="pricetag">Price : </string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="skipinup">Skip</string>
+
+    <string name="title_main_activity">Firebase Notifications</string>
+
+
+    <string name="btn1_description">Start foreground service</string>
+    <string name="btn1_title">Start</string>
+    <string name="simple_service_title">Simple Service</string>
+    <string name="simple_service_desc">Simple Service from the OTest app</string>
+
+    <string name="main_create_noti2_btn">Send</string>
+
+    <string name="btnA_title">Go to Settings</string>
+    <string name="noti_channel_default">Primary Channel</string>
+    <string name="noti1_title">Notification 1 Title</string>
+    <string name="primary1_body">The content</string>
+    <string name="noti2_title">Second notification</string>
+    <string name="secondary1_body">Notification body text.</string>
+    <string name="noti_channel_second">Secondary Channel</string>
+
+    <string name="main_primary_title">Primary Channel</string>
+    <string name="main_primary_send1">Send 1</string>
+    <string name="main_primary_send2">Send 2</string>
+    <string name="main_primary_config">Go to primary settings</string>
+
+    <string name="main_secondary_title">Secondary Channel</string>
+    <string name="main_secondary_send1">Send 1</string>
+    <string name="main_secondary_send2">Send 2</string>
+    <string name="main_secondary_config">Go to secondary settings</string>
+    <string name="primary2_body">Second Notification for Primary Channel</string>
+    <string name="secondary2_body">Second Notification for Secondary Channel</string>
+    <string name="default_notification_channel">default_notification_channel_id</string>
+    <string name="channel_name">Buy Online</string>
+    <string name="x">x</string>
+
+
 </resources>

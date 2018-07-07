@@ -1,16 +1,16 @@
 /**
- *  This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
- *  purpose of educating developers, and is not intended to be used in any production environment.
- *
- *  IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
- *  OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
- *  EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
- *  WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- *  Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
+ * This is sample code provided by Wowza Media Systems, LLC.  All sample code is intended to be a reference for the
+ * purpose of educating developers, and is not intended to be used in any production environment.
+ * <p>
+ * IN NO EVENT SHALL WOWZA MEDIA SYSTEMS, LLC BE LIABLE TO YOU OR ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL,
+ * OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF WOWZA MEDIA SYSTEMS, LLC HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * <p>
+ * WOWZA MEDIA SYSTEMS, LLC SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. ALL CODE PROVIDED HEREUNDER IS PROVIDED "AS IS".
+ * WOWZA MEDIA SYSTEMS, LLC HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * <p>
+ * Copyright © 2015 Wowza Media Systems, LLC. All rights reserved.
  */
 
 package com.yl.youthlive;
@@ -37,7 +37,7 @@ import com.wowza.gocoder.sdk.api.status.WZStatus;
 import java.util.Arrays;
 
 abstract public class CameraActivityBase extends GoCoderSDKActivityBase
-    implements WZCameraView.PreviewStatusListener{
+        implements WZCameraView.PreviewStatusListener {
 
     private final static String BASE_TAG = CameraActivityBase.class.getSimpleName();
 
@@ -49,11 +49,11 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
     //protected        mStatusView   = null;
 
     // The GoCoder SDK camera preview display view
-    protected WZCameraView mWZCameraView  = null;
+    protected WZCameraView mWZCameraView = null;
     protected WZAudioDevice mWZAudioDevice = null;
 
     private boolean mDevicesInitialized = false;
-    private boolean mUIInitialized      = false;
+    private boolean mUIInitialized = false;
 
     private SharedPreferences.OnSharedPreferenceChangeListener mPrefsChangeListener = null;
 
@@ -62,12 +62,6 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
         super.onCreate(savedInstanceState);
 
         Toast.makeText(this, "cameraactivityBase.java", Toast.LENGTH_SHORT).show();
-    }
-
-    //define callback interface
-    interface PermissionCallbackInterface {
-
-        void onPermissionResult(boolean result);
     }
 
     /**
@@ -107,11 +101,11 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
             mPrefsChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String prefsKey) {
-                    if (mWZCameraView != null &&  Arrays.binarySearch(CAMERA_CONFIG_PREFS_SORTED, prefsKey) != -1) {
+                    if (mWZCameraView != null && Arrays.binarySearch(CAMERA_CONFIG_PREFS_SORTED, prefsKey) != -1) {
                         // Update the camera preview display frame size
                         WZSize currentFrameSize = mWZCameraView.getFrameSize();
                         int prefsFrameWidth = sharedPreferences.getInt("wz_video_frame_width", currentFrameSize.getWidth());
-                        int prefsFrameHeight = sharedPreferences.getInt("wz_video_frame_height",currentFrameSize.getHeight());
+                        int prefsFrameHeight = sharedPreferences.getInt("wz_video_frame_height", currentFrameSize.getHeight());
                         WZSize prefsFrameSize = new WZSize(prefsFrameWidth, prefsFrameHeight);
                         if (!prefsFrameSize.equals(currentFrameSize))
                             mWZCameraView.setFrameSize(prefsFrameSize);
@@ -212,17 +206,16 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
         if (getBroadcast() == null) return;
 
         if (getBroadcast().getStatus().isIdle()) {
-            if(!mWZBroadcastConfig.isAudioEnabled()){
+            if (!mWZBroadcastConfig.isAudioEnabled()) {
                 Toast.makeText(this, "The audio stream is currently turned off", Toast.LENGTH_LONG).show();
             }
             if (mWZBroadcastConfig.isVideoEnabled()) {
                 WZStreamingError configError = startBroadcast();
                 if (configError != null) {
                     //if (mStatusView != null)
-                     //   mStatusView.setErrorMessage(configError.getErrorDescription());
+                    //   mStatusView.setErrorMessage(configError.getErrorDescription());
                 }
-            }
-            else{
+            } else {
                 Toast.makeText(this, "The video stream is currently turned off", Toast.LENGTH_LONG).show();
             }
         } else {
@@ -230,15 +223,7 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
         }
     }
 
-//    private FragmentManager.OnBackStackChangedListener backStackListener =  new FragmentManager.OnBackStackChangedListener() {
-//
-//        @Override
-//        public void onBackStackChanged() {
-//            syncUIControlState();
-//        }
-//    };
-
-    private void showSettings(View v){
+    private void showSettings(View v) {
         // Display the prefs fragment
         GoCoderSDKPrefs.PrefsFragment prefsFragment = new GoCoderSDKPrefs.PrefsFragment();
         prefsFragment.setActiveCamera(mWZCameraView != null ? mWZCameraView.getCamera() : null);
@@ -250,15 +235,22 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
                 .commit();*/
     }
 
+//    private FragmentManager.OnBackStackChangedListener backStackListener =  new FragmentManager.OnBackStackChangedListener() {
+//
+//        @Override
+//        public void onBackStackChanged() {
+//            syncUIControlState();
+//        }
+//    };
+
     /**
      * Click handler for the settings button
      */
     public void onSettings(View v) {
 
-        if(this.hasDevicePermissionToAccess(Manifest.permission.CAMERA) && this.hasDevicePermissionToAccess(Manifest.permission.RECORD_AUDIO)) {
+        if (this.hasDevicePermissionToAccess(Manifest.permission.CAMERA) && this.hasDevicePermissionToAccess(Manifest.permission.RECORD_AUDIO)) {
             this.showSettings(v);
-        }
-        else{
+        } else {
             Toast.makeText(this, "You must enable audio / video access to update the settings", Toast.LENGTH_LONG).show();
         }
     }
@@ -270,7 +262,7 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
             boolean audioIsInitialized = false;
 
             // Initialize the camera preview
-            if(this.hasDevicePermissionToAccess(Manifest.permission.CAMERA)) {
+            if (this.hasDevicePermissionToAccess(Manifest.permission.CAMERA)) {
                 if (mWZCameraView != null) {
                     WZCamera availableCameras[] = mWZCameraView.getCameras();
                     // Ensure we can access to at least one camera
@@ -287,7 +279,7 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
                 }
             }
 
-            if(this.hasDevicePermissionToAccess(Manifest.permission.RECORD_AUDIO)) {
+            if (this.hasDevicePermissionToAccess(Manifest.permission.RECORD_AUDIO)) {
                 // Initialize the audio input device interface
                 mWZAudioDevice = new WZAudioDevice();
 
@@ -296,7 +288,7 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
                 audioIsInitialized = true;
             }
 
-            if(videoIsInitialized && audioIsInitialized)
+            if (videoIsInitialized && audioIsInitialized)
                 mDevicesInitialized = true;
         }
     }
@@ -312,7 +304,7 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
         mUIInitialized = true;
 
         //if (sGoCoderSDK == null && mStatusView != null)
-         //   mStatusView.setErrorMessage(WowzaGoCoder.getLastError().getErrorDescription());
+        //   mStatusView.setErrorMessage(WowzaGoCoder.getLastError().getErrorDescription());
     }
 
     protected boolean syncUIControlState() {
@@ -322,17 +314,23 @@ abstract public class CameraActivityBase extends GoCoderSDKActivityBase
         boolean isStreaming = (getBroadcast() != null && getBroadcast().getStatus().isRunning());
 
         if (disableControls) {
-           //if (mBtnBroadcast != null) mBtnBroadcast.setEnabled(false);
+            //if (mBtnBroadcast != null) mBtnBroadcast.setEnabled(false);
             //if (mBtnSettings != null) mBtnSettings.setEnabled(false);
         } else {
             //if (mBtnBroadcast != null) {
-           //     mBtnBroadcast.setState(isStreaming);
-           //     mBtnBroadcast.setEnabled(true);
-           // }
-          //  if (mBtnSettings != null)
-          //      mBtnSettings.setEnabled(!isStreaming);
+            //     mBtnBroadcast.setState(isStreaming);
+            //     mBtnBroadcast.setEnabled(true);
+            // }
+            //  if (mBtnSettings != null)
+            //      mBtnSettings.setEnabled(!isStreaming);
         }
 
         return disableControls;
+    }
+
+    //define callback interface
+    interface PermissionCallbackInterface {
+
+        void onPermissionResult(boolean result);
     }
 }

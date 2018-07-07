@@ -61,28 +61,27 @@ public class Timeline extends Fragment implements ConnectivityReceiver.Connectiv
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.timeline , container , false);
+        View view = inflater.inflate(R.layout.timeline, container, false);
         checkConnection();
 
 
         list = new ArrayList<>();
 
         //grid = (RecyclerView)view.findViewById(R.id.grid);
-        grid2 = (RecyclerView)view.findViewById(R.id.grid2);
-        progress = (ProgressBar)view.findViewById(R.id.progress);
+        grid2 = (RecyclerView) view.findViewById(R.id.grid2);
+        progress = (ProgressBar) view.findViewById(R.id.progress);
 
 
-        manager = new LinearLayoutManager(getContext() , LinearLayoutManager.HORIZONTAL , false);
-        manager2 = new GridLayoutManager(getContext() , 2);
+        manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        manager2 = new GridLayoutManager(getContext(), 2);
 
-        adapter2 = new LiveAdapter2(getContext() , list);
+        adapter2 = new LiveAdapter2(getContext(), list);
 
         //grid.setAdapter(adapter);
         //grid.setLayoutManager(manager);
 
         grid2.setAdapter(adapter2);
         grid2.setLayoutManager(manager2);
-
 
 
         return view;
@@ -92,8 +91,8 @@ public class Timeline extends Fragment implements ConnectivityReceiver.Connectiv
     public void onResume() {
         super.onResume();
 
-               // register connection status listener
-            bean.getInstance().setConnectivityListener(this);
+        // register connection status listener
+        bean.getInstance().setConnectivityListener(this);
 
         loadData();
 
@@ -101,8 +100,7 @@ public class Timeline extends Fragment implements ConnectivityReceiver.Connectiv
     }
 
 
-    public void loadData()
-    {
+    public void loadData() {
         progress.setVisibility(View.VISIBLE);
 
         final bean b = (bean) getContext().getApplicationContext();
@@ -118,7 +116,7 @@ public class Timeline extends Fragment implements ConnectivityReceiver.Connectiv
 
         Call<timelineBean> call = cr.getTimeline(b.userId);
 
-Log.d("userId" , b.userId);
+        Log.d("userId", b.userId);
 
         call.enqueue(new Callback<timelineBean>() {
             @Override
@@ -183,22 +181,25 @@ Log.d("userId" , b.userId);
         showalert(isConnected);
     }
 
-    public class LiveAdapter2 extends RecyclerView.Adapter<LiveAdapter2.ViewHolder>
-    {
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showalert(isConnected);
+
+    }
+
+    public class LiveAdapter2 extends RecyclerView.Adapter<LiveAdapter2.ViewHolder> {
 
         Context context;
         List<Datum> list = new ArrayList<>();
         String TAG = "asdas";
         private int mSeekPosition;
 
-        public LiveAdapter2(Context context , List<Datum> list)
-        {
+        public LiveAdapter2(Context context, List<Datum> list) {
             this.context = context;
             this.list = list;
         }
 
-        public void setGridData(List<Datum> list)
-        {
+        public void setGridData(List<Datum> list) {
             this.list = list;
             notifyDataSetChanged();
         }
@@ -206,7 +207,7 @@ Log.d("userId" , b.userId);
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.timeline_modeln , parent , false);
+            View view = inflater.inflate(R.layout.timeline_modeln, parent, false);
             return new ViewHolder(view);
         }
 
@@ -220,7 +221,7 @@ Log.d("userId" , b.userId);
             DisplayImageOptions options = new DisplayImageOptions.Builder().resetViewBeforeLoading(false).cacheInMemory(true).cacheOnDisk(true).build();
 
             ImageLoader loader = ImageLoader.getInstance();
-            loader.displayImage(item.getTimelineProfileImage() , holder.image , options);
+            loader.displayImage(item.getTimelineProfileImage(), holder.image, options);
 
             holder.name.setText(item.getTimelineName());
 
@@ -264,31 +265,27 @@ Log.d("userId" , b.userId);
 */
 
 
+            if (Objects.equals(item.getIsLiked(), "1")) {
 
-            if (Objects.equals(item.getIsLiked(), "1"))
-            {
+                holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_like, 0, 0, 0);
 
-                holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_like , 0 , 0 , 0);
-
-            }
-            else
-            {
-                holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.black_heart , 0 , 0 , 0);
+            } else {
+                holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.black_heart, 0, 0, 0);
             }
 
 
-        //    holder.video.getVideoInfo().setBgColor(Color.BLACK).setAspectRatio(VideoInfo.AR_MATCH_PARENT).setCurrentVideoAsCover(true);//config player
-          //  holder.video.setVideoPath(item.getVideoURL()).setFingerprint(position);
-            bean b=new bean();
-            loader.displayImage(b.BASE_URL+item.getThumbURL() , holder.imageView, options);
+            //    holder.video.getVideoInfo().setBgColor(Color.BLACK).setAspectRatio(VideoInfo.AR_MATCH_PARENT).setCurrentVideoAsCover(true);//config player
+            //  holder.video.setVideoPath(item.getVideoURL()).setFingerprint(position);
+            bean b = new bean();
+            loader.displayImage(b.BASE_URL + item.getThumbURL(), holder.imageView, options);
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Activity activity = (Activity) context;
-                    Intent intent = new Intent(context ,SingleVideoActivity.class);
-                    intent.putExtra("videoId" , item.getVideoId());
-                    intent.putExtra("url" , item.getVideoURL());
+                    Intent intent = new Intent(context, SingleVideoActivity.class);
+                    intent.putExtra("videoId", item.getVideoId());
+                    intent.putExtra("url", item.getVideoURL());
                     intent.putExtra("thumb", item.getThumbURL());
                     context.startActivity(intent);
                     activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -354,12 +351,11 @@ Log.d("userId" , b.userId);
             return list.size();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder
-        {
+        class ViewHolder extends RecyclerView.ViewHolder {
 
             CircleImageView image;
-            TextView name , time;
-            TextView likes ;
+            TextView name, time;
+            TextView likes;
             ImageView imageView;
             VideoView video;
             ImageButton play;
@@ -367,15 +363,15 @@ Log.d("userId" , b.userId);
             public ViewHolder(View itemView) {
                 super(itemView);
 
-                image = (CircleImageView)itemView.findViewById(R.id.image);
-                name = (TextView)itemView.findViewById(R.id.name);
-                time = (TextView)itemView.findViewById(R.id.time);
-               // video = (VideoView) itemView.findViewById(R.id.video);
-                imageView = (ImageView)itemView.findViewById(R.id.videothumb);
-                play = (ImageButton)itemView.findViewById(R.id.play);
+                image = (CircleImageView) itemView.findViewById(R.id.image);
+                name = (TextView) itemView.findViewById(R.id.name);
+                time = (TextView) itemView.findViewById(R.id.time);
+                // video = (VideoView) itemView.findViewById(R.id.video);
+                imageView = (ImageView) itemView.findViewById(R.id.videothumb);
+                play = (ImageButton) itemView.findViewById(R.id.play);
 
 
-                likes = (TextView)itemView.findViewById(R.id.likes);
+                likes = (TextView) itemView.findViewById(R.id.likes);
 
                 /*itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -388,13 +384,6 @@ Log.d("userId" , b.userId);
 
             }
         }
-    }
-
-
-    @Override
-    public void onNetworkConnectionChanged(boolean isConnected) {
-        showalert(isConnected);
-
     }
 
 

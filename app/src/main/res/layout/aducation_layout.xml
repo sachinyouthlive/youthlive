@@ -39,28 +39,30 @@
                 android:textSize="18sp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:gravity="center">
+            android:orientation="vertical">
 
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/titleEducation"
-                android:background="@drawable/forgotback"
-                android:gravity="start"
-                android:hint="Enter your Title"
-                android:textSize="18sp" />
-        </LinearLayout>
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/titleEducation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/forgotback"
+                    android:gravity="start"
+                    android:hint="Enter your Title"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,13 +89,13 @@
                 android:gravity="center">
 
                 <EditText
+                    android:id="@+id/Year_mention"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/Year_mention"
                     android:background="@drawable/forgotback"
                     android:gravity="start"
-                    android:inputType="date"
                     android:hint="Enter your Year"
+                    android:inputType="date"
                     android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>
@@ -110,9 +112,9 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/txtok"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
-                android:id="@+id/txtok"
                 android:layout_weight="1"
                 android:gravity="center">
 

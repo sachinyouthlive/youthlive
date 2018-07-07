@@ -1,275 +1,254 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minWidth="350dp"
     android:background="@drawable/white_round_dialog"
-    >
+    android:minWidth="350dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:animateLayoutChanges="true"
-        >
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Update your details"
-            android:textColor="@color/colorAccent"
             android:gravity="center_horizontal"
             android:padding="10dp"
-            />
+            android:text="Update your details"
+            android:textColor="@color/colorAccent" />
 
 
         <TextView
+            android:id="@+id/phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/phone_black"
+            android:gravity="center_vertical"
             android:padding="10dp"
             android:text="Phone"
-            android:textColor="#000000"
-            android:drawableStart="@drawable/phone_black"
-            android:id="@+id/phone"
-            android:gravity="center_vertical"
-            android:drawablePadding="10dp"
-            />
+            android:textColor="#000000" />
 
         <LinearLayout
+            android:id="@+id/phone_hide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/phone_hide"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:textColor="#7aa933"
-                android:text="On changing phone number, you will get logged out from the app"
                 android:gravity="center_horizontal"
-                android:paddingStart="20dp"
                 android:paddingBottom="5dp"
                 android:paddingEnd="20dp"
-                />
+                android:paddingStart="20dp"
+                android:text="On changing phone number, you will get logged out from the app"
+                android:textColor="#7aa933"
+                android:textSize="10sp" />
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:hint="Country Code"
-                android:drawableStart="@drawable/plus"
-                android:drawablePadding="10dp"
-                android:layout_marginStart="8dp"
                 android:id="@+id/country"
-                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="8dp"
-                android:gravity="center_vertical"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/comment_sendback"
-                />
+                android:drawablePadding="10dp"
+                android:drawableStart="@drawable/plus"
+                android:gravity="center_vertical"
+                android:hint="Country Code"
+                android:inputType="number"
+                android:padding="10dp" />
 
 
             <EditText
+                android:id="@+id/phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:hint="Enter Phone"
-                android:layout_marginStart="8dp"
-                android:id="@+id/phone_number"
-                android:inputType="phone"
                 android:layout_marginBottom="10dp"
-                android:drawableEnd="@drawable/arrow_right"
                 android:layout_marginEnd="8dp"
-                android:gravity="center_vertical"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/comment_sendback"
-                />
+                android:drawableEnd="@drawable/arrow_right"
+                android:gravity="center_vertical"
+                android:hint="Enter Phone"
+                android:inputType="phone"
+                android:padding="10dp" />
 
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:visibility="gone"
             android:background="#cdcdcd"
-            />
+            android:visibility="gone" />
 
         <TextView
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/password_black"
+            android:gravity="center_vertical"
             android:padding="10dp"
             android:text="Password"
-            android:visibility="gone"
             android:textColor="#000000"
-            android:drawableStart="@drawable/password_black"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            android:id="@+id/password"
-            />
+            android:visibility="gone" />
 
         <LinearLayout
+            android:id="@+id/password_hide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/password_hide"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:textColor="#7aa933"
-                android:text="On changing password, you will get logged out from the app"
                 android:gravity="center_horizontal"
-                android:paddingStart="20dp"
                 android:paddingBottom="5dp"
                 android:paddingEnd="20dp"
-                />
+                android:paddingStart="20dp"
+                android:text="On changing password, you will get logged out from the app"
+                android:textColor="#7aa933"
+                android:textSize="10sp" />
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:hint="Old Password"
-                android:layout_marginStart="8dp"
                 android:id="@+id/old_password"
-                android:inputType="textPassword"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/comment_sendback"
-                />
-
-            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:hint="New Password"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/comment_sendback"
+                android:gravity="center_vertical"
+                android:hint="Old Password"
+                android:inputType="textPassword"
+                android:padding="10dp" />
+
+            <EditText
                 android:id="@+id/new_password"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="10dp"
-                android:inputType="textPassword"
-                android:layout_marginEnd="8dp"
-                android:gravity="center_vertical"
-                android:background="@drawable/comment_sendback"
-                />
-
-            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:hint="Confirm New Password"
-                android:layout_marginStart="8dp"
-                android:id="@+id/confirm_new"
-                android:inputType="textPassword"
                 android:layout_marginBottom="10dp"
-                android:drawableEnd="@drawable/arrow_right"
                 android:layout_marginEnd="8dp"
-                android:gravity="center_vertical"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/comment_sendback"
-                />
+                android:gravity="center_vertical"
+                android:hint="New Password"
+                android:inputType="textPassword"
+                android:padding="10dp" />
+
+            <EditText
+                android:id="@+id/confirm_new"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/comment_sendback"
+                android:drawableEnd="@drawable/arrow_right"
+                android:gravity="center_vertical"
+                android:hint="Confirm New Password"
+                android:inputType="textPassword"
+                android:padding="10dp" />
 
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#cdcdcd"
-            />
+            android:background="#cdcdcd" />
 
         <TextView
+            android:id="@+id/personal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:drawableStart="@drawable/personal_black"
             android:drawablePadding="10dp"
+            android:drawableStart="@drawable/personal_black"
             android:gravity="center_vertical"
-            android:textColor="#000000"
+            android:padding="10dp"
             android:text="Personal Details"
-            android:id="@+id/personal"
-            />
+            android:textColor="#000000" />
 
         <LinearLayout
+            android:id="@+id/personal_hide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone"
-            android:id="@+id/personal_hide"
-            >
+            android:visibility="gone">
 
             <EditText
+                android:id="@+id/usename"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:hint="Enter Username"
-                android:layout_marginStart="8dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="8dp"
-                android:inputType="textPersonName"
-                android:id="@+id/usename"
-                android:gravity="center_vertical"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/comment_sendback"
-                />
+                android:gravity="center_vertical"
+                android:hint="Enter Username"
+                android:inputType="textPersonName"
+                android:padding="10dp" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginBottom="10dp"
-                android:drawableEnd="@drawable/arrow_right"
                 android:layout_marginEnd="8dp"
-                android:minHeight="45dp"
-                android:gravity="center_vertical"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/comment_sendback"
-                >
+                android:drawableEnd="@drawable/arrow_right"
+                android:gravity="center_vertical"
+                android:minHeight="45dp">
 
                 <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:id="@+id/gender"
-                    />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </RelativeLayout>
+
             <TextView
+                android:id="@+id/birth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/comment_sendback"
+                android:gravity="center_vertical"
                 android:padding="10dp"
                 android:text="Choose Birth Date"
-                android:layout_marginStart="8dp"
-                android:id="@+id/birth"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="8dp"
-                android:textSize="18sp"
-                android:gravity="center_vertical"
-                android:background="@drawable/comment_sendback"
-                />
+                android:textSize="18sp" />
+
             <EditText
+                android:id="@+id/bio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:hint="Enter Bio"
-                android:id="@+id/bio"
-                android:layout_marginStart="8dp"
-                android:inputType="text"
                 android:layout_marginBottom="10dp"
-                android:drawableEnd="@drawable/arrow_right"
                 android:layout_marginEnd="8dp"
-                android:gravity="center_vertical"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/comment_sendback"
-                />
+                android:drawableEnd="@drawable/arrow_right"
+                android:gravity="center_vertical"
+                android:hint="Enter Bio"
+                android:inputType="text"
+                android:padding="10dp" />
 
         </LinearLayout>
 
     </LinearLayout>
 
     <ProgressBar
+        android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:id="@+id/progress"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
 </RelativeLayout>

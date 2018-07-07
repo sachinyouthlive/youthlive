@@ -435,12 +435,12 @@
 
 
     <RelativeLayout
+        android:id="@+id/player_layout1"
         android:layout_width="100dp"
         android:layout_height="150dp"
-        android:visibility="gone"
         android:layout_marginStart="15dp"
-        android:id="@+id/player_layout1"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="100dp"
+        android:visibility="gone">
 
         <com.bambuser.broadcaster.SurfaceViewWithAutoAR
             android:id="@+id/player1"
@@ -448,11 +448,10 @@
             android:layout_height="match_parent" />
 
         <ProgressBar
+            android:id="@+id/progress1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:id="@+id/progress1"
-            />
+            android:layout_centerInParent="true" />
 
     </RelativeLayout>
 

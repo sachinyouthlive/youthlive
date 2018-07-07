@@ -1,8 +1,8 @@
 package com.yl.youthlive;
 
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -88,8 +88,7 @@ public class ExoTest extends AppCompatActivity implements RecordHandler.RecordLi
 
 //auto start playing
 
-                if (isHidden)
-                {
+                if (isHidden) {
                     container.setVisibility(View.VISIBLE);
                     StreamaxiaPublisher mPublisher = new StreamaxiaPublisher(camera, ExoTest.this);
 
@@ -99,15 +98,12 @@ public class ExoTest extends AppCompatActivity implements RecordHandler.RecordLi
 
                     try {
                         camera.startCamera();
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
 
-
                     //cameraPreview.setScalingMode(ScalingMode.TRIM);
-
 
 
                     List<Size> sizes = mPublisher.getSupportedPictureSizes(getResources().getConfiguration().orientation);
@@ -115,20 +111,16 @@ public class ExoTest extends AppCompatActivity implements RecordHandler.RecordLi
                     mPublisher.setVideoOutputResolution(540, 270, getResources().getConfiguration().orientation);
 
 
-
                     //camera.startCamera();
                     isHidden = false;
 
-                }
-                else
-                {
+                } else {
 
                     camera.stopCamera();
                     container.setVisibility(View.GONE);
                     isHidden = true;
 
                 }
-
 
 
             }

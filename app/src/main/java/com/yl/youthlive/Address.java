@@ -35,7 +35,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-
 import com.yl.youthlive.Activitys.PersonalInfo;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
@@ -60,13 +59,11 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
     FloatingActionButton editer;
     TextView username, youthId, phone, gender, birth, bio;
+    PersonalInfo per;
+    String userId;
     private GoogleApiClient mGoogleApiClient;
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
-
-    PersonalInfo per;
-
-    String userId;
 
     @Nullable
     @Override
@@ -74,7 +71,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
         FacebookSdk.sdkInitialize(getContext().getApplicationContext());
         View view = inflater.inflate(R.layout.address_layout, container, false);
 
-        per = (PersonalInfo)getActivity();
+        per = (PersonalInfo) getActivity();
 
         userId = getArguments().getString("userId");
 
@@ -91,21 +88,15 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
         editer = view.findViewById(R.id.edit);
 
         Bundle b = getArguments();
-        bean b1 = (bean)getContext().getApplicationContext();
+        bean b1 = (bean) getContext().getApplicationContext();
 
-        if (!Objects.equals(userId, b1.userId))
-        {
+        if (!Objects.equals(userId, b1.userId)) {
             editer.setVisibility(View.GONE);
             phone.setText("(mobile number not public)");
-        }
-        else
-        {
+        } else {
             editer.setVisibility(View.VISIBLE);
             phone.setText(b.getString("phone"));
         }
-
-
-
 
 
         try {
@@ -121,10 +112,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
         birth.setText(b.getString("birth"));
         bio.setText(b.getString("bio"));
 
-        String profileuserId=b.getString("userId");
-
-
-
+        String profileuserId = b.getString("userId");
 
 
         editer.setOnClickListener(new View.OnClickListener() {
@@ -250,7 +238,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                                     progress.setVisibility(View.VISIBLE);
 
 
-                                    Log.d("neetu" , "log");
+                                    Log.d("neetu", "log");
                                     bean b = (bean) getContext().getApplicationContext();
 
                                     final Retrofit retrofit = new Retrofit.Builder()
@@ -274,7 +262,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                                                     signOut();
                                                 }
 
-                                                Log.d("kamal" , "response");
+                                                Log.d("kamal", "response");
 
                                                 LoginManager.getInstance().logOut();
 
@@ -299,7 +287,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                                         @Override
                                         public void onFailure(Call<loginResponseBean> call, Throwable t) {
 
-                                            Log.d("nisha" , t.toString());
+                                            Log.d("nisha", t.toString());
                                             progress.setVisibility(View.GONE);
                                         }
                                     });
@@ -488,7 +476,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                 .requestEmail()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .enableAutoManage(getActivity() , new GoogleApiClient.OnConnectionFailedListener() {
+                .enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 

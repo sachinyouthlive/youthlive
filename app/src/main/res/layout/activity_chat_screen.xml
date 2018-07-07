@@ -9,82 +9,74 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/toolbar"
-            android:background="@color/colorPrimary"
-            />
+            android:background="@color/colorPrimary" />
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/grid"
-            android:paddingBottom="60dp"
             android:clipToPadding="false"
-            />
+            android:paddingBottom="60dp" />
 
     </LinearLayout>
 
     <ProgressBar
+        android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:id="@+id/progress"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
         android:background="#ffffff"
         android:elevation="8dp"
+        android:gravity="center"
         android:orientation="horizontal">
-
 
 
         <ImageButton
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
-            android:background="@drawable/emoji"
-            />
+            android:background="@drawable/emoji" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_gravity="center_vertical"
             android:layoutDirection="rtl"
-            >
+            android:orientation="horizontal">
 
             <android.support.design.widget.FloatingActionButton
+                android:id="@+id/send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/send"
                 android:layout_gravity="center_vertical"
-                app:backgroundTint="#ffffff"
-                android:id="@+id/send"
-                />
+                android:src="@drawable/send"
+                app:backgroundTint="#ffffff" />
 
             <EditText
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/comment_sendback"
-                android:cursorVisible="true"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
+                android:background="@drawable/comment_sendback"
+                android:cursorVisible="true"
                 android:gravity="center_vertical|start"
-                android:hint="Add a comment" />
+                android:hint="Add a comment"
+                android:padding="10dp" />
 
 
         </LinearLayout>

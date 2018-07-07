@@ -22,20 +22,17 @@ import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
 
 
-
     TabLayout tabs;
-
-
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.vlog , container , false);
+        View view = inflater.inflate(R.layout.vlog, container, false);
         checkConnection();
 
 
-        tabs = (TabLayout)view.findViewById(R.id.tabs);
+        tabs = (TabLayout) view.findViewById(R.id.tabs);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
         tabs.addTab(tabs.newTab().setText("HOT"));
@@ -71,28 +68,12 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
         return view;
     }
 
-    class ViewAdapter extends FragmentStatePagerAdapter
-    {
-
-        public ViewAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return new HotVolg();
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-    }
     ////////////////////internet connectivity check///////////////
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showalert(isConnected);
     }
+
     private void showalert(boolean isConnected) {
         if (isConnected) {
 
@@ -125,26 +106,41 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
         }
 
     }
-
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showalert(isConnected);
 
     }
+
     @Override
     public void onResume() {
         super.onResume();
         // register connection status listener
         bean.getInstance().setConnectivityListener(this);
+    }
+
+    class ViewAdapter extends FragmentStatePagerAdapter {
+
+        public ViewAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return new HotVolg();
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
 
 }

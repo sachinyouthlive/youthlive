@@ -2,9 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
     tools:context="com.yl.youthlive.LiveScreenNew">
 
     <com.streamaxia.android.CameraPreview
@@ -29,10 +29,10 @@
 
 
     <include
+        android:id="@+id/finish_popup"
         layout="@layout/finish_popup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/finish_popup"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/pager"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,8 +43,6 @@
         android:id="@+id/simpleChronometer"
         android:layout_width="0dp"
         android:layout_height="0dp" />
-
-
 
 
 </android.support.constraint.ConstraintLayout>

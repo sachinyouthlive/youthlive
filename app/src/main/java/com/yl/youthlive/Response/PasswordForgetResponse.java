@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName;
 public class PasswordForgetResponse {
 
 
-
     @SerializedName("message")
     private String message;
 
@@ -18,14 +17,16 @@ public class PasswordForgetResponse {
     public int getSuccess() {
         return success;
     }
+
     public void setSuccess(int success) {
         this.success = success;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

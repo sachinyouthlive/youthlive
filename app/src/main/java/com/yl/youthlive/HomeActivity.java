@@ -78,30 +78,25 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
+    public final int MEDIA_TYPE_VIDEO = 2;
+    public final int REQUEST_IMAGE_CAPTURE = 1;
+    public final int GALLEY_REQUEST_CODE_CUSTOMER = 10;
+    final int REQUEST_VIDEO_CAPTURE = 1;
+    private final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
     AHBottomNavigation bottom;
     DrawerLayout drawer;
     Toolbar toolbar;
-    TextView name , logout;
-    private Uri realUri;
-    private Uri fileUri;
+    TextView name, logout;
     ProgressBar videoProgress;
-    final int REQUEST_VIDEO_CAPTURE = 1;
-    Bitmap bitmap;
-    TextView feedBack;
 
     //AHBottomNavigation bottom;
-
+    Bitmap bitmap;
+    TextView feedBack;
+    private Uri realUri;
+    private Uri fileUri;
     private GoogleApiClient mGoogleApiClient;
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
-
-
-    public final int MEDIA_TYPE_VIDEO = 2;
-    private final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
-    public final int REQUEST_IMAGE_CAPTURE = 1;
-    public final int GALLEY_REQUEST_CODE_CUSTOMER = 10;
-
-
     private FragmentRefreshListener fragmentRefreshListener;
 
     /// for fragment refresh on new vlog add
@@ -121,18 +116,18 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_home);
-        pref = getSharedPreferences("pref" , Context.MODE_PRIVATE);
+        pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
         edit = pref.edit();
 
-        feedBack = (TextView)findViewById(R.id.feedback);
+        feedBack = (TextView) findViewById(R.id.feedback);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        name = (TextView)findViewById(R.id.name);
-        logout = (TextView)findViewById(R.id.logout);
+        name = (TextView) findViewById(R.id.name);
+        logout = (TextView) findViewById(R.id.logout);
 
         videoProgress = (ProgressBar) findViewById(R.id.video_progress);
 
@@ -143,9 +138,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         toggle.syncState();
 
 
-
-
-        bottom = (AHBottomNavigation)findViewById(R.id.bottom_navigation);
+        bottom = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
 
         AHBottomNavigationItem item1 =
                 new AHBottomNavigationItem("Live Users", R.drawable.live);
@@ -180,7 +173,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onClick(View view) {
 
-                Log.d("asdasd" , "asdasd");
+                Log.d("asdasd", "asdasd");
 
                 final Dialog dialog = new Dialog(HomeActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -188,9 +181,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 dialog.setCancelable(true);
                 dialog.show();
 
-                final EditText comment = (EditText)dialog.findViewById(R.id.comment);
-                Button submit = (Button)dialog.findViewById(R.id.submit);
-                final ProgressBar progressBar = (ProgressBar)dialog.findViewById(R.id.progress);
+                final EditText comment = (EditText) dialog.findViewById(R.id.comment);
+                Button submit = (Button) dialog.findViewById(R.id.submit);
+                final ProgressBar progressBar = (ProgressBar) dialog.findViewById(R.id.progress);
 
 
                 submit.setOnClickListener(new View.OnClickListener() {
@@ -199,8 +192,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
                         String com = comment.getText().toString();
 
-                        if (com.length() > 0)
-                        {
+                        if (com.length() > 0) {
 
 
                             progressBar.setVisibility(View.VISIBLE);
@@ -216,16 +208,15 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                            Call<feedBackBean> call = cr.feedback(b.userId , com);
+                            Call<feedBackBean> call = cr.feedback(b.userId, com);
 
                             call.enqueue(new Callback<feedBackBean>() {
                                 @Override
                                 public void onResponse(Call<feedBackBean> call, retrofit2.Response<feedBackBean> response) {
 
                                     try {
-                                        Toast.makeText(HomeActivity.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-                                    }catch (Exception e)
-                                    {
+                                        Toast.makeText(HomeActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                    } catch (Exception e) {
                                         e.printStackTrace();
                                     }
 
@@ -242,18 +233,15 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                                 }
                             });
 
-                        }
-                        else
-                        {
-                            Toast.makeText(HomeActivity.this , "Please Enter a Comment" , Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(HomeActivity.this, "Please Enter a Comment", Toast.LENGTH_SHORT).show();
                         }
 
                     }
                 });
 
 
-                if (drawer.isDrawerOpen(GravityCompat.START))
-                {
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                 }
 
@@ -355,11 +343,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         });
 
 
-
-
         buildGoogleApiClient();
 
-        bean b = (bean)getApplicationContext();
+        bean b = (bean) getApplicationContext();
 
         name.setText("Hi, " + b.userName);
 
@@ -367,8 +353,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onClick(View view) {
 
-                if (mGoogleApiClient.isConnected())
-                {
+                if (mGoogleApiClient.isConnected()) {
                     signOut();
                 }
 
@@ -379,8 +364,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 edit.remove("pass");
                 edit.apply();
 
-                Intent i = new Intent(getApplicationContext() , Login.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent i = new Intent(getApplicationContext(), Login.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 finish();
 
@@ -396,8 +381,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         ft.commit();
 
 
-
-
     }
 
     private void signOut() {
@@ -408,17 +391,16 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                     public void onResult(@NonNull Status status) {
 
 
-                        if (status.isSuccess())
-                        {
+                        if (status.isSuccess()) {
 
                             edit.remove("type");
                             edit.remove("user");
                             edit.remove("pass");
                             edit.apply();
-                            Intent i = new Intent(getApplicationContext() , Login.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Intent i = new Intent(getApplicationContext(), Login.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(i);
-                            overridePendingTransition(0,0);
+                            overridePendingTransition(0, 0);
                             finish();
 
                         }
@@ -457,7 +439,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
                 startActivityForResult(intent, CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE);*/
 
-                Log.d("jg" , "video");
+                Log.d("jg", "video");
 
                 Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                 takeVideoIntent.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 0);
@@ -480,8 +462,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
                 Uri videoUri = data.getData();
                 uploadVideo(videoUri);
-            }
-            else if (requestCode == CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE) {
+            } else if (requestCode == CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE) {
                 if (resultCode == RESULT_OK) {
                     realUri = Uri.parse(fileUri.getPath());
                     //imgPostServices();
@@ -504,7 +485,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 realUri = Uri.parse(path);
 
                 try {
-                    realUri = Uri.parse(getPath(HomeActivity.this , realUri));
+                    realUri = Uri.parse(getPath(HomeActivity.this, realUri));
                     //  ivProfileEditProfile.setImageURI(data.getData());
                     //imgPostServices();
                     uploadVideo(realUri);
@@ -518,7 +499,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                         Log.d("TAG", "not cust");
                         realUri = data.getData();
                         // Get real path to make File
-                        realUri = Uri.parse(getPath(HomeActivity.this , data.getData()));
+                        realUri = Uri.parse(getPath(HomeActivity.this, data.getData()));
                         bitmap = BitmapFactory.decodeFile(realUri.getPath());
                         bitmap = Bitmap.createScaledBitmap(bitmap, 400, 400, false);
                         //imgPostServices();
@@ -620,11 +601,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         return multipartTypedOutput;
     }
 
-    public void uploadVideo(Uri uri)
-    {
+    public void uploadVideo(Uri uri) {
         videoProgress.setVisibility(View.VISIBLE);
         MultipartBody.Part body = null;
-        String mCurrentPhotoPath = getPath(HomeActivity.this , uri);
+        String mCurrentPhotoPath = getPath(HomeActivity.this, uri);
 
         File file = new File(mCurrentPhotoPath);
 
@@ -634,7 +614,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         body = MultipartBody.Part.createFormData("video", file.getName(), reqFile);
 
         final bean b = (bean) getApplicationContext();
-
 
 
         Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND);
@@ -666,29 +645,30 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-        Call<addVideoBean> call = cr.addVideo(b.userId , "" , "" , body , body2);
+        Call<addVideoBean> call = cr.addVideo(b.userId, "", "", body, body2);
 
         call.enqueue(new Callback<addVideoBean>() {
             @Override
-            public void onResponse(Call<addVideoBean> call,retrofit2.Response<addVideoBean> response) {
+            public void onResponse(Call<addVideoBean> call, retrofit2.Response<addVideoBean> response) {
                 if (getFragmentRefreshListener() != null) {
                     videoProgress.setVisibility(View.VISIBLE);
                     getFragmentRefreshListener().onRefresh();
                 }
 
-                Toast.makeText(HomeActivity.this , "Video Uploaded Successfully" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "Video Uploaded Successfully", Toast.LENGTH_SHORT).show();
                 videoProgress.setVisibility(View.GONE);
-                Log.d("status" , response.body().getStatus());
-                Log.d("message" , response.body().getMessage());
+                Log.d("status", response.body().getStatus());
+                Log.d("message", response.body().getMessage());
             }
+
             @Override
             public void onFailure(Call<addVideoBean> call, Throwable t) {
                 videoProgress.setVisibility(View.GONE);
             }
         });
     }
-    private String getPath(final Context context, final Uri uri)
-    {
+
+    private String getPath(final Context context, final Uri uri) {
         final boolean isKitKatOrAbove = true;
 
         // DocumentProvider
@@ -728,7 +708,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -745,6 +725,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         return null;
     }
+
     private boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
@@ -793,7 +774,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 .requestEmail()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this , new GoogleApiClient.OnConnectionFailedListener() {
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
@@ -829,19 +810,17 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onBackPressed() {
 
 
-
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Are you sure, You want to Exit?");
-                alertDialogBuilder.setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                finish();
-                            }
-                        });
+        alertDialogBuilder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        finish();
+                    }
+                });
 
-        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -854,10 +833,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         alertDialog.show();
 
 
-
     }
-    public interface OnsearchListener
-    {
+
+    public interface OnsearchListener {
         public void search(String searchtext);
     }
 

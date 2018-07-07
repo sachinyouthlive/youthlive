@@ -63,13 +63,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class Login extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener  {
+public class Login extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
+    public static final String mypreference = "mypref";
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     Button create, login;
     CallbackManager mCallbackManager;
     ImageView facebook_login, googleLogin, twitter_login;
-    public static final String mypreference = "mypref";
-    private ProgressDialog pDialog;
     String msg, loginid;
     SessionManager session;
     ProgressBar progress;
@@ -87,15 +87,23 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
     };
 
     GoogleSignInClient mGoogleSignInClient;
-
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-    private int RC_SIGN_IN = 22;
-
     SharedPreferences pref;
     SharedPreferences.Editor edit;
-
     SharedPreferences fcmPref;
     SharedPreferences.Editor fcmEdit;
+    private ProgressDialog pDialog;
+    private int RC_SIGN_IN = 22;
+
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,7 +248,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         setContentView(R.layout.activity_login);
 
 
-        fcmPref = getSharedPreferences("fcm" , Context.MODE_PRIVATE);
+        fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
         fcmEdit = fcmPref.edit();
 
 
@@ -250,7 +258,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
 
             Log.d("token", tok);
 
-            fcmEdit.putString("token" , tok);
+            fcmEdit.putString("token", tok);
 
             fcmEdit.apply();
 
@@ -261,13 +269,13 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                 public void run() {
                     //If there are stories, add them to the table
                     //try {
-                        // code runs in a thread
-                        //runOnUiThread(new Runnable() {
-                          //  @Override
-                            //public void run() {
-                                new MyFirebaseInstanceIDService().onTokenRefresh();
-                            //}
-                        //});
+                    // code runs in a thread
+                    //runOnUiThread(new Runnable() {
+                    //  @Override
+                    //public void run() {
+                    new MyFirebaseInstanceIDService().onTokenRefresh();
+                    //}
+                    //});
                     //} catch (final Exception ignored) {
                     //}
                 }
@@ -296,7 +304,6 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         }
 
 
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -306,8 +313,6 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
 
         /*GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         updateUI(account);*/
-
-
 
 
         if (!hasPermissions(this, PERMISSIONS)) {
@@ -387,11 +392,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         });
 
 
-
-
     }
-
-
 
     public void Alredyaccount(View view) {
         Intent alredyacco = new Intent(Login.this, Signin.class);
@@ -412,19 +413,21 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-////////////////////internet connectivity check///////////////
+
+    ////////////////////internet connectivity check///////////////
     private void checkConnection() {
-    boolean isConnected = ConnectivityReceiver.isConnected();
-    showSnack(isConnected);
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        showSnack(isConnected);
     }
+
     private void showSnack(boolean isConnected) {
         String message;
         int color;
         if (isConnected) {
 
             // Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
-        //    message = "Good! Connected to Internet";
-        //    color = Color.WHITE;
+            //    message = "Good! Connected to Internet";
+            //    color = Color.WHITE;
         } else {
             //  Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
@@ -451,13 +454,11 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
-            }
-      //      message = "Sorry! Not connected to internet";
-       //     color = Color.RED;
+            //      message = "Sorry! Not connected to internet";
+            //     color = Color.RED;
         }
 
        /* Snackbar snackbar = Snackbar
@@ -469,6 +470,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         snackbar.show();
         */
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -482,104 +484,6 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         showSnack(isConnected);
 
     }
-
-
-    @SuppressLint("StaticFieldLeak")
-    private class FacebookloginAsyncTask extends AsyncTask<String, Void, Void> {    //////today list asyntask
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(Login.this);
-            pDialog.setMessage("Please wait...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-
-            //String name=params[0];
-            String email = params[0];
-            // String image=params[0];
-            String encoded = "null";
-
-           /* URL imageURL = null;
-            try {
-                imageURL = new URL(image);
-                Bitmap imagee = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-                // Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                imagee.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream .toByteArray();
-                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-
-            String url = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/socialsign_up.php";
-            ArrayList<org.apache.http.NameValuePair> nameValuePairs = new ArrayList<org.apache.http.NameValuePair>();
-            //  nameValuePairs.add(new org.apache.http.message.BasicNameValuePair("name", name));
-            nameValuePairs.add(new org.apache.http.message.BasicNameValuePair("email", email));
-            // nameValuePairs.add(new org.apache.http.message.BasicNameValuePair("image", encoded));
-
-            ServiceHandler sh = new ServiceHandler();
-            String userdata = sh.makeServiceCall(url,
-                    ServiceHandler.POST, nameValuePairs);
-            /*if (userdata != null)
-                try {
-                    JSONObject jsonObj = new JSONObject(userdata);
-                    String strstatus=jsonObj.getString("status");
-                    if (strstatus.equals("1")){
-                        JSONObject obj2=jsonObj.getJSONObject("data");
-                        msg=jsonObj.getString("message");
-                        loginid=obj2.getString("userId");
-                    }else{
-                        msg=jsonObj.getString("message");
-                    }
-                } catch (Exception e) {
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                        }
-                    });
-                    e.printStackTrace();
-                }
-            else {
-                Toast.makeText(getApplicationContext(), "No Data To Display", Toast.LENGTH_SHORT).show();
-            }*/
-            return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            pDialog.dismiss();
-          /*  SharedPreferences sharedpreferences = Login.this.getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString("userId", loginid);
-            editor.commit();
-            String  userId = sharedpreferences.getString("userId", "");*/
-
-            Intent intent = new Intent(Login.this, HomeActivity.class);
-            startActivity(intent);
-
-        }
-    }
-
-    public static boolean hasPermissions(Context context, String... permissions) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -622,7 +526,6 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
 
     }
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.
@@ -645,7 +548,6 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         }
 
     }
-
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
@@ -738,6 +640,91 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("asdas", "signInResult:failed code=" + e.getStatusCode());
+
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class FacebookloginAsyncTask extends AsyncTask<String, Void, Void> {    //////today list asyntask
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(Login.this);
+            pDialog.setMessage("Please wait...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            //String name=params[0];
+            String email = params[0];
+            // String image=params[0];
+            String encoded = "null";
+
+           /* URL imageURL = null;
+            try {
+                imageURL = new URL(image);
+                Bitmap imagee = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                // Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                imagee.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream .toByteArray();
+                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+
+            String url = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/socialsign_up.php";
+            ArrayList<org.apache.http.NameValuePair> nameValuePairs = new ArrayList<org.apache.http.NameValuePair>();
+            //  nameValuePairs.add(new org.apache.http.message.BasicNameValuePair("name", name));
+            nameValuePairs.add(new org.apache.http.message.BasicNameValuePair("email", email));
+            // nameValuePairs.add(new org.apache.http.message.BasicNameValuePair("image", encoded));
+
+            ServiceHandler sh = new ServiceHandler();
+            String userdata = sh.makeServiceCall(url,
+                    ServiceHandler.POST, nameValuePairs);
+            /*if (userdata != null)
+                try {
+                    JSONObject jsonObj = new JSONObject(userdata);
+                    String strstatus=jsonObj.getString("status");
+                    if (strstatus.equals("1")){
+                        JSONObject obj2=jsonObj.getJSONObject("data");
+                        msg=jsonObj.getString("message");
+                        loginid=obj2.getString("userId");
+                    }else{
+                        msg=jsonObj.getString("message");
+                    }
+                } catch (Exception e) {
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                        }
+                    });
+                    e.printStackTrace();
+                }
+            else {
+                Toast.makeText(getApplicationContext(), "No Data To Display", Toast.LENGTH_SHORT).show();
+            }*/
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            pDialog.dismiss();
+          /*  SharedPreferences sharedpreferences = Login.this.getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString("userId", loginid);
+            editor.commit();
+            String  userId = sharedpreferences.getString("userId", "");*/
+
+            Intent intent = new Intent(Login.this, HomeActivity.class);
+            startActivity(intent);
 
         }
     }

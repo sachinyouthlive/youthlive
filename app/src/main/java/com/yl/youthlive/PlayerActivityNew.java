@@ -1,33 +1,7 @@
 package com.yl.youthlive;
 
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-
-import com.google.firebase.iid.FirebaseInstanceId;
-
-
-
-import java.io.IOException;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class PlayerActivityNew extends AppCompatActivity// implements StreamaxiaPlayerState, MyPlayerInterface
 {
@@ -80,7 +54,6 @@ public class PlayerActivityNew extends AppCompatActivity// implements Streamaxia
     @BindView(R.id.player_state_view)
     TextView stateText;
 */
-
 
 
     @Override
@@ -283,12 +256,12 @@ public class PlayerActivityNew extends AppCompatActivity// implements Streamaxia
 */
 
     }
-/*
+    /*
 
 
 
 
-   */
+     */
 /* @Override
     public int Status(int i) {
 
@@ -319,7 +292,7 @@ public class PlayerActivityNew extends AppCompatActivity// implements Streamaxia
 
 
 
-    */
+ */
 /*void getLatestResourceUri() {
         Request request = new Request.Builder()
                 .url("https://api.irisplatform.io/broadcasts")
@@ -378,7 +351,7 @@ public class PlayerActivityNew extends AppCompatActivity// implements Streamaxia
         mBroadcastPlayer.load();*//*
 
 
-        */
+ */
 /*WZPlayerConfig wzPlayerConfig = new WZPlayerConfig();
 
         wzPlayerConfig.setHostAddress("ec2-18-219-154-44.us-east-2.compute.amazonaws.com");
@@ -476,7 +449,7 @@ public class PlayerActivityNew extends AppCompatActivity// implements Streamaxia
 *//*
 
 
-        */
+ */
 /*wzPlayerConfig.setHostAddress("ec2-18-219-154-44.us-east-2.compute.amazonaws.com");
         wzPlayerConfig.setApplicationName("live");
         wzPlayerConfig.setStreamName(resourceUri);
@@ -531,7 +504,7 @@ public class PlayerActivityNew extends AppCompatActivity// implements Streamaxia
 
 
 
-        */
+ */
 /*ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         MediaSource videoSource = new ExtractorMediaSource(Uri.parse(ur),
                 rtmpDataSourceFactory, extractorsFactory, null, null);
@@ -687,6 +660,6 @@ public class PlayerActivityNew extends AppCompatActivity// implements Streamaxia
     }*//*
 
 
-*/
+ */
 
 }

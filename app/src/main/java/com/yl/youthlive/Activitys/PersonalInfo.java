@@ -45,8 +45,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class PersonalInfo extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener{
+public class PersonalInfo extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
+    public Context appContext, myContext;
+    public FragmentManager fm;
     Toolbar toolbar;
     ViewPager pager;
     ProgressBar progress;
@@ -56,16 +58,10 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
     String userid;
     String allItems, allItem;
     TextView followings, friends, fans;
-
     ViewPager coverPager;
     CircleIndicator indicator;
-
     Button follow;
-
     LinearLayout followingClick, fanClick, friendClick;
-
-    public Context appContext, myContext;
-    public FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +74,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         progress = findViewById(R.id.progress);
         profile = findViewById(R.id.profile);
 
-        follow = (Button)findViewById(R.id.follow);
+        follow = (Button) findViewById(R.id.follow);
         profileimg = findViewById(R.id.profileimg);
         final bean b = (bean) getApplicationContext();
 
@@ -87,20 +83,14 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         b.mylist.add(useridd);
         userid = b.mylist.get(b.mylist.size() - 1);
         /////////////////////
-        followingClick = (LinearLayout)findViewById(R.id.followings_click);
+        followingClick = (LinearLayout) findViewById(R.id.followings_click);
         fanClick = (LinearLayout) findViewById(R.id.fans_click);
         friendClick = findViewById(R.id.friends_click);
 
 
-
-
-
-        if (Objects.equals(userid, b.userId))
-        {
+        if (Objects.equals(userid, b.userId)) {
             follow.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             follow.setVisibility(View.VISIBLE);
 
         }
@@ -158,7 +148,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<followBean> call = cr.follow(b.userId , userid);
+                Call<followBean> call = cr.follow(b.userId, userid);
 
                 call.enqueue(new Callback<followBean>() {
                     @Override
@@ -224,9 +214,9 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         });
 
 
-     //   tabs.addTab(tabs.newTab().setText("Personal"));
-     //   tabs.addTab(tabs.newTab().setText("Education"));
-     //   tabs.addTab(tabs.newTab().setText("Career"));
+        //   tabs.addTab(tabs.newTab().setText("Personal"));
+        //   tabs.addTab(tabs.newTab().setText("Education"));
+        //   tabs.addTab(tabs.newTab().setText("Career"));
 
 
     }
@@ -243,7 +233,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
 
     @Override
     protected void onResume() {
-     // register connection status listener
+        // register connection status listener
 
         super.onResume();
         loadfollowstatus(userid);
@@ -252,11 +242,13 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
 
 
     }
+
     ///////////////////internet connectivity check///////////////
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showSnack(isConnected);
     }
+
     private void showSnack(boolean isConnected) {
         String message;
         int color;
@@ -291,10 +283,8 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
             //      message = "Sorry! Not connected to internet";
             //     color = Color.RED;
@@ -309,6 +299,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         snackbar.show();
         */
     }
+
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showSnack(isConnected);
@@ -360,7 +351,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                     pager.setAdapter(adapter);
 
 
-                 //   tabs.setupWithViewPager(pager);
+                    //   tabs.setupWithViewPager(pager);
 
 
                 } else {
@@ -378,104 +369,6 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         });
 
 
-    }
-
-
-    public class CoverPager extends FragmentStatePagerAdapter {
-
-        List<com.yl.youthlive.loginResponsePOJO.CoverImage> list = new ArrayList<>();
-
-        public CoverPager(FragmentManager fm, List<com.yl.youthlive.loginResponsePOJO.CoverImage> list) {
-            super(fm);
-            this.list = list;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            com.yl.youthlive.CoverImage frag = new com.yl.youthlive.CoverImage();
-            Bundle b = new Bundle();
-            b.putString("url", list.get(position).getImage());
-            frag.setArguments(b);
-            return frag;
-        }
-
-        @Override
-        public int getCount() {
-            return list.size();
-        }
-    }
-
-
-    /*public class CoverImage extends Fragment
-    {
-
-        String url;
-        ImageView image;
-
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.cober_image_layout , container , false);
-
-            url = getArguments().getString("url");
-            image = (ImageView)view.findViewById(R.id.image);
-
-            ImageLoader loader = ImageLoader.getInstance();
-            loader.displayImage(url , image);
-
-
-            return  view;
-        }
-    }*/
-
-
-    public class FragStatePAgerAdapter extends FragmentStatePagerAdapter {
-
-        Data data;
-        String title[] = {"Personal"};
-
-        public FragStatePAgerAdapter(FragmentManager fm, Data data) {
-            super(fm);
-            this.data = data;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-
-            if (position == 0) {
-                Address frag = new Address();
-                Bundle b = new Bundle();
-
-                b.putString("userId", data.getUserId());
-                b.putString("phone", data.getPhone());
-                b.putString("user", data.getUserName());
-                b.putString("youth", data.getYouthLiveId());
-                b.putString("gender", data.getGender());
-                b.putString("birth", data.getBirthday());
-                b.putString("bio", data.getBio());
-
-
-                frag.setArguments(b);
-
-                return frag;
-            }
-
-          else {
-                return null;
-            }
-
-
-        }
-
-        @Override
-        public int getCount() {
-            return 1;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return title[position];
-        }
     }
 
     public void loadfollowstatus(String userids) {
@@ -530,6 +423,100 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         });
 
 
+    }
+
+
+    /*public class CoverImage extends Fragment
+    {
+
+        String url;
+        ImageView image;
+
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.cober_image_layout , container , false);
+
+            url = getArguments().getString("url");
+            image = (ImageView)view.findViewById(R.id.image);
+
+            ImageLoader loader = ImageLoader.getInstance();
+            loader.displayImage(url , image);
+
+
+            return  view;
+        }
+    }*/
+
+    public class CoverPager extends FragmentStatePagerAdapter {
+
+        List<com.yl.youthlive.loginResponsePOJO.CoverImage> list = new ArrayList<>();
+
+        public CoverPager(FragmentManager fm, List<com.yl.youthlive.loginResponsePOJO.CoverImage> list) {
+            super(fm);
+            this.list = list;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            com.yl.youthlive.CoverImage frag = new com.yl.youthlive.CoverImage();
+            Bundle b = new Bundle();
+            b.putString("url", list.get(position).getImage());
+            frag.setArguments(b);
+            return frag;
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
+    }
+
+    public class FragStatePAgerAdapter extends FragmentStatePagerAdapter {
+
+        Data data;
+        String title[] = {"Personal"};
+
+        public FragStatePAgerAdapter(FragmentManager fm, Data data) {
+            super(fm);
+            this.data = data;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            if (position == 0) {
+                Address frag = new Address();
+                Bundle b = new Bundle();
+
+                b.putString("userId", data.getUserId());
+                b.putString("phone", data.getPhone());
+                b.putString("user", data.getUserName());
+                b.putString("youth", data.getYouthLiveId());
+                b.putString("gender", data.getGender());
+                b.putString("birth", data.getBirthday());
+                b.putString("bio", data.getBio());
+
+
+                frag.setArguments(b);
+
+                return frag;
+            } else {
+                return null;
+            }
+
+
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return title[position];
+        }
     }
 
 }

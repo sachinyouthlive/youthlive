@@ -24,10 +24,10 @@
         android:layout_height="34dp"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         android:background="@drawable/close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,9 +42,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -73,9 +73,9 @@
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/grey_round"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,8 +103,8 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="5dp"
                 android:paddingEnd="10dp"
+                android:paddingStart="5dp"
                 android:textColor="#000000"
                 android:textSize="14sp" />
 
@@ -112,9 +112,9 @@
                 android:id="@+id/view_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="5dp"
-                android:paddingEnd="10dp"
                 android:paddingBottom="5dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="5dp"
                 android:textColor="#000000"
                 android:textSize="10sp"
                 android:visibility="visible" />
@@ -126,8 +126,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginStart="20dp"
             android:background="@drawable/add"
             android:visibility="gone" />
 
@@ -160,8 +160,8 @@
             android:layout_gravity="center_vertical"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:paddingStart="5dp"
             android:paddingEnd="10dp"
+            android:paddingStart="5dp"
 
             android:textColor="#000000" />
     </LinearLayout>
@@ -192,8 +192,8 @@
             android:layout_gravity="center_vertical"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:paddingStart="5dp"
             android:paddingEnd="10dp"
+            android:paddingStart="5dp"
             android:textColor="#000000" />
 
     </LinearLayout>
@@ -290,8 +290,8 @@
         android:id="@+id/bubble"
         android:layout_width="100dp"
         android:layout_height="250dp"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         app:layout_constraintBottom_toBottomOf="@+id/actions"
         app:layout_constraintEnd_toEndOf="@+id/imageView3" />
 
@@ -300,8 +300,8 @@
         android:id="@+id/heart"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/lover"
         app:layout_constraintBottom_toBottomOf="@+id/bubble"
         app:layout_constraintEnd_toEndOf="@+id/bubble" />
@@ -311,8 +311,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/heart" />
@@ -326,9 +326,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:background="#000000"
         android:elevation="4dp"
         android:visibility="gone"
-        android:background="#000000"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
@@ -337,8 +337,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#000000"
-            android:elevation="1dp"
-            />
+            android:elevation="1dp" />
 
 
         <ImageButton
@@ -346,18 +345,18 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="15dp"
-            android:elevation="1dp"
             android:background="@drawable/accept"
+            android:elevation="1dp"
             android:visibility="gone" />
 
 
         <ImageButton
             android:id="@+id/reject1"
-            android:elevation="1dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/reject"
+            android:elevation="1dp"
             android:visibility="gone" />
 
 
@@ -365,18 +364,17 @@
             android:id="@+id/reject3"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:elevation="1dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/red_round"
+            android:elevation="1dp"
             android:src="@drawable/hang_up"
             android:visibility="gone" />
 
         <TextView
+            android:id="@+id/texxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/texxt"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
 
     </com.google.android.exoplayer.AspectRatioFrameLayout>
@@ -424,8 +422,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/comment_sendback"
                 android:cursorVisible="true"
                 android:gravity="center_vertical|start"
@@ -459,8 +457,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/grid2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -475,8 +472,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
 
 
 </android.support.constraint.ConstraintLayout>

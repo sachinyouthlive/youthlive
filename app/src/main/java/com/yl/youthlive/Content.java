@@ -16,13 +16,14 @@ public class Content extends AppCompatActivity {
     Toolbar toolbar;
     WebView webview;
     ProgressDialog progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
 
 
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         webview = (WebView) findViewById(R.id.web);
 
@@ -30,7 +31,6 @@ public class Content extends AppCompatActivity {
 
 
         setSupportActionBar(toolbar);
-
 
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);

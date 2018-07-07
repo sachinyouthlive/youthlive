@@ -1,21 +1,16 @@
 package com.yl.youthlive;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceView;
-
-
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
 public class CameraActivity extends AppCompatActivity {
 
+    private static final String APPLICATION_ID = "9Nl68X4uVmi5mu5REY3SxA";
     //Broadcaster mBroadcaster;
     SurfaceView mPreviewSurface;
-    private static final String APPLICATION_ID = "9Nl68X4uVmi5mu5REY3SxA";
     Button mBroadcastButton;
 
     @Override

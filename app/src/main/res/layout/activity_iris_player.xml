@@ -49,12 +49,12 @@
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/image"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center_vertical"
                         android:scaleType="centerCrop"
                         android:src="@drawable/user_default"
-                        android:id="@+id/image"
                         app:civ_border_color="#ffffff"
                         app:civ_border_width="1dp" />
 
@@ -65,36 +65,36 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingEnd="10dp"
                             android:paddingStart="5dp"
-                            android:id="@+id/name"
                             android:textColor="#000000"
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/view_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingBottom="5dp"
                             android:paddingEnd="10dp"
                             android:paddingStart="5dp"
-                            android:id="@+id/view_count"
-                            android:visibility="visible"
                             android:textColor="#000000"
-                            android:textSize="10sp" />
+                            android:textSize="10sp"
+                            android:visibility="visible" />
 
                     </LinearLayout>
 
                     <ImageButton
+                        android:id="@+id/follow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
                         android:layout_gravity="center_vertical"
-                        android:visibility="visible"
-                        android:id="@+id/follow"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/add"/>
+                        android:layout_marginStart="20dp"
+                        android:background="@drawable/add"
+                        android:visibility="visible" />
 
                 </LinearLayout>
 
@@ -166,17 +166,15 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <RelativeLayout
+                        android:id="@+id/camera_layout1"
                         android:layout_width="100dp"
                         android:layout_height="150dp"
-                        android:layout_marginTop="10dp"
-                        android:visibility="visible"
                         android:layout_marginStart="15dp"
-                        android:id="@+id/camera_layout1"
-                        >
+                        android:layout_marginTop="10dp"
+                        android:visibility="visible">
 
                         <!--<com.bambuser.broadcaster.SurfaceViewWithAutoAR
                             android:layout_width="wrap_content"
@@ -187,52 +185,44 @@
 
 
                         <ImageButton
+                            android:id="@+id/accept1"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="15dp"
-                            android:id="@+id/accept1"
-                            android:background="@drawable/accept"
-                            />
+                            android:background="@drawable/accept" />
 
 
                         <ImageButton
+                            android:id="@+id/reject1"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:id="@+id/reject1"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginBottom="15dp"
-                            android:background="@drawable/reject"
-                            />
+                            android:background="@drawable/reject" />
 
 
                         <ImageButton
+                            android:id="@+id/reject3"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:id="@+id/reject3"
-                            android:src="@drawable/hang_up"
                             android:layout_alignParentBottom="true"
-                            android:visibility="gone"
                             android:layout_centerHorizontal="true"
                             android:layout_marginBottom="15dp"
                             android:background="@drawable/red_round"
-                            />
+                            android:src="@drawable/hang_up"
+                            android:visibility="gone" />
 
 
                     </RelativeLayout>
-
-
-
 
 
                 </LinearLayout>
 
 
             </LinearLayout>
-
-
 
 
             <android.support.v7.widget.RecyclerView
@@ -242,8 +232,6 @@
                 android:layout_gravity="center_vertical" />
 
 
-
-
         </LinearLayout>
 
 
@@ -251,13 +239,12 @@
             android:id="@+id/close"
             android:layout_width="34dp"
             android:layout_height="34dp"
-            android:layout_gravity="end"
             android:layout_alignParentEnd="true"
+            android:layout_gravity="end"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/close" />
-
 
 
     </RelativeLayout>
@@ -308,8 +295,8 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginStart="10dp"
-                        android:visibility="gone"
-                        android:background="@drawable/emoji" />
+                        android:background="@drawable/emoji"
+                        android:visibility="gone" />
 
 
                     <LinearLayout

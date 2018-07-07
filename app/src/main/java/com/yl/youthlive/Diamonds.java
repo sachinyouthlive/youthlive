@@ -13,13 +13,13 @@ import android.widget.TextView;
 
 public class Diamonds extends Fragment {
 
-    TextView amount , history , googlePay;
+    TextView amount, history, googlePay;
     ProgressBar progress;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.diamond_layout , container , false);
+        View view = inflater.inflate(R.layout.diamond_layout, container, false);
 
 
         amount = view.findViewById(R.id.textView6);
@@ -28,24 +28,16 @@ public class Diamonds extends Fragment {
         progress = view.findViewById(R.id.progressBar6);
 
 
-
-
         googlePay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-                Intent intent = new Intent(getContext() , BuyDiamonds.class);
+                Intent intent = new Intent(getContext(), BuyDiamonds.class);
                 startActivity(intent);
 
             }
         });
-
-
-        
-
-
-
 
 
         return view;

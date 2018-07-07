@@ -3,8 +3,6 @@ package com.yl.youthlive;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 /**
  * Created by TBX on 11/21/2017.
  */

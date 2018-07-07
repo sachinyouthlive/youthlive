@@ -35,9 +35,9 @@
     <application
         android:name=".bean"
         android:allowBackup="true"
-        android:icon="@drawable/yl"
+        android:icon="@drawable/yllogo"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/yl"
+        android:roundIcon="@drawable/yllogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
@@ -204,6 +204,15 @@
         <activity android:name=".Activitys.FriendActivity" />
         <activity android:name=".Activitys.SearchActivity" />
         <activity android:name=".ExoTest"></activity>
+        <activity
+            android:name=".login.ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.New_Password"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.OTP_varify"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

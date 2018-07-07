@@ -2,64 +2,60 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:openDrawer="start"
-    android:id="@+id/activity_main"
-    tools:context="com.yl.youthlive.MainActivity">
+    tools:context="com.yl.youthlive.MainActivity"
+    tools:openDrawer="start">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-
-        <android.support.v7.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/toolbar"
-            android:background="@color/colorPrimary" />
-
-
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginBottom="60dp"
-            android:id="@+id/replace"
-            />
+            android:orientation="vertical">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary" />
 
 
-    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:indeterminate="true"
-        app:spb_sections_count="4"
-        app:spb_color="#379906"
-        app:spb_speed="2.0"
-        app:spb_reversed="false"
-        android:id="@+id/video_progress"
-        app:spb_mirror_mode="false"
-        app:spb_progressiveStart_activated="true"
-        app:spb_progressiveStart_speed="1.5"
-        app:spb_progressiveStop_speed="3.4"
-        />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/replace"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="60dp"
+                    android:orientation="vertical" />
 
 
-</RelativeLayout>
+                <fr.castorflex.android.smoothprogressbar.SmoothProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/video_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    app:spb_color="#379906"
+                    app:spb_mirror_mode="false"
+                    app:spb_progressiveStart_activated="true"
+                    app:spb_progressiveStart_speed="1.5"
+                    app:spb_progressiveStop_speed="3.4"
+                    app:spb_reversed="false"
+                    app:spb_sections_count="4"
+                    app:spb_speed="2.0" />
 
-    </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
 
         <!--<com.aurelhubert.ahbottomnavigation.AHBottomNavigation
@@ -69,17 +65,14 @@
             android:layout_height="wrap_content" />-->
 
 
-
-
     </RelativeLayout>
 
 
     <include
         layout="@layout/drawer_layout"
-        android:layout_gravity="start"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        />
+        android:layout_gravity="start" />
 
 
 </android.support.v4.widget.DrawerLayout>

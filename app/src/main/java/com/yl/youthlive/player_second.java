@@ -17,11 +17,11 @@ public class player_second extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.second_pager , container , false);
+        View view = inflater.inflate(R.layout.second_pager, container, false);
 
-        plactivity = (PlayerActivity)getActivity();
+        plactivity = (PlayerActivity) getActivity();
 
-        close = (ImageButton)view.findViewById(R.id.close);
+        close = (ImageButton) view.findViewById(R.id.close);
 
 
         close.setOnClickListener(new View.OnClickListener() {
@@ -32,7 +32,6 @@ public class player_second extends Fragment {
 
             }
         });
-
 
 
         return view;

@@ -38,27 +38,27 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class following_adapter extends RecyclerView.Adapter<following_adapter.followingadapter>{
+public class following_adapter extends RecyclerView.Adapter<following_adapter.followingadapter> {
 
     Context context;
     List<Datum> list = new ArrayList<>();
     FollowingActivity con;
 
 
-    public following_adapter(Context context , List<Datum> list)
-    {
+    public following_adapter(Context context, List<Datum> list) {
         this.list = list;
-        this.context=context;
+        this.context = context;
     }
 
 
     @Override
     public followingadapter onCreateViewHolder(ViewGroup parent, int viewType) {
-        con = (FollowingActivity)context;
+        con = (FollowingActivity) context;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.following_recycler , parent , false);
+        View view = inflater.inflate(R.layout.following_recycler, parent, false);
         return new followingadapter(view);
     }
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final followingadapter holder, int position) {
@@ -134,7 +134,6 @@ public class following_adapter extends RecyclerView.Adapter<following_adapter.fo
         //
 
 
-
         holder.message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -205,9 +204,6 @@ public class following_adapter extends RecyclerView.Adapter<following_adapter.fo
                 });
 
 
-
-
-
             }
         });
 
@@ -229,7 +225,7 @@ public class following_adapter extends RecyclerView.Adapter<following_adapter.fo
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<followBean> call = cr.follow(b.userId , item.getUserId());
+                Call<followBean> call = cr.follow(b.userId, item.getUserId());
 
                 call.enqueue(new Callback<followBean>() {
                     @Override
@@ -247,11 +243,10 @@ public class following_adapter extends RecyclerView.Adapter<following_adapter.fo
                     public void onFailure(Call<followBean> call, Throwable t) {
 
                         con.progress.setVisibility(View.GONE);
-                        Log.d("asdad" , t.toString());
+                        Log.d("asdad", t.toString());
 
                     }
                 });
-
 
 
             }
@@ -260,15 +255,10 @@ public class following_adapter extends RecyclerView.Adapter<following_adapter.fo
     }
 
 
-
-
-    public void setGridData(List<Datum> list)
-    {
+    public void setGridData(List<Datum> list) {
         this.list = list;
         notifyDataSetChanged();
     }
-
-
 
 
     @Override
@@ -276,27 +266,27 @@ public class following_adapter extends RecyclerView.Adapter<following_adapter.fo
         return list.size();
     }
 
-    public class followingadapter extends RecyclerView.ViewHolder{
+    public class followingadapter extends RecyclerView.ViewHolder {
 
         CircleImageView image;
-        TextView name , youthId , beans;
+        TextView name, youthId, beans;
         Button unfollow;
         Button message;
         RelativeLayout relative_following;
 
 
         public followingadapter(View itemView) {
-        super(itemView);
+            super(itemView);
 
-        image = (CircleImageView)itemView.findViewById(R.id.image);
-        name = (TextView)itemView.findViewById(R.id.name);
-        youthId = (TextView)itemView.findViewById(R.id.yid);
-        beans = (TextView)itemView.findViewById(R.id.beans);
-        message = (Button)itemView.findViewById(R.id.message);
+            image = (CircleImageView) itemView.findViewById(R.id.image);
+            name = (TextView) itemView.findViewById(R.id.name);
+            youthId = (TextView) itemView.findViewById(R.id.yid);
+            beans = (TextView) itemView.findViewById(R.id.beans);
+            message = (Button) itemView.findViewById(R.id.message);
 
-        unfollow = (Button)itemView.findViewById(R.id.unfollow);
+            unfollow = (Button) itemView.findViewById(R.id.unfollow);
             relative_following = itemView.findViewById(R.id.relative_follow);
 
+        }
     }
-}
 }

@@ -21,11 +21,12 @@ public class FollowerResponse {
         this.success = success;
     }
 
-    public void setFollow_status(String follow_status) {
-        this.follow_status = follow_status;
-    }
     public String getFollow_status() {
         return follow_status;
+    }
+
+    public void setFollow_status(String follow_status) {
+        this.follow_status = follow_status;
     }
 
 }

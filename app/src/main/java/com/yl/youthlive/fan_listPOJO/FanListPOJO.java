@@ -1,4 +1,3 @@
-
 package com.yl.youthlive.fan_listPOJO;
 
 import com.google.gson.annotations.Expose;

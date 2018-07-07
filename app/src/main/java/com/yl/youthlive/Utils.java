@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 public class Utils {
 
     public static boolean isValidMobile(String phone) {
-        boolean check=false;
-        if(!Pattern.matches("[a-zA-Z]+", phone)) {
-            if(phone.length() < 10 || phone.length() > 10) {
+        boolean check = false;
+        if (!Pattern.matches("[a-zA-Z]+", phone)) {
+            if (phone.length() < 10 || phone.length() > 10) {
                 // if(phone.length() != 10) {
                 check = false;
 
@@ -20,7 +20,7 @@ public class Utils {
                 check = true;
             }
         } else {
-            check=false;
+            check = false;
         }
         return check;
     }

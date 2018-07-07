@@ -23,23 +23,21 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewHolder>{
+public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewHolder> {
 
     Context context;
     List<Datum> list = new ArrayList<>();
 
-    public MassageAdapter(Context context , List<Datum> list)
-    {
+    public MassageAdapter(Context context, List<Datum> list) {
         this.context = context;
         this.list = list;
     }
 
 
-
     @Override
     public MsgViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.messageformate , parent , false);
+        View view = inflater.inflate(R.layout.messageformate, parent, false);
         return new MsgViewHolder(view);
 
     }
@@ -51,7 +49,7 @@ public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewH
         final Datum item = list.get(i);
 
         ImageLoader loader = ImageLoader.getInstance();
-        loader.displayImage(item.getFriendImage() , msgViewHolder.image);
+        loader.displayImage(item.getFriendImage(), msgViewHolder.image);
 
         msgViewHolder.name.setText(item.getFriendName());
 
@@ -73,12 +71,9 @@ public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewH
         }
         //.............
 
-        if (i == list.size() - 1)
-        {
+        if (i == list.size() - 1) {
             msgViewHolder.line.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             msgViewHolder.line.setVisibility(View.VISIBLE);
         }
 
@@ -86,11 +81,11 @@ public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewH
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(context , ChatScreen.class);
-                intent.putExtra("id" , item.getFriendId());
-                intent.putExtra("chat" , item.getChatId());
-                intent.putExtra("name" , item.getFriendName());
-                intent.putExtra("image" , item.getFriendImage());
+                Intent intent = new Intent(context, ChatScreen.class);
+                intent.putExtra("id", item.getFriendId());
+                intent.putExtra("chat", item.getChatId());
+                intent.putExtra("name", item.getFriendName());
+                intent.putExtra("image", item.getFriendImage());
                 context.startActivity(intent);
 
             }
@@ -98,7 +93,7 @@ public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewH
 
     }
 
-    public void setgrid(List<Datum> list){
+    public void setgrid(List<Datum> list) {
 
         this.list = list;
         notifyDataSetChanged();
@@ -109,7 +104,7 @@ public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewH
         return list.size();
     }
 
-    public  class MsgViewHolder extends RecyclerView.ViewHolder {
+    public class MsgViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView image;
         TextView name, msgtime;
@@ -118,10 +113,10 @@ public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewH
         public MsgViewHolder(View itemView) {
             super(itemView);
 
-            image = (CircleImageView)itemView.findViewById(R.id.image);
-            name = (TextView)itemView.findViewById(R.id.name);
+            image = (CircleImageView) itemView.findViewById(R.id.image);
+            name = (TextView) itemView.findViewById(R.id.name);
             msgtime = (TextView) itemView.findViewById(R.id.msg_time);
-            line = (TextView)itemView.findViewById(R.id.line);
+            line = (TextView) itemView.findViewById(R.id.line);
 
         }
     }

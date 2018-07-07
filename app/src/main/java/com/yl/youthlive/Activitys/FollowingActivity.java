@@ -33,13 +33,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class FollowingActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
+    public ProgressBar progress;
     RecyclerView recycler_following;
     following_adapter recAdapter;
     LinearLayoutManager layoutmanager;
-
     Toolbar toolbar;
     List<Datum> list;
-    public ProgressBar progress;
     TextView nofollowmsg;
     String userId;
 
@@ -55,10 +54,10 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
         }
         list = new ArrayList<>();
 
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        progress = (ProgressBar)findViewById(R.id.progress);
+        progress = (ProgressBar) findViewById(R.id.progress);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setTitleTextColor(Color.WHITE);
@@ -73,15 +72,13 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
             }
         });
 
-        recycler_following = (RecyclerView)findViewById(R.id.recycler_following);
-        layoutmanager = new LinearLayoutManager(this , LinearLayoutManager.VERTICAL , false);
-        recAdapter = new following_adapter(this , list);
+        recycler_following = (RecyclerView) findViewById(R.id.recycler_following);
+        layoutmanager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recAdapter = new following_adapter(this, list);
         recycler_following.setLayoutManager(layoutmanager);
         recycler_following.setAdapter(recAdapter);
         recycler_following.setHasFixedSize(true);
         nofollowmsg = findViewById(R.id.nofollowingmsg);
-
-
 
 
     }
@@ -96,11 +93,13 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
 
 
     }
+
     ///////////////////internet connectivity check///////////////
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showAlert(isConnected);
     }
+
     private void showAlert(boolean isConnected) {
         String message;
         int color;
@@ -133,10 +132,8 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
             //      message = "Sorry! Not connected to internet";
             //     color = Color.RED;
@@ -151,14 +148,14 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
         snackbar.show();
         */
     }
+
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showAlert(isConnected);
 
     }
 
-    public void loadData()
-    {
+    public void loadData() {
         progress.setVisibility(View.VISIBLE);
 
         final bean b = (bean) getApplicationContext();

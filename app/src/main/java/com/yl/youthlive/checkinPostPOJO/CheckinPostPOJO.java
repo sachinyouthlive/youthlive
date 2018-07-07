@@ -1,4 +1,3 @@
-
 package com.yl.youthlive.checkinPostPOJO;
 
 import com.google.gson.annotations.Expose;

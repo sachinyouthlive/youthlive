@@ -29,24 +29,20 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     Context context;
 
 
-
-
-    public ChatAdapter(Context context , List<Datum> list)
-    {
+    public ChatAdapter(Context context, List<Datum> list) {
         this.list = list;
         this.context = context;
     }
 
-    public void setGridData(List<Datum> list)
-    {
+    public void setGridData(List<Datum> list) {
         this.list = list;
         notifyDataSetChanged();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.chat_list_model , parent , false);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.chat_list_model, parent, false);
         return new ViewHolder(view);
     }
 
@@ -75,17 +71,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
         //.............
 
-        bean b = (bean)context.getApplicationContext();
+        bean b = (bean) context.getApplicationContext();
 
-        if (Objects.equals(item.getSenderId(), b.userId))
-        {
+        if (Objects.equals(item.getSenderId(), b.userId)) {
 
             holder.container.setGravity(Gravity.END);
             holder.bubble.setBackgroundResource(R.drawable.bubble_me);
 
-        }
-        else
-        {
+        } else {
             holder.container.setGravity(Gravity.START);
             holder.bubble.setBackgroundResource(R.drawable.bubble);
         }
@@ -97,19 +90,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return list.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder
-    {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        LinearLayout container , bubble;
-        TextView message , time;
+        LinearLayout container, bubble;
+        TextView message, time;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            container = (LinearLayout)itemView.findViewById(R.id.container);
-            bubble = (LinearLayout)itemView.findViewById(R.id.bubble);
-            message = (TextView)itemView.findViewById(R.id.message);
-            time = (TextView)itemView.findViewById(R.id.time);
+            container = (LinearLayout) itemView.findViewById(R.id.container);
+            bubble = (LinearLayout) itemView.findViewById(R.id.bubble);
+            message = (TextView) itemView.findViewById(R.id.message);
+            time = (TextView) itemView.findViewById(R.id.time);
 
         }
     }

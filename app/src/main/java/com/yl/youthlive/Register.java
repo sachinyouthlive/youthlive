@@ -69,42 +69,38 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import static com.yl.youthlive.R.id.Signup;
 
 public class Register extends AppCompatActivity {
-    private static final String BASEESIGNUP_URL = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/sign_up.php";
-    Button signup_button;
-    int flag=0;
-    CallbackManager callbackManager;
-    private String fbUserID;
-    SessionManager session;
-    //private TwitterAuthClient client;
-    private int twiterUserID;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    public static  final  int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE=12;
-    RelativeLayout relative;
-
-    ImageView facebook_login, googleLogin , twitter_login;
-
-    ProgressBar progress;
-    private int RC_SIGN_IN = 22;
-    GoogleSignInClient mGoogleSignInClient;
-
+    public static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 12;
+    private static final String BASEESIGNUP_URL = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/sign_up.php";
     private static final String TWITTER_KEY = "LBbbEwhJEotJqr3hfXlRHGtUk";
     private static final String TWITTER_SECRET = "RQL5V4FKdtqMLdWs6DkldiCoM7bkN4szL5s8oZKEHXXmHARWNR";
     private static final String BASEOTP_URL = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/sign_up.php";
-    EditText Phone_no;
-    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS =0 ;
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
     private static final String KEY_COUNTRY = "Contery";
     private static final String KEY_PASS = "passs";
-    CallbackManager mCallbackManager;
     private static final String TAG = "ERROR";
-    BroadcastReceiver smsSentReceiver, smsDeliveredReceiver;
     private static final String OTP = "otp";
+    Button signup_button;
+    int flag = 0;
+    CallbackManager callbackManager;
+    SessionManager session;
+    RelativeLayout relative;
+    ImageView facebook_login, googleLogin, twitter_login;
+    ProgressBar progress;
+    GoogleSignInClient mGoogleSignInClient;
+    EditText Phone_no;
+    CallbackManager mCallbackManager;
+    BroadcastReceiver smsSentReceiver, smsDeliveredReceiver;
     String Phonenumber, Msg, opt_Phone, str, verificationCode, userId;
     AlertDialog.Builder builder;
-    private ProgressDialog pDialog;
     String jsonResponse;
-
     SharedPreferences pref;
     SharedPreferences.Editor edit;
+    private String fbUserID;
+    //private TwitterAuthClient client;
+    private int twiterUserID;
+    private int RC_SIGN_IN = 22;
+    private ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +132,6 @@ public class Register extends AppCompatActivity {
                                             String image = "https://graph.facebook.com/" + id + "/picture?type=large";
 
 
-
                                             progress.setVisibility(View.VISIBLE);
 
                                             final bean b = (bean) getApplicationContext();
@@ -150,39 +145,36 @@ public class Register extends AppCompatActivity {
                                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                            Call<socialBean> call = cr.socialSignIn(id , email);
+                                            Call<socialBean> call = cr.socialSignIn(id, email);
 
                                             call.enqueue(new Callback<socialBean>() {
                                                 @Override
                                                 public void onResponse(Call<socialBean> call, retrofit2.Response<socialBean> response) {
 
-                                                    if (response.body().getData().getUserName().length() > 0)
-                                                    {
+                                                    if (response.body().getData().getUserName().length() > 0) {
 
-                                                        edit.putString("type" , "social");
-                                                        edit.putString("user" , email);
-                                                        edit.putString("pass" , id);
+                                                        edit.putString("type", "social");
+                                                        edit.putString("user", email);
+                                                        edit.putString("pass", id);
                                                         edit.apply();
 
                                                         //  Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(Register.this , HomeActivity.class);
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        Intent intent = new Intent(Register.this, HomeActivity.class);
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
 
 
-                                                    }
-                                                    else
-                                                    {
+                                                    } else {
 
-                                                        edit.putString("type" , "social");
-                                                        edit.putString("user" , email);
-                                                        edit.putString("pass" , id);
+                                                        edit.putString("type", "social");
+                                                        edit.putString("user", email);
+                                                        edit.putString("pass", id);
                                                         edit.commit();
 
-                                                        Toast.makeText(Register.this , "Please update your info" , Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(Register.this, "Please update your info", Toast.LENGTH_SHORT).show();
                                                         Intent intent = new Intent(Register.this, UserInformation.class);
-                                                        intent.putExtra("userId" , response.body().getData().getUserId());
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        intent.putExtra("userId", response.body().getData().getUserId());
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
 
 
@@ -199,7 +191,6 @@ public class Register extends AppCompatActivity {
                                                     progress.setVisibility(View.GONE);
                                                 }
                                             });
-
 
 
                                             //new FacebookloginAsyncTask().execute(email);
@@ -231,15 +222,15 @@ public class Register extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.activity_register);
 
-        pref = getSharedPreferences("pref" , Context.MODE_PRIVATE);
+        pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
         edit = pref.edit();
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
         checkLocationPermission1();
-        builder =new AlertDialog.Builder(Register.this);
-        relative=findViewById(R.id.relative);
+        builder = new AlertDialog.Builder(Register.this);
+        relative = findViewById(R.id.relative);
         Phone_no = findViewById(R.id.phone_no);
         signup_button = findViewById(Signup);
 
@@ -266,7 +257,7 @@ public class Register extends AppCompatActivity {
             }
         });
 
-        twitter_login = (ImageView)findViewById(R.id.twitter);
+        twitter_login = (ImageView) findViewById(R.id.twitter);
         twitter_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -275,7 +266,7 @@ public class Register extends AppCompatActivity {
         });
 
 
-        progress = (ProgressBar)findViewById(R.id.progress);
+        progress = (ProgressBar) findViewById(R.id.progress);
 
         signup_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,88 +278,76 @@ public class Register extends AppCompatActivity {
     }
 
 
-
-    public void signUp()
-    {
+    public void signUp() {
 
 
         String phone = Phone_no.getText().toString();
 
 
+        if (phone.length() > 0) {
 
-            if (phone.length() > 0)
-            {
+            progress.setVisibility(View.VISIBLE);
 
-                progress.setVisibility(View.VISIBLE);
+            final bean b = (bean) getApplicationContext();
 
-                final bean b = (bean) getApplicationContext();
+            final Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(b.BASE_URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
+            final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<loginResponseBean> call = cr.signUp(phone);
+            Call<loginResponseBean> call = cr.signUp(phone);
 
-                call.enqueue(new Callback<loginResponseBean>() {
-                    @Override
-                    public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
-
-
-                        if (Objects.equals(response.body().getStatus(), "1"))
-                        {
-
-                            Intent intent = new Intent(Register.this , OTP.class);
-
-                            intent.putExtra("code" ,  response.body().getData().getVerificationCode());
-                            intent.putExtra("userId" ,  response.body().getData().getUserId());
-                            intent.putExtra("phone" ,  response.body().getData().getPhone());
-                            intent.putExtra("country" ,  response.body().getData().getCountryCode());
+            call.enqueue(new Callback<loginResponseBean>() {
+                @Override
+                public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
 
 
-                            startActivity(intent);
-                            finish();
+                    if (Objects.equals(response.body().getStatus(), "1")) {
 
-                        }
-                        else
-                        {
-                            Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-                        }
+                        Intent intent = new Intent(Register.this, OTP.class);
+
+                        intent.putExtra("code", response.body().getData().getVerificationCode());
+                        intent.putExtra("userId", response.body().getData().getUserId());
+                        intent.putExtra("phone", response.body().getData().getPhone());
+                        intent.putExtra("country", response.body().getData().getCountryCode());
 
 
-                        // Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
+                        finish();
 
-                        progress.setVisibility(View.GONE);
+                    } else {
+                        Toast.makeText(Register.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
-                    @Override
-                    public void onFailure(Call<loginResponseBean> call, Throwable t) {
-                        progress.setVisibility(View.GONE);
-                        Log.d("register" , t.toString());
-                    }
-                });
 
-            }
-            else
-            {
-                Phone_no.setError("Invalid Phone");
-            }
+                    // Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
 
+                    progress.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onFailure(Call<loginResponseBean> call, Throwable t) {
+                    progress.setVisibility(View.GONE);
+                    Log.d("register", t.toString());
+                }
+            });
+
+        } else {
+            Phone_no.setError("Invalid Phone");
+        }
 
 
     }
 
 
-
     private void usersign() {
         showpDialog();
         Phonenumber = Phone_no.getText().toString().trim();
-        if (Phonenumber.equals(""))
-        {
+        if (Phonenumber.equals("")) {
             builder.setTitle("Somethimg went wrong..");
             builder.setMessage("Please Enter Valid Mobile Number");
             Displayalart("input_error");
@@ -380,29 +359,29 @@ public class Register extends AppCompatActivity {
                 Log.d(TAG, response.toString());
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    String status= jObj.getString("status");
-                    if (!status.equals("0")){
+                    String status = jObj.getString("status");
+                    if (!status.equals("0")) {
                         JSONObject user = jObj.getJSONObject("data");
                         Phonenumber = user.getString("phone");
                         verificationCode = user.getString("verificationCode");
-                        str=jObj.getString("message");
-                        userId=user.getString("userId");
+                        str = jObj.getString("message");
+                        userId = user.getString("userId");
                         SharedPreferences settings = getSharedPreferences("mypref", MODE_PRIVATE);
                         SharedPreferences.Editor editor = settings.edit();
-                        editor.putString("userid",userId);
+                        editor.putString("userid", userId);
                         editor.apply();
 
-                        Intent intent=new Intent(getApplicationContext(),OTP.class);
-                        intent.putExtra("verificationCode",verificationCode);
-                        intent.putExtra("userId",userId);
-                        PendingIntent pi=PendingIntent.getActivity(getApplicationContext(), 0, intent,0);
-                        SmsManager sms=SmsManager.getDefault();
-                        sms.sendTextMessage(Phonenumber, null, verificationCode, pi,null);
+                        Intent intent = new Intent(getApplicationContext(), OTP.class);
+                        intent.putExtra("verificationCode", verificationCode);
+                        intent.putExtra("userId", userId);
+                        PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+                        SmsManager sms = SmsManager.getDefault();
+                        sms.sendTextMessage(Phonenumber, null, verificationCode, pi, null);
                         //Toast.makeText(getApplicationContext(), "Message Sent successfully!",Toast.LENGTH_LONG).show();
 
                         //OTP();
-                    }else{
-                        str=jObj.getString("message");
+                    } else {
+                        str = jObj.getString("message");
                         //  Toast.makeText(Register.this, str, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
@@ -419,7 +398,7 @@ public class Register extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("phone",Phonenumber);
+                params.put("phone", Phonenumber);
                 return params;
             }
         };
@@ -456,12 +435,11 @@ public class Register extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
 
                     }
-                })
-                {
+                }) {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> params = new HashMap<String, String>();
-                        params.put("phone",Phonenumber);
+                        params.put("phone", Phonenumber);
                         return params;
                     }
                 };
@@ -506,14 +484,14 @@ public class Register extends AppCompatActivity {
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
+
     public boolean checkLocationPermission1() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE))
-            {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_PHONE_STATE},
                         MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
@@ -545,7 +523,6 @@ public class Register extends AppCompatActivity {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
 
 
     @Override
@@ -584,40 +561,36 @@ public class Register extends AppCompatActivity {
             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-            Call<socialBean> call = cr.socialSignIn(account.getId() , account.getEmail());
+            Call<socialBean> call = cr.socialSignIn(account.getId(), account.getEmail());
 
             call.enqueue(new Callback<socialBean>() {
                 @Override
                 public void onResponse(Call<socialBean> call, retrofit2.Response<socialBean> response) {
 
-                    if (response.body().getData().getUserName().length() > 0)
-                    {
+                    if (response.body().getData().getUserName().length() > 0) {
 
-                        edit.putString("type" , "social");
-                        edit.putString("user" , account.getEmail());
-                        edit.putString("pass" , account.getId());
+                        edit.putString("type", "social");
+                        edit.putString("user", account.getEmail());
+                        edit.putString("pass", account.getId());
                         edit.commit();
 
                         //  Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Register.this , HomeActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent intent = new Intent(Register.this, HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
 
 
+                    } else {
 
-                    }
-                    else
-                    {
-
-                        edit.putString("type" , "social");
-                        edit.putString("user" , account.getEmail());
-                        edit.putString("pass" , account.getId());
+                        edit.putString("type", "social");
+                        edit.putString("user", account.getEmail());
+                        edit.putString("pass", account.getId());
                         edit.commit();
 
-                        Toast.makeText(Register.this , "Please update your info" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this, "Please update your info", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Register.this, UserInformation.class);
-                        intent.putExtra("userId" , response.body().getData().getUserId());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("userId", response.body().getData().getUserId());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
 
                     }
@@ -633,7 +606,6 @@ public class Register extends AppCompatActivity {
                     progress.setVisibility(View.GONE);
                 }
             });
-
 
 
         } catch (ApiException e) {

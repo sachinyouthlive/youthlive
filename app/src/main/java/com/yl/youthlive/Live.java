@@ -189,11 +189,13 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
 
     }
+
     ////////////////////internet connectivity check///////////////
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showalert(isConnected);
     }
+
     private void showalert(boolean isConnected) {
         if (isConnected) {
 
@@ -226,10 +228,8 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
         }
 
@@ -279,7 +279,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
             ImageLoader loader = ImageLoader.getInstance();
 
-            loader.displayImage(item.getUserImage() , holder.image , options);
+            loader.displayImage(item.getUserImage(), holder.image, options);
 
             holder.viewCount.setText(item.getLiveUsers());
 
@@ -369,7 +369,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                 public void onClick(View v) {
 
 
-                    bean b = (bean)context.getApplicationContext();
+                    bean b = (bean) context.getApplicationContext();
 
                     b.liveId = item.getLiveId();
 

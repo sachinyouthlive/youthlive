@@ -110,94 +110,63 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class firstFrag extends Fragment implements WZStatusCallback {
 
+    public static final String ACCOUNT_SID = "AC325e3afb64517a3f8a99b2d1133f1b3d";
+    public static final String API_KEY_SID = "SKf2f5e0089874c68bb2e59cbb3b9155a2";
+    public static final String API_KEY_SECRET = "1js7fkFMjVfccKAKrOpfzOIf2Lvi4Esh";
+    //Broadcaster mBroadcaster;
+    //SurfaceView mPreviewSurface;
+    private static final String APPLICATION_ID = "gA1JdKySejF0GfA0ChIvVA";
+    private static final int PERMISSIONS_REQUEST_CODE = 0x1;
+    private static final int REQUEST_CODE = 100;
+    private static final String SCREENCAP_NAME = "screencap";
+
+    //Toast toast;
+    private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
+    //SimpleExoPlayerView thumb;
+    private static MediaProjection sMediaProjection;
+    private static String STORE_DIRECTORY;
+    private static int IMAGES_PRODUCED;
+    protected int mWZNetworkLogLevel = WZLog.LOG_LEVEL_DEBUG;
     RecyclerView grid;
     RecyclerView grid2;
-
-
-
     LinearLayoutManager manager;
     LiveAdapter adapter;
     LiveAdapter2 adapter2;
     LinearLayoutManager manager2;
     ImageButton heart;
-
-    //Toast toast;
-
-
-
-
-
     String giftURL = "", giftName = "";
-
-    private BubbleView bubbleView;
     ImageButton close;
     ImageButton folloview_friends;
-    //Broadcaster mBroadcaster;
-    //SurfaceView mPreviewSurface;
-    private static final String APPLICATION_ID = "gA1JdKySejF0GfA0ChIvVA";
     ListView following_friendList;
     String userId, friendid, str;
     ArrayList<String> name;
-    ArrayList<String> img;
-    ImageView back;
-    TextView tv;
-
-    String key = "";
-
-    private static final int PERMISSIONS_REQUEST_CODE = 0x1;
-    private boolean mPermissionsGranted = true;
-
-    private String[] mRequiredPermissions = new String[]{
-            android.Manifest.permission.CAMERA,
-            android.Manifest.permission.RECORD_AUDIO
-    };
-
-
-    // followingfriend_adapter fd;
-    String url = "http://youthlive.in/api/follow_unfollow.php";
-    RequestQueue requestQueue;
-    SharedPreferences settings;
-
-
 
 
     // The GoCoder SDK camera view
-
-
 
 
     // The GoCoder SDK audio device
 
 
     // The broadcast configuration settings
-
-
+    ArrayList<String> img;
+    ImageView back;
+    TextView tv;
+    String key = "";
+    // followingfriend_adapter fd;
+    String url = "http://youthlive.in/api/follow_unfollow.php";
+    RequestQueue requestQueue;
+    SharedPreferences settings;
     String connId;
-
     ProgressBar progress;
-
-
-
     TextView likeCount;
-
     String title;
-
-
-
-
-
     List<Comment> cList;
     List<com.yl.youthlive.getIpdatedPOJO.View> vList;
-
     String liveId = "";
-
     int count = 0;
-
     Toast toast;
-
     TextView viewCount;
-
-
     Integer[] gfts = {
             R.drawable.gift1,
             R.drawable.gift2,
@@ -206,85 +175,118 @@ public class firstFrag extends Fragment implements WZStatusCallback {
             R.drawable.gift5,
             R.drawable.gift6
     };
-
     ImageButton chatIcon, switchCamera, crop;
     LinearLayout chat, actions;
     EditText comment;
     FloatingActionButton send;
     CircleImageView image;
     TextView username;
-
     TextView beans, level;
-
-    private int mDensity;
     LinearLayout giftLayout;
     ImageView giftIcon;
     TextView giftTitle;
-
-
     FrameLayout playerLayout1;
-
     String access = "";
     String sid = "";
-
-    private MediaProjectionManager mProjectionManager;
-    //SimpleExoPlayerView thumb;
-    private static MediaProjection sMediaProjection;
-
-
-
-
-
-    private Display mDisplay;
-
-
-    public static final String ACCOUNT_SID = "AC325e3afb64517a3f8a99b2d1133f1b3d";
-    public static final String API_KEY_SID = "SKf2f5e0089874c68bb2e59cbb3b9155a2";
-    public static final String API_KEY_SECRET = "1js7fkFMjVfccKAKrOpfzOIf2Lvi4Esh";
-    private boolean disconnectedFromOnDestroy;
-    private String TAG = "ddfsdf";
-
+    BroadcastReceiver commentReceiver;
+    BroadcastReceiver viewReceiver;
 
 
     //private VideoView player;
 
 
     //  MediaPlayerConfig wzPlayerConfig;
-
-
-
-
-    BroadcastReceiver commentReceiver;
-    BroadcastReceiver viewReceiver;
     BroadcastReceiver likeReceiver;
     BroadcastReceiver giftReceiver;
     BroadcastReceiver statusReceiver;
-
     LiveScreen lvscreen;
-
-    private static final int REQUEST_CODE = 100;
-
-    private static String STORE_DIRECTORY;
-
     int PERMISSION_CODE = 12;
-
     int coun = 0;
-
     WZPlayerView mStreamPlayerView;
-
-
-    protected int mWZNetworkLogLevel = WZLog.LOG_LEVEL_DEBUG;
-
-
+    private BubbleView bubbleView;
+    private boolean mPermissionsGranted = true;
+    private String[] mRequiredPermissions = new String[]{
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.RECORD_AUDIO
+    };
+    private int mDensity;
+    private MediaProjectionManager mProjectionManager;
+    private Display mDisplay;
+    private boolean disconnectedFromOnDestroy;
+    private String TAG = "ddfsdf";
     private WZPlayerConfig mStreamPlayerConfig = null;
+    private int mWidth;
+    private int mHeight;
+    private int mRotation;
+    private ImageReader mImageReader;
+
+
+
+
+/*
+
+    public void BlockPersson(View view) {
+        PersonBlock();
+    }
+*/
+
+
+    /*@Override
+    public int Status(int i) {
+        Log.e("VEG", "From Native listitem status: " + i);
+        return 0;
+    }
+
+    @Override
+    public int OnReceiveData(ByteBuffer byteBuffer, int i, long l) {
+        Log.e("VEG", "Form Native listitem OnReceiveData: size: " + i + ", pts: " + l);
+        return 0;
+    }*/
+    private VirtualDisplay mVirtualDisplay;
+    private Handler mHandler;
+    private OrientationChangeCallback mOrientationChangeCallback;
+
+    public static Bitmap SavePixels(int x, int y, int w, int h, GL10 gl) {
+        int b[] = new int[w * (y + h)];
+        int bt[] = new int[w * h];
+        IntBuffer ib = IntBuffer.wrap(b);
+        ib.position(0);
+        gl.glReadPixels(x, 0, w, y + h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
+
+        for (int i = 0, k = 0; i < h; i++, k++) {//remember, that OpenGL bitmap is incompatible with Android bitmap
+            //and so, some correction need.
+            for (int j = 0; j < w; j++) {
+                int pix = b[i * w + j];
+                int pb = (pix >> 16) & 0xff;
+                int pr = (pix << 16) & 0x00ff0000;
+                int pix1 = (pix & 0xff00ff00) | pr | pb;
+                bt[(h - k - 1) * w + j] = pix1;
+            }
+        }
+
+
+        Bitmap sb = Bitmap.createBitmap(bt, w, h, Bitmap.Config.ARGB_8888);
+        return sb;
+    }
+
+    //
+// Utility method to check the status of a permissions request for an array of permission identifiers
+//
+    private static boolean hasPermissions(Context context, String[] permissions) {
+        for (String permission : permissions)
+            if (context.checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED)
+                return false;
+
+        return true;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.live_pager , container , false);
+        View view = inflater.inflate(R.layout.live_pager, container, false);
 
 
-        lvscreen = (LiveScreen)getActivity();
+        lvscreen = (LiveScreen) getActivity();
 
         mProjectionManager = (MediaProjectionManager) lvscreen.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
@@ -329,8 +331,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
         final bean b = (bean) getContext().getApplicationContext();
 
 
-
-
         ImageLoader loader = ImageLoader.getInstance();
         loader.displayImage(b.userImage, image);
 
@@ -369,7 +369,7 @@ public class firstFrag extends Fragment implements WZStatusCallback {
 
                 if (lvscreen.goCoder != null && lvscreen.goCoderCameraView != null) {
                     if (lvscreen.mAutoFocusDetector == null)
-                        lvscreen.mAutoFocusDetector = new GestureDetectorCompat(getContext() , new AutoFocusListener(getContext() , lvscreen.goCoderCameraView));
+                        lvscreen.mAutoFocusDetector = new GestureDetectorCompat(getContext(), new AutoFocusListener(getContext(), lvscreen.goCoderCameraView));
 
                     WZCamera activeCamera = lvscreen.goCoderCameraView.getCamera();
                     if (activeCamera != null && activeCamera.hasCapability(WZCamera.FOCUS_MODE_CONTINUOUS))
@@ -417,19 +417,14 @@ public class firstFrag extends Fragment implements WZStatusCallback {
         });*/
 
 
-
-
-
-
-
         //mBroadcaster.setAuthor(b.userImage);
         //mBroadcaster.setSendPosition(true);
         //mBroadcaster.setCustomData(b.userId);
         //mBroadcaster.setSaveOnServer(false);
         grid = (RecyclerView) view.findViewById(R.id.grid);
         grid2 = (RecyclerView) view.findViewById(R.id.grid2);
-        manager = new LinearLayoutManager(getContext() , LinearLayoutManager.HORIZONTAL, false);
-        manager2 = new LinearLayoutManager(getContext() , LinearLayoutManager.VERTICAL, true);
+        manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        manager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true);
         heart = (ImageButton) view.findViewById(R.id.heart);
         folloview_friends.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -446,8 +441,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
 
 
                 lvscreen.closeConnection();
-
-
 
 
             }
@@ -505,7 +498,7 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess , "basic");
+                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
 
                     call.enqueue(new Callback<liveCommentBean>() {
                         @Override
@@ -532,7 +525,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
         });
 
 
-
         crop.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -554,7 +546,7 @@ public class firstFrag extends Fragment implements WZStatusCallback {
 
                 startProjection();
 
-                               /*HiddenShot.getInstance().buildShotAndShare(getActivity(),"Check this out");*/
+                /*HiddenShot.getInstance().buildShotAndShare(getActivity(),"Check this out");*/
 
 
 
@@ -609,7 +601,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                 });*/
 
 
-
                 //Bitmap bitmap_rootview = ScreenShott.getInstance().takeScreenShotOfView(lvscreen.goCoderCameraView);
 
                 /*View rv = lvscreen.main.getRootView();
@@ -618,9 +609,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                 Canvas c = new Canvas(saveBitmap);
                 rv.draw(c);
 */
-
-
-
 
 
             }
@@ -692,7 +680,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                     lvscreen.goCoderBroadcastConfig.setStreamName(liveId);
 
 
-
                     Log.d("keyFrame", String.valueOf(lvscreen.goCoderBroadcastConfig.getVideoKeyFrameInterval()));
 
                     WZStreamingError configValidationError = lvscreen.goCoderBroadcastConfig.validateForBroadcast();
@@ -711,18 +698,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                     //connectToRoom("123" , "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzM2NDRiMWZmNjkwYTM1Y2ZjOGZiNTFmYWYyMWI0NTY4LTE1MTkyOTYyODYiLCJpc3MiOiJTSzM2NDRiMWZmNjkwYTM1Y2ZjOGZiNTFmYWYyMWI0NTY4Iiwic3ViIjoiQUNmOWQwZTVhMTk4NmIxZTg2NzI0Y2I3ZmJiNjEyOTk2MCIsImV4cCI6MTUxOTI5OTg4NiwiZ3JhbnRzIjp7ImlkZW50aXR5IjoiY2xpZW50MiIsInZpZGVvIjp7InJvb20iOiIxMjMifX19.ULAQN_l_H1iEqNHM1-iNWWlk_ACs71zR1oiQDl0SGew");
 
 
-
-
-
-
-
-
-
-
-
-
-
-
                     schedule(liveId);
 
                 } else {
@@ -737,11 +712,10 @@ public class firstFrag extends Fragment implements WZStatusCallback {
             @Override
             public void onFailure(Call<goLiveBean> call, Throwable t) {
                 progress.setVisibility(View.GONE);
-                Toast.makeText(getContext() , "Error in going Live" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error in going Live", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             }
         });
-
 
 
         commentReceiver = new BroadcastReceiver() {
@@ -754,17 +728,17 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                     // now subscribe to `global` topic to receive app wide notifications
 
 
-                    Log.d("data" , intent.getStringExtra("data"));
+                    Log.d("data", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
                     Gson gson = new Gson();
 
-                    Comment item = gson.fromJson( json, Comment.class );
+                    Comment item = gson.fromJson(json, Comment.class);
 
                     adapter2.addComment(item);
-					
-					grid2.scrollToPosition(0);
+
+                    grid2.scrollToPosition(0);
 
                     //displayFirebaseRegId();
 
@@ -781,7 +755,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
         };
 
 
-
         likeReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -792,7 +765,7 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                     // now subscribe to `global` topic to receive app wide notifications
 
 
-                    Log.d("data" , intent.getStringExtra("data"));
+                    Log.d("data", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
@@ -834,14 +807,13 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                     // now subscribe to `global` topic to receive app wide notifications
 
 
-                    Log.d("data" , intent.getStringExtra("data"));
+                    Log.d("data", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
                     Gson gson = new Gson();
 
-                    com.yl.youthlive.getIpdatedPOJO.Gift item = gson.fromJson( json, com.yl.youthlive.getIpdatedPOJO.Gift.class );
-
+                    com.yl.youthlive.getIpdatedPOJO.Gift item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.Gift.class);
 
 
                     try {
@@ -853,7 +825,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
 
 
                     //displayFirebaseRegId();
@@ -881,7 +852,7 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                     // now subscribe to `global` topic to receive app wide notifications
 
 
-                    Log.d("data" , intent.getStringExtra("data"));
+                    Log.d("data", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
@@ -889,21 +860,17 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                         JSONObject obj = new JSONObject(json);
 
 
-
                         String mode = obj.getString("status");
                         String uri = obj.getString("uri");
 
 
-
-                        if (mode.equals("1"))
-                        {
+                        if (mode.equals("1")) {
                             mStreamPlayerConfig = new WZPlayerConfig();
-
 
 
                             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-                            GoCoderSDKPrefs.saveConfigDetails(prefs , uri);
+                            GoCoderSDKPrefs.saveConfigDetails(prefs, uri);
                             //GoCoderSDKPrefs.saveConfigDetails(prefs , "sample.mp4");
 
 
@@ -911,13 +878,11 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                             mWZNetworkLogLevel = Integer.valueOf(prefs.getString("wz_debug_net_log_level", String.valueOf(WZLog.LOG_LEVEL_DEBUG)));
 
 
-
                             if (mStreamPlayerConfig != null)
 
-                                Log.d("eeeeee" , "entered");
+                                Log.d("eeeeee", "entered");
 
                             GoCoderSDKPrefs.updateConfigFromPrefs(prefs, mStreamPlayerConfig);
-
 
 
                             if (mStreamPlayerView.isPlaying()) {
@@ -942,38 +907,28 @@ public class firstFrag extends Fragment implements WZStatusCallback {
 
                                     // Start playback of the live stream
 
-                                    Log.d("config" , mStreamPlayerConfig.toString());
+                                    Log.d("config", mStreamPlayerConfig.toString());
 
-                                    mStreamPlayerView.play(mStreamPlayerConfig , firstFrag.this);
+                                    mStreamPlayerView.play(mStreamPlayerConfig, firstFrag.this);
                                 }
 
                             }
 
 
-                        }
-                        else
-                        {
+                        } else {
 
                             playerLayout1.setVisibility(View.GONE);
 
-                            if (mStreamPlayerView.isPlaying())
-                            {
+                            if (mStreamPlayerView.isPlaying()) {
                                 mStreamPlayerView.stop();
                             }
 
                         }
 
 
-
-
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-
-
 
 
                     //displayFirebaseRegId();
@@ -1001,20 +956,18 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                     // now subscribe to `global` topic to receive app wide notifications
 
 
-                    Log.d("data" , intent.getStringExtra("data"));
+                    Log.d("data", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
                     Gson gson = new Gson();
 
-                    com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson( json, com.yl.youthlive.getIpdatedPOJO.View.class );
+                    com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
 
                     String id = item.getUserId();
-                    if (!id.equals(b.userId))
-                    {
+                    if (!id.equals(b.userId)) {
                         adapter.addView(item);
                     }
-
 
 
                     //displayFirebaseRegId();
@@ -1036,34 +989,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
 
     }
 
-
-    public static Bitmap SavePixels(int x, int y, int w, int h, GL10 gl)
-    {
-        int b[]=new int[w*(y+h)];
-        int bt[]=new int[w*h];
-        IntBuffer ib= IntBuffer.wrap(b);
-        ib.position(0);
-        gl.glReadPixels(x, 0, w, y+h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, ib);
-
-        for(int i=0, k=0; i<h; i++, k++)
-        {//remember, that OpenGL bitmap is incompatible with Android bitmap
-            //and so, some correction need.
-            for(int j=0; j<w; j++)
-            {
-                int pix=b[i*w+j];
-                int pb=(pix>>16)&0xff;
-                int pr=(pix<<16)&0x00ff0000;
-                int pix1=(pix&0xff00ff00) | pr | pb;
-                bt[(h-k-1)*w+j]=pix1;
-            }
-        }
-
-
-        Bitmap sb=Bitmap.createBitmap(bt, w, h, Bitmap.Config.ARGB_8888);
-        return sb;
-    }
-
-
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -1071,7 +996,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
-
 
     public void schedule(final String vid) {
 
@@ -1092,9 +1016,9 @@ public class firstFrag extends Fragment implements WZStatusCallback {
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-        Log.d("VEG" , b.userId);
+        Log.d("VEG", b.userId);
 
-        Log.d("VEG" , liveId);
+        Log.d("VEG", liveId);
 
                 /*Call<checkStatusBean> call1 = cr.checkStatus(b.userId, liveId);
                 call1.enqueue(new Callback<checkStatusBean>() {
@@ -1265,14 +1189,13 @@ public class firstFrag extends Fragment implements WZStatusCallback {
 */
 
 
+        SharedPreferences fcmPref = getContext().getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
-        SharedPreferences fcmPref = getContext().getSharedPreferences("fcm" , Context.MODE_PRIVATE);
+        String keey = fcmPref.getString("token", "");
 
-        String keey = fcmPref.getString("token" , "");
+        Log.d("keeey", keey);
 
-        Log.d("keeey" , keey);
-
-        Call<getUpdatedBean> call = cr.getUpdatedData(b.userId, vid , keey);
+        Call<getUpdatedBean> call = cr.getUpdatedData(b.userId, vid, keey);
 
 
         call.enqueue(new Callback<getUpdatedBean>() {
@@ -1317,8 +1240,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
 
                         count = count1;
                     }
-
-
 
 
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
@@ -1394,7 +1315,7 @@ public class firstFrag extends Fragment implements WZStatusCallback {
             @Override
             public void run() {
 
-                Log.d("stateeeeeee" , String.valueOf(playerStatus.getState()));
+                Log.d("stateeeeeee", String.valueOf(playerStatus.getState()));
 
                 switch (playerStatus.getState()) {
                     case WZPlayerView.STATE_PLAYING:
@@ -1448,31 +1369,158 @@ public class firstFrag extends Fragment implements WZStatusCallback {
 
     }
 
+    @Override
+    public void onPause() {
 
+        super.onPause();
 
+        //goCoderCameraView.stopPreview();
 
-/*
-
-    public void BlockPersson(View view) {
-        PersonBlock();
-    }
-*/
-
-
-
-
-
-    /*@Override
-    public int Status(int i) {
-        Log.e("VEG", "From Native listitem status: " + i);
-        return 0;
+        //mBroadcaster.onActivityPause();
     }
 
     @Override
-    public int OnReceiveData(ByteBuffer byteBuffer, int i, long l) {
-        Log.e("VEG", "Form Native listitem OnReceiveData: size: " + i + ", pts: " + l);
-        return 0;
-    }*/
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
+
+            if (sMediaProjection != null) {
+                File externalFilesDir = lvscreen.getExternalFilesDir(null);
+                if (externalFilesDir != null) {
+                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/screenshots/";
+                    File storeDirectory = new File(STORE_DIRECTORY);
+                    if (!storeDirectory.exists()) {
+                        boolean success = storeDirectory.mkdirs();
+                        if (!success) {
+                            Log.e(TAG, "failed to create file storage directory.");
+                            return;
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
+                    return;
+                }
+
+                // display metrics
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+                mDensity = metrics.densityDpi;
+                mDisplay = lvscreen.getWindowManager().getDefaultDisplay();
+
+                // create virtual display depending on device width / height
+                createVirtualDisplay();
+
+                // register orientation change callback
+                mOrientationChangeCallback = new OrientationChangeCallback(getContext());
+                if (mOrientationChangeCallback.canDetectOrientation()) {
+                    mOrientationChangeCallback.enable();
+                }
+
+                // register media projection stop callback
+                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
+            }
+        }
+    }
+
+    private void createVirtualDisplay() {
+        // get width and height
+        Point size = new Point();
+        mDisplay.getSize(size);
+        mWidth = size.x;
+        mHeight = size.y;
+
+        // start capture reader
+        mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
+        mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
+        mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
+    }
+
+    private void stopProjection() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (sMediaProjection != null) {
+                    sMediaProjection.stop();
+                }
+            }
+        });
+    }
+
+    public void follow() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    String status = jObj.getString("status");
+                    if (!status.equals(0)) {
+                        JSONObject obj2 = jObj.getJSONObject("data");
+                        userId = obj2.getString("userId");
+                        friendid = obj2.getString("friendId");
+
+                    } else {
+                        str = jObj.getString("message");
+                        //Toast.makeText(LiveScreen.this, str, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                // hidepDialog();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(LiveScreen.this, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                bean b = new bean();
+                params.put("userId", "170");
+                params.put("friendId", "19");
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        mPermissionsGranted = true;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_CODE: {
+                // Check the result of each permission granted
+                for (int grantResult : grantResults) {
+                    if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                        mPermissionsGranted = false;
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(commentReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
+        super.onStop();
+
+
+        //goCoderCameraView.stopPreview();
+
+
+    }
+
+    private void startProjection() {
+        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
+    }
 
     public class LiveAdapter extends RecyclerView.Adapter<LiveAdapter.ViewHolder> {
 
@@ -1489,9 +1537,8 @@ public class firstFrag extends Fragment implements WZStatusCallback {
             notifyDataSetChanged();
         }
 
-        public void addView(com.yl.youthlive.getIpdatedPOJO.View item)
-        {
-            list.add(0 , item);
+        public void addView(com.yl.youthlive.getIpdatedPOJO.View item) {
+            list.add(0, item);
             notifyItemInserted(0);
             viewCount.setText(String.valueOf(list.size()));
         }
@@ -1522,7 +1569,7 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                 public void onClick(View view) {
 
                     String uid = item.getUserId();
-                    uid.replace("\"" , "");
+                    uid.replace("\"", "");
 
                     Intent intent = new Intent(context, TimelineProfile.class);
                     intent.putExtra("userId", uid);
@@ -1550,7 +1597,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
         }
     }
 
-
     public class LiveAdapter2 extends RecyclerView.Adapter<LiveAdapter2.ViewHolder> {
 
 
@@ -1568,9 +1614,8 @@ public class firstFrag extends Fragment implements WZStatusCallback {
         }
 
 
-        public void addComment(Comment item)
-        {
-            list.add(0 , item);
+        public void addComment(Comment item) {
+            list.add(0, item);
             notifyItemInserted(0);
         }
 
@@ -1599,18 +1644,17 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                 holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
 
-            final String uid = item.getUserId().replace("\"" , "");
+            final String uid = item.getUserId().replace("\"", "");
 
             DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
             ImageLoader loader = ImageLoader.getInstance();
 
-            String im = item.getUserImage().replace("\"" , "");
+            String im = item.getUserImage().replace("\"", "");
 
-            loader.displayImage(im , holder.index, options);
+            loader.displayImage(im, holder.index, options);
 
             final bean b = (bean) context.getApplicationContext();
-
 
 
             //holder.user.setText(us);
@@ -1625,7 +1669,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
 
                 }
             });
-
 
 
             if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
@@ -1733,7 +1776,7 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                                 @Override
                                 public void onFailure(Call<requestConnectionBean> call, Throwable t) {
                                     progress.setVisibility(View.GONE);
-                                    Log.d("asdasdasdas" , t.toString());
+                                    Log.d("asdasdasdas", t.toString());
                                 }
                             });
 
@@ -1746,18 +1789,15 @@ public class firstFrag extends Fragment implements WZStatusCallback {
             });
 
 
-
-
-
             if (Objects.equals(uid, b.userId)) {
                 holder.add.setVisibility(View.GONE);
             } else {
                 holder.add.setVisibility(View.VISIBLE);
             }
 
-            String com = item.getComment().replace("\"" , "");
+            String com = item.getComment().replace("\"", "");
 
-            String us = item.getUserName().replace("\"" , "");
+            String us = item.getUserName().replace("\"", "");
 
             holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
 
@@ -1786,90 +1826,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
         }
     }
 
-
-    @Override
-    public void onPause() {
-
-        super.onPause();
-
-        //goCoderCameraView.stopPreview();
-
-        //mBroadcaster.onActivityPause();
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE) {
-            sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
-
-            if (sMediaProjection != null) {
-                File externalFilesDir = lvscreen.getExternalFilesDir(null);
-                if (externalFilesDir != null) {
-                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/screenshots/";
-                    File storeDirectory = new File(STORE_DIRECTORY);
-                    if (!storeDirectory.exists()) {
-                        boolean success = storeDirectory.mkdirs();
-                        if (!success) {
-                            Log.e(TAG, "failed to create file storage directory.");
-                            return;
-                        }
-                    }
-                } else {
-                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
-                    return;
-                }
-
-                // display metrics
-                DisplayMetrics metrics = getResources().getDisplayMetrics();
-                mDensity = metrics.densityDpi;
-                mDisplay = lvscreen.getWindowManager().getDefaultDisplay();
-
-                // create virtual display depending on device width / height
-                createVirtualDisplay();
-
-                // register orientation change callback
-                mOrientationChangeCallback = new OrientationChangeCallback(getContext());
-                if (mOrientationChangeCallback.canDetectOrientation()) {
-                    mOrientationChangeCallback.enable();
-                }
-
-                // register media projection stop callback
-                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
-            }
-        }
-    }
-
-    private int mWidth;
-    private int mHeight;
-    private int mRotation;
-
-    private ImageReader mImageReader;
-
-    private VirtualDisplay mVirtualDisplay;
-    private static final String SCREENCAP_NAME = "screencap";
-
-    private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
-
-    private Handler mHandler;
-
-    private void createVirtualDisplay() {
-        // get width and height
-        Point size = new Point();
-        mDisplay.getSize(size);
-        mWidth = size.x;
-        mHeight = size.y;
-
-        // start capture reader
-        mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
-        mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
-        mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
-    }
-
-    private static int IMAGES_PRODUCED;
-
     private class ImageAvailableListener implements ImageReader.OnImageAvailableListener {
         @Override
         public void onImageAvailable(ImageReader reader) {
@@ -1880,8 +1836,7 @@ public class firstFrag extends Fragment implements WZStatusCallback {
             try {
 
 
-                if (coun == 0)
-                {
+                if (coun == 0) {
                     image = reader.acquireLatestImage();
                     if (image != null) {
                         Image.Plane[] planes = image.getPlanes();
@@ -1928,8 +1883,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                 }
 
 
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -1950,17 +1903,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                 }
             }
         }
-    }
-
-    private void stopProjection() {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (sMediaProjection != null) {
-                    sMediaProjection.stop();
-                }
-            }
-        });
     }
 
     private class OrientationChangeCallback extends OrientationEventListener {
@@ -1988,8 +1930,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
         }
     }
 
-    private OrientationChangeCallback mOrientationChangeCallback;
-
     private class MediaProjectionStopCallback extends MediaProjection.Callback {
         @Override
         public void onStop() {
@@ -2004,95 +1944,6 @@ public class firstFrag extends Fragment implements WZStatusCallback {
                 }
             });
         }
-    }
-
-    public void follow() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    String status = jObj.getString("status");
-                    if (!status.equals(0)) {
-                        JSONObject obj2 = jObj.getJSONObject("data");
-                        userId = obj2.getString("userId");
-                        friendid = obj2.getString("friendId");
-
-                    } else {
-                        str = jObj.getString("message");
-                        //Toast.makeText(LiveScreen.this, str, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                // hidepDialog();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //Toast.makeText(LiveScreen.this, error.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                bean b = new bean();
-                params.put("userId", "170");
-                params.put("friendId", "19");
-                return params;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(stringRequest);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        mPermissionsGranted = true;
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_CODE: {
-                // Check the result of each permission granted
-                for (int grantResult : grantResults) {
-                    if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                        mPermissionsGranted = false;
-                    }
-                }
-            }
-        }
-    }
-
-    //
-// Utility method to check the status of a permissions request for an array of permission identifiers
-//
-    private static boolean hasPermissions(Context context, String[] permissions) {
-        for (String permission : permissions)
-            if (context.checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED)
-                return false;
-
-        return true;
-    }
-
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(commentReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
-        super.onStop();
-
-
-        //goCoderCameraView.stopPreview();
-
-
-
-
-    }
-
-    private void startProjection() {
-        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
     }
 
 }

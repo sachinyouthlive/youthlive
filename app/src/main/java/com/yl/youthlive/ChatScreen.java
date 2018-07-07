@@ -86,8 +86,7 @@ public class ChatScreen extends AppCompatActivity {
 
                 String comm = comment.getText().toString();
 
-                if (comm.length() > 0)
-                {
+                if (comm.length() > 0) {
 
                     progress.setVisibility(View.VISIBLE);
 
@@ -101,7 +100,7 @@ public class ChatScreen extends AppCompatActivity {
 
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                    Call<sendMessageBean> call = cr.sendMessage(b.userId , id , comm);
+                    Call<sendMessageBean> call = cr.sendMessage(b.userId, id, comm);
 
                     call.enqueue(new Callback<sendMessageBean>() {
                         @Override
@@ -195,7 +194,7 @@ public class ChatScreen extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<singleMessageBean> call = cr.singleChatList(b.userId, id , chat);
+                Call<singleMessageBean> call = cr.singleChatList(b.userId, id, chat);
 
                 call.enqueue(new Callback<singleMessageBean>() {
                     @Override

@@ -1,4 +1,3 @@
-
 package com.yl.youthlive.searchlistPOJO;
 
 import com.google.gson.annotations.Expose;

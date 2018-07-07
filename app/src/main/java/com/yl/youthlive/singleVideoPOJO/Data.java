@@ -158,11 +158,11 @@ public class Data {
         this.viewsCount = viewsCount;
     }
 
-    public void setThumbURL(String thumbURL) {
-        this.thumbURL = thumbURL;
-    }
-
     public String getThumbURL() {
         return thumbURL;
+    }
+
+    public void setThumbURL(String thumbURL) {
+        this.thumbURL = thumbURL;
     }
 }

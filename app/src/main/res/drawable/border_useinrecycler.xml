@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Border -->
     <item>
         <shape>
@@ -7,9 +7,10 @@
         </shape>
     </item>
     <!-- Body -->
-    <item android:left="1dip"
-        android:top="1dp"
-        android:right="1dp">
+    <item
+        android:left="1dip"
+        android:right="1dp"
+        android:top="1dp">
         <shape>
             <solid android:color="#FFF"></solid>
         </shape>

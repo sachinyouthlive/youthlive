@@ -11,18 +11,18 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 public class player_secondNew extends Fragment {
-    private MyPlayerInterface mCallback;
     ImageButton close;
     PlayerActivityNew plactivity;
+    private MyPlayerInterface mCallback;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.second_pager , container , false);
+        View view = inflater.inflate(R.layout.second_pager, container, false);
 
         plactivity = (PlayerActivityNew) getActivity();
 
-        close = (ImageButton)view.findViewById(R.id.close);
+        close = (ImageButton) view.findViewById(R.id.close);
 
 
         close.setOnClickListener(new View.OnClickListener() {
@@ -36,9 +36,9 @@ public class player_secondNew extends Fragment {
         });
 
 
-
         return view;
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -50,6 +50,7 @@ public class player_secondNew extends Fragment {
                     + " must implement IFragmentToActivity");
         }
     }
+
     @Override
     public void onDetach() {
         mCallback = null;

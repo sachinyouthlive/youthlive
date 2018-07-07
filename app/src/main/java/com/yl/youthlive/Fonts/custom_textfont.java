@@ -3,7 +3,6 @@ package com.yl.youthlive.Fonts;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 /**
  * Created by admin on 8/9/2017.
@@ -12,6 +11,7 @@ import android.widget.TextView;
 public class custom_textfont extends android.support.v7.widget.AppCompatTextView {
 
     private Context c;
+
     public custom_textfont(Context c) {
         super(c);
         this.c = c;
@@ -20,6 +20,7 @@ public class custom_textfont extends android.support.v7.widget.AppCompatTextView
         setTypeface(tfs);
 
     }
+
     public custom_textfont(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.c = context;

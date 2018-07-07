@@ -1,149 +1,55 @@
 package com.yl.youthlive;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.media.MediaPlayer;
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.ImageViewCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
-
-
-import com.bumptech.glide.Glide;
-
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.gson.Gson;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
-import com.veer.hiddenshot.HiddenShot;
 import com.wowza.gocoder.sdk.api.WowzaGoCoder;
-import com.wowza.gocoder.sdk.api.broadcast.WZBroadcast;
 import com.wowza.gocoder.sdk.api.broadcast.WZBroadcastConfig;
 import com.wowza.gocoder.sdk.api.configuration.WZMediaConfig;
 import com.wowza.gocoder.sdk.api.devices.WZAudioDevice;
-import com.wowza.gocoder.sdk.api.devices.WZCameraView;
 import com.wowza.gocoder.sdk.api.errors.WZStreamingError;
-import com.wowza.gocoder.sdk.api.h264.WZProfileLevel;
 import com.wowza.gocoder.sdk.api.logging.WZLog;
 import com.wowza.gocoder.sdk.api.player.WZPlayerConfig;
 import com.wowza.gocoder.sdk.api.player.WZPlayerView;
 import com.wowza.gocoder.sdk.api.status.WZState;
 import com.wowza.gocoder.sdk.api.status.WZStatus;
-import com.wowza.gocoder.sdk.api.status.WZStatusCallback;
-import com.yasic.bubbleview.BubbleView;
-import com.yl.youthlive.INTERFACE.AllAPIs;
-import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
-import com.yl.youthlive.feedBackPOJO.feedBackBean;
-import com.yl.youthlive.followPOJO.followBean;
-import com.yl.youthlive.getConnectionPOJO.getConnectionBean;
-import com.yl.youthlive.getIpdatedPOJO.Comment;
-import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
-import com.yl.youthlive.giftPOJO.Datum;
-import com.yl.youthlive.giftPOJO.giftBean;
-import com.yl.youthlive.goLivePOJO.goLiveBean;
-import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
-import com.yl.youthlive.liveLikePOJO.liveLikeBean;
-import com.yl.youthlive.sendGiftPOJO.sendGiftBean;
-import com.yl.youthlive.startStreamPOJO.startStreamBean;
-import com.yl.youthlive.streamPOJO.LiveStream;
-import com.yl.youthlive.streamPOJO.streamBean;
-import com.yl.youthlive.streamResponsePOJO.streamResponseBean;
-import com.yl.youthlive.vlogListPOJO.vlogListBean;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.CancelledKeyException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-import veg.mediaplayer.sdk.MediaPlayerConfig;
 
 public class PlayerActivity extends GoCoderSDKActivityBase {
 
 
     String uri;
-
-
-    // The GoCoder SDK audio device
-    private WZAudioDevice goCoderAudioDevice;
-
-    // The broadcast configuration settings
-    private WZBroadcastConfig goCoderBroadcastConfig;
-
-    private WowzaGoCoder goCoder;
-
     String key;
-
-
-    //private VlcVideoLibrary vlcVideoLibrary;
-
     WZPlayerView mStreamPlayerView;
-
-    private WZPlayerConfig mStreamPlayerConfig = null;
-
     String liveId = "";
     String timelineId = "";
 
 
+    //private VlcVideoLibrary vlcVideoLibrary;
     ViewPager pager;
     View popup;
-
     Button end;
-
     FragAdapter adap;
+    // The GoCoder SDK audio device
+    private WZAudioDevice goCoderAudioDevice;
+    // The broadcast configuration settings
+    private WZBroadcastConfig goCoderBroadcastConfig;
+    private WowzaGoCoder goCoder;
+    private WZPlayerConfig mStreamPlayerConfig = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,9 +96,9 @@ public class PlayerActivity extends GoCoderSDKActivityBase {
 
         //goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_176x144);
 
-                goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
+        goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
         // Set the bitrate to 4000 Kbps
-                 goCoderBroadcastConfig.setVideoBitRate(1200);
+        goCoderBroadcastConfig.setVideoBitRate(1200);
         // Create a configuration instance
 
 // Set the connection properties for the target Wowza Streaming Engine server or Wowza Cloud account
@@ -278,8 +184,6 @@ public class PlayerActivity extends GoCoderSDKActivityBase {
         super.onStop();
 
 
-
-
         //surface.stop();
 //        player.stop();
 
@@ -296,7 +200,7 @@ public class PlayerActivity extends GoCoderSDKActivityBase {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        GoCoderSDKPrefs.saveConfigDetails(prefs , uri);
+        GoCoderSDKPrefs.saveConfigDetails(prefs, uri);
         //GoCoderSDKPrefs.saveConfigDetails(prefs , "sample.mp4");
 
 
@@ -304,13 +208,11 @@ public class PlayerActivity extends GoCoderSDKActivityBase {
         mWZNetworkLogLevel = Integer.valueOf(prefs.getString("wz_debug_net_log_level", String.valueOf(WZLog.LOG_LEVEL_DEBUG)));
 
 
-
         if (mStreamPlayerConfig != null)
 
-            Log.d("eeeeee" , "entered");
+            Log.d("eeeeee", "entered");
 
         GoCoderSDKPrefs.updateConfigFromPrefs(prefs, mStreamPlayerConfig);
-
 
 
         //initPlayer(uri);
@@ -326,7 +228,7 @@ public class PlayerActivity extends GoCoderSDKActivityBase {
             @Override
             public void run() {
 
-                Log.d("stateeeeeee" , String.valueOf(playerStatus.getState()));
+                Log.d("stateeeeeee", String.valueOf(playerStatus.getState()));
 
                 switch (playerStatus.getState()) {
                     case WZPlayerView.STATE_PLAYING:
@@ -508,9 +410,6 @@ public class PlayerActivity extends GoCoderSDKActivityBase {
         String ur = "rtsp://ec2-18-219-154-44.us-east-2.compute.amazonaws.com:1935/live/" + resourceUri;
 
 
-
-
-
         if (mStreamPlayerView.isPlaying()) {
             mStreamPlayerView.stop();
         } else if (mStreamPlayerView.isReadyToPlay()) {
@@ -533,18 +432,12 @@ public class PlayerActivity extends GoCoderSDKActivityBase {
 
                 // Start playback of the live stream
 
-                Log.d("config" , mStreamPlayerConfig.toString());
+                Log.d("config", mStreamPlayerConfig.toString());
 
                 mStreamPlayerView.play(mStreamPlayerConfig, this);
             }
 
         }
-
-
-
-
-
-
 
 
         //surface.setScaleType(TextureVideoView.ScaleType.CENTER_CROP);
@@ -688,11 +581,6 @@ public class PlayerActivity extends GoCoderSDKActivityBase {
 */
 
     }
-
-
-
-
-
 
 
     @Override

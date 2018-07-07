@@ -10,48 +10,59 @@ import java.io.Serializable;
 public class UpdateProfileResponse implements Serializable {
     @SerializedName("message")
     private String message;
+    @SerializedName("status")
+    private int status;
+    @SerializedName("data")
+    private DataUpdate data;
 
     public String getMessage() {
         return message;
     }
+
     public void setMessage(String message) {
         this.message = message;
     }
 
-    @SerializedName("status")
-    private int status;
-
     public int getStatus() {
         return status;
     }
+
     public void setStatus(int status) {
         this.status = status;
     }
 
-    @SerializedName("data")
-    private DataUpdate data;
-
     public DataUpdate getData() {
         return data;
     }
+
     public void setData(DataUpdate data) {
         this.data = data;
     }
 
-   public class DataUpdate{
+    public class DataUpdate {
 
         @SerializedName("fname")
         private String fname;
+        @SerializedName("education")
+        private String education;
+        @SerializedName("dob")
+        private String dob;
+        @SerializedName("image")
+        private String image;
+        @SerializedName("gender")
+        private String gender;
+        @SerializedName("location")
+        private String location;
+        @SerializedName("about_me")
+        private String about_me;
 
         public String getFname() {
             return fname;
         }
+
         public void setFname(String fname) {
             this.fname = fname;
         }
-
-        @SerializedName("education")
-        private String education;
 
         public String getEducation() {
             return education;
@@ -61,9 +72,6 @@ public class UpdateProfileResponse implements Serializable {
             this.education = education;
         }
 
-        @SerializedName("dob")
-        private String dob;
-
         public String getDob() {
             return dob;
         }
@@ -71,10 +79,6 @@ public class UpdateProfileResponse implements Serializable {
         public void setDob(String dob) {
             this.dob = dob;
         }
-
-
-        @SerializedName("image")
-        private String image;
 
         public String getImage() {
             return image;
@@ -84,10 +88,6 @@ public class UpdateProfileResponse implements Serializable {
             this.image = image;
         }
 
-
-        @SerializedName("gender")
-        private String gender;
-
         public String getGender() {
             return gender;
         }
@@ -96,28 +96,22 @@ public class UpdateProfileResponse implements Serializable {
             this.gender = gender;
         }
 
-
-        @SerializedName("location")
-        private String location;
-
         public String getLocation() {
             return location;
         }
+
         public void setLocation(String location) {
             this.location = location;
         }
 
-       @SerializedName("about_me")
-       private String about_me;
+        public String getAbout_me() {
+            return about_me;
+        }
 
-       public String getAbout_me() {
-           return about_me;
-       }
-
-       public void setAbout_me(String about_me) {
-           this.about_me = about_me;
-       }
-   }
+        public void setAbout_me(String about_me) {
+            this.about_me = about_me;
+        }
+    }
 
 
 }

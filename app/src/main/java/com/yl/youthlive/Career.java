@@ -1,9 +1,7 @@
 package com.yl.youthlive;
 
 import android.app.Dialog;
-import android.app.TaskStackBuilder;
 import android.content.Context;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -32,8 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.microedition.khronos.egl.EGLDisplay;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +38,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-import static android.content.Context.WINDOW_SERVICE;
 
 /**
  * Created by TBX on 11/23/2017.
@@ -59,8 +54,7 @@ public class Career extends Fragment {
     PersonalInfo per;
     String userId;
 
-    public void setData(List<com.yl.youthlive.loginResponsePOJO.Career> list)
-    {
+    public void setData(List<com.yl.youthlive.loginResponsePOJO.Career> list) {
         this.list = list;
     }
 
@@ -72,24 +66,21 @@ public class Career extends Fragment {
 
         //list = new ArrayList<>();
 
-        per = (PersonalInfo)getActivity();
+        per = (PersonalInfo) getActivity();
 
         userId = getArguments().getString("userId");
 
         grid = view.findViewById(R.id.grid);
         progress = view.findViewById(R.id.progress);
         manager = new GridLayoutManager(getContext(), 1);
-        adapter = new EducationAdapter(getContext() , list);
+        adapter = new EducationAdapter(getContext(), list);
         add = view.findViewById(R.id.add);
 
-        bean b1 = (bean)getContext().getApplicationContext();
+        bean b1 = (bean) getContext().getApplicationContext();
 
-        if (!Objects.equals(userId, b1.userId))
-        {
+        if (!Objects.equals(userId, b1.userId)) {
             add.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             add.setVisibility(View.VISIBLE);
         }
 
@@ -126,17 +117,13 @@ public class Career extends Fragment {
                         String f = from.getText().toString();
                         String tt = to.getText().toString();
 
-                        if (t.length() > 0)
-                        {
+                        if (t.length() > 0) {
 
-                            if (p.length() > 0)
-                            {
+                            if (p.length() > 0) {
 
-                                if (f.length() > 0)
-                                {
+                                if (f.length() > 0) {
 
-                                    if (tt.length() > 0)
-                                    {
+                                    if (tt.length() > 0) {
 
 
                                         bar.setVisibility(View.VISIBLE);
@@ -151,7 +138,7 @@ public class Career extends Fragment {
 
                                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                        Call<addCareerBean> call = cr.addCareer(p , t , f , tt , userId);
+                                        Call<addCareerBean> call = cr.addCareer(p, t, f, tt, userId);
 
                                         call.enqueue(new Callback<addCareerBean>() {
                                             @Override
@@ -169,37 +156,28 @@ public class Career extends Fragment {
                                             @Override
                                             public void onFailure(Call<addCareerBean> call, Throwable t) {
                                                 bar.setVisibility(View.GONE);
-                                                Log.d("asdasd" , t.toString());
+                                                Log.d("asdasd", t.toString());
                                             }
                                         });
 
-                                    }
-                                    else
-                                    {
-                                        Toast.makeText(getContext() , "Invalid To Year" , Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getContext(), "Invalid To Year", Toast.LENGTH_SHORT).show();
                                     }
 
-                                }
-                                else
-                                {
-                                    Toast.makeText(getContext() , "Invalid From Year" , Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), "Invalid From Year", Toast.LENGTH_SHORT).show();
                                 }
 
-                            }
-                            else
-                            {
-                                Toast.makeText(getContext() , "Invalid Position" , Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Invalid Position", Toast.LENGTH_SHORT).show();
                             }
 
-                        }
-                        else
-                        {
-                            Toast.makeText(getContext() , "Invalid Company Title" , Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Invalid Company Title", Toast.LENGTH_SHORT).show();
                         }
 
                     }
                 });
-
 
 
             }
@@ -224,8 +202,8 @@ public class Career extends Fragment {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.career_list_model , parent , false);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.career_list_model, parent, false);
             return new ViewHolder(view);
         }
 
@@ -248,18 +226,18 @@ public class Career extends Fragment {
                     dialog.setContentView(R.layout.edit_career_popup);
                     dialog.show();
 
-                    final EditText title = (EditText)dialog.findViewById(R.id.title);
+                    final EditText title = (EditText) dialog.findViewById(R.id.title);
                     title.setText(item.getCompany());
-                    final EditText position = (EditText)dialog.findViewById(R.id.position);
+                    final EditText position = (EditText) dialog.findViewById(R.id.position);
                     position.setText(item.getPosition());
-                    final EditText from = (EditText)dialog.findViewById(R.id.from);
+                    final EditText from = (EditText) dialog.findViewById(R.id.from);
                     from.setText(item.getFrom());
-                    final EditText to = (EditText)dialog.findViewById(R.id.to);
+                    final EditText to = (EditText) dialog.findViewById(R.id.to);
                     to.setText(item.getTo());
 
-                    ImageButton delete = (ImageButton)dialog.findViewById(R.id.delete);
-                    final ProgressBar progress = (ProgressBar)dialog.findViewById(R.id.progress);
-                    Button submit = (Button)dialog.findViewById(R.id.submit);
+                    ImageButton delete = (ImageButton) dialog.findViewById(R.id.delete);
+                    final ProgressBar progress = (ProgressBar) dialog.findViewById(R.id.progress);
+                    Button submit = (Button) dialog.findViewById(R.id.submit);
 
                     delete.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -277,13 +255,13 @@ public class Career extends Fragment {
 
                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                            Call<deleteCareerBean> call = cr.deleteCareer(b.userId , item.getCareerId());
+                            Call<deleteCareerBean> call = cr.deleteCareer(b.userId, item.getCareerId());
 
                             call.enqueue(new Callback<deleteCareerBean>() {
                                 @Override
                                 public void onResponse(Call<deleteCareerBean> call, Response<deleteCareerBean> response) {
 
-                                    Toast.makeText(context , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
                                     per.loadData();
 
@@ -313,17 +291,13 @@ public class Career extends Fragment {
                             String f = from.getText().toString();
                             String tt = to.getText().toString();
 
-                            if (t.length() > 0)
-                            {
+                            if (t.length() > 0) {
 
-                                if (p.length() > 0)
-                                {
+                                if (p.length() > 0) {
 
-                                    if (f.length() > 0)
-                                    {
+                                    if (f.length() > 0) {
 
-                                        if (tt.length() > 0)
-                                        {
+                                        if (tt.length() > 0) {
 
 
                                             progress.setVisibility(View.VISIBLE);
@@ -338,7 +312,7 @@ public class Career extends Fragment {
 
                                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                            Call<editCareerBean> call = cr.editCareer(b.userId , p , t , f , tt , item.getCareerId());
+                                            Call<editCareerBean> call = cr.editCareer(b.userId, p, t, f, tt, item.getCareerId());
 
                                             call.enqueue(new Callback<editCareerBean>() {
                                                 @Override
@@ -356,35 +330,25 @@ public class Career extends Fragment {
                                                 @Override
                                                 public void onFailure(Call<editCareerBean> call, Throwable t) {
                                                     progress.setVisibility(View.GONE);
-                                                    Log.d("asdasd" , t.toString());
+                                                    Log.d("asdasd", t.toString());
                                                 }
                                             });
 
-                                        }
-                                        else
-                                        {
-                                            Toast.makeText(getContext() , "Invalid To Year" , Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getContext(), "Invalid To Year", Toast.LENGTH_SHORT).show();
                                         }
 
-                                    }
-                                    else
-                                    {
-                                        Toast.makeText(getContext() , "Invalid From Year" , Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getContext(), "Invalid From Year", Toast.LENGTH_SHORT).show();
                                     }
 
-                                }
-                                else
-                                {
-                                    Toast.makeText(getContext() , "Invalid Position" , Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), "Invalid Position", Toast.LENGTH_SHORT).show();
                                 }
 
+                            } else {
+                                Toast.makeText(getContext(), "Invalid Company Title", Toast.LENGTH_SHORT).show();
                             }
-                            else
-                            {
-                                Toast.makeText(getContext() , "Invalid Company Title" , Toast.LENGTH_SHORT).show();
-                            }
-
-
 
 
                         }
@@ -404,7 +368,7 @@ public class Career extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
-            TextView company , title , time;
+            TextView company, title, time;
 
             public ViewHolder(View itemView) {
                 super(itemView);

@@ -1,33 +1,21 @@
 package com.yl.youthlive;
 
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.graphics.Region;
 import android.net.Uri;
-import android.provider.MediaStore;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
-import com.bumptech.glide.Glide;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -52,21 +40,16 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.otaliastudios.cameraview.AspectRatio;
 import com.streamaxia.android.CameraPreview;
 import com.streamaxia.android.StreamaxiaPublisher;
 import com.streamaxia.android.handlers.EncoderHandler;
 import com.streamaxia.android.handlers.RecordHandler;
 import com.streamaxia.android.handlers.RtmpHandler;
-import com.streamaxia.android.utils.ScalingMode;
-import com.streamaxia.android.utils.Size;
-
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.List;
 
 import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
@@ -82,42 +65,21 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
 
     ProgressBar progress;
-
-    private Uri uri;
-
-
     String TAG = "VideoPlayer";
-
-
-
-
     String connId;
-
-
-
-
     TextView stateText;
-
-
     CameraPreview thumbCamera1, thumbCamera2;
-
-
-
     String loadingpic;
-
-
     ViewPager pager;
-
     RelativeLayout player_camera_layout1;
-
     RelativeLayout container;
     ImageView loading;
-
     PlayerView mainPlayerView;
     SimpleExoPlayer mainPlayer;
-
-    PlayerView thumbSurface1 , thumbSurface2;
-    SimpleExoPlayer thumbPlayer1 , thumbPlayer2;
+    PlayerView thumbSurface1, thumbSurface2;
+    SimpleExoPlayer thumbPlayer1, thumbPlayer2;
+    StreamaxiaPublisher mPublisher;
+    private Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,9 +120,6 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         });
 
 
-
-
-
         mainPlayerView = findViewById(R.id.main_player);
 
         progress = findViewById(R.id.progressBar4);
@@ -178,7 +137,6 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         thumbSurface2 = findViewById(R.id.thumb_frame2);
 
         pager = findViewById(R.id.pager);
-
 
 
         //SurfaceHolder holder = surfaceView.getHolder();
@@ -229,15 +187,10 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         mainPlayer.addListener(VideoPlayer.this);
 
 
-
-
-
-
         FragAdapter adapter = new FragAdapter(getSupportFragmentManager());
 
         pager.setAdapter(adapter);
     }
-
 
     @Override
     protected void onDestroy() {
@@ -311,12 +264,12 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
     @Override
     public void onRtmpVideoStreaming() {
-        Log.d("recordloistener" , "video");
+        Log.d("recordloistener", "video");
     }
 
     @Override
     public void onRtmpAudioStreaming() {
-        Log.d("recordloistener" , "audio");
+        Log.d("recordloistener", "audio");
     }
 
     @Override
@@ -346,59 +299,59 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
     @Override
     public void onRtmpSocketException(SocketException e) {
-        Log.d("recordloistener" , e.toString());
+        Log.d("recordloistener", e.toString());
     }
 
     @Override
     public void onRtmpIOException(IOException e) {
-        Log.d("recordloistener" , e.toString());
+        Log.d("recordloistener", e.toString());
     }
 
     @Override
     public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-        Log.d("recordloistener" , e.toString());
+        Log.d("recordloistener", e.toString());
     }
 
     @Override
     public void onRtmpIllegalStateException(IllegalStateException e) {
-        Log.d("recordloistener" , e.toString());
+        Log.d("recordloistener", e.toString());
     }
 
     @Override
     public void onRtmpAuthenticationg(String s) {
-        Log.d("recordloistener" , s);
+        Log.d("recordloistener", s);
     }
 
     @Override
     public void onRecordPause() {
 
-        Log.d("recordloistener" , "paused");
+        Log.d("recordloistener", "paused");
 
     }
 
     @Override
     public void onRecordResume() {
-        Log.d("recordloistener" , "resume");
+        Log.d("recordloistener", "resume");
     }
 
     @Override
     public void onRecordStarted(String s) {
-        Log.d("recordloistener" , s);
+        Log.d("recordloistener", s);
     }
 
     @Override
     public void onRecordFinished(String s) {
-        Log.d("recordloistener" , s);
+        Log.d("recordloistener", s);
     }
 
     @Override
     public void onRecordIllegalArgumentException(IllegalArgumentException e) {
-        Log.d("recordloistener" , e.toString());
+        Log.d("recordloistener", e.toString());
     }
 
     @Override
     public void onRecordIOException(IOException e) {
-        Log.d("recordloistener" , e.toString());
+        Log.d("recordloistener", e.toString());
     }
 
     @Override
@@ -419,10 +372,9 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
-        Log.d("ssttaattee" , String.valueOf(playbackState));
+        Log.d("ssttaattee", String.valueOf(playbackState));
 
-        if (playWhenReady)
-        {
+        if (playWhenReady) {
             loading.setVisibility(View.GONE);
         }
 
@@ -458,34 +410,6 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
     }
 
-
-    public class FragAdapter extends FragmentStatePagerAdapter {
-
-        public FragAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if (position == 0) {
-                PlayerFragment1 frag = new PlayerFragment1();
-                Bundle b = new Bundle();
-                b.putString("liveId", liveId);
-                frag.setArguments(b);
-                return frag;
-            } else {
-                return new secondfrag();
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 1;
-        }
-    }
-
-    StreamaxiaPublisher mPublisher;
-
     public void startThumbCamera1(String connId) {
 
         thumbCamera1.setVisibility(View.VISIBLE);
@@ -510,8 +434,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         player_camera_layout1.setVisibility(View.VISIBLE);
     }
 
-    public void endThumbCamera1()
-    {
+    public void endThumbCamera1() {
 
         try {
 
@@ -519,8 +442,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
             mPublisher.stopRecord();
             thumbCamera1.stopCamera();
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         player_camera_layout1.setVisibility(View.GONE);
@@ -553,6 +475,31 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
         //cameraPreview.stopCamera();
 
+    }
+
+    public class FragAdapter extends FragmentStatePagerAdapter {
+
+        public FragAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                PlayerFragment1 frag = new PlayerFragment1();
+                Bundle b = new Bundle();
+                b.putString("liveId", liveId);
+                frag.setArguments(b);
+                return frag;
+            } else {
+                return new secondfrag();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
     }
 
 }

@@ -12,14 +12,14 @@ import android.widget.ImageButton;
 
 public class secondfragNew extends Fragment {
 
-    private MyInterface mCallback;
     ImageButton close;
     LiveScreenNew lvscreen;
+    private MyInterface mCallback;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.second_pager , container , false);
+        View view = inflater.inflate(R.layout.second_pager, container, false);
 
 
         lvscreen = (LiveScreenNew) getActivity();
@@ -30,9 +30,9 @@ public class secondfragNew extends Fragment {
             public void onClick(View view) {
                 //mBroadcaster.stopBroadcast();
                 //finish();
-              mCallback.closeConnections();
+                mCallback.closeConnections();
 
-             //   lvscreen.closeConnection();
+                //   lvscreen.closeConnection();
 
 
             }
@@ -42,6 +42,7 @@ public class secondfragNew extends Fragment {
         return view;
 
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -53,6 +54,7 @@ public class secondfragNew extends Fragment {
                     + " must implement IFragmentToActivity");
         }
     }
+
     @Override
     public void onDetach() {
         mCallback = null;

@@ -23,18 +23,19 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.MyViewHo
 
     Context context;
 
-    List<Datum>list = new ArrayList<>();
+    List<Datum> list = new ArrayList<>();
 
-    public RankingAdapter(Context context ,  List<Datum>list){
+    public RankingAdapter(Context context, List<Datum> list) {
 
         this.context = context;
         this.list = list;
     }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
 
-        View view = LayoutInflater.from(context).inflate(R.layout.tabratting_adapterlayout , parent , false);
+        View view = LayoutInflater.from(context).inflate(R.layout.tabratting_adapterlayout, parent, false);
 
         return new MyViewHolder(view);
     }
@@ -48,13 +49,13 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.MyViewHo
 
         holder.name.setText(item.getUserName());
         holder.beans.setText(item.getBeans());
-        holder.change.setText(String.valueOf(position + 1 ) + ".");
+        holder.change.setText(String.valueOf(position + 1) + ".");
 
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
                 .cacheOnDisc(true).resetViewBeforeLoading(false).build();
         ImageLoader loader = ImageLoader.getInstance();
-        loader.displayImage(item.getUserImage() , holder.image , options);
+        loader.displayImage(item.getUserImage(), holder.image, options);
 
 
         holder.follow.setOnClickListener(new View.OnClickListener() {
@@ -62,16 +63,14 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.MyViewHo
             public void onClick(View view) {
 
 
-
             }
         });
-
 
 
     }
 
 
-    public void setgrid( List<Datum>list){
+    public void setgrid(List<Datum> list) {
 
         this.list = list;
         notifyDataSetChanged();
@@ -82,9 +81,9 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.MyViewHo
         return list.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView beans , name  , change , follow;
+        TextView beans, name, change, follow;
 
         ImageView image;
 

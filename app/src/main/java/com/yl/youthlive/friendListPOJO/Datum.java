@@ -1,4 +1,3 @@
-
 package com.yl.youthlive.friendListPOJO;
 
 import com.google.gson.annotations.Expose;

@@ -15,9 +15,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="130dp"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             android:padding="10dp"
-            android:baselineAligned="false"
             tools:ignore="UselessParent">
 
             <RelativeLayout
@@ -82,9 +82,9 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:gravity="bottom"
-                android:layout_marginEnd="5dp"
                 android:paddingBottom="10dp">
 
                 <TextView

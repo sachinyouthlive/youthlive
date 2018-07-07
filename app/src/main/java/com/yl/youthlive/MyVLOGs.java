@@ -134,22 +134,19 @@ public class MyVLOGs extends Fragment {
 
             //Glide.with(context).load(item.getVideoURL()).into(holder.image);
 
-            if (Objects.equals(item.getIsLiked(), "1"))
-            {
+            if (Objects.equals(item.getIsLiked(), "1")) {
 
-                holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_like , 0 , 0 , 0);
+                holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_like, 0, 0, 0);
 
-            }
-            else
-            {
-                holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.heart , 0 , 0 , 0);
+            } else {
+                holder.likes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.heart, 0, 0, 0);
             }
 
             DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
 
             ImageLoader loader = ImageLoader.getInstance();
 
-            loader.displayImage(item.getThumbURL() , holder.image , options);
+            loader.displayImage(item.getThumbURL(), holder.image, options);
 
 
             holder.play.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +179,7 @@ public class MyVLOGs extends Fragment {
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<deleteVLOGBean> call = cr.removeVideo(b.userId , item.getVideoId());
+                    Call<deleteVLOGBean> call = cr.removeVideo(b.userId, item.getVideoId());
 
                     call.enqueue(new Callback<deleteVLOGBean>() {
                         @Override
@@ -209,23 +206,6 @@ public class MyVLOGs extends Fragment {
             return list.size();
         }
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView likes;
-            ImageView image;
-            ImageButton cross, play;
-
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-
-                likes = (TextView) itemView.findViewById(R.id.likes);
-                image = (ImageView) itemView.findViewById(R.id.image);
-                cross = (ImageButton) itemView.findViewById(R.id.cross);
-                play = itemView.findViewById(R.id.play);
-
-            }
-        }
-
         public Bitmap retriveVideoFrameFromVideo(String videoPath)
                 throws Throwable {
             Bitmap bitmap = null;
@@ -246,6 +226,23 @@ public class MyVLOGs extends Fragment {
                 }
             }
             return bitmap;
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView likes;
+            ImageView image;
+            ImageButton cross, play;
+
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+
+                likes = (TextView) itemView.findViewById(R.id.likes);
+                image = (ImageView) itemView.findViewById(R.id.image);
+                cross = (ImageButton) itemView.findViewById(R.id.cross);
+                play = itemView.findViewById(R.id.play);
+
+            }
         }
     }
 

@@ -9,12 +9,12 @@
         android:id="@+id/ivGridVideoItem"
         android:layout_width="160dp"
         android:layout_height="160dp" />
-   <!-- <ImageView
-        android:layout_width="160dp"
-        android:layout_height="150dp"
-        android:id="@+id/image"
-        android:src="@drawable/loading"
-        android:scaleType="centerCrop"/>-->
+    <!-- <ImageView
+         android:layout_width="160dp"
+         android:layout_height="150dp"
+         android:id="@+id/image"
+         android:src="@drawable/loading"
+         android:scaleType="centerCrop"/>-->
 
     <LinearLayout
         android:layout_width="160dp"
@@ -23,8 +23,8 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
             android:id="@+id/name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
@@ -32,9 +32,9 @@
             android:textColor="#FFF" />
 
         <TextView
+            android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/time"
             android:layout_weight="1"
             android:text="Time"
             android:textColor="#FFF" />

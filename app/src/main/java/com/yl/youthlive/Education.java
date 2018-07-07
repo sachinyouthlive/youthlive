@@ -53,8 +53,7 @@ public class Education extends Fragment {
 
     PersonalInfo per;
 
-    public void setData(List<com.yl.youthlive.loginResponsePOJO.Education> list)
-    {
+    public void setData(List<com.yl.youthlive.loginResponsePOJO.Education> list) {
         this.list = list;
     }
 
@@ -64,28 +63,24 @@ public class Education extends Fragment {
         View view = inflater.inflate(R.layout.education_layout, container, false);
 
 
-        per = (PersonalInfo)getActivity();
+        per = (PersonalInfo) getActivity();
 
         userId = getArguments().getString("userId");
-
 
 
         //list = new ArrayList<>();
         grid = view.findViewById(R.id.grid);
         progress = view.findViewById(R.id.progress);
         manager = new GridLayoutManager(getContext(), 1);
-        adapter = new EducationAdapter(getActivity() , list);
+        adapter = new EducationAdapter(getActivity(), list);
         add = view.findViewById(R.id.add);
 
 
-        bean b1 = (bean)getContext().getApplicationContext();
+        bean b1 = (bean) getContext().getApplicationContext();
 
-        if (!Objects.equals(userId, b1.userId))
-        {
+        if (!Objects.equals(userId, b1.userId)) {
             add.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             add.setVisibility(View.VISIBLE);
         }
 
@@ -94,7 +89,6 @@ public class Education extends Fragment {
         grid.setLayoutManager(manager);
 
         adapter.setGridData(list);
-
 
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -120,11 +114,9 @@ public class Education extends Fragment {
                         String e = edu.getText().toString();
                         String y = year.getText().toString();
 
-                        if (e.length() > 0 )
-                        {
+                        if (e.length() > 0) {
 
-                            if (y.length() > 0)
-                            {
+                            if (y.length() > 0) {
 
 
                                 bar.setVisibility(View.VISIBLE);
@@ -140,7 +132,7 @@ public class Education extends Fragment {
                                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                Call<addEducationBean> call = cr.addEducation(userId , e , y);
+                                Call<addEducationBean> call = cr.addEducation(userId, e, y);
 
                                 call.enqueue(new Callback<addEducationBean>() {
                                     @Override
@@ -162,16 +154,12 @@ public class Education extends Fragment {
                                 });
 
 
-                            }
-                            else
-                            {
-                                Toast.makeText(getContext() , "Invalid Year" , Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Invalid Year", Toast.LENGTH_SHORT).show();
                             }
 
-                        }
-                        else
-                        {
-                            Toast.makeText(getContext() , "Invalid Title" , Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Invalid Title", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -200,8 +188,8 @@ public class Education extends Fragment {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.education_list_model , parent , false);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.education_list_model, parent, false);
             return new ViewHolder(view);
         }
 
@@ -217,7 +205,6 @@ public class Education extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
 
 
                     final Dialog dialog = new Dialog(getActivity());
@@ -257,7 +244,7 @@ public class Education extends Fragment {
                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                            Call<editEducationBean> call = cr.deleteEducation(userId , item.getEducationId());
+                            Call<editEducationBean> call = cr.deleteEducation(userId, item.getEducationId());
 
                             call.enqueue(new Callback<editEducationBean>() {
                                 @Override
@@ -279,7 +266,6 @@ public class Education extends Fragment {
                             });
 
 
-
                         }
                     });
 
@@ -291,11 +277,9 @@ public class Education extends Fragment {
                             String e = edu.getText().toString();
                             String y = year.getText().toString();
 
-                            if (e.length() > 0 )
-                            {
+                            if (e.length() > 0) {
 
-                                if (y.length() > 0)
-                                {
+                                if (y.length() > 0) {
 
 
                                     bar.setVisibility(View.VISIBLE);
@@ -311,7 +295,7 @@ public class Education extends Fragment {
                                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                    Call<editEducationBean> call = cr.editEducation(userId , item.getEducationId() , e , y);
+                                    Call<editEducationBean> call = cr.editEducation(userId, item.getEducationId(), e, y);
 
                                     call.enqueue(new Callback<editEducationBean>() {
                                         @Override
@@ -333,16 +317,12 @@ public class Education extends Fragment {
                                     });
 
 
-                                }
-                                else
-                                {
-                                    Toast.makeText(getContext() , "Invalid Year" , Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), "Invalid Year", Toast.LENGTH_SHORT).show();
                                 }
 
-                            }
-                            else
-                            {
-                                Toast.makeText(getContext() , "Invalid Title" , Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Invalid Title", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -351,7 +331,6 @@ public class Education extends Fragment {
 
                 }
             });
-
 
 
         }
@@ -363,7 +342,7 @@ public class Education extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
-            TextView title , time;
+            TextView title, time;
 
             public ViewHolder(View itemView) {
                 super(itemView);

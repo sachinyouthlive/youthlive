@@ -17,37 +17,33 @@ import java.util.HashMap;
  */
 public class SessionManager {
 
+    public static final String FOLLOWER = "FOLLOWER";
+    public static final String YOUTHLIVEID = "YOUTHID";
+    public static final String FOLLOWING = "FOLLOWING";
+    public static final String USER_ID = "USER_ID";
+    public static final String COVER_PROFILE = "COVER_PROFILE";
+    public static final String USER_PROFILE = "USER_PROFILE";
+    public static final String USER_NAME = "USER_NAME";
+    public static final String EDUCATION = "EDUCATION";
+    public static final String GENDER = "GENDER";
+    public static final String DOB = "DOB";
+    public static final String LOCATION = "LOCATION";
+    public static final String ABOUT = "ABOUT";
+    public static final String FOLLOW_STATUS = "FOLLOW_STATUS";
+    public static final String PRO_STATUS = "PRO_STATUS";
+    public static final String FOLLOW_UNFOLLOW = "FOLLOW_UNFOLLOW";
+    // Sharedpref file name
+    private static final String PREF_NAME = "AndroidHivePref";
+    // All Shared Preferences Keys
+    private static final String IS_LOGIN = "IsLoggedIn";
     // Shared Preferences
     SharedPreferences pref;
     // Editor for Shared preferences
     SharedPreferences.Editor editor;
     // Context
     Context context;
-
     // Shared pref mode
     int PRIVATE_MODE = 0;
-
-    // Sharedpref file name
-    private static final String PREF_NAME = "AndroidHivePref";
-
-    // All Shared Preferences Keys
-    private static final String IS_LOGIN = "IsLoggedIn";
-    public static final String FOLLOWER="FOLLOWER";
-    public static  final String YOUTHLIVEID="YOUTHID";
-    public static final String FOLLOWING="FOLLOWING";
-    public static final String USER_ID="USER_ID";
-    public static final String COVER_PROFILE="COVER_PROFILE";
-    public static final String USER_PROFILE = "USER_PROFILE";
-    public static final String USER_NAME = "USER_NAME";
-    public  static final String EDUCATION="EDUCATION";
-    public  static final String GENDER="GENDER";
-    public  static final String DOB="DOB";
-    public  static final String LOCATION="LOCATION";
-    public  static final String ABOUT="ABOUT";
-    public static final String FOLLOW_STATUS="FOLLOW_STATUS";
-    public  static final String PRO_STATUS="PRO_STATUS";
-    public  static final String FOLLOW_UNFOLLOW="FOLLOW_UNFOLLOW";
-
 
 
 //    public static final String KEY_CONTACT_NO = "contact_no";
@@ -61,7 +57,7 @@ public class SessionManager {
 
     // Constructor
     @SuppressLint("CommitPrefEdits")
-    public SessionManager(Context context){
+    public SessionManager(Context context) {
         this.context = context;
         pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
@@ -69,34 +65,35 @@ public class SessionManager {
 
     /**
      * Create login session
-     * */
-    public void createLoginSession(Signin signin, String id){
+     */
+    public void createLoginSession(Signin signin, String id) {
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
-        editor.putString(USER_ID,id);
+        editor.putString(USER_ID, id);
         editor.commit();
     }
 
-    public void createCoverImage(String coverProfile){
+    public void createCoverImage(String coverProfile) {
         editor.putBoolean(IS_LOGIN, true);
-        editor.putString(COVER_PROFILE,coverProfile);
+        editor.putString(COVER_PROFILE, coverProfile);
         editor.commit();
     }
-    public void createProfile(String follower, String following ,String Youthidd){
+
+    public void createProfile(String follower, String following, String Youthidd) {
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(FOLLOWER, follower);
         editor.putString(FOLLOWING, following);
-        editor.putString(YOUTHLIVEID,Youthidd);
+        editor.putString(YOUTHLIVEID, Youthidd);
         editor.commit();
     }
 
-    public void followUnfollow(String yes){
+    public void followUnfollow(String yes) {
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(FOLLOW_UNFOLLOW, yes);
         editor.commit();
     }
 
-    public void updateSession(String profile, String name, String highEdu, String gender, String brithDay, String loc, String about){
+    public void updateSession(String profile, String name, String highEdu, String gender, String brithDay, String loc, String about) {
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(USER_PROFILE, profile);
         editor.putString(USER_NAME, name);
@@ -108,14 +105,14 @@ public class SessionManager {
         editor.commit();
     }
 
-    public void followerSession(String follower){
+    public void followerSession(String follower) {
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(FOLLOW_STATUS, follower);
         Log.e("share check", follower);
         editor.commit();
     }
 
-    public void profileStatusSession(String proStatus){
+    public void profileStatusSession(String proStatus) {
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(PRO_STATUS, proStatus);
         Log.e("share check", proStatus);
@@ -126,10 +123,10 @@ public class SessionManager {
      * Check login method wil check user login status
      * If false it will redirect user to login page
      * Else won't do anything
-     * */
-    public void checkLogin(){
+     */
+    public void checkLogin() {
         // Check login status
-        if(!this.isLoggedIn()){
+        if (!this.isLoggedIn()) {
             // user is not logged in redirect him to Login Activity
             Intent i = new Intent(context, MainActivity.class);
             // Closing all the Activities
@@ -140,17 +137,18 @@ public class SessionManager {
             context.startActivity(i);
         }
     }
+
     /**
      * Get stored session data
-     * */
-    public HashMap<String, String> getUserDetails(){
+     */
+    public HashMap<String, String> getUserDetails() {
         HashMap<String, String> user = new HashMap<String, String>();
         user.put(USER_ID, pref.getString(USER_ID, null));
         // return user
         return user;
     }
 
-    public HashMap<String, String> getUserProfile(){
+    public HashMap<String, String> getUserProfile() {
         HashMap<String, String> user = new HashMap<String, String>();
 
         user.put(USER_PROFILE, pref.getString(USER_PROFILE, null));
@@ -161,14 +159,14 @@ public class SessionManager {
         user.put(LOCATION, pref.getString(LOCATION, null));
         user.put(ABOUT, pref.getString(ABOUT, null));
 
-        user.put(FOLLOWER,pref.getString(FOLLOWER,null));
-        user.put(FOLLOWING,pref.getString(FOLLOWING,null));
-        user.put(COVER_PROFILE,pref.getString(COVER_PROFILE,null));
-        user.put(FOLLOW_STATUS,pref.getString(FOLLOW_STATUS,null));
-         user.put(PRO_STATUS,pref.getString(PRO_STATUS,null));
-         user.put(YOUTHLIVEID,pref.getString(YOUTHLIVEID,null));
+        user.put(FOLLOWER, pref.getString(FOLLOWER, null));
+        user.put(FOLLOWING, pref.getString(FOLLOWING, null));
+        user.put(COVER_PROFILE, pref.getString(COVER_PROFILE, null));
+        user.put(FOLLOW_STATUS, pref.getString(FOLLOW_STATUS, null));
+        user.put(PRO_STATUS, pref.getString(PRO_STATUS, null));
+        user.put(YOUTHLIVEID, pref.getString(YOUTHLIVEID, null));
 
-        user.put(FOLLOW_UNFOLLOW,pref.getString(FOLLOW_UNFOLLOW, null));
+        user.put(FOLLOW_UNFOLLOW, pref.getString(FOLLOW_UNFOLLOW, null));
         // return user
         return user;
     }
@@ -176,8 +174,8 @@ public class SessionManager {
 
     /**
      * Clear session details
-     * */
-    public void logoutUser(){
+     */
+    public void logoutUser() {
         // Clearing all data from Shared Preferences
         editor.clear();
         editor.commit();
@@ -191,11 +189,12 @@ public class SessionManager {
         // Staring Login Activity
         context.startActivity(i);
     }
+
     /**
      * Quick check for login
-     * **/
+     **/
     // Get Login State
-    public boolean isLoggedIn(){
+    public boolean isLoggedIn() {
         return pref.getBoolean(IS_LOGIN, false);
     }
 

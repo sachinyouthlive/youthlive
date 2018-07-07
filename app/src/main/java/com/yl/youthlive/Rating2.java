@@ -56,24 +56,24 @@ public class Rating2 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.rating1 , container , false);
+        View view = inflater.inflate(R.layout.rating1, container, false);
 
 
         grid = view.findViewById(R.id.grid);
-        manager = new GridLayoutManager(getContext() , 1);
+        manager = new GridLayoutManager(getContext(), 1);
 
         bar = view.findViewById(R.id.progress);
 
         list = new ArrayList<>();
 
-        adapter = new RankingAdapter1(getContext() , list);
+        adapter = new RankingAdapter1(getContext(), list);
 
         grid.setAdapter(adapter);
         grid.setLayoutManager(manager);
 
         bar.setVisibility(View.VISIBLE);
 
-        bean b = (bean)getContext(). getApplicationContext();
+        bean b = (bean) getContext().getApplicationContext();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(b.BASE_URL)
@@ -84,7 +84,7 @@ public class Rating2 extends Fragment {
         AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<RankingBean> call = cr.ranking(b.userId , "daily");
+        Call<RankingBean> call = cr.ranking(b.userId, "daily");
 
         call.enqueue(new Callback<RankingBean>() {
             @Override
@@ -114,17 +114,18 @@ public class Rating2 extends Fragment {
 
         Context context;
 
-        List<Datum>list = new ArrayList<>();
+        List<Datum> list = new ArrayList<>();
 
-        public RankingAdapter1(Context context ,  List<Datum>list){
+        public RankingAdapter1(Context context, List<Datum> list) {
 
             this.context = context;
             this.list = list;
         }
+
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            View view = LayoutInflater.from(context).inflate(R.layout.tabratting_adapterlayout , parent , false);
+            View view = LayoutInflater.from(context).inflate(R.layout.tabratting_adapterlayout, parent, false);
             return new MyViewHolder(view);
         }
 
@@ -135,7 +136,7 @@ public class Rating2 extends Fragment {
             final Datum item = list.get(position);
             holder.name.setText(item.getUserName());
             holder.beans.setText("Beans - " + item.getBeans());
-            holder.change.setText(String.valueOf(position + 1 ));
+            holder.change.setText(String.valueOf(position + 1));
             holder.rankno.setText(String.valueOf(position + 1));
             if (position < 3) {
                 holder.rankno.setVisibility(View.GONE);
@@ -219,7 +220,7 @@ public class Rating2 extends Fragment {
 
                     bar.setVisibility(View.VISIBLE);
 
-                    final bean b = (bean)context. getApplicationContext();
+                    final bean b = (bean) context.getApplicationContext();
 
                     final Retrofit retrofit = new Retrofit.Builder()
                             .baseUrl(b.BASE_URL)
@@ -230,7 +231,7 @@ public class Rating2 extends Fragment {
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<followBean> call = cr.follow(b.userId , item.getUserId());
+                    Call<followBean> call = cr.follow(b.userId, item.getUserId());
 
                     call.enqueue(new Callback<followBean>() {
                         @Override
@@ -260,8 +261,6 @@ public class Rating2 extends Fragment {
                     });
 
 
-
-
                 }
             });
             holder.profilelayout.setOnClickListener(new View.OnClickListener() {
@@ -276,7 +275,7 @@ public class Rating2 extends Fragment {
 
         }
 
-        public void setgrid( List<Datum>list){
+        public void setgrid(List<Datum> list) {
 
             this.list = list;
             notifyDataSetChanged();
@@ -287,7 +286,7 @@ public class Rating2 extends Fragment {
             return list.size();
         }
 
-        public class MyViewHolder extends RecyclerView.ViewHolder{
+        public class MyViewHolder extends RecyclerView.ViewHolder {
 
             TextView beans, name, change, rankno;
             ImageView image, follow, medalimg;

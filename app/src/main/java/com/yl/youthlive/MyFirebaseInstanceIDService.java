@@ -27,17 +27,14 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
             Log.d("MyRefreshedToken", token);
 
 
-            pref = getSharedPreferences("fcm" , Context.MODE_PRIVATE);
+            pref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
             edit = pref.edit();
 
-            edit.putString("token" , token);
+            edit.putString("token", token);
             edit.apply();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
 
     }

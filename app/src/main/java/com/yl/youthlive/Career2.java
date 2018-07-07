@@ -19,10 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yl.youthlive.Activitys.PersonalInfo;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.addCareerPOJO.addCareerBean;
-import com.yl.youthlive.loginResponsePOJO.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +50,7 @@ public class Career2 extends Fragment {
     TimelineProfile per;
     String userId;
 
-    public void setData(List<com.yl.youthlive.timelineProfilePOJO.Career> list)
-    {
+    public void setData(List<com.yl.youthlive.timelineProfilePOJO.Career> list) {
         this.list = list;
     }
 
@@ -64,24 +61,21 @@ public class Career2 extends Fragment {
 
         //list = new ArrayList<>();
 
-        per = (TimelineProfile)getActivity();
+        per = (TimelineProfile) getActivity();
 
         userId = getArguments().getString("userId");
 
         grid = view.findViewById(R.id.grid);
         progress = view.findViewById(R.id.progress);
         manager = new GridLayoutManager(getContext(), 1);
-        adapter = new EducationAdapter(getContext() , list);
+        adapter = new EducationAdapter(getContext(), list);
         add = view.findViewById(R.id.add);
 
-        bean b1 = (bean)getContext().getApplicationContext();
+        bean b1 = (bean) getContext().getApplicationContext();
 
-        if (!Objects.equals(userId, b1.userId))
-        {
+        if (!Objects.equals(userId, b1.userId)) {
             add.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             add.setVisibility(View.VISIBLE);
         }
 
@@ -118,17 +112,13 @@ public class Career2 extends Fragment {
                         String f = from.getText().toString();
                         String tt = to.getText().toString();
 
-                        if (t.length() > 0)
-                        {
+                        if (t.length() > 0) {
 
-                            if (p.length() > 0)
-                            {
+                            if (p.length() > 0) {
 
-                                if (f.length() > 0)
-                                {
+                                if (f.length() > 0) {
 
-                                    if (tt.length() > 0)
-                                    {
+                                    if (tt.length() > 0) {
 
 
                                         bar.setVisibility(View.VISIBLE);
@@ -143,7 +133,7 @@ public class Career2 extends Fragment {
 
                                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                        Call<addCareerBean> call = cr.addCareer(p , t , f , tt , userId);
+                                        Call<addCareerBean> call = cr.addCareer(p, t, f, tt, userId);
 
                                         call.enqueue(new Callback<addCareerBean>() {
                                             @Override
@@ -161,37 +151,28 @@ public class Career2 extends Fragment {
                                             @Override
                                             public void onFailure(Call<addCareerBean> call, Throwable t) {
                                                 bar.setVisibility(View.GONE);
-                                                Log.d("asdasd" , t.toString());
+                                                Log.d("asdasd", t.toString());
                                             }
                                         });
 
-                                    }
-                                    else
-                                    {
-                                        Toast.makeText(getContext() , "Invalid To Year" , Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getContext(), "Invalid To Year", Toast.LENGTH_SHORT).show();
                                     }
 
-                                }
-                                else
-                                {
-                                    Toast.makeText(getContext() , "Invalid From Year" , Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), "Invalid From Year", Toast.LENGTH_SHORT).show();
                                 }
 
-                            }
-                            else
-                            {
-                                Toast.makeText(getContext() , "Invalid Position" , Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Invalid Position", Toast.LENGTH_SHORT).show();
                             }
 
-                        }
-                        else
-                        {
-                            Toast.makeText(getContext() , "Invalid Company Title" , Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Invalid Company Title", Toast.LENGTH_SHORT).show();
                         }
 
                     }
                 });
-
 
 
             }
@@ -216,8 +197,8 @@ public class Career2 extends Fragment {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.career_list_model , parent , false);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.career_list_model, parent, false);
             return new ViewHolder(view);
         }
 
@@ -239,7 +220,7 @@ public class Career2 extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
-            TextView company , title , time;
+            TextView company, title, time;
 
             public ViewHolder(View itemView) {
                 super(itemView);

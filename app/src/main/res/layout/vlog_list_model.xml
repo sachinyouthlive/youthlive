@@ -12,10 +12,10 @@
         android:layout_height="160dp">
 
         <VideoView
+            android:id="@+id/videouri"
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:scaleType="centerCrop"
-            android:id="@+id/videouri"
             android:src="@drawable/bhoot" />
 
         <ImageView

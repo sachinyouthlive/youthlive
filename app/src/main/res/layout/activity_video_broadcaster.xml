@@ -2,20 +2,20 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root_view"
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context=".VideoBroadcaster">
 
     <RelativeLayout
+        android:id="@+id/thumb_container1"
         android:layout_width="120dp"
         android:layout_height="160dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:layout_marginBottom="110dp"
-        android:id="@+id/thumb_container1"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -26,22 +26,21 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        >
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:id="@+id/video_frame"
-        android:layout_width="120dp"
-        android:layout_height="160dp"
-        app:surface_type="texture_view"
-        app:resize_mode="fit"
-        />
+        app:layout_constraintVertical_bias="1.0">
+
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/video_frame"
+            android:layout_width="120dp"
+            android:layout_height="160dp"
+            app:resize_mode="fit"
+            app:surface_type="texture_view" />
 
         <ImageView
+            android:id="@+id/thumb_loading1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:visibility="visible"
-            android:id="@+id/thumb_loading1"/>
+            android:visibility="visible" />
 
     </RelativeLayout>
 
@@ -74,9 +73,9 @@
         app:layout_constraintBottom_toTopOf="@+id/thumb_container1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:resize_mode="fit"
-        app:surface_type="texture_view"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:surface_type="texture_view" />
 
     <TextView
         android:id="@+id/textView3"
@@ -98,18 +97,18 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:visibility="gone"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/pager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -117,10 +116,10 @@
 
 
     <include
+        android:id="@+id/finish_popup"
         layout="@layout/finish_popup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/finish_popup"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/pager"
         app:layout_constraintEnd_toEndOf="parent"

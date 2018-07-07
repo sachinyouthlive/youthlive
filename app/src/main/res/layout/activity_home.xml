@@ -5,8 +5,8 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:openDrawer="start"
-    tools:context="com.yl.youthlive.HomeActivity">
+    tools:context="com.yl.youthlive.HomeActivity"
+    tools:openDrawer="start">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,8 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
 
             <FrameLayout
@@ -39,27 +38,22 @@
                 android:layout_height="match_parent">
 
 
+                <LinearLayout
+                    android:id="@+id/replace"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" />
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/replace"
-        android:orientation="vertical"
-        />
-
-
-                <ProgressBar
-                    xmlns:android="http://schemas.android.com/apk/res/android"
+                <ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/video_progress"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:indeterminate="true"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:layout_marginTop="-4dp"
-                    android:visibility="gone"
-                    android:id="@+id/video_progress"
-                    />
+                    android:indeterminate="true"
+                    android:visibility="gone" />
 
 
             </RelativeLayout>
@@ -69,19 +63,17 @@
         <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
-            android:elevation="8dp"
-            android:layout_alignParentBottom="true"
             android:layout_height="?attr/actionBarSize"
-            />
+            android:layout_alignParentBottom="true"
+            android:elevation="8dp" />
 
     </RelativeLayout>
 
     <include
         layout="@layout/drawer_layout"
-        android:layout_gravity="start"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        />
+        android:layout_gravity="start" />
 
 
 </android.support.v4.widget.DrawerLayout>

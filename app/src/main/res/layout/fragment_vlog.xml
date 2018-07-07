@@ -4,16 +4,16 @@
     android:layout_height="match_parent"
     tools:context="com.yl.youthlive.Fragments.VlogFragment">
 
-   <GridView
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:numColumns="2"
-       android:id="@+id/video">
-   </GridView>
-   <ProgressBar
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:visibility="gone"
-       android:id="@+id/progress"/>
+    <GridView
+        android:id="@+id/video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="2"></GridView>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
 </FrameLayout>

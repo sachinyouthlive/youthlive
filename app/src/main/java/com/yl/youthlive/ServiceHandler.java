@@ -16,18 +16,20 @@ import java.util.List;
 
 public class ServiceHandler {
 
-    static String response = null;
     public final static int GET = 1;
     public final static int POST = 2;
+    static String response = null;
 
-    public ServiceHandler(){}
-    public String makeServiceCall(String url, int method, List<NameValuePair> params){
+    public ServiceHandler() {
+    }
 
-        try{
+    public String makeServiceCall(String url, int method, List<NameValuePair> params) {
+
+        try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpEntity httpentity = null;
             HttpResponse httpresponse = null;
-            if(method==POST){
+            if (method == POST) {
                 //System.out.println("request :"+params);
                 //System.out.println("post_url :"+url);
                 HttpPost httpPost = new HttpPost(url);
@@ -35,7 +37,7 @@ public class ServiceHandler {
                     httpPost.setEntity(new UrlEncodedFormEntity(params));
                 }
                 httpresponse = httpclient.execute(httpPost);
-            }else if (method == GET) {
+            } else if (method == GET) {
                 // appending params to url
                 if (params != null && !params.isEmpty()) {
                     String paramString = URLEncodedUtils
@@ -49,7 +51,7 @@ public class ServiceHandler {
 
             response = EntityUtils.toString(httpentity);
             Log.d("response :", response);
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return response;

@@ -8,45 +8,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/backpress"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/backpress"
                 android:contentDescription="back"
                 android:src="@drawable/back_icon" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFF"
-                android:textSize="16sp"
                 android:layout_marginStart="45dp"
                 android:layout_marginTop="2dp"
-                android:text="Message"/>
+                android:text="Message"
+                android:textColor="#FFF"
+                android:textSize="16sp" />
+
             <ImageView
                 android:layout_width="25dp"
-                android:layout_alignParentEnd="true"
                 android:layout_height="25dp"
-                android:contentDescription="bell"
+                android:layout_alignParentEnd="true"
                 android:layout_marginEnd="5dp"
+                android:contentDescription="bell"
                 android:src="@drawable/ring" />
+
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_alignParentEnd="true"
-                android:contentDescription="search"
                 android:layout_marginEnd="55dp"
+                android:contentDescription="search"
                 android:src="@drawable/search" />
+
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/pluse"
-                android:contentDescription="plus"
+                android:layout_alignParentEnd="true"
                 android:layout_marginEnd="100dp"
-                android:layout_alignParentEnd="true"/>
+                android:contentDescription="plus"
+                android:src="@drawable/pluse" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 </LinearLayout>

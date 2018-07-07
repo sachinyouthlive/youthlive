@@ -7,10 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -39,13 +40,10 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -57,8 +55,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.yl.youthlive.Activitys.UserInformation;
 import com.yl.youthlive.DBHandler.SessionManager;
 import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.login.ForgotPasswordActivity;
 import com.yl.youthlive.login2POJO.login2Bean;
-import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
 import com.yl.youthlive.socialPOJO.socialBean;
 
 import org.json.JSONException;
@@ -76,30 +74,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class Signin extends AppCompatActivity {
+    public static final String MyPREFERENCES = "userSession";
+    private static final String BASEELOGIN_URL = "http://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com/softcode/api/mobile_signin.php";
+    private static final String KEY_NUM = "number";
+    private static final String BASEOTP_URL = "http://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com/softcode/api/sign_up.php";
+    private static final String KEY_PASS = "passs";
     EditText phone_number, password_login, phoneno;
     Button Login;
     SessionManager session;
-    private ProgressDialog pDialog;
     CallbackManager mCallbackManager;
-    public static final String MyPREFERENCES = "userSession";
-    private static final String BASEELOGIN_URL = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/mobile_signin.php";
-    private static final String KEY_NUM = "number";
-    private static final String BASEOTP_URL = "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/sign_up.php";
-    private static final String KEY_PASS = "passs";
     String User_number, User_passwords, Counter_code, Phonenumber = "", verificationCode, str, userId, pass1 = "";
     AlertDialog.Builder builder;
     Button login;
     LinearLayout cancel_layout, cancel_ok;
     ProgressBar progress;
-
-    ImageView facebook_login, googleLogin , twitter_login;
-
-    private int RC_SIGN_IN = 22;
+    ImageView facebook_login, googleLogin, twitter_login;
+    TextView forgetpassword;
     GoogleApiClient googleApiClient;
-
-
     SharedPreferences pref;
     SharedPreferences.Editor edit;
+    private ProgressDialog pDialog;
+    private int RC_SIGN_IN = 22;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -133,7 +128,6 @@ public class Signin extends AppCompatActivity {
                                             String image = "https://graph.facebook.com/" + id + "/picture?type=large";
 
 
-
                                             progress.setVisibility(View.VISIBLE);
 
                                             final bean b = (bean) getApplicationContext();
@@ -147,60 +141,55 @@ public class Signin extends AppCompatActivity {
                                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                            Call<socialBean> call = cr.socialSignIn(id , email);
+                                            Call<socialBean> call = cr.socialSignIn(id, email);
 
                                             call.enqueue(new Callback<socialBean>() {
                                                 @Override
                                                 public void onResponse(Call<socialBean> call, retrofit2.Response<socialBean> response) {
 
-                                                    if (response.body().getData().getUserName().length() > 0)
-                                                    {
+                                                    if (response.body().getData().getUserName().length() > 0) {
 
                                                         b.userId = response.body().getData().getUserId();
                                                         b.userName = response.body().getData().getUserName();
 
                                                         try {
                                                             b.userImage = response.body().getData().getUserImage();
-                                                        }catch (Exception e)
-                                                        {
+                                                        } catch (Exception e) {
                                                             e.printStackTrace();
                                                         }
 
 
-                                                        edit.putString("type" , "social");
-                                                        edit.putString("user" , email);
-                                                        edit.putString("pass" , id);
+                                                        edit.putString("type", "social");
+                                                        edit.putString("user", email);
+                                                        edit.putString("pass", id);
                                                         edit.apply();
 
-                                                        Toast.makeText(Signin.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(Signin.this , HomeActivity.class);
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                                        Intent intent = new Intent(Signin.this, HomeActivity.class);
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
 
-                                                    }
-                                                    else
-                                                    {
+                                                    } else {
 
                                                         b.userId = response.body().getData().getUserId();
                                                         b.userName = response.body().getData().getUserName();
 
                                                         try {
                                                             b.userImage = response.body().getData().getUserImage();
-                                                        }catch (Exception e)
-                                                        {
+                                                        } catch (Exception e) {
                                                             e.printStackTrace();
                                                         }
 
 
-                                                        edit.putString("type" , "social");
-                                                        edit.putString("user" , email);
-                                                        edit.putString("pass" , id);
+                                                        edit.putString("type", "social");
+                                                        edit.putString("user", email);
+                                                        edit.putString("pass", id);
                                                         edit.commit();
 
-                                                        Toast.makeText(Signin.this , "Please update your info" , Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(Signin.this, "Please update your info", Toast.LENGTH_SHORT).show();
                                                         Intent intent = new Intent(Signin.this, UserInformation.class);
-                                                        intent.putExtra("userId" , response.body().getData().getUserId());
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        intent.putExtra("userId", response.body().getData().getUserId());
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
 
 
@@ -217,7 +206,6 @@ public class Signin extends AppCompatActivity {
                                                     progress.setVisibility(View.GONE);
                                                 }
                                             });
-
 
 
                                             //new FacebookloginAsyncTask().execute(email);
@@ -248,12 +236,13 @@ public class Signin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        pref = getSharedPreferences("pref" , Context.MODE_PRIVATE);
+        pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
         edit = pref.edit();
 
         builder = new AlertDialog.Builder(Signin.this);
         phone_number = findViewById(R.id.phone_number);
         password_login = findViewById(R.id.password_login);
+        forgetpassword = findViewById(R.id.forget_password);
         login = (Button) findViewById(R.id.login);
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
@@ -263,6 +252,14 @@ public class Signin extends AppCompatActivity {
         userId = settings.getString("userid", "");
         pass1 = settings.getString("password", "");
 
+        forgetpassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent Inbt = new Intent(Signin.this, ForgotPasswordActivity.class);
+                startActivity(Inbt);
+
+            }
+        });
         progress = (ProgressBar) findViewById(R.id.progress);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -271,7 +268,7 @@ public class Signin extends AppCompatActivity {
                 .build();
 
         googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this , new GoogleApiClient.OnConnectionFailedListener() {
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
@@ -299,7 +296,7 @@ public class Signin extends AppCompatActivity {
             }
         });
 
-        twitter_login = (ImageView)findViewById(R.id.twitter);
+        twitter_login = (ImageView) findViewById(R.id.twitter);
         twitter_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -326,19 +323,17 @@ public class Signin extends AppCompatActivity {
 
                 if (user != null) {
 
-                    Log.d("Firebase" , "Signed In - " + user.getEmail());
+                    Log.d("Firebase", "Signed In - " + user.getEmail());
 
                     // User is signed in
                     //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     if (user.getDisplayName() != null) {
 
 
-
-
                         String id = user.getUid();
                         String email = user.getEmail();
 
-                        handleSignInResult(id , email);
+                        handleSignInResult(id, email);
 
                         //nameTextView.setText("HI " + user.getDisplayName().toString());
                         //emailTextView.setText(user.getEmail().toString());
@@ -408,50 +403,42 @@ public class Signin extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<login2Bean> call = cr.signIn(phone , password);
+                Call<login2Bean> call = cr.signIn(phone, password);
 
                 call.enqueue(new Callback<login2Bean>() {
                     @Override
                     public void onResponse(Call<login2Bean> call, retrofit2.Response<login2Bean> response) {
 
 
-
-                        if (Objects.equals(response.body().getStatus(), "1"))
-                        {
-                            Toast.makeText(Signin.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                        if (Objects.equals(response.body().getStatus(), "1")) {
+                            Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
                             b.userId = response.body().getData().getUserId();
                             b.userName = response.body().getData().getUserName();
 
                             try {
                                 b.userImage = response.body().getData().getUserImage();
-                            }catch (Exception e)
-                            {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
-                            edit.putString("type" , "phone");
-                            edit.putString("user" , phone);
-                            edit.putString("pass" , password);
+                            edit.putString("type", "phone");
+                            edit.putString("user", phone);
+                            edit.putString("pass", password);
                             edit.commit();
 
                             Intent Inbt = new Intent(Signin.this, HomeActivity.class);
-                            Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(Inbt);
 
+                        } else {
+                            Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                        else
-                        {
-                            Toast.makeText(Signin.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-                        }
-
-
-
-
 
 
                         progress.setVisibility(View.GONE);
                     }
+
                     @Override
                     public void onFailure(Call<login2Bean> call, Throwable t) {
                         progress.setVisibility(View.GONE);
@@ -625,6 +612,7 @@ public class Signin extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
     public void Displayalart(final String code) {
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
@@ -648,10 +636,12 @@ public class Signin extends AppCompatActivity {
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
+
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -687,7 +677,7 @@ public class Signin extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         //Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
 
-                        handleSignInResult(acct.getId() , acct.getEmail());
+                        handleSignInResult(acct.getId(), acct.getEmail());
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -702,7 +692,7 @@ public class Signin extends AppCompatActivity {
     }
 
 
-    private void handleSignInResult(final String id , final String email) {
+    private void handleSignInResult(final String id, final String email) {
         //final GoogleSignInAccount account = completedTask.getResult(ApiException.class);
         // Signed in successfully, show authenticated UI.
         progress.setVisibility(View.VISIBLE);
@@ -717,67 +707,62 @@ public class Signin extends AppCompatActivity {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<socialBean> call = cr.socialSignIn(id , email);
+        Call<socialBean> call = cr.socialSignIn(id, email);
 
         call.enqueue(new Callback<socialBean>() {
             @Override
             public void onResponse(Call<socialBean> call, retrofit2.Response<socialBean> response) {
 
-                if (response.body().getData().getUserName().length() > 0)
-                {
+                if (response.body().getData().getUserName().length() > 0) {
 
                     b.userId = response.body().getData().getUserId();
                     b.userName = response.body().getData().getUserName();
 
                     try {
                         b.userImage = response.body().getData().getUserImage();
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
 
-                    edit.putString("type" , "social");
-                    edit.putString("user" , email);
-                    edit.putString("pass" , id);
+                    edit.putString("type", "social");
+                    edit.putString("user", email);
+                    edit.putString("pass", id);
                     edit.commit();
 
-                    Toast.makeText(Signin.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Signin.this , HomeActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Signin.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 
 
-
-                }
-                else
-                {
+                } else {
 
                     b.userId = response.body().getData().getUserId();
                     b.userName = response.body().getData().getUserName();
 
                     try {
                         b.userImage = response.body().getData().getUserImage();
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
 
-                    edit.putString("type" , "social");
-                    edit.putString("user" , email);
-                    edit.putString("pass" , id);
+                    edit.putString("type", "social");
+                    edit.putString("user", email);
+                    edit.putString("pass", id);
                     edit.commit();
 
-                    Toast.makeText(Signin.this , "Please update your info" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Signin.this, "Please update your info", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Signin.this, UserInformation.class);
-                    intent.putExtra("userId" , response.body().getData().getUserId());
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("userId", response.body().getData().getUserId());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 
                 }
                 progress.setVisibility(View.GONE);
             }
+
             @Override
             public void onFailure(Call<socialBean> call, Throwable t) {
                 progress.setVisibility(View.GONE);

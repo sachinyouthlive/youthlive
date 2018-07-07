@@ -48,28 +48,22 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class TimelineProfile extends AppCompatActivity {
 
 
+    public Context appContext, myContext;
+    public FragmentManager fm;
     Toolbar toolbar;
     ViewPager pager;
     ProgressBar progress;
     ImageView profile;
-
     String userid;
-
     TextView fans;
     TextView followings, friends;
-
-    Button following , messgae;
-
+    Button following, messgae;
     ViewPager coverPager;
     CircleIndicator indicator;
-
     Button follow;
-
-    public Context appContext, myContext;
-    public FragmentManager fm;
     LinearLayout followclick, fanclick, friendClick;
 
-    String userName , userImage;
+    String userName, userImage;
 
 
     @Override
@@ -81,9 +75,9 @@ public class TimelineProfile extends AppCompatActivity {
         progress = findViewById(R.id.progress);
         profile = findViewById(R.id.profileimg);
 
-        follow = (Button)findViewById(R.id.follow);
+        follow = (Button) findViewById(R.id.follow);
         //  following = (Button)findViewById(R.id.following);
-        messgae = (Button)findViewById(R.id.message);
+        messgae = (Button) findViewById(R.id.message);
         followclick = findViewById(R.id.followings_click);
         fanclick = findViewById(R.id.fans_click);
         friendClick = findViewById(R.id.friends_click);
@@ -138,9 +132,9 @@ public class TimelineProfile extends AppCompatActivity {
                 dialog.setCancelable(true);
                 dialog.show();
 
-                final EditText comment = (EditText)dialog.findViewById(R.id.message);
-                final ProgressBar bar = (ProgressBar)dialog.findViewById(R.id.progress);
-                Button submit = (Button)dialog.findViewById(R.id.send);
+                final EditText comment = (EditText) dialog.findViewById(R.id.message);
+                final ProgressBar bar = (ProgressBar) dialog.findViewById(R.id.progress);
+                Button submit = (Button) dialog.findViewById(R.id.send);
 
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -164,7 +158,7 @@ public class TimelineProfile extends AppCompatActivity {
 
                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                            Call<sendMessageBean> call = cr.sendMessage(b.userId , userid , comm);
+                            Call<sendMessageBean> call = cr.sendMessage(b.userId, userid, comm);
 
                             call.enqueue(new Callback<sendMessageBean>() {
                                 @Override
@@ -200,7 +194,6 @@ public class TimelineProfile extends AppCompatActivity {
         });
 
 
-
         if (Objects.equals(userid, b.userId)) {
             follow.setVisibility(View.GONE);
         } else {
@@ -225,7 +218,7 @@ public class TimelineProfile extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<followBean> call = cr.follow(b.userId , userid);
+                Call<followBean> call = cr.follow(b.userId, userid);
 
                 call.enqueue(new Callback<followBean>() {
                     @Override
@@ -485,7 +478,6 @@ public class TimelineProfile extends AppCompatActivity {
         followingstatus(userid);
 
 
-
     }
 
 
@@ -505,10 +497,10 @@ public class TimelineProfile extends AppCompatActivity {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<timelineProfileBean> call = cr.getProfile2(b.userId , userid);
+        Call<timelineProfileBean> call = cr.getProfile2(b.userId, userid);
 
-        Log.d("userId" , b.userId);
-        Log.d("friendId" , userid);
+        Log.d("userId", b.userId);
+        Log.d("friendId", userid);
 
         call.enqueue(new retrofit2.Callback<timelineProfileBean>() {
             @Override
@@ -542,14 +534,11 @@ public class TimelineProfile extends AppCompatActivity {
                             follow.setVisibility(View.VISIBLE);
                         }
 
-                        if (Objects.equals(response.body().getData().getFriendStatus().getFollow(), "true"))
-                        {
+                        if (Objects.equals(response.body().getData().getFriendStatus().getFollow(), "true")) {
                             if (!b.userId.equals(userid)) {
                                 messgae.setVisibility(View.VISIBLE);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             messgae.setVisibility(View.GONE);
                         }
 
@@ -580,12 +569,10 @@ public class TimelineProfile extends AppCompatActivity {
                         Toast.makeText(myContext, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                     // Toast.makeText(TimelineProfile.this , "Some Error Occurred, Please try again" , Toast.LENGTH_SHORT).show();
                 }
-
 
 
                 progress.setVisibility(View.GONE);
@@ -678,8 +665,7 @@ public class TimelineProfile extends AppCompatActivity {
 
                 return frag;
 
-            }
-            else {
+            } else {
                 return null;
             }
 

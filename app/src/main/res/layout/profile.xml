@@ -1,318 +1,316 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="?attr/actionBarSize"
-    android:clipToPadding="false"
-    >
-
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:clipToPadding="false"
+        android:paddingBottom="?attr/actionBarSize">
 
-        <LinearLayout
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/anchor"
-                android:layout_width="match_parent"
-                android:layout_height="70dp">
-
-
-                <android.support.v4.view.ViewPager
-                    android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:id="@+id/cover_pager"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:id="@+id/ivBlurProfile"
-                    android:contentDescription="banner"
-                    android:scaleType="centerCrop" />
-
-                <ImageView
-                    android:id="@+id/choose_file"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end|top"
-                    android:layout_marginRight="@dimen/dimen_10dp"
-                    android:layout_marginTop="@dimen/dimen_10dp"
-                    android:contentDescription="camera"
-                    android:src="@drawable/editblack" />
-
-                <me.relex.circleindicator.CircleIndicator
-                    android:id="@+id/indicator"
-                    android:layout_alignParentBottom="true"
-                    android:layout_width="match_parent"
-                    android:visibility="gone"
-                    android:layout_marginBottom="3dp"
-                    android:layout_height="18dp"/>
-
-
-            </FrameLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="50dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <FrameLayout
+                    android:id="@+id/anchor"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp">
+
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/cover_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/ivBlurProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:contentDescription="banner"
+                        android:scaleType="centerCrop" />
+
+                    <ImageView
+                        android:id="@+id/choose_file"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="end|top"
+                        android:layout_marginRight="@dimen/dimen_10dp"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:contentDescription="camera"
+                        android:src="@drawable/editblack" />
+
+                    <me.relex.circleindicator.CircleIndicator
+                        android:id="@+id/indicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="18dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="3dp"
+                        android:visibility="gone" />
+
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:id="@+id/name"
-                    tools:text="Sachin "
-                    android:textColor="@color/colorAccent"
-                    android:textSize="18sp" />
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="50dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"
+                        tools:text="Sachin " />
+
+                    <TextView
+                        android:id="@+id/youth_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/youth_id"
-                    android:layout_gravity="center_horizontal"
-                    />
+                    android:layout_marginTop="@dimen/dimen_20dp"
+                    android:orientation="vertical">
 
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd" />
+
+                    <TextView
+                        android:id="@+id/personal_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/businessman"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="Personal Info" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd" />
+
+                    <TextView
+                        android:id="@+id/followingAct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/hand"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="My Followings" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd" />
+
+                    <TextView
+                        android:id="@+id/vlogActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/youtube"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="My Vlog" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd" />
+
+                    <TextView
+                        android:id="@+id/messagechatee"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/mess"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="My Messages" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd" />
+
+                    <TextView
+                        android:id="@+id/wallet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/walle"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="Wallet" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd" />
+
+                    <TextView
+                        android:id="@+id/mycheckin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/checkin"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="My CheckIn" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd" />
+
+                    <TextView
+                        android:id="@+id/ratting_act"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/chevron"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="Ranking" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd" />
+
+                    <TextView
+                        android:id="@+id/beggage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/lugg"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="Baggage"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/check"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/success"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="My Check-in"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/blocked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/blocking"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="Blocked List"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/about"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/info"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="About Us" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#cdcdcd" />
+
+                    <TextView
+                        android:id="@+id/policy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/login"
+                        android:gravity="center_vertical"
+                        android:padding="14dp"
+                        android:text="Privacy Policy" />
+
+
+                </LinearLayout>
             </LinearLayout>
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_20dp"
-                android:orientation="vertical">
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:id="@+id/personal_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:drawableStart="@drawable/businessman"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:text="Personal Info" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:id="@+id/followingAct"
-                    android:drawableStart="@drawable/hand"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:text="My Followings" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/circle_white"
+                android:src="@drawable/user_default"
+                app:civ_border_color="#ffffff"
+                app:civ_border_width="2dp"
+                app:layout_anchor="@+id/anchor"
+                app:layout_anchorGravity="bottom|center_horizontal" />
 
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:id="@+id/vlogActivity"
-                    android:drawableStart="@drawable/youtube"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:text="My Vlog" />
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:id="@+id/messagechatee"
-                    android:drawableStart="@drawable/mess"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:text="My Messages" />
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:drawableStart="@drawable/walle"
-                    android:gravity="center_vertical"
-                    android:id="@+id/wallet"
-                    android:padding="14dp"
-                    android:text="Wallet" />
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:id="@+id/mycheckin"
-                    android:drawableStart="@drawable/checkin"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:text="My CheckIn" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:id="@+id/ratting_act"
-                    android:drawableStart="@drawable/chevron"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:text="Ranking" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:id="@+id/beggage"
-                    android:drawableStart="@drawable/lugg"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:visibility="gone"
-                    android:text="Baggage" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:visibility="gone"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:id="@+id/check"
-                    android:drawableStart="@drawable/success"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:visibility="gone"
-                    android:text="My Check-in" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:visibility="gone"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:id="@+id/blocked"
-                    android:drawableStart="@drawable/blocking"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:visibility="gone"
-                    android:text="Blocked List" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:visibility="gone"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:id="@+id/about"
-                    android:drawableStart="@drawable/info"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:text="About Us" />
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#cdcdcd" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="10dp"
-                    android:id="@+id/policy"
-                    android:drawableStart="@drawable/login"
-                    android:gravity="center_vertical"
-                    android:padding="14dp"
-                    android:text="Privacy Policy" />
-
-
-
-            </LinearLayout>
-        </LinearLayout>
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/user_default"
-            app:civ_border_color="#ffffff"
-            android:id="@+id/profile"
-            android:background="@drawable/circle_white"
-            app:civ_border_width="2dp"
-            app:layout_anchor="@+id/anchor"
-            app:layout_anchorGravity="bottom|center_horizontal" />
-
-
-    </android.support.design.widget.CoordinatorLayout>
-</android.support.v4.widget.NestedScrollView>
+        </android.support.design.widget.CoordinatorLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <ProgressBar
+        android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:id="@+id/progress"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
 </RelativeLayout>

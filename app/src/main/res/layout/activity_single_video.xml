@@ -23,8 +23,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -44,8 +44,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="asdasdasd"
                         android:gravity="center_vertical"
+                        android:text="asdasdasd"
                         android:textColor="#ffffff"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -57,8 +57,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10dp"
-                    android:drawableStart="@drawable/clock"
                     android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/clock"
                     android:gravity="center_vertical"
                     android:textColor="#ffffff"
                     android:textSize="10sp"
@@ -76,8 +76,7 @@
             <tcking.github.com.giraffeplayer2.VideoView
                 android:id="@+id/player"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent" />
 
 
             <ImageButton
@@ -101,10 +100,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="12dp"
                 android:layout_marginEnd="5dp"
-                android:drawableStart="@drawable/eeyyee"
+                android:layout_marginStart="12dp"
                 android:drawablePadding="5dp"
+                android:drawableStart="@drawable/eeyyee"
                 android:gravity="center_vertical"
                 android:padding="5dp"
                 android:textColor="#000000"
@@ -116,10 +115,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:drawableStart="@drawable/share"
+                android:layout_marginStart="5dp"
                 android:drawablePadding="5dp"
+                android:drawableStart="@drawable/share"
                 android:gravity="center_vertical"
                 android:padding="5dp"
                 android:textColor="#000000"
@@ -131,10 +130,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:drawableStart="@drawable/like"
+                android:layout_marginStart="5dp"
                 android:drawablePadding="5dp"
+                android:drawableStart="@drawable/like"
                 android:gravity="center_vertical"
                 android:padding="5dp"
                 android:textColor="#000000"
@@ -145,10 +144,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
-                android:drawableStart="@drawable/comment"
+                android:layout_marginStart="5dp"
                 android:drawablePadding="5dp"
+                android:drawableStart="@drawable/comment"
                 android:gravity="center_vertical"
                 android:padding="5dp"
                 android:textColor="#000000"
@@ -182,9 +181,9 @@
         <ImageButton
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:visibility="gone"
             android:layout_marginStart="10dp"
-            android:background="@drawable/emoji" />
+            android:background="@drawable/emoji"
+            android:visibility="gone" />
 
 
         <LinearLayout
@@ -207,8 +206,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/comment_sendback"
                 android:cursorVisible="true"
                 android:gravity="center_vertical|start"

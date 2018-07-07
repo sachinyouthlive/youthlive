@@ -38,8 +38,8 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
         setContentView(R.layout.activity_ratting);
         checkConnection();
 
-        layout = (TabLayout)findViewById(R.id.tab_layout);
-        pager = (ViewPager)findViewById(R.id.pager);
+        layout = (TabLayout) findViewById(R.id.tab_layout);
+        pager = (ViewPager) findViewById(R.id.pager);
 
         layout.addTab(layout.newTab().setText("Last hour"));
         layout.addTab(layout.newTab().setText("24 hour"));
@@ -56,8 +56,7 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
         layout.getTabAt(2).setText("7 days");
 
 
-
-       toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -92,11 +91,13 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
 
         }
     }
+
     ///////////////////internet connectivity check///////////////
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showAlert(isConnected);
     }
+
     private void showAlert(boolean isConnected) {
         String message;
         int color;
@@ -129,10 +130,8 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-            }
-            catch(Exception e)
-            {
-                Log.d("TAG", "Show Dialog: "+e.getMessage());
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
             //      message = "Sorry! Not connected to internet";
             //     color = Color.RED;
@@ -147,6 +146,7 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
         snackbar.show();
         */
     }
+
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showAlert(isConnected);
@@ -190,7 +190,6 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
             return POSITION_NONE;
         }
     }
-
 
 
 }

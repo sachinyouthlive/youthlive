@@ -216,12 +216,12 @@ public class Data {
         return coin;
     }
 
-    public String getDiamond() {
-        return diamond;
-    }
-
     public void setCoin(String coin) {
         this.coin = coin;
+    }
+
+    public String getDiamond() {
+        return diamond;
     }
 
     public void setDiamond(String diamond) {

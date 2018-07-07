@@ -58,7 +58,6 @@ public class HotVolg extends Fragment {
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -77,7 +76,7 @@ public class HotVolg extends Fragment {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
         Call<vlogListBean> call = cr.getVlogList(b.userId);
 
-        Log.d("userId" , b.userId);
+        Log.d("userId", b.userId);
 
         call.enqueue(new Callback<vlogListBean>() {
             @Override
@@ -85,8 +84,7 @@ public class HotVolg extends Fragment {
 
                 try {
                     adapter.setGridData(response.body().getData());
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -102,6 +100,7 @@ public class HotVolg extends Fragment {
             }
         });
     }
+
     public void loadDataSearch() {
         progress.setVisibility(View.VISIBLE);
         final bean b = (bean) getContext().getApplicationContext();
@@ -111,11 +110,11 @@ public class HotVolg extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final AllAPIs cr = retrofitsearch.create(AllAPIs.class);
-        Call<vlogsearchListBean> call = cr.getVlogSearchList((b.userId),"sachin");
+        Call<vlogsearchListBean> call = cr.getVlogSearchList((b.userId), "sachin");
 
-        Toast.makeText(getActivity(), b.userId+"loaddatasearch", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), b.userId + "loaddatasearch", Toast.LENGTH_SHORT).show();
 
-        Log.d("userId" , b.userId);
+        Log.d("userId", b.userId);
 
         call.enqueue(new Callback<vlogsearchListBean>() {
             @Override
@@ -123,9 +122,8 @@ public class HotVolg extends Fragment {
 
                 try {
                     adapterSearch.setGridData(response.body().getData());
-                   Log.e("log hotvolg", response.body().getData().toString());
-                }catch (Exception e)
-                {
+                    Log.e("log hotvolg", response.body().getData().toString());
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 

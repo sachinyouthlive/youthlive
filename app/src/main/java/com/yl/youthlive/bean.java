@@ -15,27 +15,31 @@ import java.util.ArrayList;
  * Created by TBX on 11/8/2017.
  */
 
-public class bean extends Application{
+public class bean extends Application {
 
+    public static ArrayList<String> mylist;
+    private static Context context;
+    private static bean mInstance;
     public String BASE_URL = "http://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com/softcode/";
-
     public String userId = "";
+    protected String userAgent;
     String userName = "";
     String userImage = "";
-    private static Context context;
-    public static ArrayList<String> mylist;
     String liveId = "";
-    private static bean mInstance;
     private String TAG = "myApp";
-
-    public static Context getContext() {
-        return context;
-    }
-    protected String userAgent;
 
     public bean() {
         mylist = new ArrayList<String>();
     }
+
+    public static Context getContext() {
+        return context;
+    }
+
+    public static synchronized bean getInstance() {
+        return mInstance;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -45,16 +49,10 @@ public class bean extends Application{
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
 
     }
-    public static synchronized bean getInstance() {
-        return mInstance;
-    }
 
     public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener) {
         ConnectivityReceiver.connectivityReceiverListener = listener;
     }
-
-
-
 
 
     public boolean useExtensionRenderers() {

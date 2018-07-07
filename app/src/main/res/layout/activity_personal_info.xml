@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,15 +11,15 @@
         android:layout_height="200dp">
 
         <ImageView
+            android:id="@+id/imagepro"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:id="@+id/imagepro"
             android:src="@drawable/girl" />
 
         <ImageView
-            android:layout_width="match_parent"
             android:id="@+id/backimage"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
             android:src="@drawable/gradient" />
     </RelativeLayout>
@@ -34,10 +33,10 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/name_he"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Anurag"
-            android:id="@+id/name_he"
             android:textColor="#FFF"
             android:textSize="19sp" />
 
@@ -55,11 +54,11 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/idhere"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="92"
                 android:textColor="#FFF"
-                android:id="@+id/idhere"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
@@ -146,8 +145,8 @@
         android:layout_below="@id/tab_layoutpinfo" />
 
     <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
         android:id="@+id/button_EditEducation"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
@@ -156,25 +155,25 @@
         android:background="@color/colorPrimary"
         android:src="@drawable/edit" />
 
-  <!--  <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:orientation="horizontal">
+    <!--  <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:layout_alignParentBottom="true"
+          android:background="@color/colorPrimary"
+          android:gravity="center"
+          android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/pluse" />
+          <ImageView
+              android:layout_width="30dp"
+              android:layout_height="30dp"
+              android:src="@drawable/pluse" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Add"
-            android:textColor="#FFF"
-            android:textSize="18dp" />
-    </LinearLayout>-->
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="10dp"
+              android:text="Add"
+              android:textColor="#FFF"
+              android:textSize="18dp" />
+      </LinearLayout>-->
 </RelativeLayout>

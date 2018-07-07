@@ -1,8 +1,8 @@
 package com.yl.youthlive;
 
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,10 +18,10 @@ import jp.wasabeef.blurry.Blurry;
 public class LiveEndedBroadcaster extends AppCompatActivity {
 
     ImageView image;
-    TextView liveTime , viewers , share;
+    TextView liveTime, viewers, share;
     Button back;
 
-    String lt , views;
+    String lt, views;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class LiveEndedBroadcaster extends AppCompatActivity {
         viewers.setText(views);
 
 
-        bean b = (bean)getApplicationContext();
+        bean b = (bean) getApplicationContext();
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
         ImageLoader loader = ImageLoader.getInstance();
@@ -81,10 +81,8 @@ public class LiveEndedBroadcaster extends AppCompatActivity {
         });
 
 
-
-
-
     }
+
     private String getDurationString(int seconds) {
 
         int hours = seconds / 3600;

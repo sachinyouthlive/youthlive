@@ -10,22 +10,21 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:visibility="gone"
-        android:src="@drawable/ylbgsplash" />
+        android:src="@drawable/ylbgsplash"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/splashbg"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/yl" />
+        android:src="@drawable/yllogo" />
 
     <ProgressBar
+        android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:id="@+id/progress"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
 </RelativeLayout>

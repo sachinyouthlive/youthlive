@@ -11,29 +11,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:resize_mode="fill"
-        app:surface_type="texture_view"
-        />
+        app:surface_type="texture_view" />
 
     <Button
+        android:id="@+id/play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="play"
-        android:id="@+id/play"
-        />
+        android:text="play" />
 
     <RelativeLayout
+        android:id="@+id/container"
         android:layout_width="120dp"
         android:layout_height="160dp"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:id="@+id/container"
-        android:visibility="gone"
-        >
+        android:layout_alignParentEnd="true"
+        android:visibility="gone">
 
         <com.streamaxia.android.CameraPreview
+            android:id="@+id/camera"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/camera"/>
+            android:layout_height="match_parent" />
 
     </RelativeLayout>
 

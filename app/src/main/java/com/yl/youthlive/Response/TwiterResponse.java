@@ -21,6 +21,7 @@ public class TwiterResponse implements Serializable {
     public int getSuccess() {
         return success;
     }
+
     public void setSuccess(int success) {
         this.success = success;
     }
@@ -28,6 +29,7 @@ public class TwiterResponse implements Serializable {
     public String getUser_id() {
         return user_id;
     }
+
     public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
@@ -35,6 +37,7 @@ public class TwiterResponse implements Serializable {
     public String getProfile_verify() {
         return profile_verify;
     }
+
     public void setProfile_verify(String profile_verify) {
         this.profile_verify = profile_verify;
     }
