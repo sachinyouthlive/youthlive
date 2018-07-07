@@ -348,11 +348,22 @@ public interface AllAPIs {
     );
 
     @Multipart
+    @POST("api/go_live_users_get.php")
+    Call<List<liveBean>> getLives2(
+            @Part("userId") String userId
+    );
+
+    @Multipart
     @POST("api/get_timelinelist.php")
     Call<timelineBean> getTimeline(
             @Part("userId") String userId
     );
 
+    @Multipart
+    @POST("api/go_live_update.php")
+    Call<String> updateLive(
+            @Part("liveId") String userId
+    );
 
     @Headers({
             "Accept: application/vnd.bambuser.v1+json",
@@ -519,7 +530,8 @@ public interface AllAPIs {
     Call<acceptRejectBean> acceptReject(
             @Part("requestId") String requestId,
             @Part("url") String url,
-            @Part("status") String status
+            @Part("status") String status,
+            @Part("userId") String uid
     );
 
 

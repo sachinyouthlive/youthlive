@@ -18,6 +18,7 @@ import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -31,6 +32,7 @@ import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
@@ -44,8 +46,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -53,6 +57,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 //import com.streamaxia.player.StreamaxiaPlayer;
+import com.payu.magicretry.MainActivity;
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.followPOJO.followBean;
@@ -165,6 +170,7 @@ public class BroadcasterFragment1 extends Fragment {
     View giftLayout;
     ImageView giftImage;
     TextView giftText;
+
 
 
     @Nullable
@@ -311,6 +317,7 @@ public class BroadcasterFragment1 extends Fragment {
         });
 
 
+
         progress.setVisibility(View.VISIBLE);
         final bean b = (bean) getActivity().getApplicationContext();
 
@@ -340,6 +347,7 @@ public class BroadcasterFragment1 extends Fragment {
                     broadcaster.startPublish(liveId);
 
 
+                    broadcaster.startCountDown();
                     schedule(liveId);
                     //actions.setVisibility(View.VISIBLE);
 
@@ -682,22 +690,36 @@ public class BroadcasterFragment1 extends Fragment {
                             Log.d("uurrii", uri);
 
 
-                            final Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
+                            new CountDownTimer(8000, 1000) {
+
+                                Toast toast = Toast.makeText(broadcaster, null, Toast.LENGTH_SHORT);
+
                                 @Override
-                                public void run() {
-                                    Log.d("ppllaayy", "Playing");
+                                public void onTick(long millisUntilFinished) {
 
+                                    toast.setText(String.valueOf(millisUntilFinished / 1000));
+                                    toast.show();
 
-                                    Toast.makeText(broadcaster , "Playing" , Toast.LENGTH_SHORT).show();
+                                    Log.d("asdasdsa", String.valueOf(millisUntilFinished / 1000));
+
+                                    if (millisUntilFinished / 1000 == 1) {
+
+                                        Log.d("asdasdsa", "kjaskdh");
+                                        broadcaster.startThumbPlayer1(uri, thumbPic1);
+
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFinish() {
+
 
                                     playerFrame1.setVisibility(View.VISIBLE);
 
 
-                                    broadcaster.startThumbPlayer1(uri, thumbPic1);
-
                                 }
-                            }, 8000);
+                            }.start();
 
 
                         } else {
@@ -895,6 +917,9 @@ public class BroadcasterFragment1 extends Fragment {
         return view;
     }
 
+
+
+
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
 
@@ -985,7 +1010,7 @@ public class BroadcasterFragment1 extends Fragment {
                 }
 
 
-            } else if (item.getType().equals("follow")) {
+            } else if (type.equals("follow")) {
 
                 DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
@@ -1012,7 +1037,7 @@ public class BroadcasterFragment1 extends Fragment {
                 }
 
 
-            } else if (item.getType().equals("gift")) {
+            } else if (type.equals("gift")) {
 
                 String us = item.getUserId().replace("\"", "");
                 holder.name.setText(us + " has sent a ");
@@ -1730,7 +1755,7 @@ public class BroadcasterFragment1 extends Fragment {
                 });
 
             }
-        }, 1500);
+        }, 2500);
 
 
     }

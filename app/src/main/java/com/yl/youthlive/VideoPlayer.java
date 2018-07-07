@@ -1,5 +1,8 @@
 package com.yl.youthlive;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,11 +10,14 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Region;
 import android.net.Uri;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -19,15 +25,19 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -116,8 +126,12 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
     PlayerView mainPlayerView;
     SimpleExoPlayer mainPlayer;
 
+    ProgressBar loadingProgress;
+
     PlayerView thumbSurface1 , thumbSurface2;
     SimpleExoPlayer thumbPlayer1 , thumbPlayer2;
+
+View loadingPopup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +141,13 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         liveId = getIntent().getStringExtra("uri");
         loadingpic = getIntent().getStringExtra("pic");
 
+        loadingPopup = findViewById(R.id.loading_popup);
+
         loading = findViewById(R.id.loading);
+        loadingProgress = findViewById(R.id.loading_progress);
+
+        DoubleBounce doubleBounce = new DoubleBounce();
+        loadingProgress.setIndeterminateDrawable(doubleBounce);
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
 
@@ -197,10 +217,14 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
         Log.d("status", "rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + liveId);
 
+        loadingProgress.setVisibility(View.VISIBLE);
 
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+
+
 
 //Create the player
         mainPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
@@ -245,6 +269,13 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         mainPlayer.stop();
 
         try {
+            thumbPlayer1.stop();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        try {
             mPublisher.stopPublish();
             mPublisher.stopRecord();
         } catch (Exception e) {
@@ -277,8 +308,6 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
     @Override
     public void onRtmpConnected(String s) {
-        Log.d(TAG, s);
-
         progress.setVisibility(View.VISIBLE);
 
         final bean b = (bean) getApplicationContext();
@@ -291,7 +320,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-        Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId + b.userId, "2");
+        Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId + b.userId, "2" , b.userId);
         call1.enqueue(new Callback<acceptRejectBean>() {
             @Override
             public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -305,7 +334,6 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
                 t.printStackTrace();
             }
         });
-
 
     }
 
@@ -423,7 +451,9 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
         if (playWhenReady)
         {
+            loadingPopup.setVisibility(View.GONE);
             loading.setVisibility(View.GONE);
+
         }
 
     }
@@ -440,6 +470,29 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
+
+        Log.d("eerroorr" , error.toString());
+
+
+        Dialog dialog = new Dialog(VideoPlayer.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.ended_dialog);
+        dialog.show();
+
+        Button ok = dialog.findViewById(R.id.button2);
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
+
+            }
+        });
+
+
+
 
     }
 
@@ -507,7 +560,78 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 
 
-        player_camera_layout1.setVisibility(View.VISIBLE);
+
+        new CountDownTimer(8000 , 1000)
+        {
+
+            Toast toast = Toast.makeText(VideoPlayer.this , null , Toast.LENGTH_SHORT);
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+                toast.setText(String.valueOf(millisUntilFinished / 1000));
+                toast.show();
+
+            }
+
+            @Override
+            public void onFinish() {
+
+                player_camera_layout1.setVisibility(View.VISIBLE);
+
+            }
+        }.start();
+
+
+
+
+
+    }
+
+
+    public void startThumbPlayer1(String connId)
+    {
+
+
+        Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + connId);
+
+        thumbSurface1.setVisibility(View.VISIBLE);
+
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+//Create the player
+        thumbPlayer1 = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
+                new DefaultAllocator(true, 1000),
+                200,  // min buffer 0.5s
+                500, //max buffer 3s
+                500, // playback 1s
+                500,   //playback after rebuffer 1s
+                1,
+                true
+        ));
+
+        thumbSurface1.setPlayer(thumbPlayer1);
+
+        thumbSurface1.setUseController(false);
+
+        thumbPlayer1.addListener(VideoPlayer.this);
+
+        RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
+// This is the MediaSource representing the media to be played.
+        final MediaSource videoSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
+                .createMediaSource(uri);
+
+        thumbPlayer1.prepare(videoSource);
+
+        thumbPlayer1.setPlayWhenReady(true);
+
+
+
+
+
+
     }
 
     public void endThumbCamera1()
@@ -526,6 +650,14 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         player_camera_layout1.setVisibility(View.GONE);
         //thumbCamera1.setVisibility(View.INVISIBLE);
 
+
+    }
+
+    public void endThumbPlayer1()
+    {
+        thumbPlayer1.stop();
+
+        thumbSurface1.setVisibility(View.GONE);
 
     }
 
@@ -554,5 +686,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         //cameraPreview.stopCamera();
 
     }
+
+
 
 }

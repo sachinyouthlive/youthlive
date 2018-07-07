@@ -18,6 +18,7 @@ import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -123,6 +124,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
     BroadcastReceiver endReceiver;
     BroadcastReceiver requestReceiver;
     BroadcastReceiver connectionReceiver;
+    BroadcastReceiver statusReceiver;
 
     View rootView;
     private EmojIconActions emojIcon;
@@ -722,24 +724,29 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                     String json = intent.getStringExtra("data");
 
-                    connId = json;
+                    try {
+                        JSONObject object = new JSONObject(json);
+
+                        connId = object.getString("conId");
+
+                        String uid = object.getString("uid");
+
+                        if (uid.equals(b.userId))
+                        {
+                            final Dialog dialog = new Dialog(player);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            dialog.setCancelable(false);
+                            dialog.setContentView(R.layout.new_connection_dialog);
+                            dialog.show();
+
+                            Button accept = dialog.findViewById(R.id.button11);
+                            Button deny = dialog.findViewById(R.id.button12);
+                            final ProgressBar dp = dialog.findViewById(R.id.progressBar9);
 
 
-
-                    final Dialog dialog = new Dialog(player);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setCancelable(false);
-                    dialog.setContentView(R.layout.new_connection_dialog);
-                    dialog.show();
-
-                    Button accept = dialog.findViewById(R.id.button11);
-                    Button deny = dialog.findViewById(R.id.button12);
-                    final ProgressBar dp = dialog.findViewById(R.id.progressBar9);
-
-
-                    accept.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                            accept.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
 
                             /*final bean b = (bean) player.getApplicationContext();
@@ -755,44 +762,44 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                             mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + liveId + b.userId);
 */
-                            //thumbCamera1.setVisibility(View.VISIBLE);
+                                    //thumbCamera1.setVisibility(View.VISIBLE);
 
 
-                            thumbCameraContainer1.setVisibility(View.VISIBLE);
+                                    thumbCameraContainer1.setVisibility(View.VISIBLE);
 
-                            player.startThumbCamera1(connId);
-                            dialog.dismiss();
-                        }
-                    });
+                                    player.startThumbCamera1(connId);
+                                    dialog.dismiss();
+                                }
+                            });
 
 
-                    deny.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            dp.setVisibility(View.VISIBLE);
-
-                            final bean b = (bean) player.getApplicationContext();
-
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                            Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1");
-                            call1.enqueue(new Callback<acceptRejectBean>() {
+                            deny.setOnClickListener(new View.OnClickListener() {
                                 @Override
-                                public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+                                public void onClick(View v) {
 
-                                    try {
+                                    dp.setVisibility(View.VISIBLE);
+
+                                    final bean b = (bean) player.getApplicationContext();
+
+                                    final Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(b.BASE_URL)
+                                            .addConverterFactory(ScalarsConverterFactory.create())
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                                    Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1" , b.userId);
+                                    call1.enqueue(new Callback<acceptRejectBean>() {
+                                        @Override
+                                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+
+                                            try {
 
 
 
 
-                                        //cameraLayout1.setVisibility(View.VISIBLE);
+                                                //cameraLayout1.setVisibility(View.VISIBLE);
 
 /*
                             goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
@@ -821,28 +828,36 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
 
 
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
 
-                                    dialog.dismiss();
+                                            dialog.dismiss();
 
-                                    dp.setVisibility(View.GONE);
-                                }
+                                            dp.setVisibility(View.GONE);
+                                        }
 
-                                @Override
-                                public void onFailure(Call<acceptRejectBean> call, Throwable t) {
-                                    dp.setVisibility(View.GONE);
-                                    t.printStackTrace();
+                                        @Override
+                                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                                            dp.setVisibility(View.GONE);
+                                            t.printStackTrace();
+                                        }
+                                    });
+
+
                                 }
                             });
 
 
+
+
+
+
                         }
-                    });
 
-
-
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
 
 
@@ -860,6 +875,84 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 }*/
             }
         };
+
+
+        statusReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("status")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("uurrii", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject obj = new JSONObject(json);
+
+                        connId = obj.getString("connId");
+
+                        String mode = obj.getString("status");
+                        final String uri = obj.getString("uri");
+
+                        String uid = obj.getString("uid");
+
+                        if (mode.equals("2")) {
+
+
+
+                            if (!uid.equals(b.userId))
+                            {
+                                Log.d("uurrii", uri);
+
+
+                                new CountDownTimer(8000, 1000) {
+
+
+
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+
+                                        player.startThumbPlayer1(connId);
+                                        thumbCameraContainer1.setVisibility(View.VISIBLE);
+
+                                    }
+                                }.start();
+
+                            }
+
+
+
+                        }
+
+
+                    } catch (JSONException e) {
+                        Log.d("uurrii", e.toString());
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
 
 
         connectionReceiver = new BroadcastReceiver() {
@@ -886,10 +979,15 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                         if (uid.equals(b.userId))
                         {
-
-
                             player.endThumbCamera1();
                             thumbCameraContainer1.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            player.endThumbPlayer1();
+                            thumbCameraContainer1.setVisibility(View.GONE);
+
+
                         }
 
 
@@ -1153,7 +1251,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-        Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId + b.userId, "2");
+        Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId + b.userId, "2" , b.userId);
         call1.enqueue(new Callback<acceptRejectBean>() {
             @Override
             public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -1336,6 +1434,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
             String type = item.getType().replace("\"", "");
 
+            //Log.d("ttyyppee" , type);
 
             if (type.equals("basic")) {
 
@@ -1360,7 +1459,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                 holder.index.setVisibility(View.VISIBLE);
 
-                holder.index.setVisibility(View.GONE);
+                //holder.index.setVisibility(View.GONE);
                 if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
                     holder.add.setVisibility(View.GONE);
                 } else {
@@ -1373,7 +1472,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     holder.add.setVisibility(View.VISIBLE);
                 }
 
-            } else if (item.getType().equals("follow")){
+            } else if (type.equals("follow")){
 
                 DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
@@ -1400,7 +1499,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 }
 
 
-            }else if (item.getType().equals("gift"))
+            }else if (type.equals("gift"))
             {
 
                 String us = item.getUserId().replace("\"", "");
@@ -1623,7 +1722,8 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                             new IntentFilter("request"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionReceiver,
                             new IntentFilter("connection_end"));
-
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
+                            new IntentFilter("status"));
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
 
@@ -1669,6 +1769,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(endReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
     }
 
 
@@ -2206,7 +2307,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 });
 
             }
-        } , 1500);
+        } , 2500);
 
 
     }

@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +23,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -35,8 +38,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 //import com.google.android.exoplayer.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -131,6 +136,11 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     ImageView thumbLoading1;
 
     String liveId;
+
+    View countDownPopup;
+    TextSwitcher countdown;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,6 +149,9 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
         toast = Toast.makeText(this , null , Toast.LENGTH_SHORT);
 
+
+        countDownPopup = findViewById(R.id.countdown_popup);
+        countdown = findViewById(R.id.textView29);
         thumbContainer1 = findViewById(R.id.thumb_container1);
         thumbLoading1 = findViewById(R.id.thumb_loading1);
 
@@ -186,12 +199,32 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
         //cameraPreview.setScalingMode(ScalingMode.TRIM);
 
 
+        countdown.setFactory(new ViewSwitcher.ViewFactory() {
+
+            public View makeView() {
+                // TODO Auto-generated method stub
+                // create a TextView
+                TextView t = new TextView(VideoBroadcaster.this);
+                // set the gravity of text to top and center horizontal
+                t.setGravity(Gravity.CENTER);
+                t.setTextColor(Color.WHITE);
+
+                // set displayed text size
+                t.setTextSize(100);
+                return t;
+            }
+        });
+
+
+        countdown.setCurrentText("--");
+
+
 
         List<Size> sizes = mPublisher.getSupportedPictureSizes(getResources().getConfiguration().orientation);
         final Size resolution = sizes.get(0);
         mPublisher.setVideoOutputResolution(1280, 720, this.getResources().getConfiguration().orientation);
 
-        //mPublisher.setVideoBitRate(192000);
+        //mPublisher.setVideoBitRate(1600);
 
 
         FragAdapter adapter = new FragAdapter(getSupportFragmentManager());
@@ -615,6 +648,78 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
 
     }
+
+
+    public void startCountDown() {
+
+        new CountDownTimer(8000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+                countdown.setText(String.valueOf((millisUntilFinished / 1000) + 1));
+
+            }
+
+            @Override
+            public void onFinish() {
+
+
+                updateLive();
+
+
+            }
+        }.start();
+
+
+    }
+
+
+    public void updateLive() {
+
+        progress.setVisibility(View.VISIBLE);
+
+        final bean b = (bean) getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+        Call<String> call = cr.updateLive(liveId);
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+
+                if (response.body().equals("success"))
+                {
+
+                    countDownPopup.setVisibility(View.GONE);
+
+                }
+                else
+                {
+
+                    Toast.makeText(VideoBroadcaster.this , "Error gounf live" , Toast.LENGTH_SHORT).show();
+
+                }
+
+                progress.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                progress.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
 
     public void endThumbPlayer1()
     {

@@ -903,7 +903,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                            Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1");
+                            Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1" , "");
                             call1.enqueue(new Callback<acceptRejectBean>() {
                                 @Override
                                 public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -1234,7 +1234,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-        Call<acceptRejectBean> call1 = cr.acceptReject(connId, b.userId + liveId, "2");
+        Call<acceptRejectBean> call1 = cr.acceptReject(connId, b.userId + liveId, "2" , "");
         call1.enqueue(new Callback<acceptRejectBean>() {
             @Override
             public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {

@@ -501,7 +501,7 @@ public class player_first extends Fragment implements WZStatusCallback {
 
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                retrofit2.Call<acceptRejectBean> call1 = cr.acceptReject(connId, b.userId + "-" + liveId, "2");
+                retrofit2.Call<acceptRejectBean> call1 = cr.acceptReject(connId, b.userId + "-" + liveId, "2" , "");
                 call1.enqueue(new retrofit2.Callback<acceptRejectBean>() {
                     @Override
                     public void onResponse(retrofit2.Call<acceptRejectBean> call, retrofit2.Response<acceptRejectBean> response) {
@@ -664,7 +664,7 @@ public class player_first extends Fragment implements WZStatusCallback {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<acceptRejectBean> call = cr.acceptReject(connId, "", "1");
+                retrofit2.Call<acceptRejectBean> call = cr.acceptReject(connId, "", "1" , "");
                 call.enqueue(new retrofit2.Callback<acceptRejectBean>() {
                     @Override
                     public void onResponse(retrofit2.Call<acceptRejectBean> call, retrofit2.Response<acceptRejectBean> response) {
