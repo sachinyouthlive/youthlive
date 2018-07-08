@@ -643,7 +643,9 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
         thumbPlayer1.setPlayWhenReady(true);
 
 
+        thumbContainer1.setVisibility(View.VISIBLE);
 
+        thumbPlayerView1.setVisibility(View.VISIBLE);
 
 
 

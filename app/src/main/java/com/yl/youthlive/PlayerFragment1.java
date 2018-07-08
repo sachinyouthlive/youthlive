@@ -921,7 +921,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                                     @Override
                                     public void onFinish() {
 
-                                        player.startThumbPlayer1(connId);
+                                        player.startThumbPlayer1(uri);
                                         thumbCameraContainer1.setVisibility(View.VISIBLE);
 
                                     }
