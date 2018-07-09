@@ -84,7 +84,7 @@ public class SplashActivity extends AppCompatActivity {
                     finish();
 
                 }
-            }, 4000);
+            }, 2000);
 
         }
 
@@ -135,7 +135,12 @@ public class SplashActivity extends AppCompatActivity {
                     SplashActivity.this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
                 } else {
-                    Toast.makeText(SplashActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(SplashActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SplashActivity.this, Login.class);
+                    startActivity(intent);
+                    finish();
+
+
                 }
 
 
@@ -145,6 +150,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<login2Bean> call, Throwable t) {
                 //  progress.setVisibility(View.GONE);
+                Intent intent = new Intent(SplashActivity.this, Login.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -231,6 +239,10 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<socialBean> call, Throwable t) {
                 //   progress.setVisibility(View.GONE);
+                Intent intent = new Intent(SplashActivity.this, Login.class);
+                startActivity(intent);
+                finish();
+
             }
         });
 

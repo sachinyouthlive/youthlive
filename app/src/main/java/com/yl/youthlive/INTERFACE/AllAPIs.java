@@ -246,7 +246,6 @@ public interface AllAPIs {
     @POST("api/update_phone.php")
     Call<loginResponseBean> updatePhone(
             @Part("userId") String userId,
-            @Part("countryCode") String code,
             @Part("phone") String phone
     );
 

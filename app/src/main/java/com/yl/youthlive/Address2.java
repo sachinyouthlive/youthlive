@@ -140,7 +140,6 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
                 final LinearLayout personalHide = dialog.findViewById(R.id.personal_hide);
 
 
-                final EditText country = dialog.findViewById(R.id.country);
                 final EditText phoneNumber = dialog.findViewById(R.id.phone_number);
 
                 final EditText oldPassword = dialog.findViewById(R.id.old_password);
@@ -215,10 +214,8 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
                         final int DRAWABLE_BOTTOM = 3;
                         if (event.getRawX() >= (phoneNumber.getRight() - phoneNumber.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()) - 60) {
 
-                            String count = country.getText().toString();
                             String pho = phoneNumber.getText().toString();
 
-                            if (count.length() > 0) {
 
                                 if (Utils.isValidMobile(pho)) {
 
@@ -237,7 +234,7 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
 
                                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                    Call<loginResponseBean> call = cr.updatePhone(userId, count, pho);
+                                    Call<loginResponseBean> call = cr.updatePhone(userId, pho);
 
                                     call.enqueue(new Callback<loginResponseBean>() {
                                         @Override
@@ -284,10 +281,6 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
                                 } else {
                                     Toast.makeText(getContext(), "Invalid Phone Number", Toast.LENGTH_SHORT).show();
                                 }
-
-                            } else {
-                                Toast.makeText(getContext(), "Invalid Country Code", Toast.LENGTH_SHORT).show();
-                            }
 
 
                             return true;

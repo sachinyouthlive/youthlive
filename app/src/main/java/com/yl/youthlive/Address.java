@@ -92,7 +92,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
         if (!Objects.equals(userId, b1.userId)) {
             editer.setVisibility(View.GONE);
-            phone.setText("(mobile number not public)");
+            phone.setText("(Mobile Number Private)");
         } else {
             editer.setVisibility(View.VISIBLE);
             phone.setText(b.getString("phone"));
@@ -143,7 +143,6 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                 final LinearLayout personalHide = dialog.findViewById(R.id.personal_hide);
 
 
-                final EditText country = dialog.findViewById(R.id.country);
                 final EditText phoneNumber = dialog.findViewById(R.id.phone_number);
 
                 final EditText oldPassword = dialog.findViewById(R.id.old_password);
@@ -171,7 +170,9 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
 
-                        String m = String.valueOf(datePicker.getMonth());
+                        int month = Integer.valueOf(datePicker.getMonth());
+                        month = month + 1;
+                        String m = String.valueOf(month);
                         String y = String.valueOf(datePicker.getYear());
                         String d = String.valueOf(datePicker.getDayOfMonth());
 
@@ -203,9 +204,9 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                         if (i == 0) {
-                            gend[0] = "M";
+                            gend[0] = "Male";
                         } else if (i == 1) {
-                            gend[0] = "F";
+                            gend[0] = "Female";
                         }
 
                     }
@@ -227,10 +228,8 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                         final int DRAWABLE_BOTTOM = 3;
                         if (event.getRawX() >= (phoneNumber.getRight() - phoneNumber.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()) - 60) {
 
-                            String count = country.getText().toString();
                             String pho = phoneNumber.getText().toString();
 
-                            if (count.length() > 0) {
 
                                 if (Utils.isValidMobile(pho)) {
 
@@ -249,7 +248,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
                                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                    Call<loginResponseBean> call = cr.updatePhone(userId, count, pho);
+                                    Call<loginResponseBean> call = cr.updatePhone(userId, pho);
 
                                     call.enqueue(new Callback<loginResponseBean>() {
                                         @Override
@@ -262,7 +261,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                                                     signOut();
                                                 }
 
-                                                Log.d("kamal", "response");
+                                                Log.d("sachin", "response");
 
                                                 LoginManager.getInstance().logOut();
 
@@ -296,10 +295,6 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                                 } else {
                                     Toast.makeText(getContext(), "Invalid Phone Number", Toast.LENGTH_SHORT).show();
                                 }
-
-                            } else {
-                                Toast.makeText(getContext(), "Invalid Country Code", Toast.LENGTH_SHORT).show();
-                            }
 
 
                             return true;
