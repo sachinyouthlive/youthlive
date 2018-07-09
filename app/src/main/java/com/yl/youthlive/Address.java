@@ -170,7 +170,9 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
 
-                        String m = String.valueOf(datePicker.getMonth());
+                        int month = Integer.valueOf(datePicker.getMonth());
+                        month = month + 1;
+                        String m = String.valueOf(month);
                         String y = String.valueOf(datePicker.getYear());
                         String d = String.valueOf(datePicker.getDayOfMonth());
 
@@ -202,9 +204,9 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                         if (i == 0) {
-                            gend[0] = "M";
+                            gend[0] = "Male";
                         } else if (i == 1) {
-                            gend[0] = "F";
+                            gend[0] = "Female";
                         }
 
                     }
