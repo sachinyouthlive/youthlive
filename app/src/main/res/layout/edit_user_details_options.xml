@@ -49,20 +49,6 @@
                 android:textColor="#7aa933"
                 android:textSize="10sp" />
 
-            <EditText
-                android:id="@+id/country"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/comment_sendback"
-                android:drawablePadding="10dp"
-                android:drawableStart="@drawable/plus"
-                android:gravity="center_vertical"
-                android:hint="Country Code"
-                android:inputType="number"
-                android:padding="10dp" />
 
 
             <EditText
@@ -75,7 +61,7 @@
                 android:background="@drawable/comment_sendback"
                 android:drawableEnd="@drawable/arrow_right"
                 android:gravity="center_vertical"
-                android:hint="Enter Phone"
+                android:hint="Phone Number"
                 android:inputType="phone"
                 android:padding="10dp" />
 
@@ -191,7 +177,7 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/comment_sendback"
                 android:gravity="center_vertical"
-                android:hint="Enter Username"
+                android:hint="Username"
                 android:inputType="textPersonName"
                 android:padding="10dp" />
 
@@ -223,7 +209,7 @@
                 android:background="@drawable/comment_sendback"
                 android:gravity="center_vertical"
                 android:padding="10dp"
-                android:text="Choose Birth Date"
+                android:text="Date of Birth"
                 android:textSize="18sp" />
 
             <EditText
@@ -236,7 +222,7 @@
                 android:background="@drawable/comment_sendback"
                 android:drawableEnd="@drawable/arrow_right"
                 android:gravity="center_vertical"
-                android:hint="Enter Bio"
+                android:hint="Status"
                 android:inputType="text"
                 android:padding="10dp" />
 
