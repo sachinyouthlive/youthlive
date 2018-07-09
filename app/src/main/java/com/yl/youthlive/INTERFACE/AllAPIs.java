@@ -535,6 +535,15 @@ public interface AllAPIs {
     );
 
     @Multipart
+    @POST("api/accept_reject_connection3.php")
+    Call<acceptRejectBean> acceptReject3(
+            @Part("requestId") String requestId,
+            @Part("url") String url,
+            @Part("status") String status,
+            @Part("userId") String uid
+    );
+
+    @Multipart
     @POST("api/accept_reject_connection.php")
     Call<String> acceptReject2(
             @Part("requestId") String requestId,
@@ -551,6 +560,13 @@ public interface AllAPIs {
             @Part("receiverId") String status
     );
 
+    @Multipart
+    @POST("api/request_from_player.php")
+    Call<requestConnectionBean> requestConnectionFromPlayer(
+            @Part("liveId") String requestId,
+            @Part("liveUserId") String url,
+            @Part("receiverId") String status
+    );
 
     @Multipart
     @POST("api/all_wowza_user.php")

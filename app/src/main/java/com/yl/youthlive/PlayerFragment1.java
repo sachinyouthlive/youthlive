@@ -179,20 +179,23 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
     RelativeLayout thumbCameraContainer1;
 
-    ImageButton reject1;
+    TextView reject1;
 
     View giftLayout;
     ImageView giftImage;
     TextView giftText;
 
 
+    boolean isConnection = false;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.player_fragment_layout1 , container , false);
+        View view = inflater.inflate(R.layout.player_fragment_layout1, container, false);
 
 
-        player = (VideoPlayer)getActivity();
+        player = (VideoPlayer) getActivity();
 
         mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         giftImage = view.findViewById(R.id.imageView13);
@@ -334,6 +337,13 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         });
 
 
+        end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                player.finish();
+            }
+        });
+
 
         /*start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -352,7 +362,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
             }
         });*/
 
-        final bean b = (bean)getContext().getApplicationContext();
+        final bean b = (bean) getContext().getApplicationContext();
 
         heart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -387,10 +397,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 });
 
 
-
-
-
-
             }
         });
 
@@ -419,7 +425,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     public void onResponse(Call<String> call, Response<String> response) {
 
 
-
                         progress.setVisibility(View.GONE);
 
                     }
@@ -429,10 +434,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                         progress.setVisibility(View.GONE);
                     }
                 });
-
-
-
-
 
 
             }
@@ -639,7 +640,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                         //comm.set
 
 
-                        showGift(item.getGiftId() , item.getGiftName());
+                        showGift(item.getGiftId(), item.getGiftName());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -682,12 +683,12 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                     try {
 
-                        Intent intent1 = new Intent(getContext() , LiveEndedPlayer.class);
-                        intent1.putExtra("image" , image);
-                        intent1.putExtra("id" , timelineId);
-                        intent1.putExtra("name" , timelineName.getText().toString());
-                        intent1.putExtra("time" , item.getLiveTime());
-                        intent1.putExtra("views" , item.getViewers());
+                        Intent intent1 = new Intent(getContext(), LiveEndedPlayer.class);
+                        intent1.putExtra("image", image);
+                        intent1.putExtra("id", timelineId);
+                        intent1.putExtra("name", timelineName.getText().toString());
+                        intent1.putExtra("time", item.getLiveTime());
+                        intent1.putExtra("views", item.getViewers());
                         startActivity(intent1);
                         getActivity().finish();
 
@@ -731,8 +732,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                         String uid = object.getString("uid");
 
-                        if (uid.equals(b.userId))
-                        {
+                        if (uid.equals(b.userId)) {
                             final Dialog dialog = new Dialog(player);
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setCancelable(false);
@@ -767,6 +767,10 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                                     thumbCameraContainer1.setVisibility(View.VISIBLE);
 
+                                    reject1.setVisibility(View.VISIBLE);
+
+                                    isConnection = true;
+
                                     player.startThumbCamera1(connId);
                                     dialog.dismiss();
                                 }
@@ -789,7 +793,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                    Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1" , b.userId);
+                                    Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1", b.userId);
                                     call1.enqueue(new Callback<acceptRejectBean>() {
                                         @Override
                                         public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -797,8 +801,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                                             try {
 
 
-
-
+                                                isConnection = false;
                                                 //cameraLayout1.setVisibility(View.VISIBLE);
 
 /*
@@ -827,6 +830,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 */
 
 
+reject1.setVisibility(View.GONE);
 
                                             } catch (Exception e) {
                                                 e.printStackTrace();
@@ -849,17 +853,11 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                             });
 
 
-
-
-
-
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-
 
 
                     //displayFirebaseRegId();
@@ -904,14 +902,11 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                         if (mode.equals("2")) {
 
 
-
-                            if (!uid.equals(b.userId))
-                            {
+                            if (!uid.equals(b.userId)) {
                                 Log.d("uurrii", uri);
 
 
                                 new CountDownTimer(8000, 1000) {
-
 
 
                                     @Override
@@ -921,6 +916,10 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                                     @Override
                                     public void onFinish() {
 
+                                        reject1.setVisibility(View.GONE);
+
+                                        isConnection = true;
+
                                         player.startThumbPlayer1(uri);
                                         thumbCameraContainer1.setVisibility(View.VISIBLE);
 
@@ -928,8 +927,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                                 }.start();
 
                             }
-
-
 
                         }
 
@@ -952,7 +949,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 }*/
             }
         };
-
 
 
         connectionReceiver = new BroadcastReceiver() {
@@ -977,21 +973,16 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                         String uid = obj.getString("userId");
 
 
-                        if (uid.equals(b.userId))
-                        {
+                        if (uid.equals(b.userId)) {
                             player.endThumbCamera1();
                             thumbCameraContainer1.setVisibility(View.GONE);
-                        }
-                        else
-                        {
+                            isConnection = false;
+                        } else {
                             player.endThumbPlayer1();
                             thumbCameraContainer1.setVisibility(View.GONE);
-
+isConnection = false;
 
                         }
-
-
-
 
 
                     } catch (JSONException e) {
@@ -1012,8 +1003,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 }*/
             }
         };
-
-
 
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -1106,13 +1095,12 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     }
                 });
 
-                GridLayoutManager giftManager = new GridLayoutManager(player , 2);
+                GridLayoutManager giftManager = new GridLayoutManager(player, 2);
 
-                GiftAdapter giftAdapter = new GiftAdapter(player , bar , dialog);
+                GiftAdapter giftAdapter = new GiftAdapter(player, bar, dialog);
 
                 giftGrid.setLayoutManager(giftManager);
                 giftGrid.setAdapter(giftAdapter);
-
 
 
             }
@@ -1123,6 +1111,49 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
             @Override
             public void onClick(View v) {
                 //broadcaster.switchCamera();
+
+
+if (!isConnection)
+{
+
+    final bean b = (bean) player.getApplicationContext();
+
+    progress.setVisibility(View.VISIBLE);
+
+    final Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(b.BASE_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+    Call<requestConnectionBean> call = cr.requestConnectionFromPlayer(liveId, timelineId, b.userId);
+
+    call.enqueue(new Callback<requestConnectionBean>() {
+        @Override
+        public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+
+            progress.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+            progress.setVisibility(View.GONE);
+            Log.d("asdasdasdas", t.toString());
+        }
+    });
+
+
+
+}
+else
+{
+    Toast.makeText(player , "Sorry, No room available for guest live" , Toast.LENGTH_SHORT).show();
+}
+
+
             }
         });
 
@@ -1165,18 +1196,16 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<followBean> call = cr.followLiveUser(b.userId , timelineId , liveId);
+                retrofit2.Call<followBean> call = cr.followLiveUser(b.userId, timelineId, liveId);
 
                 call.enqueue(new retrofit2.Callback<followBean>() {
                     @Override
                     public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
 
-                        if (response.body().getStatus().equals("1"))
-                        {
+                        if (response.body().getStatus().equals("1")) {
                             Toast.makeText(player, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             timeLineFollow.setVisibility(View.GONE);
                         }
-
 
 
                         progress.setVisibility(View.GONE);
@@ -1190,7 +1219,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                     }
                 });
-
 
 
             }
@@ -1251,7 +1279,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-        Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId + b.userId, "2" , b.userId);
+        Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId + b.userId, "2", b.userId);
         call1.enqueue(new Callback<acceptRejectBean>() {
             @Override
             public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -1454,7 +1482,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
 
 
-
                 holder.container.setBackground(context.getResources().getDrawable(R.drawable.gray_round2));
 
                 holder.index.setVisibility(View.VISIBLE);
@@ -1472,7 +1499,9 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     holder.add.setVisibility(View.VISIBLE);
                 }
 
-            } else if (type.equals("follow")){
+                holder.add.setVisibility(View.GONE);
+
+            } else if (type.equals("follow")) {
 
                 DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
@@ -1498,9 +1527,9 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     holder.add.setVisibility(View.VISIBLE);
                 }
 
+                holder.add.setVisibility(View.GONE);
 
-            }else if (type.equals("gift"))
-            {
+            } else if (type.equals("gift")) {
 
                 String us = item.getUserId().replace("\"", "");
                 holder.name.setText(us + " has sent a ");
@@ -1526,14 +1555,80 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
             });
 
 
-
-
-            holder.add.setOnClickListener(new View.OnClickListener() {
+            holder.index.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
 
-                    progress.setVisibility(View.VISIBLE);
+                    bean b = (bean)context.getApplicationContext();
+
+
+                    final Dialog dialog = new Dialog(context);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.follow_dialog);
+                    dialog.setCancelable(true);
+                    dialog.show();
+
+
+                    CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
+                    TextView name = (TextView) dialog.findViewById(R.id.name);
+                    Button follo = (Button) dialog.findViewById(R.id.follow);
+                    final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
+
+
+
+                    ImageLoader loader1 = ImageLoader.getInstance();
+
+                    loader1.displayImage(b.userImage, image);
+
+                    name.setText(b.userName);
+
+                    follo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            bar.setVisibility(View.VISIBLE);
+
+                            final bean b = (bean) context.getApplicationContext();
+
+                            final Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.BASE_URL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+
+                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                            retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
+
+                            call.enqueue(new retrofit2.Callback<followBean>() {
+                                @Override
+                                public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+
+                                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                    bar.setVisibility(View.GONE);
+
+                                    dialog.dismiss();
+
+                                }
+
+                                @Override
+                                public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+
+                                    bar.setVisibility(View.GONE);
+
+                                }
+                            });
+
+                        }
+                    });
+
+
+
+
+                    /*progress.setVisibility(View.VISIBLE);
 
                     final bean b = (bean) context.getApplicationContext();
 
@@ -1552,8 +1647,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                         @Override
                         public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
 
-                            if (response.body().getStatus().equals("1"))
-                            {
+                            if (response.body().getStatus().equals("1")) {
                                 Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                 holder.add.setVisibility(View.GONE);
                             }
@@ -1570,8 +1664,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                         }
                     });
-
-
+*/
 
                 }
             });
@@ -1660,14 +1753,21 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     liveUsers.setText(response.body().getData().getViewsCount());
 
 
-                    if (response.body().getData().getFollow().equals("true"))
+                    if (response.body().getData().getIsConnection().equals("true"))
                     {
+                        reject1.setVisibility(View.GONE);
+
+                        player.startThumbPlayer1(response.body().getData().getConnid());
+                        thumbCameraContainer1.setVisibility(View.VISIBLE);
+
+                    }
+
+
+                    if (response.body().getData().getFollow().equals("true")) {
 
                         timeLineFollow.setVisibility(View.GONE);
 
-                    }
-                    else
-                    {
+                    } else {
                         timeLineFollow.setVisibility(View.VISIBLE);
                     }
 
@@ -2096,12 +2196,70 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 @Override
                 public void onClick(View view) {
 
-                    String uid = item.getUserId();
-                    uid.replace("\"", "");
+                    bean b = (bean)context.getApplicationContext();
 
-                    Intent intent = new Intent(context, TimelineProfile.class);
-                    intent.putExtra("userId", uid);
-                    startActivity(intent);
+
+                    final Dialog dialog = new Dialog(context);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.follow_dialog);
+                    dialog.setCancelable(true);
+                    dialog.show();
+
+
+                    CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
+                    TextView name = (TextView) dialog.findViewById(R.id.name);
+                    Button follo = (Button) dialog.findViewById(R.id.follow);
+                    final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
+
+
+
+                    ImageLoader loader1 = ImageLoader.getInstance();
+
+                    loader1.displayImage(b.userImage, image);
+
+                    name.setText(b.userName);
+
+                    follo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            bar.setVisibility(View.VISIBLE);
+
+                            final bean b = (bean) context.getApplicationContext();
+
+                            final Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.BASE_URL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+
+                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                            retrofit2.Call<followBean> call = cr.follow(b.userId, item.getUserId());
+
+                            call.enqueue(new retrofit2.Callback<followBean>() {
+                                @Override
+                                public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+
+                                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                    bar.setVisibility(View.GONE);
+
+                                    dialog.dismiss();
+
+                                }
+
+                                @Override
+                                public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+
+                                    bar.setVisibility(View.GONE);
+
+                                }
+                            });
+
+                        }
+                    });
 
                 }
             });
@@ -2134,8 +2292,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
     }
 
 
-    class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder>
-    {
+    class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
 
         Context context;
         ProgressBar progressBar;
@@ -2158,8 +2315,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                         R.drawable.gif14
                 };
 
-        public GiftAdapter(Context context , ProgressBar progress , Dialog dialog)
-        {
+        public GiftAdapter(Context context, ProgressBar progress, Dialog dialog) {
             this.context = context;
             this.progressBar = progress;
             this.dialog = dialog;
@@ -2168,8 +2324,8 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.gift_model , parent , false);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.gift_model, parent, false);
             return new ViewHolder(view);
         }
 
@@ -2198,8 +2354,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     retrofit2.Call<sendGiftBean> call = cr.sendGift(b.userId, liveId, timelineId, String.valueOf(position + 1), "1", "1");
 
 
-
-
                     call.enqueue(new retrofit2.Callback<sendGiftBean>() {
                         @Override
                         public void onResponse(retrofit2.Call<sendGiftBean> call, retrofit2.Response<sendGiftBean> response) {
@@ -2211,9 +2365,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                                 if (Objects.equals(response.body().getStatus(), "1")) {
                                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
-                                }
-                                else
-                                {
+                                } else {
                                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
 
@@ -2236,8 +2388,6 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     });
 
 
-
-
                 }
             });
 
@@ -2249,8 +2399,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
             return 14;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder
-        {
+        class ViewHolder extends RecyclerView.ViewHolder {
 
             ImageView image;
             Button send;
@@ -2284,8 +2433,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
             };
 
 
-    public void showGift(String giftId , String text)
-    {
+    public void showGift(String giftId, String text) {
 
 
         Glide.with(player).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
@@ -2307,7 +2455,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                 });
 
             }
-        } , 2500);
+        }, 2500);
 
 
     }

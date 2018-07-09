@@ -86,7 +86,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class VideoPlayer extends AppCompatActivity implements EncoderHandler.EncodeListener, RtmpHandler.RtmpListener, RecordHandler.RecordListener, Player.EventListener {
+public class VideoPlayer extends AppCompatActivity implements EncoderHandler.EncodeListener, RecordHandler.RecordListener {
 
     String liveId;
 
@@ -133,6 +133,10 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
 View loadingPopup;
 
+View thumbCountdown;
+
+TextView thumbCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +144,10 @@ View loadingPopup;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         liveId = getIntent().getStringExtra("uri");
         loadingpic = getIntent().getStringExtra("pic");
+
+        thumbCountdown = findViewById(R.id.thumb_countdown);
+        thumbCount = findViewById(R.id.textView33);
+
 
         loadingPopup = findViewById(R.id.loading_popup);
 
@@ -250,7 +258,89 @@ View loadingPopup;
 
         mainPlayer.setPlayWhenReady(true);
 
-        mainPlayer.addListener(VideoPlayer.this);
+        mainPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+
+            }
+
+            @Override
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+            }
+
+            @Override
+            public void onLoadingChanged(boolean isLoading) {
+
+            }
+
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                Log.d("ssttaattee" , String.valueOf(playbackState));
+
+                if (playWhenReady)
+                {
+                    loadingPopup.setVisibility(View.GONE);
+                    loading.setVisibility(View.GONE);
+
+                }
+
+            }
+
+            @Override
+            public void onRepeatModeChanged(int repeatMode) {
+
+            }
+
+            @Override
+            public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+            }
+
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+
+                Log.d("eerroorr" , error.toString());
+
+
+                Dialog dialog = new Dialog(VideoPlayer.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.ended_dialog);
+                dialog.show();
+
+                Button ok = dialog.findViewById(R.id.button2);
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        finish();
+
+                    }
+                });
+
+
+
+
+            }
+
+
+            @Override
+            public void onPositionDiscontinuity(int reason) {
+
+            }
+
+            @Override
+            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+            }
+
+            @Override
+            public void onSeekProcessed() {
+
+            }
+        });
 
 
 
@@ -301,108 +391,7 @@ View loadingPopup;
         Log.d(TAG, "illegal argument: " + e.toString());
     }
 
-    @Override
-    public void onRtmpConnecting(String s) {
-        Log.d(TAG, s);
-    }
 
-    @Override
-    public void onRtmpConnected(String s) {
-        progress.setVisibility(View.VISIBLE);
-
-        Log.d("rreess" , connId);
-
-
-
-        final bean b = (bean) getApplicationContext();
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-        Call<String> call1 = cr.acceptReject2(connId, liveId + b.userId, "2" , b.userId);
-        call1.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-
-                Log.d("rreess" , response.body());
-
-                progress.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                progress.setVisibility(View.GONE);
-                Log.d("rreess" , t.toString());
-                t.printStackTrace();
-            }
-        });
-
-    }
-
-    @Override
-    public void onRtmpVideoStreaming() {
-        Log.d("recordloistener" , "video");
-    }
-
-    @Override
-    public void onRtmpAudioStreaming() {
-        Log.d("recordloistener" , "audio");
-    }
-
-    @Override
-    public void onRtmpStopped() {
-        Log.d("recordloistener", "RTMP stopped");
-    }
-
-    @Override
-    public void onRtmpDisconnected() {
-        Log.d("recordloistener", "RTMP disconnected");
-    }
-
-    @Override
-    public void onRtmpVideoFpsChanged(double v) {
-        Log.d(TAG, "fps changed" + String.valueOf(v));
-    }
-
-    @Override
-    public void onRtmpVideoBitrateChanged(double v) {
-
-    }
-
-    @Override
-    public void onRtmpAudioBitrateChanged(double v) {
-
-    }
-
-    @Override
-    public void onRtmpSocketException(SocketException e) {
-        Log.d("recordloistener" , e.toString());
-    }
-
-    @Override
-    public void onRtmpIOException(IOException e) {
-        Log.d("recordloistener" , e.toString());
-    }
-
-    @Override
-    public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-        Log.d("recordloistener" , e.toString());
-    }
-
-    @Override
-    public void onRtmpIllegalStateException(IllegalStateException e) {
-        Log.d("recordloistener" , e.toString());
-    }
-
-    @Override
-    public void onRtmpAuthenticationg(String s) {
-        Log.d("recordloistener" , s);
-    }
 
     @Override
     public void onRecordPause() {
@@ -436,87 +425,10 @@ View loadingPopup;
         Log.d("recordloistener" , e.toString());
     }
 
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
-
-    }
-
-    @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
-
-    }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
-        Log.d("ssttaattee" , String.valueOf(playbackState));
-
-        if (playWhenReady)
-        {
-            loadingPopup.setVisibility(View.GONE);
-            loading.setVisibility(View.GONE);
-
-        }
-
-    }
-
-    @Override
-    public void onRepeatModeChanged(int repeatMode) {
-
-    }
-
-    @Override
-    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
-    }
-
-    @Override
-    public void onPlayerError(ExoPlaybackException error) {
-
-        Log.d("eerroorr" , error.toString());
-
-
-        Dialog dialog = new Dialog(VideoPlayer.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.ended_dialog);
-        dialog.show();
-
-        Button ok = dialog.findViewById(R.id.button2);
-
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                finish();
-
-            }
-        });
 
 
 
 
-    }
-
-    @Override
-    public void onPositionDiscontinuity(int reason) {
-
-    }
-
-    @Override
-    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-    }
-
-    @Override
-    public void onSeekProcessed() {
-
-    }
 
 
     public class FragAdapter extends FragmentStatePagerAdapter {
@@ -546,9 +458,13 @@ View loadingPopup;
 
     StreamaxiaPublisher mPublisher;
 
-    public void startThumbCamera1(String connId) {
+    public void startThumbCamera1(final String connId) {
+
+        player_camera_layout1.setVisibility(View.VISIBLE);
 
         thumbCamera1.setVisibility(View.VISIBLE);
+        thumbCountdown.setVisibility(View.VISIBLE);
+
 
         this.connId = connId;
 
@@ -557,7 +473,109 @@ View loadingPopup;
         mPublisher = new StreamaxiaPublisher(thumbCamera1, VideoPlayer.this);
 
         mPublisher.setEncoderHandler(new EncoderHandler(VideoPlayer.this));
-        mPublisher.setRtmpHandler(new RtmpHandler(VideoPlayer.this));
+        mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
+            @Override
+            public void onRtmpConnecting(String s) {
+
+            }
+
+            @Override
+            public void onRtmpConnected(String s) {
+                progress.setVisibility(View.VISIBLE);
+
+                Log.d("rreess" , connId);
+
+
+
+                final bean b = (bean) getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                Call<String> call1 = cr.acceptReject2(connId, liveId + b.userId, "2" , b.userId);
+                call1.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+                        Log.d("rreess" , response.body());
+
+                        progress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                        Log.d("rreess" , t.toString());
+                        t.printStackTrace();
+                    }
+                });
+            }
+
+            @Override
+            public void onRtmpVideoStreaming() {
+
+            }
+
+            @Override
+            public void onRtmpAudioStreaming() {
+
+            }
+
+            @Override
+            public void onRtmpStopped() {
+
+            }
+
+            @Override
+            public void onRtmpDisconnected() {
+
+            }
+
+            @Override
+            public void onRtmpVideoFpsChanged(double v) {
+
+            }
+
+            @Override
+            public void onRtmpVideoBitrateChanged(double v) {
+
+            }
+
+            @Override
+            public void onRtmpAudioBitrateChanged(double v) {
+
+            }
+
+            @Override
+            public void onRtmpSocketException(SocketException e) {
+
+            }
+
+            @Override
+            public void onRtmpIOException(IOException e) {
+
+            }
+
+            @Override
+            public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
+
+            }
+
+            @Override
+            public void onRtmpIllegalStateException(IllegalStateException e) {
+
+            }
+
+            @Override
+            public void onRtmpAuthenticationg(String s) {
+
+            }
+        }));
         mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
         thumbCamera1.startCamera();
         mPublisher.setVideoOutputResolution(480, 360, getResources().getConfiguration().orientation);
@@ -571,20 +589,178 @@ View loadingPopup;
         new CountDownTimer(8000 , 1000)
         {
 
-            Toast toast = Toast.makeText(VideoPlayer.this , null , Toast.LENGTH_SHORT);
+            //Toast toast = Toast.makeText(VideoPlayer.this , null , Toast.LENGTH_SHORT);
 
             @Override
             public void onTick(long millisUntilFinished) {
 
-                toast.setText(String.valueOf(millisUntilFinished / 1000));
-                toast.show();
+              thumbCount.setText(String.valueOf(millisUntilFinished / 1000));
 
             }
 
             @Override
             public void onFinish() {
 
-                player_camera_layout1.setVisibility(View.VISIBLE);
+                thumbCountdown.setVisibility(View.GONE);
+
+
+
+            }
+        }.start();
+
+
+
+
+
+    }
+
+
+    public void startThumbCamera1FromPlayer(final String connId) {
+
+        player_camera_layout1.setVisibility(View.VISIBLE);
+
+        thumbCamera1.setVisibility(View.VISIBLE);
+        thumbCountdown.setVisibility(View.VISIBLE);
+
+
+        this.connId = connId;
+
+        final bean b = (bean) getApplicationContext();
+
+        mPublisher = new StreamaxiaPublisher(thumbCamera1, VideoPlayer.this);
+
+        mPublisher.setEncoderHandler(new EncoderHandler(VideoPlayer.this));
+        mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
+            @Override
+            public void onRtmpConnecting(String s) {
+
+            }
+
+            @Override
+            public void onRtmpConnected(String s) {
+                /*progress.setVisibility(View.VISIBLE);
+
+                Log.d("rreess" , connId);
+
+
+
+                final bean b = (bean) getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                Call<String> call1 = cr.acceptReject2(connId, liveId + b.userId, "2" , b.userId);
+                call1.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+                        Log.d("rreess" , response.body());
+
+                        progress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                        Log.d("rreess" , t.toString());
+                        t.printStackTrace();
+                    }
+                });*/
+            }
+
+            @Override
+            public void onRtmpVideoStreaming() {
+
+            }
+
+            @Override
+            public void onRtmpAudioStreaming() {
+
+            }
+
+            @Override
+            public void onRtmpStopped() {
+
+            }
+
+            @Override
+            public void onRtmpDisconnected() {
+
+            }
+
+            @Override
+            public void onRtmpVideoFpsChanged(double v) {
+
+            }
+
+            @Override
+            public void onRtmpVideoBitrateChanged(double v) {
+
+            }
+
+            @Override
+            public void onRtmpAudioBitrateChanged(double v) {
+
+            }
+
+            @Override
+            public void onRtmpSocketException(SocketException e) {
+
+            }
+
+            @Override
+            public void onRtmpIOException(IOException e) {
+
+            }
+
+            @Override
+            public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
+
+            }
+
+            @Override
+            public void onRtmpIllegalStateException(IllegalStateException e) {
+
+            }
+
+            @Override
+            public void onRtmpAuthenticationg(String s) {
+
+            }
+        }));
+        mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
+        thumbCamera1.startCamera();
+        mPublisher.setVideoOutputResolution(480, 360, getResources().getConfiguration().orientation);
+
+        //mPublisher.setVideoBitRate(128000);
+
+        mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
+
+
+
+        new CountDownTimer(8000 , 1000)
+        {
+
+            //Toast toast = Toast.makeText(VideoPlayer.this , null , Toast.LENGTH_SHORT);
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+                thumbCount.setText(String.valueOf(millisUntilFinished / 1000));
+
+            }
+
+            @Override
+            public void onFinish() {
+
+                thumbCountdown.setVisibility(View.GONE);
+
+
 
             }
         }.start();
@@ -623,7 +799,59 @@ View loadingPopup;
 
         thumbSurface1.setUseController(false);
 
-        thumbPlayer1.addListener(VideoPlayer.this);
+        thumbPlayer1.addListener(new Player.EventListener() {
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+
+            }
+
+            @Override
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+            }
+
+            @Override
+            public void onLoadingChanged(boolean isLoading) {
+
+            }
+
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
+            }
+
+            @Override
+            public void onRepeatModeChanged(int repeatMode) {
+
+            }
+
+            @Override
+            public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+            }
+
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+
+                endThumbPlayer1();
+
+            }
+
+            @Override
+            public void onPositionDiscontinuity(int reason) {
+
+            }
+
+            @Override
+            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+            }
+
+            @Override
+            public void onSeekProcessed() {
+
+            }
+        });
 
         RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
 // This is the MediaSource representing the media to be played.

@@ -104,7 +104,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class VideoBroadcaster extends AppCompatActivity implements EncoderHandler.EncodeListener, RtmpHandler.RtmpListener, RecordHandler.RecordListener, Player.EventListener {
+public class VideoBroadcaster extends AppCompatActivity implements EncoderHandler.EncodeListener, RtmpHandler.RtmpListener, RecordHandler.RecordListener {
 
     CameraPreview cameraPreview;
     private StreamaxiaPublisher mPublisher;
@@ -133,13 +133,15 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     SimpleExoPlayer thumbPlayer1;
 
     RelativeLayout thumbContainer1;
-    ImageView thumbLoading1;
+
 
     String liveId;
 
     View countDownPopup;
     TextSwitcher countdown;
 
+    View thumbcountdown;
+    TextView thumbCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,11 +151,13 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
         toast = Toast.makeText(this , null , Toast.LENGTH_SHORT);
 
+        thumbcountdown = findViewById(R.id.thumb_countdown);
+        thumbCount = findViewById(R.id.textView33);
 
         countDownPopup = findViewById(R.id.countdown_popup);
         countdown = findViewById(R.id.textView29);
         thumbContainer1 = findViewById(R.id.thumb_container1);
-        thumbLoading1 = findViewById(R.id.thumb_loading1);
+
 
         cameraPreview = findViewById(R.id.preview);
         progress = findViewById(R.id.progressBar5);
@@ -296,62 +300,9 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
     }
 
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
-
-    }
-
-    @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
-
-    }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
 
-        if (playWhenReady)
-        {
-            thumbLoading1.setVisibility(View.GONE);
-        }
 
-
-    }
-
-    @Override
-    public void onRepeatModeChanged(int repeatMode) {
-
-    }
-
-    @Override
-    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
-    }
-
-    @Override
-    public void onPlayerError(ExoPlaybackException error) {
-
-    }
-
-    @Override
-    public void onPositionDiscontinuity(int reason) {
-
-    }
-
-    @Override
-    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-    }
-
-    @Override
-    public void onSeekProcessed() {
-
-    }
 
     public class FragAdapter extends FragmentStatePagerAdapter
     {
@@ -569,83 +520,158 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     }
 
 
-    public void startThumbPlayer1(String connId , String thumbPic)
+    public void startThumbPlayer1(final String connId , String thumbPic)
     {
-        /*Log.d("uurrii" , thumbPic);
 
         thumbContainer1.setVisibility(View.VISIBLE);
-        thumbPlayerView1.setVisibility(View.VISIBLE);
-        thumbLoading1.setVisibility(View.VISIBLE);
+        thumbcountdown.setVisibility(View.VISIBLE);
 
 
-        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
-        ImageLoader loader = ImageLoader.getInstance();
+        new CountDownTimer(8000, 1000) {
 
-        loader.loadImage(thumbPic, options, new ImageLoadingListener() {
+
             @Override
-            public void onLoadingStarted(String imageUri, View view) {
+            public void onTick(long millisUntilFinished) {
+
+
+                thumbCount.setText(String.valueOf(millisUntilFinished / 1000));
+
 
             }
 
             @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-
-                Blurry.with(VideoBroadcaster.this).from(loadedImage).into(thumbLoading1);
-
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-
-            }
-        });
+            public void onFinish() {
 
 
-*/
-        //Uri uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/vod/sample.mp4");
 
-        Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + connId);
+                Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + connId);
 
 
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+                TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
 //Create the player
-        thumbPlayer1 = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
-                new DefaultAllocator(true, 1000),
-                200,  // min buffer 0.5s
-                500, //max buffer 3s
-                500, // playback 1s
-                500,   //playback after rebuffer 1s
-                1,
-                true
-        ));
+                thumbPlayer1 = ExoPlayerFactory.newSimpleInstance(VideoBroadcaster.this, trackSelector, new DefaultLoadControl(
+                        new DefaultAllocator(true, 1000),
+                        200,  // min buffer 0.5s
+                        500, //max buffer 3s
+                        500, // playback 1s
+                        500,   //playback after rebuffer 1s
+                        1,
+                        true
+                ));
 
-        thumbPlayerView1.setPlayer(thumbPlayer1);
+                thumbPlayerView1.setPlayer(thumbPlayer1);
 
-        thumbPlayerView1.setUseController(false);
+                thumbPlayerView1.setUseController(false);
 
-        thumbPlayer1.addListener(VideoBroadcaster.this);
+                thumbPlayer1.addListener(new Player.EventListener() {
+                    @Override
+                    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
 
-        RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
+                    }
+
+                    @Override
+                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+                    }
+
+                    @Override
+                    public void onLoadingChanged(boolean isLoading) {
+
+                    }
+
+                    @Override
+                    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
+                    }
+
+                    @Override
+                    public void onRepeatModeChanged(int repeatMode) {
+
+                    }
+
+                    @Override
+                    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+                    }
+
+                    @Override
+                    public void onPlayerError(ExoPlaybackException error) {
+
+                        progress.setVisibility(View.VISIBLE);
+
+                        final bean b = (bean) getApplicationContext();
+
+                        final Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(b.BASE_URL)
+                                .addConverterFactory(ScalarsConverterFactory.create())
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+
+                        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                        Call<String> call = cr.endConnection(connId);
+
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+
+
+                                progress.setVisibility(View.GONE);
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                progress.setVisibility(View.GONE);
+                            }
+                        });
+
+
+
+                    }
+
+                    @Override
+                    public void onPositionDiscontinuity(int reason) {
+
+                    }
+
+                    @Override
+                    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+                    }
+
+                    @Override
+                    public void onSeekProcessed() {
+
+                    }
+                });
+
+                RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
 // This is the MediaSource representing the media to be played.
-        final MediaSource videoSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
-                .createMediaSource(uri);
+                final MediaSource videoSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
+                        .createMediaSource(uri);
 
-        thumbPlayer1.prepare(videoSource);
+                thumbPlayer1.prepare(videoSource);
 
-        thumbPlayer1.setPlayWhenReady(true);
+                thumbPlayer1.setPlayWhenReady(true);
 
 
-        thumbContainer1.setVisibility(View.VISIBLE);
 
-        thumbPlayerView1.setVisibility(View.VISIBLE);
+
+                thumbPlayerView1.setVisibility(View.VISIBLE);
+
+                thumbcountdown.setVisibility(View.GONE);
+
+
+
+
+            }
+        }.start();
+
+
 
 
 
@@ -725,11 +751,17 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
     public void endThumbPlayer1()
     {
-        thumbPlayer1.stop();
+        try {
+            thumbPlayer1.stop();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
 
         thumbPlayerView1.setVisibility(View.GONE);
         thumbContainer1.setVisibility(View.GONE);
-        thumbLoading1.setVisibility(View.GONE);
+
 
     }
 

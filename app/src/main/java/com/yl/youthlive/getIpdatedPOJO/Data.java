@@ -74,6 +74,12 @@ public class Data {
     @SerializedName("follow")
     @Expose
     private String follow;
+    @SerializedName("isConnection")
+    @Expose
+    private String isConnection;
+    @SerializedName("connid")
+    @Expose
+    private String connid;
 
 
     public String getUserId() {
@@ -243,5 +249,21 @@ public class Data {
 
     public void setFollow(String follow) {
         this.follow = follow;
+    }
+
+    public String getConnid() {
+        return connid;
+    }
+
+    public String getIsConnection() {
+        return isConnection;
+    }
+
+    public void setConnid(String connid) {
+        this.connid = connid;
+    }
+
+    public void setIsConnection(String isConnection) {
+        this.isConnection = isConnection;
     }
 }

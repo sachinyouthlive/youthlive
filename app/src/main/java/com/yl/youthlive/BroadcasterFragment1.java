@@ -60,6 +60,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.payu.magicretry.MainActivity;
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.getIpdatedPOJO.Comment;
 import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
@@ -117,6 +118,7 @@ public class BroadcasterFragment1 extends Fragment {
     BroadcastReceiver giftReceiver;
     BroadcastReceiver statusReceiver;
     BroadcastReceiver connectionReceiver;
+    BroadcastReceiver requestReceiver;
     View rootView;
     private EmojIconActions emojIcon;
 
@@ -159,7 +161,7 @@ public class BroadcasterFragment1 extends Fragment {
 
     RelativeLayout playerFrame1;
 
-    ImageButton reject1;
+    TextView reject1;
 
     String connId;
 
@@ -689,37 +691,11 @@ public class BroadcasterFragment1 extends Fragment {
 
                             Log.d("uurrii", uri);
 
-
-                            new CountDownTimer(8000, 1000) {
-
-                                Toast toast = Toast.makeText(broadcaster, null, Toast.LENGTH_SHORT);
-
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-
-                                    toast.setText(String.valueOf(millisUntilFinished / 1000));
-                                    toast.show();
-
-                                    Log.d("asdasdsa", String.valueOf(millisUntilFinished / 1000));
-
-                                    if (millisUntilFinished / 1000 == 1) {
-                                        isConnection = true;
-                                        Log.d("asdasdsa", "kjaskdh");
-                                        broadcaster.startThumbPlayer1(uri, thumbPic1);
-
-                                    }
-
-                                }
-
-                                @Override
-                                public void onFinish() {
+                            broadcaster.startThumbPlayer1(uri, thumbPic1);
+                            playerFrame1.setVisibility(View.VISIBLE);
+                            isConnection = true;
 
 
-                                    playerFrame1.setVisibility(View.VISIBLE);
-
-
-                                }
-                            }.start();
 
 
                         } else {
@@ -784,6 +760,200 @@ public class BroadcasterFragment1 extends Fragment {
 
 
                     //displayFirebaseRegId();
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        requestReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("request_player")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+                    Log.d("data", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject object = new JSONObject(json);
+
+                        connId = object.getString("conId");
+
+                        String uid = object.getString("uid");
+
+                        if (uid.equals(b.userId)) {
+                            final Dialog dialog = new Dialog(broadcaster);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            dialog.setCancelable(false);
+                            dialog.setContentView(R.layout.new_connection_dialog);
+                            dialog.show();
+
+                            Button accept = dialog.findViewById(R.id.button11);
+                            Button deny = dialog.findViewById(R.id.button12);
+                            final ProgressBar dp = dialog.findViewById(R.id.progressBar9);
+
+
+                            accept.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+
+                                    dp.setVisibility(View.VISIBLE);
+
+                                    final bean b = (bean) broadcaster.getApplicationContext();
+
+                                    final Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(b.BASE_URL)
+                                            .addConverterFactory(ScalarsConverterFactory.create())
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                                    Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1", b.userId);
+                                    call1.enqueue(new Callback<acceptRejectBean>() {
+                                        @Override
+                                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+
+                                            try {
+
+
+
+                                                isConnection = false;
+                                                //cameraLayout1.setVisibility(View.VISIBLE);
+
+
+
+
+
+                                                reject1.setVisibility(View.GONE);
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            reject1.setVisibility(View.VISIBLE);
+
+                                            isConnection = true;
+
+
+                                            dialog.dismiss();
+
+                                            dp.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                                            dp.setVisibility(View.GONE);
+                                            t.printStackTrace();
+                                        }
+                                    });
+
+
+
+
+                                }
+                            });
+
+
+                            deny.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    dp.setVisibility(View.VISIBLE);
+
+                                    final bean b = (bean) broadcaster.getApplicationContext();
+
+                                    final Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(b.BASE_URL)
+                                            .addConverterFactory(ScalarsConverterFactory.create())
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                                    Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1", b.userId);
+                                    call1.enqueue(new Callback<acceptRejectBean>() {
+                                        @Override
+                                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+
+                                            try {
+
+
+
+                                                isConnection = false;
+                                                //cameraLayout1.setVisibility(View.VISIBLE);
+
+/*
+                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
+                            goCoderBroadcastConfig.setPortNumber(1935);
+                            goCoderBroadcastConfig.setApplicationName("live");
+                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
+                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
+                            // Set the bitrate to 4000 Kbps
+                            goCoderBroadcastConfig.setVideoBitRate(1200);
+
+                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
+
+                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
+
+                            //if (configValidationError != null) {
+                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDescription(), Toast.LENGTH_LONG).show();
+                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
+                            // Stop the broadcast that is currently running
+                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
+                            //} else {
+                            // Start streaming
+                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
+                            //}
+
+*/
+
+
+                                                reject1.setVisibility(View.GONE);
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            dialog.dismiss();
+
+                                            dp.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                                            dp.setVisibility(View.GONE);
+                                            t.printStackTrace();
+                                        }
+                                    });
+
+
+                                }
+                            });
+
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+
                 }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
@@ -1009,6 +1179,7 @@ public class BroadcasterFragment1 extends Fragment {
                     holder.add.setBackgroundResource(R.drawable.plus_red);
                 }
 
+                holder.add.setVisibility(View.GONE);
 
             } else if (type.equals("follow")) {
 
@@ -1037,6 +1208,9 @@ public class BroadcasterFragment1 extends Fragment {
                 }
 
 
+                holder.add.setVisibility(View.GONE);
+
+
             } else if (type.equals("gift")) {
 
                 String us = item.getUserId().replace("\"", "");
@@ -1063,7 +1237,7 @@ public class BroadcasterFragment1 extends Fragment {
             });
 
 
-            holder.add.setOnClickListener(new View.OnClickListener() {
+            holder.index.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -1314,6 +1488,8 @@ public class BroadcasterFragment1 extends Fragment {
                             new IntentFilter("status"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionReceiver,
                             new IntentFilter("connection_end"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver,
+                            new IntentFilter("request_player"));
 
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
@@ -1359,6 +1535,7 @@ public class BroadcasterFragment1 extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
     }
 
 
@@ -1681,20 +1858,129 @@ public class BroadcasterFragment1 extends Fragment {
 
             loader.displayImage(item.getUserImage(), holder.image, options);
 
-            /*holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    String uid = item.getUserId();
-                    uid.replace("\"", "");
+                    bean b = (bean)context.getApplicationContext();
 
-                    Intent intent = new Intent(context, TimelineProfile.class);
-                    intent.putExtra("userId", uid);
-                    startActivity(intent);
+                    final Dialog dialog = new Dialog(context);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.connect_dialog);
+                    dialog.setCancelable(true);
+                    dialog.show();
+
+
+                    CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
+                    TextView name = (TextView) dialog.findViewById(R.id.name);
+                    Button follo = (Button) dialog.findViewById(R.id.follow);
+                    Button connect = (Button) dialog.findViewById(R.id.connect);
+                    final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
+
+
+                    ImageLoader loader1 = ImageLoader.getInstance();
+
+                    loader1.displayImage(b.userImage, image);
+
+                    name.setText(b.userName);
+
+                    follo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            bar.setVisibility(View.VISIBLE);
+
+                            final bean b = (bean) context.getApplicationContext();
+
+                            final Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.BASE_URL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+
+                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                            retrofit2.Call<followBean> call = cr.follow(b.userId, item.getUserId());
+
+                            call.enqueue(new retrofit2.Callback<followBean>() {
+                                @Override
+                                public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+
+                                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                    bar.setVisibility(View.GONE);
+
+                                    dialog.dismiss();
+
+                                }
+
+                                @Override
+                                public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+
+                                    bar.setVisibility(View.GONE);
+
+                                }
+                            });
+
+                        }
+                    });
+
+
+                    connect.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+
+                            if (!isConnection) {
+                                bar.setVisibility(View.VISIBLE);
+
+                                final bean b = (bean) context.getApplicationContext();
+
+                                final Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl(b.BASE_URL)
+                                        .addConverterFactory(ScalarsConverterFactory.create())
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+
+                                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                                Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, item.getUserId());
+
+                                call.enqueue(new Callback<requestConnectionBean>() {
+                                    @Override
+                                    public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+
+                                        String im = item.getUserImage().replace("\"", "");
+                                        thumbPic1 = im;
+
+
+                                        dialog.dismiss();
+
+
+                                        bar.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+                                        thumbPic1 = item.getUserImage();
+                                        bar.setVisibility(View.GONE);
+                                        Log.d("asdasdasdas", t.toString());
+                                    }
+                                });
+
+
+                            } else {
+                                Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    });
+
 
                 }
             });
-*/
         }
 
         @Override
