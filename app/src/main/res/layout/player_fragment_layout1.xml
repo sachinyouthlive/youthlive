@@ -43,6 +43,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
@@ -76,7 +77,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="1dp"
-            android:layout_marginStart="10dp"
             android:background="@drawable/circle"
             android:padding="8dp"
             android:src="@drawable/add"
@@ -246,7 +246,7 @@
     <RelativeLayout
         android:id="@+id/view3"
         android:layout_width="120dp"
-        android:layout_height="160dp"
+        android:layout_height="190dp"
         android:layout_marginBottom="110dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
@@ -260,17 +260,26 @@
         <com.streamaxia.android.CameraPreview
             android:id="@+id/thumb_camera1"
             android:layout_width="120dp"
+            android:visibility="gone"
             android:layout_height="160dp" />
 
 
-        <ImageButton
+        <TextView
             android:id="@+id/reject1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginStart="1dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_margin="10dp"
-            android:background="@drawable/reject" />
+            android:background="#ffffff"
+            android:text="END"/>
 
 
     </RelativeLayout>

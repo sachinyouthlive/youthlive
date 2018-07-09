@@ -143,6 +143,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
             }
+            else if (type.equals("request_player")) {
+                String dat = data2.getString("data");
+
+                Log.d("request_player", "called");
+
+                Intent registrationComplete = new Intent("request_player");
+                registrationComplete.putExtra("data", dat.toString());
+
+                LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+            }
 
 
         } catch (Exception e) {
