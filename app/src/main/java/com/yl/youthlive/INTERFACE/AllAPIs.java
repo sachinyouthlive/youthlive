@@ -9,6 +9,7 @@ import com.yl.youthlive.addEducationPOJO.addEducationBean;
 import com.yl.youthlive.addVideoPOJO.addVideoBean;
 import com.yl.youthlive.addWalletPOJO.addWalletBean;
 import com.yl.youthlive.allMessagePOJO.allMessageBean;
+import com.yl.youthlive.buydiamondPOJO.Data;
 import com.yl.youthlive.checkStatusPOJO.checkStatusBean;
 import com.yl.youthlive.checkinPOJO.CheckinPOJO;
 import com.yl.youthlive.checkinPostPOJO.CheckinPostPOJO;
@@ -98,6 +99,21 @@ public interface AllAPIs {
             @Part("broadcast_duration") Long broadcast_duration
     );
 
+    // post diamond purchase data
+    @Multipart
+    @POST("api/user_add_diamonds.php")
+    Call<Data> postdiamondpurchase(
+            @Part("userId") Integer userId,
+            @Part("productId") String productId
+
+    );
+
+    @Multipart
+    @POST("api/get_wallet.php")
+    Call<walletBean> getWalletData(
+            @Part("userId") String userId
+    );
+
     @Multipart
     @POST("api/socialsign_up.php")
     Call<socialBean> socialSignIn(
@@ -153,11 +169,6 @@ public interface AllAPIs {
             @Part("userId") String userId
     );
 
-    @Multipart
-    @POST("api/get_wallet.php")
-    Call<walletBean> getWalletData(
-            @Part("userId") String userId
-    );
 
     @Multipart
     @POST("api/update_user_info.php")

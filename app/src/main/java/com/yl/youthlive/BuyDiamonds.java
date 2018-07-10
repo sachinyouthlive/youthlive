@@ -18,13 +18,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.SkuDetails;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.buydiamondPOJO.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import static com.yl.youthlive.bean.getContext;
 
 public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.IBillingHandler {
 
@@ -56,7 +68,6 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
         ids.add("diamond_970");
         ids.add("diamond_4000");
         ids.add("diamond_7000");
-        ids.add("test1");
 
         String liscense = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgyeBlAF+Tb5RcId3Y9sAnK7EoGEklDr24FByrgxwhQNsIOkhYfDH+KW4OGxqR47D+RjH3uHBgtKjD62qgvSsqiJR4KiHAq5gVZLZJ3nP0YDvnfWwyhg+t6FYnchGVGt2FbuNyw+XqPuZvoxUQmfB4qsIOQlbf9HI69uisnOZzuJ5b2VIVg3yIymF45jAm9+U5DdqP3vO7pHF4Y3yycOS6EIYs3VoZJ8JmJIOVHpFc//fxBaV4OKgKJij/28v5C94RRay55wHO0+ysW4fAQW52SxXX2vsQMGWYRmMzLs+N87PUixYJP96BbkUh4mkGFC1RMq8iUaeWLKIut74VhmCLQIDAQAB";
 
@@ -89,6 +100,7 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
             }
         });
 
+        Toast.makeText(this, bp.listOwnedProducts() + "", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -96,12 +108,21 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
 
         Log.d(TAG, "purchased: " + productId);
+        performPurchase(productId);
+
+        bp.consumePurchase(productId);
+        bp.release();
+
+
 
     }
 
     @Override
     public void onPurchaseHistoryRestored() {
-        Log.d(TAG, "history restored: ");
+        Log.d(TAG, "history restored:" + bp.listOwnedProducts());
+        // bp.listOwnedProducts();
+        // Toast.makeText(this, bp.listOwnedProducts()+"", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -120,8 +141,6 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
         skus.add(bp.getPurchaseListingDetails(ids.get(2)));
         skus.add(bp.getPurchaseListingDetails(ids.get(3)));
         skus.add(bp.getPurchaseListingDetails(ids.get(4)));
-        skus.add(bp.getPurchaseListingDetails(ids.get(5)));
-
 /*
         skus = bp.getPurchaseListingDetails(ids);
         Log.d(TAG , String.valueOf(skus.size()));*/
@@ -192,13 +211,66 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
 
             public ViewHolder(View itemView) {
                 super(itemView);
-
                 quantity = itemView.findViewById(R.id.textView17);
                 buy = itemView.findViewById(R.id.button4);
 
             }
         }
     }
+
+    public void performPurchase(String productId) {
+        progress.setVisibility(View.VISIBLE);
+
+
+        final bean b = (bean) getContext().getApplicationContext();
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+        Call<Data> call = cr.postdiamondpurchase(Integer.valueOf(b.userId), productId);
+
+        Log.d("userId", b.userId);
+
+        call.enqueue(new Callback<Data>() {
+            @Override
+            public void onResponse(Call<Data> call, Response<Data> response) {
+
+             /*   try {
+
+                    if (!response.body().getDiamond().isEmpty()) {
+                        Toast.makeText(BuyDiamonds.this, "Purchase done", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(BuyDiamonds.this, "Purchase failed", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }*/
+                progress.setVisibility(View.GONE);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<Data> call, Throwable t) {
+                progress.setVisibility(View.GONE);
+            }
+
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        if (bp != null)
+            bp.release();
+        super.onDestroy();
+    }
+
 
 
 }

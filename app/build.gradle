@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'youthlive'
             keyPassword 'youthlive@123'
-            storeFile file('C:/Users/lenovo/Desktop/youthlive/youthlive.jks')
+            storeFile file('C:/Users/sachin/Desktop/youthlive.jks')
             storePassword 'youthlive@123'
         }
     }
@@ -16,8 +16,8 @@ android {
         applicationId "com.yl.youthlive"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 6
-        versionName "1.5"
+        versionCode 10
+        versionName "1.9"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
