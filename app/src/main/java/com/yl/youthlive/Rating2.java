@@ -132,7 +132,6 @@ public class Rating2 extends Fragment {
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-
             final Datum item = list.get(position);
             holder.name.setText(item.getUserName());
             holder.beans.setText("Beans - " + item.getBeans());
@@ -246,9 +245,6 @@ public class Rating2 extends Fragment {
                                 ((RattingActivity) getActivity()).methodd();
                                 bar.setVisibility(View.GONE);
 
-                            } else {
-                                holder.follow.setVisibility(View.GONE);
-                                holder.ratingcard.setCardBackgroundColor(Color.parseColor("#ffef99"));
                             }
                         }
 

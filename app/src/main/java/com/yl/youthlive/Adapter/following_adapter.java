@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -102,14 +105,20 @@ public class following_adapter extends RecyclerView.Adapter<following_adapter.fo
             public void onResponse(Call<followBean> call, Response<followBean> response) {
 
                 try {
-                    //  Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    if (response.body().getMessage().equals("Following")) {
-                        holder.unfollow.setText("UNFOLLOW");
+                    if (!item.getUserId().equals(b.userId)) {
 
-                    }
-                    if (response.body().getMessage().equals("Not Following")) {
-                        holder.unfollow.setText("FOLLOW");
+                        //  Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        if (response.body().getMessage().equals("Following")) {
+                            holder.unfollow.setText("UNFOLLOW");
 
+                        }
+                        if (response.body().getMessage().equals("Not Following")) {
+                            holder.unfollow.setText("FOLLOW");
+
+                        }
+                    } else {
+                        holder.followmsgcontainer.setVisibility(View.GONE);
+                        holder.followingcard.setCardBackgroundColor(Color.parseColor("#ffef99"));
                     }
 
                 } catch (Exception e) {
@@ -273,6 +282,8 @@ public class following_adapter extends RecyclerView.Adapter<following_adapter.fo
         Button unfollow;
         Button message;
         RelativeLayout relative_following;
+        CardView followingcard;
+        LinearLayout followmsgcontainer;
 
 
         public followingadapter(View itemView) {
@@ -286,6 +297,8 @@ public class following_adapter extends RecyclerView.Adapter<following_adapter.fo
 
             unfollow = (Button) itemView.findViewById(R.id.unfollow);
             relative_following = itemView.findViewById(R.id.relative_follow);
+            followmsgcontainer = itemView.findViewById(R.id.followmsgcontainer);
+            followingcard = itemView.findViewById(R.id.followingcard);
 
         }
     }

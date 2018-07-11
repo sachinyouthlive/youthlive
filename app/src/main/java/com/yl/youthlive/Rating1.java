@@ -242,9 +242,6 @@ public class Rating1 extends Fragment {
                                 ((RattingActivity) getActivity()).methodd();
                                 bar.setVisibility(View.GONE);
 
-                            } else {
-                                holder.follow.setVisibility(View.GONE);
-                                holder.ratingcard.setCardBackgroundColor(Color.parseColor("#ffef99"));
                             }
                         }
 

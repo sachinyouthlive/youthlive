@@ -22,8 +22,10 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-    <!--<uses-feature android:name="android.hardware.camera2.full" />
-    <uses-feature android:name="android.hardware.camera2.autofocus" />-->
+    <!--
+    <uses-feature android:name="android.hardware.camera2.full" />
+    <uses-feature android:name="android.hardware.camera2.autofocus" />
+    -->
     <uses-feature
         android:name="android.hardware.camera.flash"
         android:required="false" />
@@ -53,7 +55,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -129,8 +130,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".Activitys.PersonalInfo"
             android:screenOrientation="portrait" />
@@ -196,6 +195,7 @@
         <activity android:name=".Activitys.FanActivity" />
         <activity android:name=".Activitys.FriendActivity" />
         <activity android:name=".Activitys.SearchActivity" />
+        <activity android:name=".Activitys.Diamond_purchase_history_Activity" />
         <activity android:name=".ExoTest" />
         <activity
             android:name=".login.ForgotPasswordActivity"

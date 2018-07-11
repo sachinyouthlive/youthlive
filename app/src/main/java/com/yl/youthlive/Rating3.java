@@ -183,7 +183,7 @@ public class Rating3 extends Fragment {
                 public void onResponse(Call<followBean> call, Response<followBean> response) {
 
                     try {
-                        if (!item.getUserId().equals(b.userId)) {
+                        if (!item.getUserId().toString().equals(b.userId)) {
                             if (response.body().getMessage().equals("Following")) {
                                 holder.follow.setBackgroundResource(R.drawable.rightcheck);
                             }
@@ -251,9 +251,6 @@ public class Rating3 extends Fragment {
                                 ((RattingActivity) getActivity()).methodd();
                                 bar.setVisibility(View.GONE);
 
-                            } else {
-                                holder.follow.setVisibility(View.GONE);
-                                holder.ratingcard.setCardBackgroundColor(Color.parseColor("#ffef99"));
                             }
                         }
 

@@ -3,18 +3,21 @@ package com.yl.youthlive.INTERFACE;
 
 import com.yl.youthlive.ExchangeDiamondPOJO.ExchangeBean;
 import com.yl.youthlive.GetRankingPOJO.RankingBean;
+import com.yl.youthlive.PhoneupdateminiPOJO;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 import com.yl.youthlive.addCareerPOJO.addCareerBean;
 import com.yl.youthlive.addEducationPOJO.addEducationBean;
 import com.yl.youthlive.addVideoPOJO.addVideoBean;
 import com.yl.youthlive.addWalletPOJO.addWalletBean;
 import com.yl.youthlive.allMessagePOJO.allMessageBean;
+import com.yl.youthlive.buydiamondPOJO.Data;
 import com.yl.youthlive.checkStatusPOJO.checkStatusBean;
 import com.yl.youthlive.checkinPOJO.CheckinPOJO;
 import com.yl.youthlive.checkinPostPOJO.CheckinPostPOJO;
 import com.yl.youthlive.commentPOJO.commentBean;
 import com.yl.youthlive.deleteCareerPOJO.deleteCareerBean;
 import com.yl.youthlive.deleteVLOGPOJO.deleteVLOGBean;
+import com.yl.youthlive.diamondpurchasehistoryPOJO.DiamondpurchaselistPOJO;
 import com.yl.youthlive.editCareerPOJO.editCareerBean;
 import com.yl.youthlive.editEducationPOJO.editEducationBean;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
@@ -98,6 +101,31 @@ public interface AllAPIs {
             @Part("broadcast_duration") Long broadcast_duration
     );
 
+    // get diamond purchase history
+    @Multipart
+    @POST("api/getdiamondpurchase.php")
+    Call<DiamondpurchaselistPOJO> getdiamondpurchasehistory(
+            @Part("userId") Integer userId
+
+    );
+
+    // post diamond purchase data
+    @Multipart
+    @POST("api/user_add_diamonds.php")
+    Call<Data> postdiamondpurchase(
+            @Part("userId") Integer userId,
+            @Part("productId") String productId,
+            @Part("orderId") String orderId,
+            @Part("fullorderinfo") String fullorderinfo
+
+    );
+
+    @Multipart
+    @POST("api/get_wallet.php")
+    Call<walletBean> getWalletData(
+            @Part("userId") String userId
+    );
+
     @Multipart
     @POST("api/socialsign_up.php")
     Call<socialBean> socialSignIn(
@@ -153,11 +181,6 @@ public interface AllAPIs {
             @Part("userId") String userId
     );
 
-    @Multipart
-    @POST("api/get_wallet.php")
-    Call<walletBean> getWalletData(
-            @Part("userId") String userId
-    );
 
     @Multipart
     @POST("api/update_user_info.php")
@@ -245,6 +268,13 @@ public interface AllAPIs {
     @Multipart
     @POST("api/update_phone.php")
     Call<loginResponseBean> updatePhone(
+            @Part("userId") String userId,
+            @Part("phone") String phone
+    );
+
+    @Multipart
+    @POST("api/update_phonemini.php")
+    Call<PhoneupdateminiPOJO> updatePhonemini(
             @Part("userId") String userId,
             @Part("phone") String phone
     );

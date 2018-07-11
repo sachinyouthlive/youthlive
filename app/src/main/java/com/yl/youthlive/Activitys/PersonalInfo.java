@@ -56,6 +56,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
     ImageView profileimg;
     // public static ArrayList<String> mylist = new ArrayList<String>();
     String userid;
+    String useridd = "";
     String allItems, allItem;
     TextView followings, friends, fans;
     ViewPager coverPager;
@@ -78,7 +79,11 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         profileimg = findViewById(R.id.profileimg);
         final bean b = (bean) getApplicationContext();
 
-        String useridd = getIntent().getStringExtra("userId");
+        useridd = getIntent().getStringExtra("userId");
+
+        if (useridd.equals("")) {
+            useridd = b.userId;
+        }
         ///////////////
         b.mylist.add(useridd);
         userid = b.mylist.get(b.mylist.size() - 1);
@@ -495,7 +500,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                 b.putString("youth", data.getYouthLiveId());
                 b.putString("gender", data.getGender());
                 b.putString("birth", data.getBirthday());
-                b.putString("bio", data.getBio());
+                b.putString("status", data.getBio());
 
 
                 frag.setArguments(b);
