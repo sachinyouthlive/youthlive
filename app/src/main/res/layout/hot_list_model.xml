@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp"
@@ -24,7 +25,24 @@
                 android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
+                tools:src="@drawable/user_default"
                 android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/likes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/heart"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="22"
+                android:textColor="#fff" />
 
 
             <RelativeLayout
@@ -61,21 +79,6 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/likes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="10dp"
-                    android:drawablePadding="5dp"
-                    android:drawableStart="@drawable/heart"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="22"
-                    android:textColor="#fff" />
 
             </RelativeLayout>
         </RelativeLayout>

@@ -106,6 +106,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawableStart="@drawable/businessman"
                         android:gravity="center_vertical"
                         android:padding="14dp"
@@ -120,6 +121,7 @@
                         android:id="@+id/followingAct"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
                         android:drawableStart="@drawable/hand"
                         android:gravity="center_vertical"
@@ -137,6 +139,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawableStart="@drawable/youtube"
                         android:gravity="center_vertical"
                         android:padding="14dp"
@@ -153,6 +156,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawableStart="@drawable/mess"
                         android:gravity="center_vertical"
                         android:padding="14dp"
@@ -169,6 +173,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawableStart="@drawable/walle"
                         android:gravity="center_vertical"
                         android:padding="14dp"
@@ -185,6 +190,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawableStart="@drawable/checkin"
                         android:gravity="center_vertical"
                         android:padding="14dp"
@@ -200,6 +206,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawableStart="@drawable/chevron"
                         android:gravity="center_vertical"
                         android:padding="14dp"
@@ -218,6 +225,7 @@
                         android:drawableStart="@drawable/lugg"
                         android:gravity="center_vertical"
                         android:padding="14dp"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:text="Baggage"
                         android:visibility="gone" />
 
@@ -232,6 +240,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawableStart="@drawable/success"
                         android:gravity="center_vertical"
                         android:padding="14dp"
@@ -252,6 +261,7 @@
                         android:drawableStart="@drawable/blocking"
                         android:gravity="center_vertical"
                         android:padding="14dp"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:text="Blocked List"
                         android:visibility="gone" />
 
@@ -269,6 +279,7 @@
                         android:drawableStart="@drawable/info"
                         android:gravity="center_vertical"
                         android:padding="14dp"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:text="About Us" />
 
 
@@ -285,6 +296,7 @@
                         android:drawableStart="@drawable/login"
                         android:gravity="center_vertical"
                         android:padding="14dp"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:text="Privacy Policy" />
 
 

@@ -98,6 +98,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:background="@drawable/ripple_effect_trasprntcornrless"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -131,6 +132,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:background="@drawable/ripple_effect_trasprntcornrless"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -164,6 +166,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:background="@drawable/ripple_effect_trasprntcornrless"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -228,9 +231,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="4dp"
+            android:background="#f2f2f2"
             android:fillViewport="true"
             android:orientation="vertical"
+            android:elevation="2dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 

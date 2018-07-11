@@ -45,6 +45,7 @@
         android:drawableStart="@drawable/ic_history_black_24dp"
         android:gravity="center"
         android:text="History"
+        android:background="@drawable/ripple_effect_transparentbg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,7 +78,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="#ffffff"
+        android:background="@drawable/ripple_effect_whitebg"
         android:drawableEnd="@drawable/righr"
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/gpay2"
