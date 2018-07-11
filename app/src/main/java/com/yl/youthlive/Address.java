@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -37,10 +38,12 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.yl.youthlive.Activitys.PersonalInfo;
 import com.yl.youthlive.INTERFACE.AllAPIs;
-import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
 import com.yl.youthlive.updatePOJO.updateBean;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -109,8 +112,28 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
         username.setText(b.getString("user"));
         youthId.setText(b.getString("youth"));
         gender.setText(b.getString("gender"));
-        birth.setText(b.getString("birth"));
-        bio.setText(b.getString("bio"));
+
+        String dob = b.getString("birth");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = dateFormatter.parse(dob);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+// Get time from date
+        SimpleDateFormat timeFormatter = new SimpleDateFormat("d MMM yyyy");
+        String dobValue = timeFormatter.format(date);
+
+
+        birth.setText(dobValue);
+        String status = b.getString("status");
+        if (status.isEmpty()) {
+            bio.setText("Hi there, be my Youthlive friend!");
+        } else {
+            bio.setText(b.getString("status"));
+        }
 
         String profileuserId = b.getString("userId");
 
@@ -153,15 +176,30 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
                 username1.setText(username.getText().toString());
 
-                Spinner gender = dialog.findViewById(R.id.gender);
+                final Spinner gender = dialog.findViewById(R.id.gender);
                 final TextView birth1 = dialog.findViewById(R.id.birth);
 
-                birth1.setText(birth.getText().toString());
+
+                String dob1 = birth.getText().toString();
+                SimpleDateFormat dateFormatter1 = new SimpleDateFormat("d MMM yyyy");
+                Date date1 = null;
+                try {
+                    date1 = dateFormatter1.parse(dob1);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat timeFormatter2 = new SimpleDateFormat("yyyy-MM-dd");
+                String dobValue1 = timeFormatter2.format(date1);
+                birth1.setText(dobValue1);
+
 
                 final EditText bio1 = dialog.findViewById(R.id.bio);
 
 
                 bio1.setText(bio.getText().toString());
+
+                Button update = dialog.findViewById(R.id.update);
+                Button updatephone = dialog.findViewById(R.id.updatephone);
 
                 List<String> genders = new ArrayList<>();
 
@@ -181,7 +219,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
 
                     }
-                }, 2017, 1, 1);
+                }, 2018, 1, 1);
 
                 birth1.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -217,92 +255,79 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                     }
                 });
 
-
-                phoneNumber.setOnTouchListener(new View.OnTouchListener() {
-                    @SuppressLint("ClickableViewAccessibility")
+                updatephone.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onTouch(View view, MotionEvent event) {
-                        final int DRAWABLE_LEFT = 0;
-                        final int DRAWABLE_TOP = 1;
-                        final int DRAWABLE_RIGHT = 2;
-                        final int DRAWABLE_BOTTOM = 3;
-                        if (event.getRawX() >= (phoneNumber.getRight() - phoneNumber.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()) - 60) {
+                    public void onClick(View view) {
 
-                            String pho = phoneNumber.getText().toString();
+                        String pho = phoneNumber.getText().toString();
+                        userId = getArguments().getString("userId");
+
+                        if (!DataValidation.isValidPhoneNumber(pho)) {
 
 
-                                if (Utils.isValidMobile(pho)) {
+                            progress.setVisibility(View.VISIBLE);
 
+                            final bean b = (bean) getContext().getApplicationContext();
 
-                                    progress.setVisibility(View.VISIBLE);
+                            final Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.BASE_URL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
 
+                            final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                    Log.d("neetu", "log");
-                                    bean b = (bean) getContext().getApplicationContext();
+                            Call<PhoneupdateminiPOJO> call = cr.updatePhonemini(b.userId, pho);
 
-                                    final Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(b.BASE_URL)
-                                            .addConverterFactory(ScalarsConverterFactory.create())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
+                            call.enqueue(new Callback<PhoneupdateminiPOJO>() {
+                                @Override
+                                public void onResponse(Call<PhoneupdateminiPOJO> call, Response<PhoneupdateminiPOJO> response) {
 
-                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+                                    //      if (Objects.equals(response.body().getMessage(), "1")) {
+                                    //         Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                    if (mGoogleApiClient.isConnected()) {
+                                        dialog.dismiss();
+                                        signOut();
+                                    }
 
-                                    Call<loginResponseBean> call = cr.updatePhone(userId, pho);
+                                    Log.d("sachin", "response");
 
-                                    call.enqueue(new Callback<loginResponseBean>() {
-                                        @Override
-                                        public void onResponse(Call<loginResponseBean> call, Response<loginResponseBean> response) {
+                                    LoginManager.getInstance().logOut();
 
-                                            if (Objects.equals(response.body().getMessage(), "1")) {
-                                                Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                                if (mGoogleApiClient.isConnected()) {
-                                                    dialog.dismiss();
-                                                    signOut();
-                                                }
+                                    edit.remove("type");
+                                    edit.remove("user");
+                                    edit.remove("pass");
+                                    edit.apply();
 
-                                                Log.d("sachin", "response");
+                                    Toast.makeText(getContext(), "Mobile Number Updated, Login with Updated Mobile Number", Toast.LENGTH_LONG).show();
 
-                                                LoginManager.getInstance().logOut();
+                                    Intent i = new Intent(getContext(), Login.class);
+                                    startActivity(i);
+                                    getActivity().finishAffinity();
+                                    dialog.dismiss();
+                                    //     } else {
+                                    //       Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                    //     }
 
-                                                edit.remove("type");
-                                                edit.remove("user");
-                                                edit.remove("pass");
-                                                edit.apply();
-
-                                                dialog.dismiss();
-
-                                                Intent i = new Intent(getContext(), Login.class);
-                                                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                startActivity(i);
-                                                getActivity().finish();
-                                            } else {
-                                                Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-
-                                            progress.setVisibility(View.GONE);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<loginResponseBean> call, Throwable t) {
-
-                                            Log.d("nisha", t.toString());
-                                            progress.setVisibility(View.GONE);
-                                        }
-                                    });
-
-
-                                } else {
-                                    Toast.makeText(getContext(), "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+                                    progress.setVisibility(View.GONE);
                                 }
 
+                                @Override
+                                public void onFailure(Call<PhoneupdateminiPOJO> call, Throwable t) {
 
-                            return true;
+                                    Toast.makeText(getContext(), "failed to update", Toast.LENGTH_SHORT).show();
+                                    progress.setVisibility(View.GONE);
+                                }
+                            });
+
+
+                        } else {
+                            Toast.makeText(getContext(), "Invalid Phone Number", Toast.LENGTH_SHORT).show();
                         }
-                        return false;
+
+
                     }
                 });
-
 
                 confirmPassword.setOnTouchListener(new View.OnTouchListener() {
                     @SuppressLint("ClickableViewAccessibility")
@@ -344,83 +369,48 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                     }
                 });
 
-
-                bio1.setOnTouchListener(new View.OnTouchListener() {
-                    @SuppressLint("ClickableViewAccessibility")
+                update.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onTouch(View view, MotionEvent event) {
-                        final int DRAWABLE_LEFT = 0;
-                        final int DRAWABLE_TOP = 1;
-                        final int DRAWABLE_RIGHT = 2;
-                        final int DRAWABLE_BOTTOM = 3;
-                        if (event.getRawX() >= (bio1.getRight() - bio1.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()) - 60) {
+                    public void onClick(View view) {
+                        if (!username1.getText().toString().isEmpty()) {
+                            progress.setVisibility(View.VISIBLE);
 
-                            String u = username1.getText().toString();
-                            String bi = bio1.getText().toString();
+                            final bean b = (bean) getContext().getApplicationContext();
 
-                            if (u.length() > 0) {
+                            final Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.BASE_URL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
 
-                                if (gend[0].length() > 0) {
+                            final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                    if (bday[0].length() > 0) {
+                            Call<updateBean> call = cr.updateUserData(username1.getText().toString(), gender.getSelectedItem().toString(), birth1.getText().toString(), bio1.getText().toString(), userId);
 
-                                        if (bi.length() > 0) {
+                            call.enqueue(new Callback<updateBean>() {
+                                @Override
+                                public void onResponse(Call<updateBean> call, Response<updateBean> response) {
 
-                                            progress.setVisibility(View.VISIBLE);
+                                    Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                    //bio.setText(bio1.getText().toString());
+                                    per.loadData();
 
-                                            final bean b = (bean) getContext().getApplicationContext();
-
-                                            final Retrofit retrofit = new Retrofit.Builder()
-                                                    .baseUrl(b.BASE_URL)
-                                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                                    .addConverterFactory(GsonConverterFactory.create())
-                                                    .build();
-
-                                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                                            Call<updateBean> call = cr.updateUserData(u, gend[0], bday[0], bi, userId);
-
-                                            call.enqueue(new Callback<updateBean>() {
-                                                @Override
-                                                public void onResponse(Call<updateBean> call, Response<updateBean> response) {
-
-                                                    Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-
-                                                    per.loadData();
-
-                                                    progress.setVisibility(View.GONE);
-                                                    dialog.dismiss();
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call<updateBean> call, Throwable t) {
-                                                    progress.setVisibility(View.GONE);
-                                                    Log.d("asdasd", t.toString());
-                                                }
-                                            });
-
-
-                                        } else {
-                                            Toast.makeText(getContext(), "Invalid Bio", Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    } else {
-                                        Toast.makeText(getContext(), "Invalid Birth Date", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                } else {
-                                    Toast.makeText(getContext(), "Invalid Gender", Toast.LENGTH_SHORT).show();
+                                    progress.setVisibility(View.GONE);
+                                    dialog.dismiss();
                                 }
 
-                            } else {
-                                Toast.makeText(getContext(), "Invalid Username", Toast.LENGTH_SHORT).show();
+                                @Override
+                                public void onFailure(Call<updateBean> call, Throwable t) {
+                                    progress.setVisibility(View.GONE);
+                                    Log.d("asdasd", t.toString());
+                                }
+                            });
 
-                            }
-
-                            return true;
+                        } else {
+                            Toast.makeText(getContext(), "Please enter a valid Username", Toast.LENGTH_SHORT).show();
                         }
-                        return false;
                     }
+
                 });
 
 

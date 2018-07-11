@@ -55,6 +55,7 @@ public class TimelineProfile extends AppCompatActivity {
     ProgressBar progress;
     ImageView profile;
     String userid;
+    String useridd = "";
     TextView fans;
     TextView followings, friends;
     Button following, messgae;
@@ -82,7 +83,11 @@ public class TimelineProfile extends AppCompatActivity {
         fanclick = findViewById(R.id.fans_click);
         friendClick = findViewById(R.id.friends_click);
         final bean b = (bean) getApplicationContext();
-        String useridd = getIntent().getStringExtra("userId");
+
+        useridd = getIntent().getStringExtra("userId");
+        if (useridd.equals("")) {
+            useridd = b.userId;
+        }
         ///////////////
         b.mylist.add(useridd);
         userid = b.mylist.get(b.mylist.size() - 1);

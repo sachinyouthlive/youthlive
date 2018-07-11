@@ -59,11 +59,21 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/comment_sendback"
-                android:drawableEnd="@drawable/arrow_right"
                 android:gravity="center_vertical"
                 android:hint="Phone Number"
                 android:inputType="phone"
                 android:padding="10dp" />
+
+            <Button
+                android:id="@+id/updatephone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Update"
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
 
@@ -220,11 +230,21 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/comment_sendback"
-                android:drawableEnd="@drawable/arrow_right"
                 android:gravity="center_vertical"
                 android:hint="Status"
                 android:inputType="text"
                 android:padding="10dp" />
+
+            <Button
+                android:id="@+id/update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Update"
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
 

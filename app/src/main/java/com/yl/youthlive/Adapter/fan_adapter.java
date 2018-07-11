@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -183,14 +186,20 @@ public class fan_adapter extends RecyclerView.Adapter<fan_adapter.fanadapter> {
             public void onResponse(Call<followBean> call, Response<followBean> response) {
 
                 try {
-                    // Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    if (response.body().getMessage().equals("Following")) {
-                        holder.unfollow.setText("UNFOLLOW");
 
-                    }
-                    if (response.body().getMessage().equals("Not Following")) {
-                        holder.unfollow.setText("FOLLOW");
+                    if (!item.getUserId().equals(b.userId)) {
+                        // Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        if (response.body().getMessage().equals("Following")) {
+                            holder.unfollow.setText("UNFOLLOW");
 
+                        }
+                        if (response.body().getMessage().equals("Not Following")) {
+                            holder.unfollow.setText("FOLLOW");
+
+                        }
+                    } else {
+                        holder.followmsgcontainer.setVisibility(View.GONE);
+                        holder.fancard.setCardBackgroundColor(Color.parseColor("#ffef99"));
                     }
 
                 } catch (Exception e) {
@@ -288,6 +297,8 @@ public class fan_adapter extends RecyclerView.Adapter<fan_adapter.fanadapter> {
         Button unfollow;
         Button message;
         RelativeLayout relativefan;
+        CardView fancard;
+        LinearLayout followmsgcontainer;
 
 
         public fanadapter(View itemView) {
@@ -301,6 +312,8 @@ public class fan_adapter extends RecyclerView.Adapter<fan_adapter.fanadapter> {
 
             unfollow = (Button) itemView.findViewById(R.id.unfollow);
             relativefan = itemView.findViewById(R.id.relative_fan);
+            followmsgcontainer = itemView.findViewById(R.id.followmsgcontainer);
+            fancard = itemView.findViewById(R.id.fancard);
 
         }
     }

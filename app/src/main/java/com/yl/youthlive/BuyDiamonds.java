@@ -2,11 +2,14 @@ package com.yl.youthlive;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,13 +21,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.SkuDetails;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.buydiamondPOJO.Data;
+import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +41,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static com.yl.youthlive.bean.getContext;
 
-public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.IBillingHandler {
+public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.IBillingHandler, ConnectivityReceiver.ConnectivityReceiverListener {
 
     BillingProcessor bp;
     ArrayList<String> ids;
@@ -57,7 +60,7 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_diamonds);
-
+        checkConnection();
 
         ids = new ArrayList<>();
         skus = new ArrayList<>();
@@ -66,6 +69,7 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
         ids.add("diamond_70");
         ids.add("diamond_570");
         ids.add("diamond_970");
+        ids.add("diamonds_1950");
         ids.add("diamond_4000");
         ids.add("diamond_7000");
 
@@ -100,15 +104,16 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
             }
         });
 
-        Toast.makeText(this, bp.listOwnedProducts() + "", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
 
         Log.d(TAG, "purchased: " + productId);
-        performPurchase(productId);
+        String orderId = bp.getPurchaseTransactionDetails(productId).orderId;
+        String fullorderinfo = bp.getPurchaseTransactionDetails(productId).toString();
+
+        performPurchase(productId, orderId, fullorderinfo);
 
         bp.consumePurchase(productId);
         bp.release();
@@ -141,6 +146,7 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
         skus.add(bp.getPurchaseListingDetails(ids.get(2)));
         skus.add(bp.getPurchaseListingDetails(ids.get(3)));
         skus.add(bp.getPurchaseListingDetails(ids.get(4)));
+        skus.add(bp.getPurchaseListingDetails(ids.get(5)));
 /*
         skus = bp.getPurchaseListingDetails(ids);
         Log.d(TAG , String.valueOf(skus.size()));*/
@@ -218,7 +224,7 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
         }
     }
 
-    public void performPurchase(String productId) {
+    public void performPurchase(String productId, String orderId, String fullorderinfo) {
         progress.setVisibility(View.VISIBLE);
 
 
@@ -229,7 +235,7 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<Data> call = cr.postdiamondpurchase(Integer.valueOf(b.userId), productId);
+        Call<Data> call = cr.postdiamondpurchase(Integer.valueOf(b.userId), productId, orderId, fullorderinfo);
 
         Log.d("userId", b.userId);
 
@@ -271,6 +277,76 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
         super.onDestroy();
     }
 
+    ////////////////////internet connectivity check///////////////
+    private void checkConnection() {
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        showSnack(isConnected);
+    }
+
+    private void showSnack(boolean isConnected) {
+        String message;
+        int color;
+        if (isConnected) {
+
+            // Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
+            //    message = "Good! Connected to Internet";
+            //    color = Color.WHITE;
+        } else {
+            //  Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
+            try {
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(this);
+                }
+                builder.setTitle("NO INTERNET CONNECTION")
+                        .setMessage("Please check your internet connection setting and click refresh")
+                        .setPositiveButton(R.string.Refresh, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                                overridePendingTransition(0, 0);
+                                startActivity(getIntent());
+                                overridePendingTransition(0, 0);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            } catch (Exception e) {
+                Log.d("TAG", "Show Dialog: " + e.getMessage());
+            }
+            //      message = "Sorry! Not connected to internet";
+            //     color = Color.RED;
+        }
+
+       /* Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.fab), message, Snackbar.LENGTH_LONG);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
+        */
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // register connection status listener
+        bean.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showSnack(isConnected);
+
+    }
 
 
 }

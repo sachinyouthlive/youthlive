@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.yl.youthlive.Activitys.Diamond_purchase_history_Activity;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.walletPOJO.walletBean;
 
@@ -34,7 +35,7 @@ public class Diamonds extends Fragment {
 
 
         amount = view.findViewById(R.id.textView6);
-        history = view.findViewById(R.id.textView8);
+        history = view.findViewById(R.id.history);
         googlePay = view.findViewById(R.id.textView11);
         progress = view.findViewById(R.id.progressBar6);
 
@@ -45,6 +46,20 @@ public class Diamonds extends Fragment {
 
                 Intent intent = new Intent(getContext(), BuyDiamonds.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+
+            }
+        });
+        history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Intent intent = new Intent(getContext(), Diamond_purchase_history_Activity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
 
             }
         });
