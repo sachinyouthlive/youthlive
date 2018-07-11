@@ -32,6 +32,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -51,6 +52,7 @@ import com.google.android.gms.common.api.Status;
 import com.yl.youthlive.Activitys.SearchActivity;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.addVideoPOJO.addVideoBean;
+import com.yl.youthlive.endLivePOJO.endLiveBean;
 import com.yl.youthlive.feedBackPOJO.feedBackBean;
 
 import java.io.BufferedOutputStream;
@@ -71,6 +73,7 @@ import retrofit.mime.TypedFile;
 import retrofit.mime.TypedString;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -110,6 +113,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     ////////////////
 
 
+    SharedPreferences offlinePref;
+    SharedPreferences.Editor offlineEdit;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +124,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_home);
         pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
         edit = pref.edit();
+
+        offlinePref = getSharedPreferences("offline" , Context.MODE_PRIVATE);
+        offlineEdit = offlinePref.edit();
 
         feedBack = (TextView) findViewById(R.id.feedback);
 
@@ -136,6 +145,82 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+
+
+
+
+
+
+
+        String offline = offlinePref.getString("offline" , "");
+
+        String liveId = offlinePref.getString("liveId" , "");
+
+        if (offline.length() > 0 && liveId.length() > 0)
+        {
+
+
+            final Dialog dialog = new Dialog(HomeActivity.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.offline_sync_dialog);
+            dialog.show();
+
+
+
+
+            bean b = (bean)getApplicationContext();
+
+            final Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(b.BASE_URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+            Call<endLiveBean> call = cr.syncLive(offline , liveId);
+
+            call.enqueue(new Callback<endLiveBean>() {
+                @Override
+                public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
+
+
+                    if (response.body().getStatus().equals("1"))
+                    {
+
+                        offlineEdit.remove("offline");
+                        offlineEdit.remove("liveId");
+                        offlineEdit.apply();
+
+                        dialog.dismiss();
+
+                    }
+
+
+
+                }
+
+                @Override
+                public void onFailure(Call<endLiveBean> call, Throwable t) {
+
+                }
+            });
+
+
+
+
+
+
+        }
+
+
+
+
+
+
 
 
         bottom = (AHBottomNavigation) findViewById(R.id.bottom_navigation);

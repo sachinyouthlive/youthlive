@@ -285,6 +285,31 @@ TextView thumbCount;
 
                 }
 
+                if (playbackState == 4)
+                {
+
+
+
+                    Dialog dialog = new Dialog(VideoPlayer.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setCancelable(false);
+                    dialog.setContentView(R.layout.ended_dialog);
+                    dialog.show();
+
+                    Button ok = dialog.findViewById(R.id.button2);
+
+                    ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            finish();
+
+                        }
+                    });
+
+
+                }
+
             }
 
             @Override

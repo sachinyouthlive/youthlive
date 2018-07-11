@@ -1,6 +1,7 @@
 package com.yl.youthlive;
 
 import android.app.Dialog;
+import android.arch.persistence.room.Room;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -33,6 +35,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -143,14 +146,34 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     View thumbcountdown;
     TextView thumbCount;
 
+
+    Chronometer chronometer;
+
+
+    boolean isEnded = false;
+
+
+
+
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_broadcaster);
 
+        pref = getSharedPreferences("offline" , Context.MODE_PRIVATE);
+        editor = pref.edit();
 
         toast = Toast.makeText(this , null , Toast.LENGTH_SHORT);
 
+
+//        Log.d("offline" , String.valueOf(db.queries().getAll().size()));
+
+
+        chronometer = findViewById(R.id.chronometer);
         thumbcountdown = findViewById(R.id.thumb_countdown);
         thumbCount = findViewById(R.id.textView33);
 
@@ -199,6 +222,12 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
         }
 
 
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometerChanged) {
+                chronometer = chronometerChanged;
+            }
+        });
 
         //cameraPreview.setScalingMode(ScalingMode.TRIM);
 
@@ -274,6 +303,8 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
                         if (response.body().getStatus().equals("1"))
                         {
 
+                            isEnded = true;
+
                             Intent intent = new Intent(VideoBroadcaster.this , LiveEndedBroadcaster.class);
                             intent.putExtra("liveTime" , response.body().getData().getLiveTime());
                             intent.putExtra("views" , response.body().getData().getViewers());
@@ -344,8 +375,28 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (!isEnded)
+        {
+
+            String et = String.valueOf((SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000);
+
+
+            editor.putString("offline" , et);
+            editor.putString("liveId" , liveId);
+            editor.apply();
+
+        }
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        Log.d("offline" , "destroy");
 
         try {
             thumbPlayer1.stop();
@@ -356,6 +407,9 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
         mPublisher.stopPublish();
         mPublisher.stopRecord();
+        chronometer.stop();
+
+
     }
 
     @Override
@@ -520,7 +574,7 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     }
 
 
-    public void startThumbPlayer1(final String connId , String thumbPic)
+    public void startThumbPlayer1(final String url , String thumbPic , final String connId)
     {
 
         thumbContainer1.setVisibility(View.VISIBLE);
@@ -544,7 +598,7 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
 
 
-                Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + connId);
+                Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + url);
 
 
                 BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -585,6 +639,40 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
                     @Override
                     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
+                        if (playbackState == 4)
+                        {
+                            progress.setVisibility(View.VISIBLE);
+
+                            final bean b = (bean) getApplicationContext();
+
+                            final Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.BASE_URL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+
+                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                            Call<String> call = cr.endConnection(connId);
+
+                            call.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+
+
+                                    progress.setVisibility(View.GONE);
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
+                                    progress.setVisibility(View.GONE);
+                                }
+                            });
+
+
+                        }
+
                     }
 
                     @Override
@@ -599,35 +687,6 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
                     @Override
                     public void onPlayerError(ExoPlaybackException error) {
-
-                        progress.setVisibility(View.VISIBLE);
-
-                        final bean b = (bean) getApplicationContext();
-
-                        final Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(b.BASE_URL)
-                                .addConverterFactory(ScalarsConverterFactory.create())
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-
-                        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                        Call<String> call = cr.endConnection(connId);
-
-                        call.enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-
-
-                                progress.setVisibility(View.GONE);
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
-                                progress.setVisibility(View.GONE);
-                            }
-                        });
 
 
 
@@ -727,7 +786,12 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
                 if (response.body().equals("success"))
                 {
 
+                    chronometer.setBase(SystemClock.elapsedRealtime());
+
                     countDownPopup.setVisibility(View.GONE);
+
+                    chronometer.start();
+
 
                 }
                 else
@@ -764,6 +828,8 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
 
     }
+
+
 
 
 }

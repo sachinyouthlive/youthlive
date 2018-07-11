@@ -311,6 +311,13 @@ public interface AllAPIs {
     );
 
     @Multipart
+    @POST("api/syncLive.php")
+    Call<endLiveBean> syncLive(
+            @Part("duration") String duration,
+            @Part("liveId") String liveId
+    );
+
+    @Multipart
     @POST("api/add_education.php")
     Call<addEducationBean> addEducation(
             @Part("userId") String userId,
@@ -558,6 +565,15 @@ public interface AllAPIs {
     @Multipart
     @POST("api/accept_reject_connection.php")
     Call<acceptRejectBean> acceptReject(
+            @Part("requestId") String requestId,
+            @Part("url") String url,
+            @Part("status") String status,
+            @Part("userId") String uid
+    );
+
+    @Multipart
+    @POST("api/accept_from_broadcaster.php")
+    Call<acceptRejectBean> acceptRejectBroadcaster(
             @Part("requestId") String requestId,
             @Part("url") String url,
             @Part("status") String status,
