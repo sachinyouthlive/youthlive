@@ -125,6 +125,8 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
     BroadcastReceiver requestReceiver;
     BroadcastReceiver connectionReceiver;
     BroadcastReceiver statusReceiver;
+    BroadcastReceiver statusReceiverPlayer;
+
 
     View rootView;
     private EmojIconActions emojIcon;
@@ -586,8 +588,10 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
                     com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
 
+                    final String uid = item.getUserId().replace("\"", "");
+
                     String id = item.getUserId();
-                    if (!id.equals(b.userId)) {
+                    if (!uid.equals(timelineId)) {
                         viewsAdapter.addView(item);
                     }
 
@@ -830,7 +834,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 */
 
 
-reject1.setVisibility(View.GONE);
+                                                reject1.setVisibility(View.GONE);
 
                                             } catch (Exception e) {
                                                 e.printStackTrace();
@@ -980,9 +984,84 @@ reject1.setVisibility(View.GONE);
                         } else {
                             player.endThumbPlayer1();
                             thumbCameraContainer1.setVisibility(View.GONE);
-isConnection = false;
+                            isConnection = false;
 
                         }
+
+
+                    } catch (JSONException e) {
+                        Log.d("uurrii", e.toString());
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        statusReceiverPlayer = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("status_player")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("uurrii", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject obj = new JSONObject(json);
+
+                        connId = obj.getString("connId");
+
+                        String mode = obj.getString("status");
+                        final String uri = obj.getString("uri");
+
+
+                        String uid = obj.getString("uid");
+
+
+                        if (uid.equals(b.userId))
+                        {
+                            if (mode.equals("2")) {
+
+
+                                thumbCameraContainer1.setVisibility(View.VISIBLE);
+
+                                reject1.setVisibility(View.VISIBLE);
+
+                                isConnection = true;
+
+                                player.startThumbCamera1(connId);
+
+
+
+
+                            } else {
+
+                                isConnection = false;
+                                Toast.makeText(player, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
+
+
+                            }
+
+                        }
+
+
 
 
                     } catch (JSONException e) {
@@ -1113,45 +1192,41 @@ isConnection = false;
                 //broadcaster.switchCamera();
 
 
-if (!isConnection)
-{
+                if (!isConnection) {
 
-    final bean b = (bean) player.getApplicationContext();
+                    final bean b = (bean) player.getApplicationContext();
 
-    progress.setVisibility(View.VISIBLE);
+                    progress.setVisibility(View.VISIBLE);
 
-    final Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(b.BASE_URL)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
+                    final Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.BASE_URL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
 
-    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-    Call<requestConnectionBean> call = cr.requestConnectionFromPlayer(liveId, timelineId, b.userId);
-
-    call.enqueue(new Callback<requestConnectionBean>() {
-        @Override
-        public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
-
-            progress.setVisibility(View.GONE);
-        }
-
-        @Override
-        public void onFailure(Call<requestConnectionBean> call, Throwable t) {
-            progress.setVisibility(View.GONE);
-            Log.d("asdasdasdas", t.toString());
-        }
-    });
+                    final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
+                    Call<requestConnectionBean> call = cr.requestConnectionFromPlayer(liveId, timelineId, b.userId);
 
-}
-else
-{
-    Toast.makeText(player , "Sorry, No room available for guest live" , Toast.LENGTH_SHORT).show();
-}
+                    call.enqueue(new Callback<requestConnectionBean>() {
+                        @Override
+                        public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+
+                            progress.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+                            progress.setVisibility(View.GONE);
+                            Log.d("asdasdasdas", t.toString());
+                        }
+                    });
+
+
+                } else {
+                    Toast.makeText(player, "Sorry, No room available for guest live", Toast.LENGTH_SHORT).show();
+                }
 
 
             }
@@ -1543,87 +1618,95 @@ else
 
             //holder.user.setText(us);
 
+/*
             holder.index.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    /*Intent intent = new Intent(context, TimelineProfile.class);
+                    */
+/*Intent intent = new Intent(context, TimelineProfile.class);
                     intent.putExtra("userId", uid);
-                    startActivity(intent);*/
+                    startActivity(intent);*//*
+
 
                 }
             });
 
+*/
 
             holder.index.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
 
-                    bean b = (bean)context.getApplicationContext();
+
+                    bean b = (bean) context.getApplicationContext();
+
+                    if (!uid.equals(b.userId))
+                    {
+                        final Dialog dialog = new Dialog(context);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.follow_dialog);
+                        dialog.setCancelable(true);
+                        dialog.show();
 
 
-                    final Dialog dialog = new Dialog(context);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setContentView(R.layout.follow_dialog);
-                    dialog.setCancelable(true);
-                    dialog.show();
+                        CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
+                        TextView name = (TextView) dialog.findViewById(R.id.name);
+                        Button follo = (Button) dialog.findViewById(R.id.follow);
+                        final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
 
 
-                    CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
-                    TextView name = (TextView) dialog.findViewById(R.id.name);
-                    Button follo = (Button) dialog.findViewById(R.id.follow);
-                    final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
+                        ImageLoader loader1 = ImageLoader.getInstance();
+
+                        loader1.displayImage(b.userImage, image);
+
+                        name.setText(b.userName);
+
+                        follo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                bar.setVisibility(View.VISIBLE);
+
+                                final bean b = (bean) context.getApplicationContext();
+
+                                final Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl(b.BASE_URL)
+                                        .addConverterFactory(ScalarsConverterFactory.create())
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+
+                                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
+                                retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
 
-                    ImageLoader loader1 = ImageLoader.getInstance();
+                                call.enqueue(new retrofit2.Callback<followBean>() {
+                                    @Override
+                                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
 
-                    loader1.displayImage(b.userImage, image);
+                                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
-                    name.setText(b.userName);
+                                        bar.setVisibility(View.GONE);
 
-                    follo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                                        dialog.dismiss();
 
-                            bar.setVisibility(View.VISIBLE);
+                                    }
 
-                            final bean b = (bean) context.getApplicationContext();
+                                    @Override
+                                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
 
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
+                                        bar.setVisibility(View.GONE);
 
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+                                    }
+                                });
+
+                            }
+                        });
+                    }
 
 
-                            retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
-
-                            call.enqueue(new retrofit2.Callback<followBean>() {
-                                @Override
-                                public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
-
-                                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-
-                                    bar.setVisibility(View.GONE);
-
-                                    dialog.dismiss();
-
-                                }
-
-                                @Override
-                                public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
-
-                                    bar.setVisibility(View.GONE);
-
-                                }
-                            });
-
-                        }
-                    });
 
 
 
@@ -1727,8 +1810,25 @@ else
 
                     timelineId = response.body().getData().getTimelineId();
 
+
+
                     commentsAdapter.setGridData(response.body().getData().getComments());
-                    viewsAdapter.setGridData(response.body().getData().getViews());
+
+
+                    for (int i = 0 ; i < response.body().getData().getViews().size() ; i++)
+                    {
+
+                        final String uid = response.body().getData().getViews().get(i).getUserId().replace("\"", "");
+
+                        if (!uid.equals(b.userId))
+                        {
+                            viewsAdapter.addView(response.body().getData().getViews().get(i));
+                        }
+
+
+                    }
+
+                    //viewsAdapter.setGridData(response.body().getData().getViews());
 
                     int count1 = Integer.parseInt(response.body().getData().getLikesCount());
 
@@ -1753,8 +1853,7 @@ else
                     liveUsers.setText(response.body().getData().getViewsCount());
 
 
-                    if (response.body().getData().getIsConnection().equals("true"))
-                    {
+                    if (response.body().getData().getIsConnection().equals("true")) {
                         reject1.setVisibility(View.GONE);
 
                         player.startThumbPlayer1(response.body().getData().getConnid());
@@ -1824,6 +1923,8 @@ else
                             new IntentFilter("connection_end"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
                             new IntentFilter("status"));
+  LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiverPlayer,
+                            new IntentFilter("status_player"));
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
 
@@ -1870,6 +1971,7 @@ else
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiverPlayer);
     }
 
 
@@ -2162,7 +2264,7 @@ else
         public void addView(com.yl.youthlive.getIpdatedPOJO.View item) {
             list.add(0, item);
             notifyItemInserted(0);
-            liveUsers.setText(String.valueOf(list.size() - 1));
+            liveUsers.setText(String.valueOf(list.size()));
         }
 
         public void removeView(com.yl.youthlive.getIpdatedPOJO.View item) {
@@ -2184,82 +2286,97 @@ else
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             holder.setIsRecyclable(false);
 
+            final bean b = (bean) context.getApplicationContext();
+
             final com.yl.youthlive.getIpdatedPOJO.View item = list.get(position);
 
-            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+            final DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
             ImageLoader loader = ImageLoader.getInstance();
 
-            loader.displayImage(item.getUserImage(), holder.image, options);
+
+
+            final String uid = item.getUserId().replace("\"", "");
+            final String imm = item.getUserImage().replace("\"", "");
+            final String un = item.getUserName().replace("\"", "");
+
+
+
+            loader.displayImage(b.BASE_URL + imm , holder.image, options);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    bean b = (bean)context.getApplicationContext();
+
+                    if (!uid.equals(b.userId))
+                    {
+                        final Dialog dialog = new Dialog(context);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.follow_dialog);
+                        dialog.setCancelable(true);
+                        dialog.show();
 
 
-                    final Dialog dialog = new Dialog(context);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setContentView(R.layout.follow_dialog);
-                    dialog.setCancelable(true);
-                    dialog.show();
-
-
-                    CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
-                    TextView name = (TextView) dialog.findViewById(R.id.name);
-                    Button follo = (Button) dialog.findViewById(R.id.follow);
-                    final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
+                        CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
+                        TextView name = (TextView) dialog.findViewById(R.id.name);
+                        Button follo = (Button) dialog.findViewById(R.id.follow);
+                        final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
 
 
 
-                    ImageLoader loader1 = ImageLoader.getInstance();
+                        ImageLoader loader1 = ImageLoader.getInstance();
 
-                    loader1.displayImage(b.userImage, image);
+                        loader1.displayImage(b.BASE_URL + imm, image , options);
 
-                    name.setText(b.userName);
+                        name.setText(un);
 
-                    follo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                        follo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
 
-                            bar.setVisibility(View.VISIBLE);
+                                bar.setVisibility(View.VISIBLE);
 
-                            final bean b = (bean) context.getApplicationContext();
+                                final bean b = (bean) context.getApplicationContext();
 
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
+                                final Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl(b.BASE_URL)
+                                        .addConverterFactory(ScalarsConverterFactory.create())
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
 
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+                                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                            retrofit2.Call<followBean> call = cr.follow(b.userId, item.getUserId());
+                                retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
 
-                            call.enqueue(new retrofit2.Callback<followBean>() {
-                                @Override
-                                public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+                                call.enqueue(new retrofit2.Callback<followBean>() {
+                                    @Override
+                                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
 
-                                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
-                                    bar.setVisibility(View.GONE);
+                                        bar.setVisibility(View.GONE);
 
-                                    dialog.dismiss();
+                                        dialog.dismiss();
 
-                                }
+                                    }
 
-                                @Override
-                                public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+                                    @Override
+                                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
 
-                                    bar.setVisibility(View.GONE);
+                                        bar.setVisibility(View.GONE);
 
-                                }
-                            });
+                                    }
+                                });
 
-                        }
-                    });
+                            }
+                        });
+                    }
+
+
+
+
 
                 }
             });

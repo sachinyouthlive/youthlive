@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -85,6 +86,7 @@ import java.util.TimerTask;
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconMultiAutoCompleteTextView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -174,6 +176,8 @@ public class BroadcasterFragment1 extends Fragment {
     TextView giftText;
 
 
+    ImageButton connection;
+
 
     @Nullable
     @Override
@@ -214,6 +218,8 @@ public class BroadcasterFragment1 extends Fragment {
 
         newMessage = view.findViewById(R.id.textView4);
         likeCount = view.findViewById(R.id.textView5);
+
+        connection = view.findViewById(R.id.connect);
 
         emoji = view.findViewById(R.id.imageButton4);
         message = view.findViewById(R.id.imageButton3);
@@ -587,8 +593,10 @@ public class BroadcasterFragment1 extends Fragment {
 
                     com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
 
+                    final String uid = item.getUserId().replace("\"", "");
+
                     String id = item.getUserId();
-                    if (!id.equals(b.userId)) {
+                    if (!uid.equals(b.userId)) {
                         viewsAdapter.addView(item);
                     }
 
@@ -691,7 +699,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                             Log.d("uurrii", uri);
 
-                            broadcaster.startThumbPlayer1(uri, thumbPic1);
+                            broadcaster.startThumbPlayer1(uri, thumbPic1 , connId);
                             playerFrame1.setVisibility(View.VISIBLE);
                             isConnection = true;
 
@@ -791,9 +799,9 @@ public class BroadcasterFragment1 extends Fragment {
 
                         connId = object.getString("conId");
 
-                        String uid = object.getString("uid");
+                        final String uid = object.getString("uid");
 
-                        if (uid.equals(b.userId)) {
+
                             final Dialog dialog = new Dialog(broadcaster);
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setCancelable(false);
@@ -822,7 +830,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                    Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1", b.userId);
+                                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(connId, liveId + uid, "2", uid);
                                     call1.enqueue(new Callback<acceptRejectBean>() {
                                         @Override
                                         public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -884,7 +892,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                    Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1", b.userId);
+                                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(connId, liveId + uid, "1", uid);
                                     call1.enqueue(new Callback<acceptRejectBean>() {
                                         @Override
                                         public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -945,7 +953,7 @@ public class BroadcasterFragment1 extends Fragment {
                             });
 
 
-                        }
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1084,7 +1092,170 @@ public class BroadcasterFragment1 extends Fragment {
         });
 
 
+
+        connection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                final Dialog dialog = new Dialog(broadcaster);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(true);
+                dialog.setContentView(R.layout.live_users_list_popup);
+                dialog.show();
+
+                RecyclerView dialogGrid = dialog.findViewById(R.id.grid);
+
+                ProgressBar dialogBar = dialog.findViewById(R.id.progressBar12);
+
+                ImageButton dialogClose = dialog.findViewById(R.id.imageButton9);
+
+                GridLayoutManager dialogManager = new GridLayoutManager(broadcaster , 1);
+
+                List<com.yl.youthlive.getIpdatedPOJO.View> l2 = viewsAdapter.getList();
+
+                DialogAdapter dialogAdapter  = new DialogAdapter(broadcaster , l2 , dialogBar , dialog);
+
+                dialogGrid.setAdapter(dialogAdapter);
+                dialogGrid.setLayoutManager(dialogManager);
+
+
+                dialogClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+
+
+
+            }
+        });
+
+
         return view;
+    }
+
+
+
+
+    class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder>
+    {
+
+        Context context;
+        List<com.yl.youthlive.getIpdatedPOJO.View> list = new ArrayList<>();
+        ProgressBar dialogProgress;
+        Dialog dialog;
+
+
+        public DialogAdapter(Context context , List<com.yl.youthlive.getIpdatedPOJO.View> list , ProgressBar dialogProgress , Dialog dialog)
+        {
+            this.context = context;
+            this.list = list;
+            this.dialogProgress = dialogProgress;
+            this.dialog = dialog;
+        }
+
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.guest_list_model , parent , false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+            com.yl.youthlive.getIpdatedPOJO.View item = list.get(position);
+
+            final String uid = item.getUserId().replace("\"", "");
+            final String imm = item.getUserImage().replace("\"", "");
+            final String un = item.getUserName().replace("\"", "");
+
+            final bean b = (bean)context.getApplicationContext();
+
+            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+            ImageLoader loader = ImageLoader.getInstance();
+
+            loader.displayImage(b.BASE_URL + imm , holder.image , options);
+
+            holder.name.setText(un);
+
+
+            holder.join.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    dialogProgress.setVisibility(View.VISIBLE);
+
+                    final Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.BASE_URL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                    Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
+
+                    call.enqueue(new Callback<requestConnectionBean>() {
+                        @Override
+                        public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+
+                            if (response.body().getStatus().equals("1"))
+                            {
+                                thumbPic1 = imm;
+                                Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+
+                            dialogProgress.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+                            thumbPic1 = imm;
+                            dialogProgress.setVisibility(View.GONE);
+                            Log.d("asdasdasdas", t.toString());
+                        }
+                    });
+
+
+
+                }
+            });
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder
+        {
+
+            CircleImageView image;
+            TextView name;
+            Button join;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+
+
+                image = itemView.findViewById(R.id.view8);
+                name = itemView.findViewById(R.id.textView36);
+                join = itemView.findViewById(R.id.button9);
+
+
+            }
+        }
     }
 
 
@@ -1225,7 +1396,7 @@ public class BroadcasterFragment1 extends Fragment {
 
             //holder.user.setText(us);
 
-            holder.index.setOnClickListener(new View.OnClickListener() {
+            /*holder.index.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -1234,83 +1405,39 @@ public class BroadcasterFragment1 extends Fragment {
                     startActivity(intent);
 
                 }
-            });
+            });*/
 
 
             holder.index.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-
-                    final Dialog dialog = new Dialog(context);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setContentView(R.layout.connect_dialog);
-                    dialog.setCancelable(true);
-                    dialog.show();
-
-
-                    CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
-                    TextView name = (TextView) dialog.findViewById(R.id.name);
-                    Button follo = (Button) dialog.findViewById(R.id.follow);
-                    Button connect = (Button) dialog.findViewById(R.id.connect);
-                    final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
+                    if (!uid.equals(b.userId))
+                    {
+                        final Dialog dialog = new Dialog(context);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.connect_dialog);
+                        dialog.setCancelable(true);
+                        dialog.show();
 
 
-                    ImageLoader loader1 = ImageLoader.getInstance();
-
-                    loader1.displayImage(b.userImage, image);
-
-                    name.setText(b.userName);
-
-                    follo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            bar.setVisibility(View.VISIBLE);
-
-                            final bean b = (bean) context.getApplicationContext();
-
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+                        CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
+                        TextView name = (TextView) dialog.findViewById(R.id.name);
+                        Button follo = (Button) dialog.findViewById(R.id.follow);
+                        Button connect = (Button) dialog.findViewById(R.id.connect);
+                        final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
 
 
-                            retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
+                        ImageLoader loader1 = ImageLoader.getInstance();
 
-                            call.enqueue(new retrofit2.Callback<followBean>() {
-                                @Override
-                                public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+                        loader1.displayImage(b.userImage, image);
 
-                                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        name.setText(b.userName);
 
-                                    bar.setVisibility(View.GONE);
+                        follo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
 
-                                    dialog.dismiss();
-
-                                }
-
-                                @Override
-                                public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
-
-                                    bar.setVisibility(View.GONE);
-
-                                }
-                            });
-
-                        }
-                    });
-
-
-                    connect.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-
-                            if (!isConnection) {
                                 bar.setVisibility(View.VISIBLE);
 
                                 final bean b = (bean) context.getApplicationContext();
@@ -1324,37 +1451,85 @@ public class BroadcasterFragment1 extends Fragment {
                                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
+                                retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
 
-                                call.enqueue(new Callback<requestConnectionBean>() {
+                                call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
-                                    public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+                                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
 
-                                        String im = item.getUserImage().replace("\"", "");
-                                        thumbPic1 = im;
+                                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
+                                        bar.setVisibility(View.GONE);
 
                                         dialog.dismiss();
 
-
-                                        bar.setVisibility(View.GONE);
                                     }
 
                                     @Override
-                                    public void onFailure(Call<requestConnectionBean> call, Throwable t) {
-                                        thumbPic1 = item.getUserImage();
+                                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+
                                         bar.setVisibility(View.GONE);
-                                        Log.d("asdasdasdas", t.toString());
+
                                     }
                                 });
 
-
-                            } else {
-                                Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
                             }
+                        });
 
-                        }
-                    });
+
+                        connect.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+
+                                if (!isConnection) {
+                                    bar.setVisibility(View.VISIBLE);
+
+                                    final bean b = (bean) context.getApplicationContext();
+
+                                    final Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(b.BASE_URL)
+                                            .addConverterFactory(ScalarsConverterFactory.create())
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                                    Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
+
+                                    call.enqueue(new Callback<requestConnectionBean>() {
+                                        @Override
+                                        public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+
+                                            String im = item.getUserImage().replace("\"", "");
+                                            thumbPic1 = im;
+
+
+                                            dialog.dismiss();
+
+
+                                            bar.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+                                            thumbPic1 = item.getUserImage();
+                                            bar.setVisibility(View.GONE);
+                                            Log.d("asdasdasdas", t.toString());
+                                        }
+                                    });
+
+
+                                } else {
+                                    Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        });
+                    }
+
+
 
 
                 }
@@ -1416,8 +1591,26 @@ public class BroadcasterFragment1 extends Fragment {
 
                 try {
 
+
+
+
                     commentsAdapter.setGridData(response.body().getData().getComments());
-                    viewsAdapter.setGridData(response.body().getData().getViews());
+
+
+                    for (int i = 0 ; i < response.body().getData().getViews().size() ; i++)
+                    {
+
+                        final String uid = response.body().getData().getViews().get(i).getUserId().replace("\"", "");
+
+                        if (!uid.equals(b.userId))
+                        {
+                            viewsAdapter.addView(response.body().getData().getViews().get(i));
+                        }
+
+
+                    }
+
+
 
                     int count1 = Integer.parseInt(response.body().getData().getLikesCount());
 
@@ -1828,13 +2021,17 @@ public class BroadcasterFragment1 extends Fragment {
         public void addView(com.yl.youthlive.getIpdatedPOJO.View item) {
             list.add(0, item);
             notifyItemInserted(0);
-            liveUsers.setText(String.valueOf(list.size() - 1));
+            liveUsers.setText(String.valueOf(list.size()));
         }
 
         public void removeView(com.yl.youthlive.getIpdatedPOJO.View item) {
             list.remove(item);
             notifyDataSetChanged();
             liveUsers.setText(String.valueOf(list.size()));
+        }
+
+        public List<com.yl.youthlive.getIpdatedPOJO.View> getList() {
+            return list;
         }
 
         @NonNull
@@ -1850,89 +2047,57 @@ public class BroadcasterFragment1 extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             holder.setIsRecyclable(false);
 
+            final bean b = (bean)context.getApplicationContext();
+
             final com.yl.youthlive.getIpdatedPOJO.View item = list.get(position);
 
-            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+            final DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
             ImageLoader loader = ImageLoader.getInstance();
 
-            loader.displayImage(item.getUserImage(), holder.image, options);
+
+                final String uid = item.getUserId().replace("\"", "");
+                final String imm = item.getUserImage().replace("\"", "");
+                final String un = item.getUserName().replace("\"", "");
+
+
+                Log.d("imageaaa" , item.getUserImage());
+                Log.d("imageaaa" , imm);
+
+
+            loader.displayImage(b.BASE_URL + imm , holder.image, options);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    bean b = (bean)context.getApplicationContext();
 
-                    final Dialog dialog = new Dialog(context);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setContentView(R.layout.connect_dialog);
-                    dialog.setCancelable(true);
-                    dialog.show();
-
-
-                    CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
-                    TextView name = (TextView) dialog.findViewById(R.id.name);
-                    Button follo = (Button) dialog.findViewById(R.id.follow);
-                    Button connect = (Button) dialog.findViewById(R.id.connect);
-                    final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
+                    if (!uid.equals(b.userId))
+                    {
+                        final Dialog dialog = new Dialog(context);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.connect_dialog);
+                        dialog.setCancelable(true);
+                        dialog.show();
 
 
-                    ImageLoader loader1 = ImageLoader.getInstance();
-
-                    loader1.displayImage(b.userImage, image);
-
-                    name.setText(b.userName);
-
-                    follo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            bar.setVisibility(View.VISIBLE);
-
-                            final bean b = (bean) context.getApplicationContext();
-
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+                        CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
+                        TextView name = (TextView) dialog.findViewById(R.id.name);
+                        Button follo = (Button) dialog.findViewById(R.id.follow);
+                        Button connect = (Button) dialog.findViewById(R.id.connect);
+                        final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
 
 
-                            retrofit2.Call<followBean> call = cr.follow(b.userId, item.getUserId());
+                        ImageLoader loader1 = ImageLoader.getInstance();
 
-                            call.enqueue(new retrofit2.Callback<followBean>() {
-                                @Override
-                                public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+                        loader1.displayImage(b.BASE_URL + imm, image , options);
 
-                                    Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        name.setText(un);
 
-                                    bar.setVisibility(View.GONE);
+                        follo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
 
-                                    dialog.dismiss();
-
-                                }
-
-                                @Override
-                                public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
-
-                                    bar.setVisibility(View.GONE);
-
-                                }
-                            });
-
-                        }
-                    });
-
-
-                    connect.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-
-                            if (!isConnection) {
                                 bar.setVisibility(View.VISIBLE);
 
                                 final bean b = (bean) context.getApplicationContext();
@@ -1946,37 +2111,86 @@ public class BroadcasterFragment1 extends Fragment {
                                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, item.getUserId());
+                                retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
 
-                                call.enqueue(new Callback<requestConnectionBean>() {
+                                call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
-                                    public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+                                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
 
-                                        String im = item.getUserImage().replace("\"", "");
-                                        thumbPic1 = im;
+                                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
+                                        bar.setVisibility(View.GONE);
 
                                         dialog.dismiss();
 
-
-                                        bar.setVisibility(View.GONE);
                                     }
 
                                     @Override
-                                    public void onFailure(Call<requestConnectionBean> call, Throwable t) {
-                                        thumbPic1 = item.getUserImage();
+                                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+
                                         bar.setVisibility(View.GONE);
-                                        Log.d("asdasdasdas", t.toString());
+
                                     }
                                 });
 
-
-                            } else {
-                                Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
                             }
+                        });
 
-                        }
-                    });
+
+                        connect.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+
+                                if (!isConnection) {
+                                    bar.setVisibility(View.VISIBLE);
+
+                                    final bean b = (bean) context.getApplicationContext();
+
+                                    final Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(b.BASE_URL)
+                                            .addConverterFactory(ScalarsConverterFactory.create())
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                                    Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
+
+                                    call.enqueue(new Callback<requestConnectionBean>() {
+                                        @Override
+                                        public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+
+                                            String im = item.getUserImage().replace("\"", "");
+                                            thumbPic1 = im;
+
+
+                                            dialog.dismiss();
+
+
+                                            bar.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+                                            thumbPic1 = item.getUserImage();
+                                            bar.setVisibility(View.GONE);
+                                            Log.d("asdasdasdas", t.toString());
+                                        }
+                                    });
+
+
+                                } else {
+                                    Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        });
+                    }
+
+
+
 
 
                 }
