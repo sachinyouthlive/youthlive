@@ -206,6 +206,8 @@
         <activity
             android:name=".login.OTP_varify"
             android:screenOrientation="portrait" />
+        <activity android:name=".RTMPEncoder"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -223,7 +223,9 @@ TextView thumbCount;
         //uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/vod/sample.mp4");
         //uri = Uri.parse("rtmp://192.168.1.103:1935/vod/sample.mp4");
 
-        Log.d("status", "rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + liveId);
+        Log.d("statusss", "rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
+
+
 
         loadingProgress.setVisibility(View.VISIBLE);
 
@@ -237,10 +239,10 @@ TextView thumbCount;
 //Create the player
         mainPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
                 new DefaultAllocator(true, 1000),
-                200,  // min buffer 0.5s
-                500, //max buffer 3s
-                500, // playback 1s
-                500,   //playback after rebuffer 1s
+                500,  // min buffer 0.5s
+                1000    , //max buffer 3s
+                1000, // playback 1s
+                1000,   //playback after rebuffer 1s
                 1,
                 true
         ));
