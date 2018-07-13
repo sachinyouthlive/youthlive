@@ -30,7 +30,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -66,7 +65,6 @@ import com.yl.youthlive.endLivePOJO.Data;
 import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.getIpdatedPOJO.Comment;
 import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
-import com.yl.youthlive.goLivePOJO.goLiveBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.liveLikePOJO.liveLikeBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
@@ -1212,6 +1210,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
                     call.enqueue(new Callback<requestConnectionBean>() {
                         @Override
                         public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+                            Toast.makeText(player, "Your request has been sent to the broadcaster", Toast.LENGTH_SHORT).show();
 
                             progress.setVisibility(View.GONE);
                         }

@@ -55,7 +55,7 @@ public class DataValidation {
 
     public static Boolean isValidPhoneNumber(String phonenumber) {
         Boolean valid = true;
-        if (!TextUtils.isEmpty(phonenumber.trim()) && phonenumber.length() > 9) {
+        if (!TextUtils.isEmpty(phonenumber.trim()) && phonenumber.length() > 9 && phonenumber.length() < 11) {
             if (Pattern.compile(PHONE_NUMBER).matcher(phonenumber).matches()) {
                 valid = false;
             }

@@ -36,7 +36,7 @@
     <application
         android:name=".bean"
         android:allowBackup="true"
-        android:icon="@drawable/yllogo"
+        android:icon="@mipmap/ylive"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"

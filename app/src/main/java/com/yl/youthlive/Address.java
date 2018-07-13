@@ -29,7 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -177,6 +176,10 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                 username1.setText(username.getText().toString());
 
                 final Spinner gender = dialog.findViewById(R.id.gender);
+                Bundle b1 = getArguments();
+                String s = b1.getString("gender");
+
+
                 final TextView birth1 = dialog.findViewById(R.id.birth);
 
 
@@ -197,6 +200,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
 
                 bio1.setText(bio.getText().toString());
+
 
                 Button update = dialog.findViewById(R.id.update);
                 Button updatephone = dialog.findViewById(R.id.updatephone);
@@ -254,6 +258,11 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
                     }
                 });
+                if (s.equals("Male")) {
+                    gender.setSelection(0);
+                } else {
+                    gender.setSelection(1);
+                }
 
                 updatephone.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -285,14 +294,14 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
                                     //      if (Objects.equals(response.body().getMessage(), "1")) {
                                     //         Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                    if (mGoogleApiClient.isConnected()) {
-                                        dialog.dismiss();
-                                        signOut();
-                                    }
+                                    //    if (mGoogleApiClient.isConnected()) {
+                                    //       dialog.dismiss();
+                                    //        signOut();
+                                    //    }
 
                                     Log.d("sachin", "response");
 
-                                    LoginManager.getInstance().logOut();
+                                    //   LoginManager.getInstance().logOut();
 
                                     edit.remove("type");
                                     edit.remove("user");
