@@ -72,6 +72,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.pedro.rtplibrary.rtmp.RtmpCamera1;
 import com.streamaxia.android.CameraPreview;
 import com.streamaxia.android.StreamaxiaPublisher;
 import com.streamaxia.android.handlers.EncoderHandler;
@@ -89,6 +90,8 @@ import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
 import com.yl.youthlive.goLivePOJO.goLiveBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
+
+import net.ossrs.rtmp.ConnectCheckerRtmp;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -109,8 +112,9 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class VideoBroadcaster extends AppCompatActivity implements EncoderHandler.EncodeListener, RtmpHandler.RtmpListener, RecordHandler.RecordListener {
 
-    CameraPreview cameraPreview;
-    private StreamaxiaPublisher mPublisher;
+    //CameraPreview cameraPreview;
+    //private StreamaxiaPublisher mPublisher;
+
     ProgressBar progress;
 
     //
@@ -158,6 +162,8 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
+    SurfaceView surfaceView;
+    RtmpCamera1 rtmpCamera1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +188,10 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
         thumbContainer1 = findViewById(R.id.thumb_container1);
 
 
-        cameraPreview = findViewById(R.id.preview);
+        surfaceView = findViewById(R.id.preview);
+        //cameraPreview = findViewById(R.id.preview);
+
+
         progress = findViewById(R.id.progressBar5);
 
         popup = findViewById(R.id.finish_popup);
@@ -206,7 +215,37 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        mPublisher = new StreamaxiaPublisher(cameraPreview, this);
+        ConnectCheckerRtmp connectCheckerRtmp = new ConnectCheckerRtmp() {
+            @Override
+            public void onConnectionSuccessRtmp() {
+
+            }
+
+            @Override
+            public void onConnectionFailedRtmp(String s) {
+
+            }
+
+            @Override
+            public void onDisconnectRtmp() {
+
+            }
+
+            @Override
+            public void onAuthErrorRtmp() {
+
+            }
+
+            @Override
+            public void onAuthSuccessRtmp() {
+
+            }
+        };
+
+
+        rtmpCamera1 = new RtmpCamera1(surfaceView , connectCheckerRtmp);
+
+        /*mPublisher = new StreamaxiaPublisher(cameraPreview, this);
 
         mPublisher.setEncoderHandler(new EncoderHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
@@ -220,7 +259,7 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
         {
             e.printStackTrace();
         }
-
+*/
 
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -253,9 +292,14 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
 
 
+/*
         List<Size> sizes = mPublisher.getSupportedPictureSizes(getResources().getConfiguration().orientation);
         final Size resolution = sizes.get(0);
         mPublisher.setVideoOutputResolution(1280, 720, this.getResources().getConfiguration().orientation);
+*/
+
+        //rtmpCamera1.prepareAudio(128 * 1024 , 44100, false, true, true);
+        //rtmpCamera1.prepareVideo(640, 480, 30, 900 * 1024 , false, 90);
 
         //mPublisher.setVideoBitRate(1600);
 
@@ -363,15 +407,17 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     @Override
     protected void onResume() {
         super.onResume();
-        cameraPreview.startCamera();
-        mPublisher.resumeRecord();
+        //cameraPreview.startCamera();
+        //mPublisher.resumeRecord();
+        rtmpCamera1.startPreview();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //cameraPreview.stopCamera();
-        mPublisher.pauseRecord();
+
+        //mPublisher.pauseRecord();
     }
 
     @Override
@@ -405,8 +451,10 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
             e.printStackTrace();
         }
 
-        mPublisher.stopPublish();
-        mPublisher.stopRecord();
+        rtmpCamera1.stopPreview();
+        rtmpCamera1.stopStream();
+        /*mPublisher.stopPublish();
+        mPublisher.stopRecord();*/
         chronometer.stop();
 
 
@@ -534,12 +582,13 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     {
         if (torchStatus)
         {
-            cameraPreview.stopTorch();
+            //cameraPreview.stopTorch();
+
             torchStatus = false;
         }
         else
         {
-            cameraPreview.startTorch();
+            //cameraPreview.startTorch();
             torchStatus = true;
         }
     }
@@ -547,13 +596,18 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
 
     public void startPublish(String liveId)
     {
-        mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
+        //mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
+        if (rtmpCamera1.prepareAudio(128 * 1024 , 44100, true, true, true) && rtmpCamera1.prepareVideo(640, 480, 30, 900 * 1024 , false, 90))
+        {
+            rtmpCamera1.startStream("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
+        }
     }
 
 
     public void switchCamera()
     {
-        mPublisher.switchCamera();
+        rtmpCamera1.switchCamera();
+        //mPublisher.switchCamera();
     }
 
 
