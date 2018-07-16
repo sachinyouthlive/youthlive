@@ -4,12 +4,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.sendMessagePOJO.sendMessageBean;
@@ -32,7 +33,7 @@ public class ChatScreen extends AppCompatActivity {
 
     Toolbar toolbar;
     RecyclerView grid;
-    GridLayoutManager manager;
+    LinearLayoutManager manager;
     String id, name, image, chat;
     ChatAdapter adapter;
     List<Datum> list;
@@ -58,7 +59,8 @@ public class ChatScreen extends AppCompatActivity {
         comment = (EditText) findViewById(R.id.comment);
         send = (FloatingActionButton) findViewById(R.id.send);
 
-        manager = new GridLayoutManager(this, 1);
+        manager = new LinearLayoutManager(this);
+        manager.setStackFromEnd(true);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -77,6 +79,7 @@ public class ChatScreen extends AppCompatActivity {
         adapter = new ChatAdapter(this, list);
 
         grid.setAdapter(adapter);
+        grid.smoothScrollToPosition(list.size() - 1);
         grid.setLayoutManager(manager);
 
 
@@ -84,13 +87,13 @@ public class ChatScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String comm = comment.getText().toString();
+                final String comm = comment.getText().toString();
 
                 if (comm.length() > 0) {
 
                     progress.setVisibility(View.VISIBLE);
 
-                    bean b = (bean) getApplicationContext();
+                    final bean b = (bean) getApplicationContext();
 
                     final Retrofit retrofit = new Retrofit.Builder()
                             .baseUrl(b.BASE_URL)
@@ -99,7 +102,6 @@ public class ChatScreen extends AppCompatActivity {
                             .build();
 
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
-
                     Call<sendMessageBean> call = cr.sendMessage(b.userId, id, comm);
 
                     call.enqueue(new Callback<sendMessageBean>() {
@@ -108,8 +110,6 @@ public class ChatScreen extends AppCompatActivity {
 
                             comment.setText("");
                             progress.setVisibility(View.GONE);
-
-
                         }
 
                         @Override
@@ -150,7 +150,7 @@ public class ChatScreen extends AppCompatActivity {
                 .build();
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
-
+        Toast.makeText(b, "" + chat + " frnd id" + id + " usrid" + b.userId, Toast.LENGTH_SHORT).show();
         Call<singleMessageBean> call = cr.singleChatList(b.userId, id, chat);
 
         call.enqueue(new Callback<singleMessageBean>() {

@@ -66,7 +66,6 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
 
 
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
         list = new ArrayList<>();
 
         holder = new MassageAdapter(this, list);
