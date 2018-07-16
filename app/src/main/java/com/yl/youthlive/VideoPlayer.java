@@ -239,10 +239,10 @@ TextView thumbCount;
 //Create the player
         mainPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
                 new DefaultAllocator(true, 1000),
-                500,  // min buffer 0.5s
-                1000    , //max buffer 3s
-                1000, // playback 1s
-                1000,   //playback after rebuffer 1s
+                100,  // min buffer 0.5s
+                500    , //max buffer 3s
+                500, // playback 1s
+                500,   //playback after rebuffer 1s
                 1,
                 true
         ));

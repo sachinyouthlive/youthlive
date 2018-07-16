@@ -597,7 +597,7 @@ public class VideoBroadcaster extends AppCompatActivity implements EncoderHandle
     public void startPublish(String liveId)
     {
         //mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
-        if (rtmpCamera1.prepareAudio(128 * 1024 , 44100, true, true, true) && rtmpCamera1.prepareVideo(640, 480, 30, 900 * 1024 , false, 90))
+        if (rtmpCamera1.prepareAudio(96 * 1024 , 48000, true, true, false) && rtmpCamera1.prepareVideo(512, 288, 30, 735 * 1024 , false, 90))
         {
             rtmpCamera1.startStream("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
         }
