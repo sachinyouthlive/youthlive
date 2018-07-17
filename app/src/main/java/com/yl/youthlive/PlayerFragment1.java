@@ -53,11 +53,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.streamaxia.android.CameraPreview;
-import com.streamaxia.android.StreamaxiaPublisher;
-import com.streamaxia.android.handlers.EncoderHandler;
-import com.streamaxia.android.handlers.RecordHandler;
-import com.streamaxia.android.handlers.RtmpHandler;
+
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
@@ -95,7 +91,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class PlayerFragment1 extends Fragment implements RecordHandler.RecordListener, RtmpHandler.RtmpListener, EncoderHandler.EncodeListener {
+public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordListener, RtmpHandler.RtmpListener, EncoderHandler.EncodeListener
+{
 
     TextView newMessage;
 
@@ -135,7 +132,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
 
     ImageButton timeLineFollow;
 
-    CameraPreview thumbCamera1;
+
 
     private static final int REQUEST_CODE = 100;
 
@@ -213,7 +210,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         bubbleView = (BubbleView) view.findViewById(R.id.bubble);
         timeLineFollow = view.findViewById(R.id.folloview_friends);
 
-        thumbCamera1 = view.findViewById(R.id.thumb_camera1);
+
 
         List<Drawable> drawableList = new ArrayList<>();
         drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_indigo_900_24dp));
@@ -1302,184 +1299,7 @@ public class PlayerFragment1 extends Fragment implements RecordHandler.RecordLis
         return view;
     }
 
-    @Override
-    public void onRecordPause() {
 
-    }
-
-    @Override
-    public void onRecordResume() {
-
-    }
-
-    @Override
-    public void onRecordStarted(String s) {
-
-    }
-
-    @Override
-    public void onRecordFinished(String s) {
-
-    }
-
-    @Override
-    public void onRecordIllegalArgumentException(IllegalArgumentException e) {
-
-    }
-
-    StreamaxiaPublisher mPublisher;
-
-    @Override
-    public void onRecordIOException(IOException e) {
-
-    }
-
-    @Override
-    public void onRtmpConnecting(String s) {
-
-    }
-
-    @Override
-    public void onRtmpConnected(String s) {
-        progress.setVisibility(View.VISIBLE);
-
-        final bean b = (bean) getContext().getApplicationContext();
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-        Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId + b.userId, "2", b.userId);
-        call1.enqueue(new Callback<acceptRejectBean>() {
-            @Override
-            public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
-
-                try {
-
-
-                    //cameraLayout1.setVisibility(View.VISIBLE);
-
-/*
-                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
-                            goCoderBroadcastConfig.setPortNumber(1935);
-                            goCoderBroadcastConfig.setApplicationName("live");
-                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
-                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
-                            // Set the bitrate to 4000 Kbps
-                            goCoderBroadcastConfig.setVideoBitRate(1200);
-
-                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
-
-                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
-
-                            //if (configValidationError != null) {
-                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDescription(), Toast.LENGTH_LONG).show();
-                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
-                            // Stop the broadcast that is currently running
-                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
-                            //} else {
-                            // Start streaming
-                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
-                            //}
-
-*/
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-                progress.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onFailure(Call<acceptRejectBean> call, Throwable t) {
-                progress.setVisibility(View.GONE);
-                t.printStackTrace();
-            }
-        });
-
-    }
-
-    @Override
-    public void onRtmpVideoStreaming() {
-
-    }
-
-    @Override
-    public void onRtmpAudioStreaming() {
-
-    }
-
-    @Override
-    public void onRtmpStopped() {
-
-    }
-
-    @Override
-    public void onRtmpDisconnected() {
-
-    }
-
-    @Override
-    public void onRtmpVideoFpsChanged(double v) {
-
-    }
-
-    @Override
-    public void onRtmpVideoBitrateChanged(double v) {
-
-    }
-
-    @Override
-    public void onRtmpAudioBitrateChanged(double v) {
-
-    }
-
-    @Override
-    public void onRtmpSocketException(SocketException e) {
-
-    }
-
-    @Override
-    public void onRtmpIOException(IOException e) {
-
-    }
-
-    @Override
-    public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-
-    }
-
-    @Override
-    public void onRtmpIllegalStateException(IllegalStateException e) {
-
-    }
-
-    @Override
-    public void onRtmpAuthenticationg(String s) {
-
-    }
-
-    @Override
-    public void onNetworkWeak() {
-
-    }
-
-    @Override
-    public void onNetworkResume() {
-
-    }
-
-    @Override
-    public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
-
-    }
 
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 

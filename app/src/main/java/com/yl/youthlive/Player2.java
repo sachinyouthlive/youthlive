@@ -6,20 +6,24 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.nio.ByteBuffer;
-
+/*
 import veg.mediaplayer.sdk.MediaPlayer;
-import veg.mediaplayer.sdk.MediaPlayerConfig;
+import veg.mediaplayer.sdk.MediaPlayerConfig;*/
 
-public class Player2 extends AppCompatActivity implements MediaPlayer.MediaPlayerCallback {
+public class Player2 extends AppCompatActivity// implements MediaPlayer.MediaPlayerCallback
+{
+/*
 
     MediaPlayer player;
     MediaPlayerConfig config;
+*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player2);
 
+/*
         player = (MediaPlayer) findViewById(R.id.player);
 
         config = new MediaPlayerConfig();
@@ -44,23 +48,29 @@ public class Player2 extends AppCompatActivity implements MediaPlayer.MediaPlaye
 
         player.Open(config, this);
 
+*/
 
     }
 
+/*
     @Override
     public int Status(int i) {
         MediaPlayer.PlayerNotifyCodes status = MediaPlayer.PlayerNotifyCodes.forValue(i);
-        /*if (handler == null || status == null)
-            return 0;*/
+        */
+/*if (handler == null || status == null)
+            return 0;*//*
+
 
         Log.e("VEG", "From Native listitem status: " + i);
         switch (MediaPlayer.PlayerNotifyCodes.forValue(i)) {
             default:
                 Message msg = new Message();
-                /*msg.obj = status;
+                */
+/*msg.obj = status;
                 //handler.removeMessages(mOldMsg);
                 //mOldMsg = msg.what;
-                handler.sendMessage(msg);*/
+                handler.sendMessage(msg);*//*
+
         }
         return 0;
     }
@@ -70,4 +80,5 @@ public class Player2 extends AppCompatActivity implements MediaPlayer.MediaPlaye
         Log.e("VEG", "Form Native listitem OnReceiveData: size: " + i + ", pts: " + l);
         return 0;
     }
+*/
 }

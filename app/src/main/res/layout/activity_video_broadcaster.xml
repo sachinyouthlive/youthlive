@@ -58,32 +58,17 @@
     </RelativeLayout>
 
 
-    <SurfaceView
+    <net.ossrs.yasea.SrsCameraView
         android:id="@+id/preview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:keepScreenOn="true"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <!--<com.streamaxia.android.CameraPreview
-        android:id="@+id/preview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:keepScreenOn="true"
-        app:aspectRatio="16:9"
-        app:facing="back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
--->
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/video_frame1"

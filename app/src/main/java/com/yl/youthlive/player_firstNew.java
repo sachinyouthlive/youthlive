@@ -53,11 +53,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.streamaxia.android.CameraPreview;
-import com.streamaxia.android.StreamaxiaPublisher;
-import com.streamaxia.android.handlers.EncoderHandler;
-import com.streamaxia.android.handlers.RecordHandler;
-import com.streamaxia.android.handlers.RtmpHandler;
+
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
@@ -91,9 +87,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class player_firstNew extends Fragment implements EncoderHandler.EncodeListener, RecordHandler.RecordListener, RtmpHandler.RtmpListener {
+public class player_firstNew extends Fragment// implements EncoderHandler.EncodeListener, RecordHandler.RecordListener, RtmpHandler.RtmpListener
+{
 
-    private static final int REQUEST_CODE = 100;
+    /*private static final int REQUEST_CODE = 100;
     private static final String SCREENCAP_NAME = "screencap";
     private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
     //SimpleExoPlayerView thumb;
@@ -165,14 +162,14 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
     private VirtualDisplay mVirtualDisplay;
     private Handler mHandler;
     private OrientationChangeCallback mOrientationChangeCallback;
-
+*/
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.player_first_frag, container, false);
 
 
-        player = (VideoPlayer) getActivity();
+  /*      player = (VideoPlayer) getActivity();
 
         mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
@@ -190,7 +187,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
 
 
-        /*accept1.setOnClickListener(new View.OnClickListener() {
+        *//*accept1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -214,10 +211,10 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
 
             }
-        });*/
+        });*//*
 
 
-        /*report.setOnClickListener(new View.OnClickListener() {
+        *//*report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -294,9 +291,9 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
             }
         });
-*/
+*//*
 
-/*
+*//*
         reject1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -343,7 +340,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
 
 
-*/
+*//*
 
 
         List<Drawable> drawableList = new ArrayList<>();
@@ -469,7 +466,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
 
 
-        /*start.setOnClickListener(new View.OnClickListener() {
+        *//*start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -484,7 +481,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
 
             }
-        });*/
+        });*//*
 
         final bean b = (bean) getContext().getApplicationContext();
 
@@ -599,7 +596,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -607,7 +604,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
 
@@ -641,7 +638,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -649,7 +646,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
 
@@ -679,7 +676,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -687,7 +684,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
 
@@ -734,7 +731,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -742,7 +739,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
 
@@ -785,7 +782,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -793,7 +790,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
 
@@ -877,7 +874,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                                         //cameraLayout1.setVisibility(View.VISIBLE);
 
-/*
+*//*
                             goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
                             goCoderBroadcastConfig.setPortNumber(1935);
                             goCoderBroadcastConfig.setApplicationName("live");
@@ -900,7 +897,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                             goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
                             //}
 
-*/
+*//*
 
 
                                     } catch (Exception e) {
@@ -926,7 +923,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -934,7 +931,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
 
@@ -1115,11 +1112,11 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
             }
         });
 
-
+*/
         return view;
     }
 
-    @Override
+  /*  @Override
     public void onNetworkWeak() {
 
     }
@@ -1193,9 +1190,9 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
 
 
-/*                    accept1.setVisibility(View.GONE);
+*//*                    accept1.setVisibility(View.GONE);
                     reject1.setVisibility(View.GONE);
-                    reject3.setVisibility(View.VISIBLE);*/
+                    reject3.setVisibility(View.VISIBLE);*//*
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1231,7 +1228,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
 
 
-/*    public void showGift(final int pos, String title) {
+*//*    public void showGift(final int pos, String title) {
 
         giftLayout1.setVisibility(View.VISIBLE);
 
@@ -1256,7 +1253,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
         }, 2500);
 
 
-    }*/
+    }*//*
 
     @Override
     public void onRtmpDisconnected() {
@@ -1305,11 +1302,11 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
     public void schedule(final String vid) {
 
-        /*Timer t = new Timer();
+        *//*Timer t = new Timer();
         t.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-*/
+*//*
         final bean b = (bean) getContext().getApplicationContext();
 
         final Retrofit retrofit = new Retrofit.Builder()
@@ -1321,7 +1318,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                /*retrofit2.Call<getConnectionBean> call1 = cr.getConnection(b.userId, vid);
+                *//*retrofit2.Call<getConnectionBean> call1 = cr.getConnection(b.userId, vid);
 
 
                 call1.enqueue(new retrofit2.Callback<getConnectionBean>() {
@@ -1348,7 +1345,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     public void onFailure(retrofit2.Call<getConnectionBean> call, Throwable t) {
 
                     }
-                });*/
+                });*//*
 
 
         SharedPreferences fcmPref = getContext().getSharedPreferences("fcm", Context.MODE_PRIVATE);
@@ -1409,7 +1406,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
 //                    username.setText(response.body().getData().getTimelineName());
 
-                    /*if (response.body().getData().getGift().size() > 0) {
+                    *//*if (response.body().getData().getGift().size() > 0) {
                         try {
 
                             giftName = response.body().getData().getGift().get(0).getGiftId();
@@ -1420,10 +1417,10 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                             e.printStackTrace();
                         }
 
-                    }*/
+                    }*//*
 
 
-                    /*if (count1 > count) {
+                    *//*if (count1 > count) {
                         for (int i = 0; i < count1 - count; i++)
 
                             bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
@@ -1431,7 +1428,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                         likeCount.setText(response.body().getData().getLikesCount());
 
                         count = count1;
-                    }*/
+                    }*//*
 
 
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
@@ -1451,7 +1448,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver,
                             new IntentFilter("request"));
 
-                    /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
+                    *//*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
 
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
@@ -1461,7 +1458,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                             new IntentFilter("gift"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
                             new IntentFilter("status"));
-*/
+*//*
                 } catch (Exception e) {
                     // e.printStackTrace();
                 }
@@ -1475,8 +1472,8 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
             }
         });
 
-           /* }
-        }, 0, 1000);*/
+           *//* }
+        }, 0, 1000);*//*
 
     }
 
@@ -1567,7 +1564,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
     }
 
-    /* public void schedule(String liveId) {
+    *//* public void schedule(String liveId) {
          final bean b = (bean) getActivity().getApplicationContext();
 
          final Retrofit retrofit = new Retrofit.Builder()
@@ -1641,7 +1638,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
  //                    username.setText(response.body().getData().getTimelineName());
 
-                     *//*if (response.body().getData().getGift().size() > 0) {
+                     *//**//*if (response.body().getData().getGift().size() > 0) {
                         try {
 
                             giftName = response.body().getData().getGift().get(0).getGiftId();
@@ -1652,10 +1649,10 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                             e.printStackTrace();
                         }
 
-                    }*//*
+                    }*//**//*
 
 
-     *//*if (count1 > count) {
+     *//**//*if (count1 > count) {
                         for (int i = 0; i < count1 - count; i++)
 
                             bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
@@ -1663,7 +1660,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                         likeCount.setText(response.body().getData().getLikesCount());
 
                         count = count1;
-                    }*//*
+                    }*//**//*
 
 
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
@@ -1683,7 +1680,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver,
                             new IntentFilter("request"));
 
-                    *//*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
+                    *//**//*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
 
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
@@ -1693,7 +1690,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                             new IntentFilter("gift"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
                             new IntentFilter("status"));
-*//*
+*//**//*
                 } catch (Exception e) {
                     // e.printStackTrace();
                 }
@@ -1712,7 +1709,7 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
 
     }
 
-*/
+*//*
     private void startProjection() {
         startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
     }
@@ -1950,9 +1947,9 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
                 @Override
                 public void onClick(View view) {
 
-                    /*Intent intent = new Intent(context, TimelineProfile.class);
+                    *//*Intent intent = new Intent(context, TimelineProfile.class);
                     intent.putExtra("userId", uid);
-                    startActivity(intent);*/
+                    startActivity(intent);*//*
 
                 }
             });
@@ -2407,5 +2404,5 @@ public class player_firstNew extends Fragment implements EncoderHandler.EncodeLi
         }
     }
 
-
+*/
 }

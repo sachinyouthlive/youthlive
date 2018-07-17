@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.github.faucamp.simplertmp.RtmpHandler;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -62,17 +63,15 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.otaliastudios.cameraview.AspectRatio;
-import com.streamaxia.android.CameraPreview;
-import com.streamaxia.android.StreamaxiaPublisher;
-import com.streamaxia.android.handlers.EncoderHandler;
-import com.streamaxia.android.handlers.RecordHandler;
-import com.streamaxia.android.handlers.RtmpHandler;
-import com.streamaxia.android.utils.ScalingMode;
-import com.streamaxia.android.utils.Size;
+
 
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
+
+import net.ossrs.yasea.SrsCameraView;
+import net.ossrs.yasea.SrsEncodeHandler;
+import net.ossrs.yasea.SrsPublisher;
+import net.ossrs.yasea.SrsRecordHandler;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -86,7 +85,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class VideoPlayer extends AppCompatActivity implements EncoderHandler.EncodeListener, RecordHandler.RecordListener {
+public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener {
 
     String liveId;
 
@@ -109,7 +108,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
     TextView stateText;
 
 
-    CameraPreview thumbCamera1, thumbCamera2;
+    SrsCameraView thumbCamera1, thumbCamera2;
 
 
 
@@ -239,10 +238,10 @@ TextView thumbCount;
 //Create the player
         mainPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
                 new DefaultAllocator(true, 1000),
-                100,  // min buffer 0.5s
-                500    , //max buffer 3s
-                500, // playback 1s
-                500,   //playback after rebuffer 1s
+                500,  // min buffer 0.5s
+                1000    , //max buffer 3s
+                1000, // playback 1s
+                1000,   //playback after rebuffer 1s
                 1,
                 true
         ));
@@ -452,10 +451,10 @@ TextView thumbCount;
         Log.d("recordloistener" , e.toString());
     }
 
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
-
-
-
+    }
 
 
     public class FragAdapter extends FragmentStatePagerAdapter {
@@ -483,7 +482,7 @@ TextView thumbCount;
         }
     }
 
-    StreamaxiaPublisher mPublisher;
+    SrsPublisher mPublisher;
 
     public void startThumbCamera1(final String connId) {
 
@@ -497,9 +496,9 @@ TextView thumbCount;
 
         final bean b = (bean) getApplicationContext();
 
-        mPublisher = new StreamaxiaPublisher(thumbCamera1, VideoPlayer.this);
+        mPublisher = new SrsPublisher(thumbCamera1);
 
-        mPublisher.setEncoderHandler(new EncoderHandler(VideoPlayer.this));
+        mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
         mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
             @Override
             public void onRtmpConnecting(String s) {
@@ -598,19 +597,16 @@ TextView thumbCount;
 
             }
 
-            @Override
-            public void onRtmpAuthenticationg(String s) {
 
-            }
         }));
-        mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
-        thumbCamera1.startCamera();
-        mPublisher.setVideoOutputResolution(480, 360, getResources().getConfiguration().orientation);
+        mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
+        mPublisher.setOutputResolution(480, 360);
+        mPublisher.setPreviewResolution(480,360);
 
         //mPublisher.setVideoBitRate(128000);
 
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
-
+        thumbCamera1.startCamera();
 
 
         new CountDownTimer(8000 , 1000)
@@ -654,9 +650,9 @@ TextView thumbCount;
 
         final bean b = (bean) getApplicationContext();
 
-        mPublisher = new StreamaxiaPublisher(thumbCamera1, VideoPlayer.this);
+        mPublisher = new SrsPublisher(thumbCamera1);
 
-        mPublisher.setEncoderHandler(new EncoderHandler(VideoPlayer.this));
+        mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
         mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
             @Override
             public void onRtmpConnecting(String s) {
@@ -755,17 +751,17 @@ TextView thumbCount;
 
             }
 
-            @Override
-            public void onRtmpAuthenticationg(String s) {
 
-            }
         }));
-        mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
-        thumbCamera1.startCamera();
-        mPublisher.setVideoOutputResolution(480, 360, getResources().getConfiguration().orientation);
+        mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
+
+        mPublisher.setPreviewResolution(360, 480);
+        mPublisher.setOutputResolution(480, 360);
 
         //mPublisher.setVideoBitRate(128000);
 
+        mPublisher.setVideoSmoothMode();
+        thumbCamera1.startCamera();
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 
 
