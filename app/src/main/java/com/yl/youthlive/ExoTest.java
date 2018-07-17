@@ -21,29 +21,25 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.streamaxia.android.CameraPreview;
-import com.streamaxia.android.StreamaxiaPublisher;
-import com.streamaxia.android.handlers.EncoderHandler;
-import com.streamaxia.android.handlers.RecordHandler;
-import com.streamaxia.android.handlers.RtmpHandler;
-import com.streamaxia.android.utils.Size;
 
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.List;
 
-public class ExoTest extends AppCompatActivity implements RecordHandler.RecordListener, RtmpHandler.RtmpListener, EncoderHandler.EncodeListener {
-
-    String uri;
-    RelativeLayout container;
-    CameraPreview camera;
-    boolean isHidden = true;
+public class ExoTest extends AppCompatActivity //implements RecordHandler.RecordListener, RtmpHandler.RtmpListener, EncoderHandler.EncodeListener
+{
+//
+//    String uri;
+//    RelativeLayout container;
+//    CameraPreview camera;
+//    boolean isHidden = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exo_test);
 
+/*
         uri = getIntent().getStringExtra("uri");
 
         container = findViewById(R.id.container);
@@ -125,9 +121,11 @@ public class ExoTest extends AppCompatActivity implements RecordHandler.RecordLi
 
             }
         });
+*/
 
     }
 
+/*
     @Override
     public void onRecordPause() {
 
@@ -242,4 +240,6 @@ public class ExoTest extends AppCompatActivity implements RecordHandler.RecordLi
     public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
 
     }
+*/
+
 }

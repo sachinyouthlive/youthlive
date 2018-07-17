@@ -261,11 +261,6 @@
         app:layout_constraintVertical_bias="1.0">
 
 
-        <com.streamaxia.android.CameraPreview
-            android:id="@+id/thumb_camera1"
-            android:layout_width="120dp"
-            android:visibility="gone"
-            android:layout_height="160dp" />
 
 
         <TextView

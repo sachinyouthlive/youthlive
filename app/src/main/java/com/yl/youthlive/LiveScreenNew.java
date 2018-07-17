@@ -26,12 +26,12 @@ import android.widget.Chronometer;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.streamaxia.android.CameraPreview;
+/*import com.streamaxia.android.CameraPreview;
 import com.streamaxia.android.StreamaxiaPublisher;
 import com.streamaxia.android.handlers.EncoderHandler;
 import com.streamaxia.android.handlers.RecordHandler;
 import com.streamaxia.android.handlers.RtmpHandler;
-import com.streamaxia.android.utils.Size;
+import com.streamaxia.android.utils.Size;*/
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.checkinPostPOJO.CheckinPostPOJO;
 
@@ -51,12 +51,13 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static com.yl.youthlive.bean.getContext;
 
-public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.RtmpListener, RecordHandler.RecordListener,
-        EncoderHandler.EncodeListener, MyInterface {
+public class LiveScreenNew extends AppCompatActivity// implements RtmpHandler.RtmpListener, RecordHandler.RecordListener,
+        //EncoderHandler.EncodeListener, MyInterface
+{
 
 
     // Set default values for the streamer
-    public final static String streamaxiaStreamName = "demo";
+    /*public final static String streamaxiaStreamName = "demo";
     public final static int bitrate = 500;
     public final static int width = 720;
     public final static int height = 1280;
@@ -91,14 +92,14 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
 
 
 
-    /*private void connectToRoom(String roomName, String accessToken) {
+    *//*private void connectToRoom(String roomName, String accessToken) {
         //configureAudio(true);
         ConnectOptions.Builder connectOptionsBuilder = new ConnectOptions.Builder(accessToken)
                 .roomName(roomName);
 
-        *//*
+        *//**//*
      * Add local audio track to connect options to share with participants.
-     *//*
+     *//**//*
         if (localAudioTrack != null) {
             connectOptionsBuilder
                     .audioTracks(Collections.singletonList(localAudioTrack));
@@ -111,21 +112,21 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
             localVideoTrack = LocalVideoTrack.create(this, true, cameraCapturerCompat.getVideoCapturer());
 //            localVideoTrack.addRenderer(localVideoView);
 
-            *//*
+            *//**//*
      * If connected to a Room then share the local video track.
-     *//*
+     *//**//*
 
         }
 
-        *//*
+        *//**//*
      * Add local video track to connect options to share with participants.
-     *//*
+     *//**//*
         if (localVideoTrack != null) {
             connectOptionsBuilder.videoTracks(Collections.singletonList(localVideoTrack));
         }
         room = Video.connect(this, connectOptionsBuilder.build(), roomListener());
         //setDisconnectAction();
-    }*/
+    }*//*
 
     //
 // Utility method to check the status of a permissions request for an array of permission identifiers
@@ -137,12 +138,13 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
 
         return true;
     }
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_screennew);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+/*
 
         ButterKnife.bind(this);
         mPublisher = new StreamaxiaPublisher(mCameraView, this);
@@ -166,6 +168,7 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
 
         pager.setAdapter(adap);
 ////
+*/
 /*
         mPublisher = new StreamaxiaPublisher(mCameraView, this);
 
@@ -177,7 +180,8 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
         setStreamerDefaultValues();
 
         mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + streamaxiaStreamName);
-*/
+*//*
+
 
         ////
 
@@ -219,11 +223,12 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
 
             }
         });
+*/
 
 
     }
 
-    private void PersonBlock() {
+/*    private void PersonBlock() {
         final Dialog dialog = new Dialog(LiveScreenNew.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.blockpersom_dialog);
@@ -297,19 +302,19 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
 
     @Override
     protected void onDestroy() {
-        /*
+        *//*
          * Always disconnect from the room before leaving the Activity to
          * ensure any memory allocated to the Room resource is freed.
-         */
-        /*if (room != null && room.getState() != RoomState.DISCONNECTED) {
+         *//*
+        *//*if (room != null && room.getState() != RoomState.DISCONNECTED) {
             room.disconnect();
             disconnectedFromOnDestroy = true;
-        }*/
+        }*//*
 
-        /*
+        *//*
          * Release the local audio and video tracks ensuring any memory allocated to audio
          * or video is freed.
-         */
+         *//*
 
 
         super.onDestroy();
@@ -555,5 +560,5 @@ public class LiveScreenNew extends AppCompatActivity implements RtmpHandler.Rtmp
         public int getCount() {
             return 2;
         }
-    }
+    }*/
 }

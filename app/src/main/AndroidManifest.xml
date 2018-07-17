@@ -18,6 +18,9 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="com.android.vending.BILLING" />
+    
+
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
 
     <uses-feature
         android:name="android.hardware.camera"

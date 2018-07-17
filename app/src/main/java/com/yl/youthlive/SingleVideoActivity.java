@@ -59,9 +59,9 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import tcking.github.com.giraffeplayer2.GiraffePlayer;
 import tcking.github.com.giraffeplayer2.PlayerListener;
 import tv.danmaku.ijk.media.player.IjkTimedText;
-import veg.mediaplayer.sdk.MediaPlayer;
 
-public class SingleVideoActivity extends AppCompatActivity implements MediaPlayer.MediaPlayerCallback, ConnectivityReceiver.ConnectivityReceiverListener {
+
+public class SingleVideoActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     Toolbar toolbar;
     CircleImageView profile;
@@ -880,7 +880,7 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
         }, 0, 1000);
 
     }
-
+/*
     @Override
     public int Status(int i) {
         Log.d("status", String.valueOf(i));
@@ -891,7 +891,7 @@ public class SingleVideoActivity extends AppCompatActivity implements MediaPlaye
     public int OnReceiveData(ByteBuffer byteBuffer, int i, long l) {
 
         return 0;
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
