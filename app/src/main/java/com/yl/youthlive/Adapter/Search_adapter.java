@@ -63,7 +63,7 @@ public class Search_adapter extends RecyclerView.Adapter<Search_adapter.searchad
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final searchadapter holder, int position) {
-
+        holder.setIsRecyclable(false);
         final Datum item = list.get(position);
 
         if (!item.getUserImage().isEmpty()) {

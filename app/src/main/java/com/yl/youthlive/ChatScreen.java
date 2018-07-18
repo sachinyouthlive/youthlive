@@ -79,7 +79,6 @@ public class ChatScreen extends AppCompatActivity {
         adapter = new ChatAdapter(this, list);
 
         grid.setAdapter(adapter);
-        grid.smoothScrollToPosition(list.size() - 1);
         grid.setLayoutManager(manager);
 
 
@@ -160,6 +159,7 @@ public class ChatScreen extends AppCompatActivity {
                 adapter.setGridData(response.body().getData());
                 progress.setVisibility(View.GONE);
 
+                Toast.makeText(ChatScreen.this, "loaddata", Toast.LENGTH_SHORT).show();
                 schedule();
 
             }
@@ -204,6 +204,7 @@ public class ChatScreen extends AppCompatActivity {
                         try {
                             if (response.body().getData() != null) {
                                 adapter.setGridData(response.body().getData());
+                                grid.scrollBy(0, 200);
                             }
 
                         } catch (Exception e) {

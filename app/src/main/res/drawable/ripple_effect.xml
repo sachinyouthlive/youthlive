@@ -7,7 +7,7 @@
     <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
             <corners android:radius="50dp"></corners>
-            <solid android:color="@color/colorPrimary" />
+            <solid android:color="#df8a8a" />
             <padding
                 android:bottom="@dimen/padding_small_5"
                 android:left="@dimen/padding_medium_10dp"
@@ -20,7 +20,7 @@
         android:id="@android:id/background">
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/padding_extra_large_20"></corners>
-            <solid android:color="@color/colorAccent" />
+            <solid android:color="@color/colorPrimary" />
             <padding
                 android:bottom="@dimen/padding_small_5"
                 android:left="@dimen/padding_medium_10dp"

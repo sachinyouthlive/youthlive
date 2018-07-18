@@ -131,7 +131,7 @@ public class Rating2 extends Fragment {
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
-
+            holder.setIsRecyclable(false);
             final Datum item = list.get(position);
             holder.name.setText(item.getUserName());
             holder.beans.setText("Beans - " + item.getBeans());

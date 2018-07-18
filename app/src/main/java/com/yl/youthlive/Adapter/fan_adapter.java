@@ -66,7 +66,7 @@ public class fan_adapter extends RecyclerView.Adapter<fan_adapter.fanadapter> {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final fanadapter holder, int position) {
-
+        holder.setIsRecyclable(false);
         final Datum item = list.get(position);
 
         if (!item.getUserImage().isEmpty()) {

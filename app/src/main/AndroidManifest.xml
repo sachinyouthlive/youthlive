@@ -18,10 +18,10 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="com.android.vending.BILLING" />
-    
 
-    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
-
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -209,8 +209,10 @@
         <activity
             android:name=".login.OTP_varify"
             android:screenOrientation="portrait" />
-        <activity android:name=".RTMPEncoder"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".RTMPEncoder"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activitys.PhoneUpdateActivity"></activity>
     </application>
 
 </manifest>

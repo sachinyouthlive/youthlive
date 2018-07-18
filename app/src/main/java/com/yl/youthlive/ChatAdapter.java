@@ -48,7 +48,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        holder.setIsRecyclable(false);
         Datum item = list.get(position);
 
         holder.message.setText(item.getLastMsg());

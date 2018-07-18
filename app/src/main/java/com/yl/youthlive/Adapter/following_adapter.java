@@ -65,7 +65,7 @@ public class following_adapter extends RecyclerView.Adapter<following_adapter.fo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final followingadapter holder, int position) {
-
+        holder.setIsRecyclable(false);
         final Datum item = list.get(position);
 
         if (!item.getUserImage().isEmpty()) {

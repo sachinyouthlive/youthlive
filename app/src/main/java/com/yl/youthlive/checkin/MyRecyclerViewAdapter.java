@@ -40,7 +40,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // binds the data to the textview in each cell
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        holder.setIsRecyclable(false);
         Calendar c1 = Calendar.getInstance();
         int iDay = c1.get(Calendar.DATE);
         int iMonth = c1.get(Calendar.MONTH);

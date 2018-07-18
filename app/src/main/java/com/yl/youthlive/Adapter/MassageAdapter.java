@@ -45,7 +45,7 @@ public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewH
 
     @Override
     public void onBindViewHolder(MsgViewHolder msgViewHolder, int i) {
-
+        msgViewHolder.setIsRecyclable(false);
 
         final Datum item = list.get(i);
 
