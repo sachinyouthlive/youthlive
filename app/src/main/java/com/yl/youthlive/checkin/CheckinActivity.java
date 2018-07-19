@@ -4,15 +4,28 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.TotalbroadcastPOJO;
+import com.yl.youthlive.bean;
 
 import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import static com.yl.youthlive.bean.getContext;
 
 public class CheckinActivity extends AppCompatActivity {
 
@@ -20,6 +33,7 @@ public class CheckinActivity extends AppCompatActivity {
     public Spinner launchMonthSpinner;
     MyRecyclerViewAdapter adapter;
     Toolbar toolbar;
+    TextView total_broadcast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +43,7 @@ public class CheckinActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(R.drawable.arrow);
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,6 +54,7 @@ public class CheckinActivity extends AppCompatActivity {
 
         toolbar.setTitleTextColor(Color.WHITE);
 
+        total_broadcast = findViewById(R.id.total_broadcast);
         //using calender to find number of days in month and current date
 
         Calendar c1 = Calendar.getInstance();
@@ -62,6 +78,7 @@ public class CheckinActivity extends AppCompatActivity {
 
             }
         });
+        totalbroadcast(String.valueOf(iMonth + 1));
     }
 
 
@@ -103,4 +120,50 @@ public class CheckinActivity extends AppCompatActivity {
         launchMonthSpinner.setAdapter(adapter);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void totalbroadcast(String month) {
+
+        final bean b = (bean) getContext().getApplicationContext();
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+        Call<TotalbroadcastPOJO> call = cr.totalbroadcast(b.userId, month);
+
+        Log.d("userId", b.userId);
+
+        call.enqueue(new Callback<TotalbroadcastPOJO>() {
+            @Override
+            public void onResponse(Call<TotalbroadcastPOJO> call, Response<TotalbroadcastPOJO> response) {
+
+                try {
+                    if (!response.body().getTotalMonthlyBroadcast().toString().isEmpty()) {
+                        long totalSecs = response.body().getTotalMonthlyBroadcast();
+                        long hours = totalSecs / 3600;
+                        long minutes = (totalSecs % 3600) / 60;
+                        long seconds = totalSecs % 60;
+
+                        String timeString = String.format("%02d hr %02d min %02d sec", hours, minutes, seconds);
+                        total_broadcast.setText(timeString);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<TotalbroadcastPOJO> call, Throwable t) {
+
+            }
+
+        });
+    }
 }

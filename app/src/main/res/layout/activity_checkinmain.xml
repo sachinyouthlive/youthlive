@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -39,19 +40,77 @@
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginBottom="@dimen/dimen_5dp"
-        android:paddingEnd="@dimen/dimen_5dp"
-        android:prompt="@string/spinner_title" />
-
-    <FrameLayout
-        android:id="@+id/container"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="@dimen/dimen_5dp"
+                android:paddingEnd="@dimen/dimen_5dp"
+                android:prompt="@string/spinner_title" />
+
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_30dp"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_8dp"
+                android:background="#d3d3d3"
+                android:drawableStart="@drawable/clock_black"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dimen_15dp"
+                android:paddingStart="16dp"
+                android:text="This month till now"
+                android:textSize="@dimen/dimen_16sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_16dp"
+                android:background="@drawable/ripple_effect_grey"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/total_broadcast_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dimen_10dp"
+                    android:drawableEnd="@drawable/videoblack"
+                    android:gravity="center_vertical"
+                    android:text="GoLive Time"
+                    android:textSize="@dimen/dimen_14sp" />
+
+                <TextView
+                    android:id="@+id/total_broadcast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/total_broadcast_header"
+                    android:layout_toRightOf="@+id/total_broadcast_header"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dimen_2dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/dimen_14sp"
+                    tools:text="2 hr 45 min 4 sec " />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

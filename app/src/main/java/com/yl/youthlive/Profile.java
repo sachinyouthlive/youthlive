@@ -38,7 +38,6 @@ import com.yl.youthlive.Activitys.MessaageActivity;
 import com.yl.youthlive.Activitys.MyVlog;
 import com.yl.youthlive.Activitys.PersonalInfo;
 import com.yl.youthlive.Activitys.RattingActivity;
-import com.yl.youthlive.DBHandler.SessionManager;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.checkin.CheckinActivity;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
@@ -49,7 +48,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
@@ -78,7 +76,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
     String userID;
     Bitmap bitmap;
     TextView wallet;
-    SessionManager session;
+    // SessionManager session;
     String shareProfile;
     String shareyouth, shareName;
     CircleImageView profileimage;
@@ -258,8 +256,8 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
         // profile_imagee=view.findViewById(R.id.profile_image);
         vlogActivity = view.findViewById(R.id.vlogActivity);
-        session = new SessionManager(getActivity());
-        user = session.getUserDetails();
+        // session = new SessionManager(getActivity());
+        //  user = session.getUserDetails();
         //userID = user.get(SessionManager.USER_ID);
         bean b = (bean) getApplicationContext();
         userID = b.userId;
@@ -450,8 +448,10 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
         // register connection status listener
         bean.getInstance().setConnectivityListener(this);
-
-        loadData();
+        bean b = (bean) getContext().getApplicationContext();
+        if (!b.userId.isEmpty()) {
+            loadData(b.userId);
+        }
 
     }
 
@@ -529,7 +529,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
     }
 
-    public void loadData() {
+    public void loadData(String userID) {
 
         progress.setVisibility(View.VISIBLE);
 
@@ -544,14 +544,14 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<loginResponseBean> call = cr.getProfile(b.userId);
+        Call<loginResponseBean> call = cr.getProfile(userID);
 
         call.enqueue(new retrofit2.Callback<loginResponseBean>() {
             @Override
             public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
 
 
-                if (Objects.equals(response.body().getStatus(), "1")) {
+                //   if (Objects.equals(response.body().getStatus(), "1")) {
 
                     try {
                         CoverPager pageAdapter = new CoverPager(getChildFragmentManager(), response.body().getData().getCoverImage());
@@ -571,9 +571,10 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                     }
 
 
-                } else {
-                    Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                //  } else {
+                //       Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                //       Toast.makeText(getContext(),"error here", Toast.LENGTH_SHORT).show();
+                //   }
 
 
                 progress.setVisibility(View.GONE);
@@ -628,7 +629,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                     b.userImage = response.body().getData().getUserImage();
 
                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    loadData();
+                    loadData(b.userId);
 
 
                     progress.setVisibility(View.GONE);
@@ -677,7 +678,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                     b.userImage = response.body().getData().getUserImage();
 
                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    loadData();
+                    loadData(b.userId);
 
 
                     progress.setVisibility(View.GONE);

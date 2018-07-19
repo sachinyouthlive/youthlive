@@ -4,6 +4,7 @@ package com.yl.youthlive.INTERFACE;
 import com.yl.youthlive.ExchangeDiamondPOJO.ExchangeBean;
 import com.yl.youthlive.GetRankingPOJO.RankingBean;
 import com.yl.youthlive.PhoneupdateminiPOJO;
+import com.yl.youthlive.TotalbroadcastPOJO;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 import com.yl.youthlive.addCareerPOJO.addCareerBean;
 import com.yl.youthlive.addEducationPOJO.addEducationBean;
@@ -100,6 +101,14 @@ public interface AllAPIs {
             @Part("day") Integer day,
             @Part("month") Integer month,
             @Part("broadcast_duration") Long broadcast_duration
+    );
+
+    // get checkin data
+    @Multipart
+    @POST("api/checkin/monthlycheckin.php")
+    Call<TotalbroadcastPOJO> totalbroadcast(
+            @Part("userId") String userId,
+            @Part("month") String month
     );
 
     // get diamond purchase history
