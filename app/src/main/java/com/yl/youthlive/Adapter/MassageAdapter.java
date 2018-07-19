@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.ChatScreen;
@@ -87,7 +86,7 @@ public class MassageAdapter extends RecyclerView.Adapter<MassageAdapter.MsgViewH
                 intent.putExtra("chat", item.getChatId());
                 intent.putExtra("name", item.getFriendName());
                 intent.putExtra("image", item.getFriendImage());
-                Toast.makeText(context, "" + item.getFriendId() + " " + item.getChatId() + " " + item.getFriendName(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(context, "" + item.getFriendId() + " " + item.getChatId() + " " + item.getFriendName(), Toast.LENGTH_SHORT).show();
                 context.startActivity(intent);
 
             }

@@ -62,6 +62,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class Profile extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
@@ -259,7 +260,9 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         vlogActivity = view.findViewById(R.id.vlogActivity);
         session = new SessionManager(getActivity());
         user = session.getUserDetails();
-        userID = user.get(SessionManager.USER_ID);
+        //userID = user.get(SessionManager.USER_ID);
+        bean b = (bean) getApplicationContext();
+        userID = b.userId;
 
         profileimage.setOnClickListener(new View.OnClickListener() {
             @Override
