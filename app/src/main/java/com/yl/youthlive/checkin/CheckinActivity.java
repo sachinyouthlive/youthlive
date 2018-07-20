@@ -33,7 +33,7 @@ public class CheckinActivity extends AppCompatActivity {
     public Spinner launchMonthSpinner;
     MyRecyclerViewAdapter adapter;
     Toolbar toolbar;
-    TextView total_broadcast;
+    TextView total_broadcast, monthheader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class CheckinActivity extends AppCompatActivity {
 
 
         toolbar.setTitleTextColor(Color.WHITE);
-
+        monthheader = findViewById(R.id.header);
         total_broadcast = findViewById(R.id.total_broadcast);
         //using calender to find number of days in month and current date
 
@@ -72,6 +72,8 @@ public class CheckinActivity extends AppCompatActivity {
                 ((TextView) parent.getChildAt(0)).setTextSize(14);
 
                 sendData();
+                monthsettext(position, iMonth);
+                totalbroadcast(String.valueOf(position + 1));
             } // to close the onItemSelected
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -120,10 +122,6 @@ public class CheckinActivity extends AppCompatActivity {
         launchMonthSpinner.setAdapter(adapter);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     public void totalbroadcast(String month) {
 
@@ -165,5 +163,52 @@ public class CheckinActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    public void monthsettext(int month, int currentmonth) {
+        if (month == currentmonth) {
+            monthheader.setText("This Month till now");
+        } else {
+
+            switch (month) {
+                case 0:
+                    monthheader.setText("Your January Month Checkin");
+                    break;
+                case 1:
+                    monthheader.setText("Your February Month Checkin");
+                    break;
+                case 2:
+                    monthheader.setText("Your March Month Checkin");
+                    break;
+                case 3:
+                    monthheader.setText("Your April Month Checkin");
+                    break;
+                case 4:
+                    monthheader.setText("Your May Month Checkin");
+                    break;
+                case 5:
+                    monthheader.setText("Your June Month Checkin");
+                    break;
+                case 6:
+                    monthheader.setText("Your July Month Checkin");
+                    break;
+                case 7:
+                    monthheader.setText("Your August Month Checkin");
+                    break;
+                case 8:
+
+                    monthheader.setText("Your September Month Checkin");
+                    break;
+                case 9:
+                    monthheader.setText("Your October Month Checkin");
+                    break;
+                case 10:
+                    monthheader.setText("Your November Month Checkin");
+                    break;
+                case 11:
+                    monthheader.setText("Your December Month Checkin");
+                    break;
+            }
+        }
     }
 }

@@ -55,14 +55,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginBottom="@dimen/dimen_5dp"
-                android:paddingEnd="@dimen/dimen_5dp"
+                android:paddingEnd="@dimen/dimen_4dp"
                 android:prompt="@string/spinner_title" />
 
             <FrameLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_30dp"
+                android:layout_marginBottom="@dimen/dimen_18dp"
                 android:orientation="vertical" />
 
             <TextView
@@ -72,17 +72,19 @@
                 android:layout_marginBottom="@dimen/dimen_8dp"
                 android:background="#d3d3d3"
                 android:drawableStart="@drawable/clock_black"
+                android:drawablePadding="@dimen/dimen_4dp"
                 android:gravity="center_vertical"
-                android:padding="@dimen/dimen_15dp"
+                android:padding="@dimen/dimen_10dp"
+                android:textColor="@android:color/white"
                 android:paddingStart="16dp"
-                android:text="This month till now"
+                tools:text="Your August Month Checkin"
                 android:textSize="@dimen/dimen_16sp"
                 android:textStyle="bold" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dimen_16dp"
+                android:layout_margin="@dimen/dimen_10dp"
                 android:background="@drawable/ripple_effect_grey"
                 android:gravity="center">
 
