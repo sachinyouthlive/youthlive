@@ -21,6 +21,9 @@ public class Data {
     @SerializedName("coin")
     @Expose
     private String coin;
+    @SerializedName("conversion_rate")
+    @Expose
+    private String conversion_rate;
 
     public String getId() {
         return id;
@@ -52,6 +55,14 @@ public class Data {
 
     public void setCoin(String coin) {
         this.coin = coin;
+    }
+
+    public String getConversion_rate() {
+        return conversion_rate;
+    }
+
+    public void setConversion_rate(String conversion_rate) {
+        this.conversion_rate = conversion_rate;
     }
 
 }

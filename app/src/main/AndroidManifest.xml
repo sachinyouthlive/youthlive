@@ -70,7 +70,9 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <activity android:name=".Login" />
+        <activity
+            android:name=".Login"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait">
@@ -158,16 +160,35 @@
         <activity
             android:name=".HomeActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_home" />
-        <activity android:name=".ChatScreen" />
-        <activity android:name=".WalletActivity" />
-        <activity android:name=".TimelineProfile" />
-        <activity android:name=".FeedBack" />
-        <activity android:name=".Content" />
-        <activity android:name=".Terms" />
-        <activity android:name=".IrisLive" />
-        <activity android:name=".IrisPlayer" />
-        <activity android:name=".Player2" />
+        <activity
+            android:name=".ChatScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TimelineProfile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FeedBack"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Content"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Terms"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".IrisLive"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".IrisPlayer"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Player2"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".internetConnectivity.ConnectivityReceiver"
@@ -177,7 +198,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".Activitys.MycheckinActivity" />
+        <activity
+            android:name=".Activitys.MycheckinActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".VideoBroadcaster"
             android:screenOrientation="portrait"
@@ -187,19 +210,39 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".checkin.CheckinActivity"
-            android:parentActivityName=".HomeActivity" />
+            android:parentActivityName=".HomeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".checkin.CheckInDetailActivity"
-            android:parentActivityName=".checkin.CheckinActivity" />
-        <activity android:name=".WalletNew" />
-        <activity android:name=".BuyDiamonds" />
-        <activity android:name=".LiveEndedPlayer" />
-        <activity android:name=".LiveEndedBroadcaster" />
-        <activity android:name=".Activitys.FanActivity" />
-        <activity android:name=".Activitys.FriendActivity" />
-        <activity android:name=".Activitys.SearchActivity" />
-        <activity android:name=".Activitys.Diamond_purchase_history_Activity" />
-        <activity android:name=".ExoTest" />
+            android:parentActivityName=".checkin.CheckinActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WalletNew"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BuyDiamonds"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LiveEndedPlayer"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LiveEndedBroadcaster"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activitys.FanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activitys.FriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activitys.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activitys.Diamond_purchase_history_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ExoTest"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".login.ForgotPasswordActivity"
             android:screenOrientation="portrait" />
@@ -212,7 +255,9 @@
         <activity
             android:name=".RTMPEncoder"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activitys.PhoneUpdateActivity"></activity>
+        <activity
+            android:name=".Activitys.PhoneUpdateActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
