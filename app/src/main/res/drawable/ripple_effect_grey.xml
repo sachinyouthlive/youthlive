@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:color="@color/colorPrimary"
+    android:color="#ffff7f"
     tools:targetApi="lollipop">
 
     <item android:id="@android:id/mask">
@@ -20,7 +20,7 @@
         android:id="@android:id/background">
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/padding_extra_large_20"></corners>
-            <solid android:color="@color/colorPrimary" />
+            <solid android:color="#ffff7f" />
             <padding
                 android:bottom="@dimen/padding_small_5"
                 android:left="@dimen/padding_medium_10dp"

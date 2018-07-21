@@ -36,8 +36,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.yl.youthlive.Activitys.PersonalInfo;
+import com.yl.youthlive.Activitys.PhoneUpdateActivity;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.updatePOJO.updateBean;
+import com.yl.youthlive.updatephonePOJO.UpdatephonePOJO;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -268,11 +270,14 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                     @Override
                     public void onClick(View view) {
 
-                        String pho = phoneNumber.getText().toString();
+                        final String pho = phoneNumber.getText().toString();
                         userId = getArguments().getString("userId");
-
                         if (!DataValidation.isValidPhoneNumber(pho)) {
 
+//                            Intent intent=new Intent(getContext(), PhoneUpdateActivity.class);
+//                            intent.putExtra("phoneno",pho);
+//                            startActivity(intent);
+//                            dialog.dismiss();
 
                             progress.setVisibility(View.VISIBLE);
 
@@ -286,11 +291,11 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                            Call<PhoneupdateminiPOJO> call = cr.updatePhonemini(b.userId, pho);
+                            Call<UpdatephonePOJO> call = cr.updatePhoneno(pho);
 
-                            call.enqueue(new Callback<PhoneupdateminiPOJO>() {
+                            call.enqueue(new Callback<UpdatephonePOJO>() {
                                 @Override
-                                public void onResponse(Call<PhoneupdateminiPOJO> call, Response<PhoneupdateminiPOJO> response) {
+                                public void onResponse(Call<UpdatephonePOJO> call, Response<UpdatephonePOJO> response) {
 
                                     //      if (Objects.equals(response.body().getMessage(), "1")) {
                                     //         Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -303,26 +308,33 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
                                     //   LoginManager.getInstance().logOut();
 
-                                    edit.remove("type");
-                                    edit.remove("user");
-                                    edit.remove("pass");
-                                    edit.apply();
-
-                                    Toast.makeText(getContext(), "Mobile Number Updated, Login with Updated Mobile Number", Toast.LENGTH_LONG).show();
-
-                                    Intent i = new Intent(getContext(), Login.class);
-                                    startActivity(i);
-                                    getActivity().finishAffinity();
-                                    dialog.dismiss();
+//                                    edit.remove("type");
+//                                    edit.remove("user");
+//                                    edit.remove("pass");
+//                                    edit.apply();
+//
+//                                    Toast.makeText(getContext(), "Mobile Number Updated, Login with Updated Mobile Number", Toast.LENGTH_LONG).show();
+//
+//                                    Intent i = new Intent(getContext(), Login.class);
+//                                    startActivity(i);
+//                                    getActivity().finishAffinity();
+//                                    dialog.dismiss();
                                     //     } else {
                                     //       Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                     //     }
-
+                                    String otp = response.body().getInformation().getOtp().toString();
+                                    Intent intent = new Intent(getContext(), PhoneUpdateActivity.class);
+                                    intent.putExtra("otp", otp);
+                                    intent.putExtra("phoneno", pho);
+                                    // Toast.makeText(getContext(), ""+otp, Toast.LENGTH_SHORT).show();
+                                    startActivity(intent);
+                                    getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                                     progress.setVisibility(View.GONE);
+                                    dialog.dismiss();
                                 }
 
                                 @Override
-                                public void onFailure(Call<PhoneupdateminiPOJO> call, Throwable t) {
+                                public void onFailure(Call<UpdatephonePOJO> call, Throwable t) {
 
                                     Toast.makeText(getContext(), "failed to update", Toast.LENGTH_SHORT).show();
                                     progress.setVisibility(View.GONE);

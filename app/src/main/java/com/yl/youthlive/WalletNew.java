@@ -41,7 +41,7 @@ public class WalletNew extends AppCompatActivity {
 
 
         tabs.addTab(tabs.newTab().setText("DIAMONDS"));
-        tabs.addTab(tabs.newTab().setText("BEANS"));
+        tabs.addTab(tabs.newTab().setText("COINS"));
 
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
 
@@ -50,7 +50,7 @@ public class WalletNew extends AppCompatActivity {
         tabs.setupWithViewPager(pager);
 
         tabs.getTabAt(0).setText("DIAMONDS");
-        tabs.getTabAt(1).setText("BEANS");
+        tabs.getTabAt(1).setText("COINS");
 
 
     }

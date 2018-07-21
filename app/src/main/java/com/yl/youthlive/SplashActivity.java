@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -43,7 +45,7 @@ public class SplashActivity extends AppCompatActivity {
         progress = findViewById(R.id.progress);
 
         bg = findViewById(R.id.splashbg);
-
+        bindLogo();
 
         //  Glide.with(this).load(R.drawable.splashyl).into(bg);
 
@@ -250,6 +252,51 @@ public class SplashActivity extends AppCompatActivity {
 
 
     }
+
+    private void bindLogo() {
+        // Start animating the image
+        final ImageView splash = findViewById(R.id.splashbg);
+        final AlphaAnimation animation1 = new AlphaAnimation(0.2f, 1.0f);
+        animation1.setDuration(700);
+        final AlphaAnimation animation2 = new AlphaAnimation(1.0f, 0.2f);
+        animation2.setDuration(700);
+        //animation1 AnimationListener
+        animation1.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                // start animation2 when animation1 ends (continue)
+                splash.startAnimation(animation2);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationStart(Animation arg0) {
+            }
+        });
+
+        //animation2 AnimationListener
+        animation2.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                // start animation1 when animation2 ends (repeat)
+                splash.startAnimation(animation1);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationStart(Animation arg0) {
+            }
+        });
+
+        splash.startAnimation(animation1);
+    }
+
 
 
 }

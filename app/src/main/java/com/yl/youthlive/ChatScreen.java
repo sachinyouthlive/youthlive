@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.sendMessagePOJO.sendMessageBean;
@@ -79,7 +78,6 @@ public class ChatScreen extends AppCompatActivity {
         adapter = new ChatAdapter(this, list);
 
         grid.setAdapter(adapter);
-        grid.smoothScrollToPosition(list.size() - 1);
         grid.setLayoutManager(manager);
 
 
@@ -150,7 +148,7 @@ public class ChatScreen extends AppCompatActivity {
                 .build();
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Toast.makeText(b, "" + chat + " frnd id" + id + " usrid" + b.userId, Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(b, "" + chat + " frnd id" + id + " usrid" + b.userId, Toast.LENGTH_SHORT).show();
         Call<singleMessageBean> call = cr.singleChatList(b.userId, id, chat);
 
         call.enqueue(new Callback<singleMessageBean>() {
@@ -160,6 +158,7 @@ public class ChatScreen extends AppCompatActivity {
                 adapter.setGridData(response.body().getData());
                 progress.setVisibility(View.GONE);
 
+                //     Toast.makeText(ChatScreen.this, "loaddata", Toast.LENGTH_SHORT).show();
                 schedule();
 
             }
@@ -204,6 +203,7 @@ public class ChatScreen extends AppCompatActivity {
                         try {
                             if (response.body().getData() != null) {
                                 adapter.setGridData(response.body().getData());
+                                grid.scrollBy(0, 200);
                             }
 
                         } catch (Exception e) {

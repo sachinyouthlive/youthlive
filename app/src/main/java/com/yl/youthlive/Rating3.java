@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +29,7 @@ import com.yl.youthlive.followPOJO.followBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,7 +48,7 @@ public class Rating3 extends Fragment {
 
 
     RecyclerView grid;
-    GridLayoutManager manager;
+    LinearLayoutManager manager;
     RankingAdapter2 adapter1;
     List<Datum> list;
     ProgressBar bar;
@@ -61,7 +62,7 @@ public class Rating3 extends Fragment {
 
 
         grid = view.findViewById(R.id.grid);
-        manager = new GridLayoutManager(getContext(), 1);
+        manager = new LinearLayoutManager(getContext());
 
         bar = view.findViewById(R.id.progress);
 
@@ -133,7 +134,7 @@ public class Rating3 extends Fragment {
         @SuppressLint("SetTextI18n")
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
-
+            holder.setIsRecyclable(false);
 
             final Datum item = list.get(position);
 
@@ -248,7 +249,7 @@ public class Rating3 extends Fragment {
                                 if (response.body().getMessage().equals("Unfollow Success")) {
                                     holder.follow.setBackgroundResource(R.drawable.plussign);
                                 }
-                                ((RattingActivity) getActivity()).methodd();
+                                ((RattingActivity) Objects.requireNonNull(getActivity())).methodd();
                                 bar.setVisibility(View.GONE);
 
                             }

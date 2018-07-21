@@ -28,6 +28,7 @@ import com.yl.youthlive.followPOJO.followBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -126,8 +127,7 @@ public class Rating1 extends Fragment {
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
-
-
+            holder.setIsRecyclable(false);
             final Datum item = list.get(position);
 
 
@@ -239,7 +239,7 @@ public class Rating1 extends Fragment {
                                 if (response.body().getMessage().equals("Unfollow Success")) {
                                     holder.follow.setBackgroundResource(R.drawable.plussign);
                                 }
-                                ((RattingActivity) getActivity()).methodd();
+                                ((RattingActivity) Objects.requireNonNull(getActivity())).methodd();
                                 bar.setVisibility(View.GONE);
 
                             }

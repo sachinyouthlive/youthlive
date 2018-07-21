@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
+import java.util.Objects;
+
 
 public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
 
@@ -54,11 +56,12 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
         tabs.getTabAt(1).setText("POPULAR");
 
 
-        ((HomeActivity) getActivity()).setFragmentRefreshListener(new HomeActivity.FragmentRefreshListener() {
+        ((HomeActivity) Objects.requireNonNull(getActivity())).setFragmentRefreshListener(new HomeActivity.FragmentRefreshListener() {
             @Override
             public void onRefresh() {
 
 
+                assert getFragmentManager() != null;
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.detach(com.yl.youthlive.Vlog.this).attach(com.yl.youthlive.Vlog.this).commit();
 

@@ -1,19 +1,26 @@
 apply plugin: 'com.android.library'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'youthlive'
+            keyPassword 'youthlive@123'
+            storeFile file('E:/android app PUBLISHED/youthlive/yl7july/youthlive.jks')
+            storePassword 'youthlive@123'
+        }
+    }
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
-
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
         versionName "2.6"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86"
         }
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
@@ -26,10 +33,12 @@ android {
             path 'src/main/cpp/Android.mk'
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libx264.libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libx264.libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

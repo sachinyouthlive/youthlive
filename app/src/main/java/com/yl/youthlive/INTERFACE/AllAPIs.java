@@ -4,6 +4,7 @@ package com.yl.youthlive.INTERFACE;
 import com.yl.youthlive.ExchangeDiamondPOJO.ExchangeBean;
 import com.yl.youthlive.GetRankingPOJO.RankingBean;
 import com.yl.youthlive.PhoneupdateminiPOJO;
+import com.yl.youthlive.TotalbroadcastPOJO;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 import com.yl.youthlive.addCareerPOJO.addCareerBean;
 import com.yl.youthlive.addEducationPOJO.addEducationBean;
@@ -56,6 +57,7 @@ import com.yl.youthlive.timelinePOJO.timelineBean;
 import com.yl.youthlive.timelineProfilePOJO.timelineProfileBean;
 import com.yl.youthlive.updatePOJO.updateBean;
 import com.yl.youthlive.updateProfilePOJO.updateProfileBean;
+import com.yl.youthlive.updatephonePOJO.UpdatephonePOJO;
 import com.yl.youthlive.vlogListPOJO.vlogListBean;
 import com.yl.youthlive.vlogsearchListPOJO.vlogsearchListBean;
 import com.yl.youthlive.walletPOJO.walletBean;
@@ -99,6 +101,14 @@ public interface AllAPIs {
             @Part("day") Integer day,
             @Part("month") Integer month,
             @Part("broadcast_duration") Long broadcast_duration
+    );
+
+    // get checkin data
+    @Multipart
+    @POST("api/checkin/monthlycheckin.php")
+    Call<TotalbroadcastPOJO> totalbroadcast(
+            @Part("userId") String userId,
+            @Part("month") String month
     );
 
     // get diamond purchase history
@@ -276,6 +286,12 @@ public interface AllAPIs {
     @POST("api/update_phonemini.php")
     Call<PhoneupdateminiPOJO> updatePhonemini(
             @Part("userId") String userId,
+            @Part("phone") String phone
+    );
+
+    @Multipart
+    @POST("api/update_phoneno.php")
+    Call<UpdatephonePOJO> updatePhoneno(
             @Part("phone") String phone
     );
 

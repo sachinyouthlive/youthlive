@@ -46,6 +46,7 @@ public class CheckinAdapter extends RecyclerView.Adapter<CheckinAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         final Information item = list.get(position);
 
         int duration = item.getBroadcastDuration();

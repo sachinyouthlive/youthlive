@@ -65,7 +65,7 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.friendad
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final friendadapter holder, int position) {
-
+        holder.setIsRecyclable(false);
         final Datum item = list.get(position);
 
         if (!item.getUserImage().isEmpty()) {

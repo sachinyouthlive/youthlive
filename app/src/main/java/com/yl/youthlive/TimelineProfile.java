@@ -122,7 +122,6 @@ public class TimelineProfile extends AppCompatActivity {
                 Intent intent = new Intent(TimelineProfile.this, FriendActivity.class);
                 intent.putExtra("userId", userid);
                 startActivity(intent);
-                finish();
 
             }
         });
