@@ -2736,21 +2736,34 @@ public class BroadcasterFragment1 extends Fragment {
 
     Integer gifts[] = new Integer[]
             {
-                    R.drawable.gif1,
-                    R.drawable.gif2,
-                    R.drawable.gif3,
-                    R.drawable.gif4,
-                    R.drawable.gif5,
-                    R.drawable.gif6,
-                    R.drawable.gif7,
-                    R.drawable.gif8,
-                    R.drawable.gif9,
-                    R.drawable.gif10,
-                    R.drawable.gif11,
-                    R.drawable.gif12,
-                    R.drawable.gif13,
-                    R.drawable.gif14
+                    R.drawable.g5,
+                    R.drawable.g20,
+                    R.drawable.g50,
+                    R.drawable.g70,
+                    R.drawable.g110,
+                    R.drawable.g150,
+                    R.drawable.g170,
+                    R.drawable.g180,
+                    R.drawable.g190,
+                    R.drawable.g210,
+                    R.drawable.g240,
+                    R.drawable.g250,
+                    R.drawable.g280,
+                    R.drawable.g300,
+                    R.drawable.g310,
+                    R.drawable.g350,
+                    R.drawable.g380,
+                    R.drawable.g450,
+                    R.drawable.g500,
+                    R.drawable.g610,
+                    R.drawable.g700,
+                    R.drawable.g800,
+                    R.drawable.g900,
+                    R.drawable.g999
             };
+
+
+
 
 
     public void showGift(String giftId, String text) {
