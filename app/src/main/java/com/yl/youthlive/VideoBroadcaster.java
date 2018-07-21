@@ -77,6 +77,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 /**/
 //import com.streamaxia.player.StreamaxiaPlayer;
 //import com.streamaxia.player.listener.StreamaxiaPlayerState;
+import com.seu.magicfilter.utils.MagicFilterType;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
 import com.yl.youthlive.followPOJO.followBean;
@@ -166,6 +167,12 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     SrsCameraView cameraPreview;
 
 
+    BroadcastReceiver headsetPlug;
+
+
+    TextView earphones;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,8 +184,37 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         toast = Toast.makeText(this , null , Toast.LENGTH_SHORT);
 
 
+        earphones = findViewById(R.id.earphones);
 //        Log.d("offline" , String.valueOf(db.queries().getAll().size()));
 
+        headsetPlug = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+
+
+                if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
+                    boolean connectedHeadphones = (intent.getIntExtra("state", 0) == 1);
+
+                    if (connectedHeadphones)
+                    {
+
+                        earphones.setVisibility(View.GONE);
+
+                    }
+                    else
+                    {
+
+                        earphones.setVisibility(View.VISIBLE);
+
+                    }
+
+
+                }
+
+
+            }
+        };
 
         chronometer = findViewById(R.id.chronometer);
         thumbcountdown = findViewById(R.id.thumb_countdown);
@@ -224,8 +260,9 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
-        mPublisher.setPreviewResolution(640, 360);
+        mPublisher.setPreviewResolution(360, 640);
         mPublisher.setOutputResolution(640, 360);
+        //mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
         mPublisher.setVideoSmoothMode();
 
 
@@ -347,6 +384,10 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
             }
         });
 
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.HEADSET_PLUG");
+        registerReceiver(headsetPlug, intentFilter);
+
 
 
     }
@@ -416,9 +457,13 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
 
         Log.d("offline" , "destroy");
+
+        if (headsetPlug != null) {
+            unregisterReceiver(headsetPlug);
+            headsetPlug = null;
+        }
 
         try {
             thumbPlayer1.stop();
@@ -427,9 +472,20 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
             e.printStackTrace();
         }
 
-        mPublisher.stopPublish();
-        mPublisher.stopRecord();
-        chronometer.stop();
+        try {
+            if (mPublisher != null)
+            {
+                mPublisher.stopPublish();
+                mPublisher.stopRecord();
+                chronometer.stop();
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+        super.onDestroy();
 
 
     }

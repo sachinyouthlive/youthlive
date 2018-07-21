@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -61,11 +62,10 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/view_count"
+                android:id="@+id/ylid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="2dp"
-                android:drawableStart="@drawable/ic_user"
                 android:gravity="center_vertical"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
@@ -104,7 +104,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             android:padding="5dp"
-            android:src="@drawable/coffee2" />
+            android:src="@drawable/coin" />
 
 
         <TextView
@@ -405,5 +405,21 @@
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButton7" />
+
+    <TextView
+        android:id="@+id/view_count"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="0"
+        android:drawableStart="@drawable/ic_user"
+        android:drawablePadding="5dp"
+        android:gravity="center"
+        android:background="@drawable/grey_round"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout4"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout4"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout4" />
 
 </android.support.constraint.ConstraintLayout>

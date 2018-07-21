@@ -185,6 +185,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
     boolean isConnection = false;
 
+    TextView ylId;
 
     @Nullable
     @Override
@@ -193,6 +194,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 
         player = (VideoPlayer) getActivity();
+
+        ylId = view.findViewById(R.id.ylid);
 
         mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         giftImage = view.findViewById(R.id.imageView13);
@@ -1041,9 +1044,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                                 isConnection = true;
 
-                                player.startThumbCamera1(connId);
-
-
+                                player.startThumbCamera1FromPlayer(connId);
 
 
                             } else {
@@ -1627,6 +1628,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                 try {
 
+                    ylId.setText(response.body().getData().getYouthliveId());
+
                     timelineId = response.body().getData().getTimelineId();
 
 
@@ -1653,7 +1656,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     likeCount.setText(String.valueOf(count1));
 
-                    totalBeans.setText(response.body().getData().getBeans2() + " Beans");
+                    totalBeans.setText(response.body().getData().getBeans2() + " Coins");
 
 
                     liveUsers.setText(response.body().getData().getViewsCount());

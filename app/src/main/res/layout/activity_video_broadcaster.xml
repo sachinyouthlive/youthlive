@@ -43,7 +43,7 @@
         android:layout_height="160dp"
         android:layout_alignParentTop="true"
         app:surface_type="texture_view"
-        app:resize_mode="fit"
+        app:resize_mode="zoom"
         />
 
         <include
@@ -106,6 +106,27 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:id="@+id/pager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/earphones"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="marquee"
+        android:textSize="16sp"
+        android:singleLine="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:gravity="center"
+        android:text="Please use earphones for better experience"
+        android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

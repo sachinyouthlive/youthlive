@@ -162,6 +162,7 @@ public class Signin extends AppCompatActivity {
                                                         edit.putString("type", "social");
                                                         edit.putString("user", email);
                                                         edit.putString("pass", id);
+                                                        edit.putString("userType" , response.body().getData().getType());
                                                         edit.apply();
 
                                                         Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -425,6 +426,7 @@ public class Signin extends AppCompatActivity {
                             edit.putString("type", "phone");
                             edit.putString("user", phone);
                             edit.putString("pass", password);
+                            edit.putString("userType" , response.body().getData().getType());
                             edit.commit();
 
                             Intent Inbt = new Intent(Signin.this, HomeActivity.class);
@@ -728,6 +730,7 @@ public class Signin extends AppCompatActivity {
                     edit.putString("type", "social");
                     edit.putString("user", email);
                     edit.putString("pass", id);
+                    edit.putString("userType" , response.body().getData().getType());
                     edit.commit();
 
                     Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -751,6 +754,7 @@ public class Signin extends AppCompatActivity {
                     edit.putString("type", "social");
                     edit.putString("user", email);
                     edit.putString("pass", id);
+                    edit.putString("userType" , response.body().getData().getType());
                     edit.commit();
 
                     Toast.makeText(Signin.this, "Please update your info", Toast.LENGTH_SHORT).show();

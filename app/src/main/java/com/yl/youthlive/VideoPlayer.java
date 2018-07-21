@@ -1,6 +1,8 @@
 package com.yl.youthlive;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -9,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Region;
+import android.media.audiofx.Visualizer;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -22,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -41,11 +45,16 @@ import com.github.faucamp.simplertmp.RtmpHandler;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.audio.AudioAttributes;
+import com.google.android.exoplayer2.audio.AudioRendererEventListener;
+import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -59,6 +68,8 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.video.VideoListener;
+import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -75,6 +86,7 @@ import net.ossrs.yasea.SrsRecordHandler;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.Arrays;
 import java.util.List;
 
 import jp.wasabeef.blurry.Blurry;
@@ -98,18 +110,13 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     String TAG = "VideoPlayer";
 
 
-
-
     String connId;
-
-
 
 
     TextView stateText;
 
 
     SrsCameraView thumbCamera1, thumbCamera2;
-
 
 
     String loadingpic;
@@ -127,14 +134,20 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
     ProgressBar loadingProgress;
 
-    PlayerView thumbSurface1 , thumbSurface2;
-    SimpleExoPlayer thumbPlayer1 , thumbPlayer2;
+    PlayerView thumbSurface1, thumbSurface2;
+    SimpleExoPlayer thumbPlayer1, thumbPlayer2;
 
-View loadingPopup;
+    View loadingPopup;
 
-View thumbCountdown;
+    View thumbCountdown;
 
-TextView thumbCount;
+    TextView thumbCount;
+
+    TextView earphones;
+
+    BroadcastReceiver headsetPlug;
+
+    boolean isThumbCamera1 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,8 +157,47 @@ TextView thumbCount;
         liveId = getIntent().getStringExtra("uri");
         loadingpic = getIntent().getStringExtra("pic");
 
+        earphones = findViewById(R.id.earphones);
+
         thumbCountdown = findViewById(R.id.thumb_countdown);
         thumbCount = findViewById(R.id.textView33);
+
+
+        headsetPlug = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+
+                if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
+                    boolean connectedHeadphones = (intent.getIntExtra("state", 0) == 1);
+
+                    if (connectedHeadphones) {
+
+
+                        if (isThumbCamera1)
+                        {
+                            earphones.setVisibility(View.GONE);
+                        }
+
+
+
+                    } else {
+
+
+                        if (isThumbCamera1)
+                        {
+                            earphones.setVisibility(View.VISIBLE);
+                        }
+
+
+                    }
+
+
+                }
+
+
+            }
+        };
 
 
         loadingPopup = findViewById(R.id.loading_popup);
@@ -185,9 +237,6 @@ TextView thumbCount;
         });
 
 
-
-
-
         mainPlayerView = findViewById(R.id.main_player);
 
         progress = findViewById(R.id.progressBar4);
@@ -207,7 +256,6 @@ TextView thumbCount;
         pager = findViewById(R.id.pager);
 
 
-
         //SurfaceHolder holder = surfaceView.getHolder();
         //holder.setFormat(PixelFormat.UNKNOWN);
         //holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -225,7 +273,6 @@ TextView thumbCount;
         Log.d("statusss", "rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
 
 
-
         loadingProgress.setVisibility(View.VISIBLE);
 
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -233,13 +280,11 @@ TextView thumbCount;
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
 
-
-
 //Create the player
         mainPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
                 new DefaultAllocator(true, 1000),
-                500,  // min buffer 0.5s
-                1000    , //max buffer 3s
+                1000,  // min buffer 0.5s
+                3000, //max buffer 3s
                 1000, // playback 1s
                 1000,   //playback after rebuffer 1s
                 1,
@@ -250,6 +295,63 @@ TextView thumbCount;
 
         mainPlayerView.setUseController(false);
 
+        mainPlayer.addAudioDebugListener(new AudioRendererEventListener() {
+            @Override
+            public void onAudioEnabled(DecoderCounters counters) {
+
+            }
+
+            @Override
+            public void onAudioSessionId(int audioSessionId) {
+
+                Log.d("sessionId", String.valueOf(audioSessionId));
+
+                Visualizer visualizer = new Visualizer(0);
+
+                visualizer.setCaptureSize(256);
+                visualizer.setEnabled(true);
+
+                Log.d("sessionId", String.valueOf(visualizer.getScalingMode()));
+
+                visualizer.setDataCaptureListener(new Visualizer.OnDataCaptureListener() {
+                    @Override
+                    public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform, int samplingRate) {
+
+                        Log.d("sessionId", "1");
+
+                    }
+
+                    @Override
+                    public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
+                        Log.d("sessionId", "1");
+                    }
+
+
+                }, Visualizer.getMaxCaptureRate(), true, false);
+
+            }
+
+            @Override
+            public void onAudioDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
+
+            }
+
+            @Override
+            public void onAudioInputFormatChanged(Format format) {
+
+            }
+
+            @Override
+            public void onAudioSinkUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
+
+            }
+
+            @Override
+            public void onAudioDisabled(DecoderCounters counters) {
+
+            }
+        });
+
         RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
 // This is the MediaSource representing the media to be played.
         final MediaSource videoSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
@@ -258,6 +360,7 @@ TextView thumbCount;
         mainPlayer.prepare(videoSource);
 
         mainPlayer.setPlayWhenReady(true);
+
 
         mainPlayer.addListener(new Player.EventListener() {
             @Override
@@ -268,6 +371,8 @@ TextView thumbCount;
             @Override
             public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
 
+                Log.d("parameters", String.valueOf(trackSelections.length));
+
             }
 
             @Override
@@ -277,18 +382,15 @@ TextView thumbCount;
 
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                Log.d("ssttaattee" , String.valueOf(playbackState));
+                Log.d("ssttaattee", String.valueOf(playbackState));
 
-                if (playWhenReady)
-                {
+                if (playWhenReady) {
                     loadingPopup.setVisibility(View.GONE);
                     loading.setVisibility(View.GONE);
 
                 }
 
-                if (playbackState == 4)
-                {
-
+                if (playbackState == 4) {
 
 
                     Dialog dialog = new Dialog(VideoPlayer.this);
@@ -326,7 +428,7 @@ TextView thumbCount;
             @Override
             public void onPlayerError(ExoPlaybackException error) {
 
-                Log.d("eerroorr" , error.toString());
+                Log.d("eerroorr", error.toString());
 
 
                 Dialog dialog = new Dialog(VideoPlayer.this);
@@ -347,8 +449,6 @@ TextView thumbCount;
                 });
 
 
-
-
             }
 
 
@@ -360,6 +460,8 @@ TextView thumbCount;
             @Override
             public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
 
+                Log.d("parameters", String.valueOf(playbackParameters.pitch));
+
             }
 
             @Override
@@ -367,10 +469,6 @@ TextView thumbCount;
 
             }
         });
-
-
-
-
 
 
         FragAdapter adapter = new FragAdapter(getSupportFragmentManager());
@@ -386,8 +484,7 @@ TextView thumbCount;
 
         try {
             thumbPlayer1.stop();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -418,37 +515,36 @@ TextView thumbCount;
     }
 
 
-
     @Override
     public void onRecordPause() {
 
-        Log.d("recordloistener" , "paused");
+        Log.d("recordloistener", "paused");
 
     }
 
     @Override
     public void onRecordResume() {
-        Log.d("recordloistener" , "resume");
+        Log.d("recordloistener", "resume");
     }
 
     @Override
     public void onRecordStarted(String s) {
-        Log.d("recordloistener" , s);
+        Log.d("recordloistener", s);
     }
 
     @Override
     public void onRecordFinished(String s) {
-        Log.d("recordloistener" , s);
+        Log.d("recordloistener", s);
     }
 
     @Override
     public void onRecordIllegalArgumentException(IllegalArgumentException e) {
-        Log.d("recordloistener" , e.toString());
+        Log.d("recordloistener", e.toString());
     }
 
     @Override
     public void onRecordIOException(IOException e) {
-        Log.d("recordloistener" , e.toString());
+        Log.d("recordloistener", e.toString());
     }
 
     @Override
@@ -509,8 +605,7 @@ TextView thumbCount;
             public void onRtmpConnected(String s) {
                 progress.setVisibility(View.VISIBLE);
 
-                Log.d("rreess" , connId);
-
+                Log.d("rreess", connId);
 
 
                 final bean b = (bean) getApplicationContext();
@@ -523,20 +618,21 @@ TextView thumbCount;
 
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                Call<String> call1 = cr.acceptReject2(connId, liveId + b.userId, "2" , b.userId);
+                Call<String> call1 = cr.acceptReject2(connId, liveId + b.userId, "2", b.userId);
                 call1.enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
 
-                        Log.d("rreess" , response.body());
+                        Log.d("rreess", response.body());
 
+                        isThumbCamera1 = true;
                         progress.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
                         progress.setVisibility(View.GONE);
-                        Log.d("rreess" , t.toString());
+                        Log.d("rreess", t.toString());
                         t.printStackTrace();
                     }
                 });
@@ -601,23 +697,23 @@ TextView thumbCount;
         }));
         mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
         mPublisher.setOutputResolution(480, 360);
-        mPublisher.setPreviewResolution(480,360);
+        mPublisher.setPreviewResolution(360, 480);
 
         //mPublisher.setVideoBitRate(128000);
 
+        mPublisher.setVideoSmoothMode();
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
         thumbCamera1.startCamera();
 
 
-        new CountDownTimer(8000 , 1000)
-        {
+        new CountDownTimer(8000, 1000) {
 
             //Toast toast = Toast.makeText(VideoPlayer.this , null , Toast.LENGTH_SHORT);
 
             @Override
             public void onTick(long millisUntilFinished) {
 
-              thumbCount.setText(String.valueOf(millisUntilFinished / 1000));
+                thumbCount.setText(String.valueOf(millisUntilFinished / 1000));
 
             }
 
@@ -627,12 +723,8 @@ TextView thumbCount;
                 thumbCountdown.setVisibility(View.GONE);
 
 
-
             }
         }.start();
-
-
-
 
 
     }
@@ -661,6 +753,9 @@ TextView thumbCount;
 
             @Override
             public void onRtmpConnected(String s) {
+
+                isThumbCamera1 = true;
+
                 /*progress.setVisibility(View.VISIBLE);
 
                 Log.d("rreess" , connId);
@@ -765,9 +860,7 @@ TextView thumbCount;
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 
 
-
-        new CountDownTimer(8000 , 1000)
-        {
+        new CountDownTimer(8000, 1000) {
 
             //Toast toast = Toast.makeText(VideoPlayer.this , null , Toast.LENGTH_SHORT);
 
@@ -784,19 +877,14 @@ TextView thumbCount;
                 thumbCountdown.setVisibility(View.GONE);
 
 
-
             }
         }.start();
-
-
-
 
 
     }
 
 
-    public void startThumbPlayer1(String connId)
-    {
+    public void startThumbPlayer1(String connId) {
 
 
         Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + connId);
@@ -886,38 +974,31 @@ TextView thumbCount;
         thumbPlayer1.setPlayWhenReady(true);
 
 
-
-
-
-
     }
 
-    public void endThumbCamera1()
-    {
+    public void endThumbCamera1() {
 
         try {
 
             mPublisher.stopPublish();
             mPublisher.stopRecord();
             thumbCamera1.stopCamera();
-
-        }catch (Exception e)
-        {
+            isThumbCamera1 = false;
+            player_camera_layout1.setVisibility(View.GONE);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        player_camera_layout1.setVisibility(View.GONE);
+
         //thumbCamera1.setVisibility(View.INVISIBLE);
 
 
     }
 
-    public void endThumbPlayer1()
-    {
+    public void endThumbPlayer1() {
 
         try {
             thumbPlayer1.stop();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -951,7 +1032,6 @@ TextView thumbCount;
         //cameraPreview.stopCamera();
 
     }
-
 
 
 }

@@ -83,7 +83,8 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.WAKE_LOCK,
             Manifest.permission.ACCESS_NETWORK_STATE,
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
+            Manifest.permission.MODIFY_AUDIO_SETTINGS
     };
 
     GoogleSignInClient mGoogleSignInClient;
@@ -173,6 +174,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                                                         edit.putString("type", "social");
                                                         edit.putString("user", email);
                                                         edit.putString("pass", id);
+                                                        edit.putString("userType" , response.body().getData().getType());
                                                         edit.apply();
 
                                                         //    Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -495,7 +497,8 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                             ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED
+                            ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.MODIFY_AUDIO_SETTINGS) == PackageManager.PERMISSION_GRANTED
                     ) {
 //
 
@@ -505,7 +508,8 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                                 ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA) ||
                                 ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS) ||
                                 ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO) ||
-                                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WAKE_LOCK)
+                                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WAKE_LOCK) ||
+                                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.MODIFY_AUDIO_SETTINGS)
                         ) {
 
                     Toast.makeText(getApplicationContext(), "Permissions are required for this app", Toast.LENGTH_SHORT).show();
@@ -591,6 +595,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                         edit.putString("type", "social");
                         edit.putString("user", account.getEmail());
                         edit.putString("pass", account.getId());
+                        edit.putString("userType" , response.body().getData().getType());
                         edit.commit();
 
                         //   Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();

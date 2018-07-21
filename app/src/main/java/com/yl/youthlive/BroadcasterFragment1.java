@@ -1,5 +1,6 @@
 package com.yl.youthlive;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,6 +20,7 @@ import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -65,6 +67,7 @@ import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.getIpdatedPOJO.Comment;
 import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
+import com.yl.youthlive.getLivePOJO.Result;
 import com.yl.youthlive.goLivePOJO.goLiveBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
@@ -72,14 +75,18 @@ import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -87,6 +94,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconMultiAutoCompleteTextView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -119,6 +129,7 @@ public class BroadcasterFragment1 extends Fragment {
     BroadcastReceiver viewReceiver;
     BroadcastReceiver giftReceiver;
     BroadcastReceiver statusReceiver;
+    BroadcastReceiver playerStatusReceiver;
     BroadcastReceiver connectionReceiver;
     BroadcastReceiver requestReceiver;
     View rootView;
@@ -131,17 +142,22 @@ public class BroadcasterFragment1 extends Fragment {
     VideoBroadcaster broadcaster;
 
     private static final int REQUEST_CODE = 100;
+    private static final int REQUEST_CODE2 = 102;
 
     private MediaProjectionManager mProjectionManager;
+    private MediaProjectionManager mProjectionManager2;
     //SimpleExoPlayerView thumb;
     private static MediaProjection sMediaProjection;
+    private static MediaProjection sMediaProjection2;
     private Display mDisplay;
+    private Display mDisplay2;
 
     String TAG = "BroadcasterFragment1";
 
     private static String STORE_DIRECTORY;
 
     int coun = 0;
+    int coun2 = 0;
 
     TextView likeCount;
 
@@ -179,6 +195,12 @@ public class BroadcasterFragment1 extends Fragment {
     ImageButton connection;
 
 
+    TextView ylId;
+
+    String userType;
+
+    SharedPreferences pref;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -186,7 +208,10 @@ public class BroadcasterFragment1 extends Fragment {
 
         broadcaster = (VideoBroadcaster) getActivity();
 
+        pref = broadcaster.getSharedPreferences("pref", Context.MODE_PRIVATE);
+
         mProjectionManager = (MediaProjectionManager) broadcaster.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        mProjectionManager2 = (MediaProjectionManager) broadcaster.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
 
         bubbleView = (BubbleView) view.findViewById(R.id.bubble);
@@ -198,6 +223,7 @@ public class BroadcasterFragment1 extends Fragment {
         giftLayout = view.findViewById(R.id.gift_layout);
 
         reject1 = view.findViewById(R.id.reject1);
+        ylId = view.findViewById(R.id.ylid);
 
         reject1.setZ(21);
 
@@ -326,59 +352,75 @@ public class BroadcasterFragment1 extends Fragment {
 
 
 
-        progress.setVisibility(View.VISIBLE);
-        final bean b = (bean) getActivity().getApplicationContext();
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-        Call<goLiveBean> call3 = cr.goLive(b.userId, b.userId, "");
-
-        call3.enqueue(new Callback<goLiveBean>() {
-            @Override
-            public void onResponse(Call<goLiveBean> call, retrofit2.Response<goLiveBean> response) {
-
-                if (Objects.equals(response.body().getStatus(), "1")) {
-                    //Toast.makeText(LiveScreen.this, "You are now live", Toast.LENGTH_SHORT).show();
-                    liveId = response.body().getData().getLiveId();
-
-                    broadcaster.setLiveId(liveId);
-
-                    Log.d("lliivvee", liveId);
-                    Log.d("lliivvee", b.userId);
-
-                    broadcaster.startPublish(liveId);
+        userType = pref.getString("userType" , "");
 
 
-                    broadcaster.startCountDown();
-                    schedule(liveId);
-                    //actions.setVisibility(View.VISIBLE);
+        if (userType.equals("user"))
+        {
+            progress.setVisibility(View.VISIBLE);
+            final bean b = (bean) getActivity().getApplicationContext();
 
-                    //mCallback.startStreaming(liveId);
+            final Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(b.BASE_URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-                    //schedule(liveId);
+            final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                } else {
-                    //Toast.makeText(getContext(), "Error going on live", Toast.LENGTH_SHORT).show();
-                    //lvscreen.finish();
+            Call<goLiveBean> call3 = cr.goLive(b.userId, b.userId, "");
+
+            call3.enqueue(new Callback<goLiveBean>() {
+                @Override
+                public void onResponse(Call<goLiveBean> call, retrofit2.Response<goLiveBean> response) {
+
+                    if (Objects.equals(response.body().getStatus(), "1")) {
+                        //Toast.makeText(LiveScreen.this, "You are now live", Toast.LENGTH_SHORT).show();
+                        liveId = response.body().getData().getLiveId();
+
+                        broadcaster.setLiveId(liveId);
+
+                        Log.d("lliivvee", liveId);
+                        Log.d("lliivvee", b.userId);
+
+                        broadcaster.startPublish(liveId);
+
+
+                        broadcaster.startCountDown();
+                        schedule(liveId);
+                        //actions.setVisibility(View.VISIBLE);
+
+                        //mCallback.startStreaming(liveId);
+
+                        //schedule(liveId);
+
+                    } else {
+                        //Toast.makeText(getContext(), "Error going on live", Toast.LENGTH_SHORT).show();
+                        //lvscreen.finish();
+                    }
+
+                    progress.setVisibility(View.GONE);
                 }
 
-                progress.setVisibility(View.GONE);
-            }
+                @Override
+                public void onFailure(Call<goLiveBean> call, Throwable t) {
+                    progress.setVisibility(View.GONE);
+                    //Toast.makeText(getContext() , "Error in going Live" , Toast.LENGTH_SHORT).show();
+                    //getActivity().finish();
+                }
 
-            @Override
-            public void onFailure(Call<goLiveBean> call, Throwable t) {
-                progress.setVisibility(View.GONE);
-                //Toast.makeText(getContext() , "Error in going Live" , Toast.LENGTH_SHORT).show();
-                //getActivity().finish();
-            }
+            });
 
-        });
+        }else
+        {
+
+            coun2 = 0;
+            startActivityForResult(mProjectionManager2.createScreenCaptureIntent(), REQUEST_CODE2);
+
+        }
+
+
+
 
         /*start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -595,6 +637,8 @@ public class BroadcasterFragment1 extends Fragment {
 
                     final String uid = item.getUserId().replace("\"", "");
 
+                    final bean b = (bean) getActivity().getApplicationContext();
+
                     String id = item.getUserId();
                     if (!uid.equals(b.userId)) {
                         viewsAdapter.addView(item);
@@ -677,6 +721,69 @@ public class BroadcasterFragment1 extends Fragment {
 
                 // checking for type intent filter
                 if (intent.getAction().equals("status")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("uurrii", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject obj = new JSONObject(json);
+
+                        connId = obj.getString("connId");
+
+                        String mode = obj.getString("status");
+                        final String uri = obj.getString("uri");
+
+
+                        if (mode.equals("2")) {
+
+
+                            Log.d("uurrii", uri);
+
+                            broadcaster.startThumbPlayer1(uri, thumbPic1 , connId);
+                            playerFrame1.setVisibility(View.VISIBLE);
+                            isConnection = true;
+
+
+
+
+                        } else {
+
+                            isConnection = false;
+                            Toast.makeText(broadcaster, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
+
+
+                        }
+
+
+                    } catch (JSONException e) {
+                        Log.d("uurrii", e.toString());
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+        playerStatusReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("status_player")) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
@@ -1073,8 +1180,24 @@ public class BroadcasterFragment1 extends Fragment {
         new Thread() {
             @Override
             public void run() {
+                try {
+                    Looper.prepare();
+                    mHandler = new Handler();
+                    Looper.loop();
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        }.start();
+
+
+        new Thread() {
+            @Override
+            public void run() {
                 Looper.prepare();
-                mHandler = new Handler();
+                mHandler2 = new Handler();
                 Looper.loop();
             }
         }.start();
@@ -1584,6 +1707,7 @@ public class BroadcasterFragment1 extends Fragment {
 
         Call<getUpdatedBean> call = cr.getUpdatedData(b.userId, liveId, keey);
 
+        Log.d("asdasd" , b.userId);
 
         call.enqueue(new Callback<getUpdatedBean>() {
             @Override
@@ -1592,6 +1716,7 @@ public class BroadcasterFragment1 extends Fragment {
                 try {
 
 
+                    ylId.setText(response.body().getData().getYouthliveId());
 
 
                     commentsAdapter.setGridData(response.body().getData().getComments());
@@ -1616,7 +1741,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                     likeCount.setText(String.valueOf(count1));
 
-                    totalBeans.setText(response.body().getData().getBeans() + " Beans");
+                    totalBeans.setText(response.body().getData().getBeans() + " Coins");
 
 
                     liveUsers.setText(response.body().getData().getViewsCount());
@@ -1683,7 +1808,8 @@ public class BroadcasterFragment1 extends Fragment {
                             new IntentFilter("connection_end"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver,
                             new IntentFilter("request_player"));
-
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(playerStatusReceiver,
+                            new IntentFilter("status_player"));
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
 
@@ -1696,7 +1822,8 @@ public class BroadcasterFragment1 extends Fragment {
                             new IntentFilter("status"));
 */
                 } catch (Exception e) {
-                    // e.printStackTrace();
+                     e.printStackTrace();
+                    Log.d("asdasd", e.toString());
                 }
 
 
@@ -1705,7 +1832,7 @@ public class BroadcasterFragment1 extends Fragment {
             @Override
             public void onFailure(Call<getUpdatedBean> call, Throwable t) {
 
-                // Log.d("asdasd", t.toString());
+                 Log.d("asdasd", t.toString());
 
             }
         });
@@ -1727,70 +1854,260 @@ public class BroadcasterFragment1 extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(playerStatusReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
     }
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE) {
-            sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
 
-            if (sMediaProjection != null) {
-                File externalFilesDir = broadcaster.getExternalFilesDir(null);
-                if (externalFilesDir != null) {
-                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/youthive/";
-                    File storeDirectory = new File(STORE_DIRECTORY);
-                    if (!storeDirectory.exists()) {
-                        boolean success = storeDirectory.mkdirs();
-                        if (!success) {
-                            Log.e(TAG, "failed to create file storage directory.");
-                            return;
+            if (resultCode == Activity.RESULT_OK)
+            {
+                sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
+
+                if (sMediaProjection != null) {
+                    File externalFilesDir = broadcaster.getExternalFilesDir(null);
+                    if (externalFilesDir != null) {
+                        STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/youthive/";
+                        File storeDirectory = new File(STORE_DIRECTORY);
+                        if (!storeDirectory.exists()) {
+                            boolean success = storeDirectory.mkdirs();
+                            if (!success) {
+                                Log.e(TAG, "failed to create file storage directory.");
+                                return;
+                            }
                         }
+                    } else {
+                        Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
+                        return;
                     }
-                } else {
-                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
-                    return;
+
+                    // display metrics
+                    DisplayMetrics metrics = getResources().getDisplayMetrics();
+                    mDensity = metrics.densityDpi;
+                    mDisplay = broadcaster.getWindowManager().getDefaultDisplay();
+
+                    // create virtual display depending on device width / height
+                    createVirtualDisplay();
+
+                    // register orientation change callback
+                    mOrientationChangeCallback = new OrientationChangeCallback(getContext());
+                    if (mOrientationChangeCallback.canDetectOrientation()) {
+                        mOrientationChangeCallback.enable();
+                    }
+
+                    // register media projection stop callback
+                    sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
                 }
-
-                // display metrics
-                DisplayMetrics metrics = getResources().getDisplayMetrics();
-                mDensity = metrics.densityDpi;
-                mDisplay = broadcaster.getWindowManager().getDefaultDisplay();
-
-                // create virtual display depending on device width / height
-                createVirtualDisplay();
-
-                // register orientation change callback
-                mOrientationChangeCallback = new OrientationChangeCallback(getContext());
-                if (mOrientationChangeCallback.canDetectOrientation()) {
-                    mOrientationChangeCallback.enable();
-                }
-
-                // register media projection stop callback
-                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
             }
+            else
+            {
+
+            }
+
+
+        }
+        else if (requestCode == REQUEST_CODE2) {
+
+            if (resultCode == Activity.RESULT_OK)
+            {
+
+
+
+                progress.setVisibility(View.VISIBLE);
+                final bean b = (bean) getActivity().getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                Call<goLiveBean> call3 = cr.goLive(b.userId, b.userId, "");
+
+                call3.enqueue(new Callback<goLiveBean>() {
+                    @Override
+                    public void onResponse(Call<goLiveBean> call, retrofit2.Response<goLiveBean> response) {
+
+                        if (Objects.equals(response.body().getStatus(), "1")) {
+                            //Toast.makeText(LiveScreen.this, "You are now live", Toast.LENGTH_SHORT).show();
+                            liveId = response.body().getData().getLiveId();
+
+                            broadcaster.setLiveId(liveId);
+
+                            Log.d("lliivvee", liveId);
+                            Log.d("lliivvee", b.userId);
+
+                            broadcaster.startPublish(liveId);
+
+
+                            broadcaster.startCountDown();
+                            schedule(liveId);
+
+
+                            repeatHandler = new Handler();
+
+                            mStatusChecker = new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        repeat(resultCode , data);
+                                    }catch (Exception e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+                                    finally {
+                                        // 100% guarantee that this always happens, even if
+                                        // your update method throws an exception
+                                        mHandler.postDelayed(mStatusChecker, 60000);
+                                    }
+                                }
+                            };
+
+
+                            mStatusChecker.run();
+
+
+                            //actions.setVisibility(View.VISIBLE);
+
+                            //mCallback.startStreaming(liveId);
+
+                            //schedule(liveId);
+
+                        } else {
+                            //Toast.makeText(getContext(), "Error going on live", Toast.LENGTH_SHORT).show();
+                            //lvscreen.finish();
+                        }
+
+                        progress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<goLiveBean> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                        //Toast.makeText(getContext() , "Error in going Live" , Toast.LENGTH_SHORT).show();
+                        //getActivity().finish();
+                    }
+
+                });
+
+
+
+
+
+            }
+            else
+            {
+                Toast.makeText(broadcaster , "This permission is required to go live" , Toast.LENGTH_SHORT).show();
+                broadcaster.finish();
+            }
+
+
         }
     }
 
 
+    Handler repeatHandler;
+
+
+    Runnable mStatusChecker;
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (repeatHandler != null)
+        {
+            repeatHandler.removeCallbacks(mStatusChecker);
+        }
+
+
+    }
+
+    public void repeat(int resultCode, Intent data)
+    {
+
+        coun2 = 0;
+
+        sMediaProjection2 = mProjectionManager2.getMediaProjection(resultCode, data);
+
+        if (sMediaProjection2 != null) {
+            File externalFilesDir = broadcaster.getExternalFilesDir(null);
+            if (externalFilesDir != null) {
+                STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/youthive/";
+                File storeDirectory = new File(STORE_DIRECTORY);
+                if (!storeDirectory.exists()) {
+                    boolean success = storeDirectory.mkdirs();
+                    if (!success) {
+                        Log.e(TAG, "failed to create file storage directory.");
+                        return;
+                    }
+                }
+            } else {
+                Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
+                return;
+            }
+
+
+           try {
+               // display metrics
+               DisplayMetrics metrics = getResources().getDisplayMetrics();
+               mDensity2 = metrics.densityDpi;
+               mDisplay2 = broadcaster.getWindowManager().getDefaultDisplay();
+
+               // create virtual display depending on device width / height
+               createVirtualDisplay2();
+
+               // register orientation change callback
+               mOrientationChangeCallback2 = new OrientationChangeCallback2(getContext());
+               if (mOrientationChangeCallback2.canDetectOrientation()) {
+                   mOrientationChangeCallback2.enable();
+               }
+
+               // register media projection stop callback
+               sMediaProjection2.registerCallback(new MediaProjectionStopCallback2(), mHandler2);
+           }catch (Exception e)
+           {
+               e.printStackTrace();
+           }
+
+
+        }
+    }
+
+
+
     private int mWidth;
+    private int mWidth2;
     private int mHeight;
+    private int mHeight2;
     private int mRotation;
+    private int mRotation2;
 
     private int mDensity;
+    private int mDensity2;
 
     private ImageReader mImageReader;
+    private ImageReader mImageReader2;
 
     private VirtualDisplay mVirtualDisplay;
+    private VirtualDisplay mVirtualDisplay2;
     private static final String SCREENCAP_NAME = "screencap";
+
+
 
     private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
 
     private Handler mHandler;
+    private Handler mHandler2;
 
     private void createVirtualDisplay() {
         // get width and height
@@ -1804,6 +2121,21 @@ public class BroadcasterFragment1 extends Fragment {
         mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
         mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
         mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
+    }
+
+    private void createVirtualDisplay2() {
+        // get width and height
+        Point size = new Point();
+        mDisplay2.getSize(size);
+        mWidth2 = size.x;
+        mHeight2 = size.y;
+
+        coun2 = 0;
+
+        // start capture reader
+        mImageReader2 = ImageReader.newInstance(mWidth2, mHeight2, PixelFormat.RGBA_8888, 2);
+        mVirtualDisplay2 = sMediaProjection2.createVirtualDisplay(SCREENCAP_NAME, mWidth2, mHeight2, mDensity2, VIRTUAL_DISPLAY_FLAGS, mImageReader2.getSurface(), null, mHandler2);
+        mImageReader2.setOnImageAvailableListener(new ImageAvailableListener2(), mHandler2);
     }
 
     private static int IMAGES_PRODUCED;
@@ -1939,12 +2271,154 @@ public class BroadcasterFragment1 extends Fragment {
         }
     }
 
+
+    private class ImageAvailableListener2 implements ImageReader.OnImageAvailableListener {
+        @Override
+        public void onImageAvailable(ImageReader reader) {
+            Image image = null;
+            //FileOutputStream fos = null;
+            Bitmap bitmap = null;
+
+            try {
+
+
+                if (coun2 == 0) {
+                    image = reader.acquireLatestImage();
+                    if (image != null) {
+                        Image.Plane[] planes = image.getPlanes();
+                        ByteBuffer buffer = planes[0].getBuffer();
+                        int pixelStride = planes[0].getPixelStride();
+                        int rowStride = planes[0].getRowStride();
+                        int rowPadding = rowStride - pixelStride * mWidth2;
+
+                        // create bitmap
+
+                        bitmap = Bitmap.createBitmap(mWidth2 + rowPadding / pixelStride, mHeight2, Bitmap.Config.ARGB_8888);
+                        bitmap.copyPixelsFromBuffer(buffer);
+
+                        // write bitmap to a file
+                        //fos = new FileOutputStream(STORE_DIRECTORY + "/myscreen_" + IMAGES_PRODUCED + ".png");
+
+
+                        File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "thumb" + String.valueOf(new Random(100)) + ".jpg");
+
+                        OutputStream os = null;
+                        try {
+                            os = new BufferedOutputStream(new FileOutputStream(file2));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+
+                        IMAGES_PRODUCED++;
+                        Log.e(TAG, "captured image: " + IMAGES_PRODUCED);
+
+
+                        final String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "Title", null);
+
+
+                        //Toast.makeText(broadcaster , path , Toast.LENGTH_SHORT).show();
+
+
+                        final bean b = (bean) broadcaster.getApplicationContext();
+
+
+                        RequestBody reqFile2 = RequestBody.create(MediaType.parse("multipart/form-data"), file2);
+                        MultipartBody.Part body2 = null;
+                        body2 = MultipartBody.Part.createFormData("image", file2.getName(), reqFile2);
+
+                        final Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(b.BASE_URL)
+                                .addConverterFactory(ScalarsConverterFactory.create())
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+
+                        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+
+                        Call<String> call = cr.addScreenshot(b.userId , liveId , body2);
+
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+
+
+                                //Toast.makeText(broadcaster , "Success" , Toast.LENGTH_SHORT).show();
+
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+
+                            }
+                        });
+
+
+
+
+
+
+
+
+
+
+
+
+                        Log.e(TAG, "6");
+
+
+                        coun2++;
+
+
+                        stopProjection2();
+
+                    }
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                /*if (os != null) {
+                    try {
+                        fos.close();
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+                }*/
+
+                if (bitmap != null) {
+                    bitmap.recycle();
+                }
+
+                if (image != null) {
+                    image.close();
+                }
+            }
+        }
+    }
+
+
     private void stopProjection() {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 if (sMediaProjection != null) {
                     sMediaProjection.stop();
+                }
+            }
+        });
+    }
+
+    private void stopProjection2() {
+        mHandler2.post(new Runnable() {
+            @Override
+            public void run() {
+                if (sMediaProjection2 != null) {
+                    sMediaProjection2.stop();
                 }
             }
         });
@@ -1977,6 +2451,36 @@ public class BroadcasterFragment1 extends Fragment {
 
     private OrientationChangeCallback mOrientationChangeCallback;
 
+
+    private class OrientationChangeCallback2 extends OrientationEventListener {
+
+        OrientationChangeCallback2(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onOrientationChanged(int orientation) {
+            final int rotation = mDisplay2.getRotation();
+            if (rotation != mRotation2) {
+                mRotation2 = rotation;
+                try {
+                    // clean up
+                    if (mVirtualDisplay2!= null) mVirtualDisplay2.release();
+                    if (mImageReader2 != null) mImageReader2.setOnImageAvailableListener(null, null);
+
+                    // re-create virtual display depending on device width / height
+                    createVirtualDisplay2();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private OrientationChangeCallback2 mOrientationChangeCallback2;
+
+
+
     private class MediaProjectionStopCallback extends MediaProjection.Callback {
         @Override
         public void onStop() {
@@ -1993,6 +2497,22 @@ public class BroadcasterFragment1 extends Fragment {
         }
     }
 
+
+    private class MediaProjectionStopCallback2 extends MediaProjection.Callback {
+        @Override
+        public void onStop() {
+            Log.e("ScreenCapture", "stopping projection.");
+            mHandler2.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mVirtualDisplay2 != null) mVirtualDisplay2.release();
+                    if (mImageReader2 != null) mImageReader2.setOnImageAvailableListener(null, null);
+                    if (mOrientationChangeCallback2 != null) mOrientationChangeCallback2.disable();
+                    sMediaProjection2.unregisterCallback(MediaProjectionStopCallback2.this);
+                }
+            });
+        }
+    }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();

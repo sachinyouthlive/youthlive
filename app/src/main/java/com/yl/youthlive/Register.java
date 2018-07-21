@@ -156,6 +156,7 @@ public class Register extends AppCompatActivity {
                                                         edit.putString("type", "social");
                                                         edit.putString("user", email);
                                                         edit.putString("pass", id);
+                                                        edit.putString("userType" , response.body().getData().getType());
                                                         edit.apply();
 
                                                         //  Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
@@ -572,6 +573,7 @@ public class Register extends AppCompatActivity {
                         edit.putString("type", "social");
                         edit.putString("user", account.getEmail());
                         edit.putString("pass", account.getId());
+                        edit.putString("userType" , response.body().getData().getType());
                         edit.commit();
 
                         //  Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();

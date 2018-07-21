@@ -90,6 +90,9 @@ public class Data {
     @SerializedName("isPhoneVerified")
     @Expose
     private String isPhoneVerified;
+    @SerializedName("type")
+    @Expose
+    private String type;
 
     public String getUserId() {
         return userId;
@@ -305,6 +308,14 @@ public class Data {
 
     public void setIsPhoneVerified(String isPhoneVerified) {
         this.isPhoneVerified = isPhoneVerified;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

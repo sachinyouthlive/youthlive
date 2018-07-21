@@ -80,7 +80,12 @@ public class Data {
     @SerializedName("connid")
     @Expose
     private String connid;
-
+    @SerializedName("type")
+    @Expose
+    private String type;
+    @SerializedName("youthliveId")
+    @Expose
+    private String youthliveId;
 
     public String getUserId() {
         return userId;
@@ -265,5 +270,21 @@ public class Data {
 
     public void setIsConnection(String isConnection) {
         this.isConnection = isConnection;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getYouthliveId() {
+        return youthliveId;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setYouthliveId(String youthliveId) {
+        this.youthliveId = youthliveId;
     }
 }

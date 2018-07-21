@@ -538,6 +538,13 @@ public interface AllAPIs {
             @Part MultipartBody.Part image
     );
 
+    @Multipart
+    @POST("api/add_screenshot.php")
+    Call<String> addScreenshot(
+            @Part("userId") String userId,
+            @Part("liveId") String liveId,
+            @Part MultipartBody.Part image
+    );
 
     @Multipart
     @POST("api/get_ranking.php")
