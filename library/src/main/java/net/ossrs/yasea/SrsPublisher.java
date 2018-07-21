@@ -85,6 +85,7 @@ public class SrsPublisher {
         }
 
         if (AcousticEchoCanceler.isAvailable()) {
+            Log.d("supressor" , "echo canceller");
             aec = AcousticEchoCanceler.create(mic.getAudioSessionId());
             if (aec != null) {
                 aec.setEnabled(true);
@@ -92,6 +93,7 @@ public class SrsPublisher {
         }
 
         if (AutomaticGainControl.isAvailable()) {
+            Log.d("supressor" , "gain");
             agc = AutomaticGainControl.create(mic.getAudioSessionId());
             if (agc != null) {
                 agc.setEnabled(true);
@@ -269,14 +271,21 @@ public class SrsPublisher {
     }
 
     public void setSendVideoOnly(boolean flag) {
-        if (mic != null) {
-            if (flag) {
-                mic.stop();
-                mPcmBuffer = new byte[4096];
-            } else {
-                mic.startRecording();
+
+        try {
+            if (mic != null) {
+                if (flag) {
+                    mic.stop();
+                    mPcmBuffer = new byte[4096];
+                } else {
+                    mic.startRecording();
+                }
             }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
+
         sendVideoOnly = flag;
     }
 

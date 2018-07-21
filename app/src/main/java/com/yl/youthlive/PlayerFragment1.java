@@ -185,6 +185,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
     boolean isConnection = false;
 
+    TextView ylId;
 
     @Nullable
     @Override
@@ -193,6 +194,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 
         player = (VideoPlayer) getActivity();
+
+        ylId = view.findViewById(R.id.ylid);
 
         mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         giftImage = view.findViewById(R.id.imageView13);
@@ -1041,9 +1044,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                                 isConnection = true;
 
-                                player.startThumbCamera1(connId);
-
-
+                                player.startThumbCamera1FromPlayer(connId);
 
 
                             } else {
@@ -1627,6 +1628,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                 try {
 
+                    ylId.setText(response.body().getData().getYouthliveId());
+
                     timelineId = response.body().getData().getTimelineId();
 
 
@@ -1653,7 +1656,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     likeCount.setText(String.valueOf(count1));
 
-                    totalBeans.setText(response.body().getData().getBeans2() + " Beans");
+                    totalBeans.setText(response.body().getData().getBeans2() + " Coins");
 
 
                     liveUsers.setText(response.body().getData().getViewsCount());
@@ -2235,21 +2238,60 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         Dialog dialog;
         Integer gifs[] = new Integer[]
                 {
-                        R.drawable.gif1,
-                        R.drawable.gif2,
-                        R.drawable.gif3,
-                        R.drawable.gif4,
-                        R.drawable.gif5,
-                        R.drawable.gif6,
-                        R.drawable.gif7,
-                        R.drawable.gif8,
-                        R.drawable.gif9,
-                        R.drawable.gif10,
-                        R.drawable.gif11,
-                        R.drawable.gif12,
-                        R.drawable.gif13,
-                        R.drawable.gif14
+                        R.drawable.g5,
+                        R.drawable.g20,
+                        R.drawable.g50,
+                        R.drawable.g70,
+                        R.drawable.g110,
+                        R.drawable.g150,
+                        R.drawable.g170,
+                        R.drawable.g180,
+                        R.drawable.g190,
+                        R.drawable.g210,
+                        R.drawable.g240,
+                        R.drawable.g250,
+                        R.drawable.g280,
+                        R.drawable.g300,
+                        R.drawable.g310,
+                        R.drawable.g350,
+                        R.drawable.g380,
+                        R.drawable.g450,
+                        R.drawable.g500,
+                        R.drawable.g610,
+                        R.drawable.g700,
+                        R.drawable.g800,
+                        R.drawable.g900,
+                        R.drawable.g999
                 };
+
+
+        String diamonds[] = {
+                "5",
+                "20",
+                "50",
+                "70",
+                "110",
+                "150",
+                "170",
+                "180",
+                "190",
+                "210",
+                "240",
+                "250",
+                "280",
+                "300",
+                "310",
+                "350",
+                "380",
+                "450",
+                "500",
+                "610",
+                "700",
+                "800",
+                "900",
+                "999"
+        };
+
 
         public GiftAdapter(Context context, ProgressBar progress, Dialog dialog) {
             this.context = context;
@@ -2270,6 +2312,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
             Glide.with(context).load(gifs[position]).into(holder.image);
 
+            holder.send.setText(diamonds[position]);
+
             holder.send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -2287,7 +2331,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    retrofit2.Call<sendGiftBean> call = cr.sendGift(b.userId, liveId, timelineId, String.valueOf(position + 1), "1", "1");
+                    retrofit2.Call<sendGiftBean> call = cr.sendGift(b.userId, liveId, timelineId, String.valueOf(position + 1), "1", diamonds[position]);
 
 
                     call.enqueue(new retrofit2.Callback<sendGiftBean>() {
@@ -2332,7 +2376,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
         @Override
         public int getItemCount() {
-            return 14;
+            return 24;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -2352,21 +2396,34 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
     Integer gifts[] = new Integer[]
             {
-                    R.drawable.gif1,
-                    R.drawable.gif2,
-                    R.drawable.gif3,
-                    R.drawable.gif4,
-                    R.drawable.gif5,
-                    R.drawable.gif6,
-                    R.drawable.gif7,
-                    R.drawable.gif8,
-                    R.drawable.gif9,
-                    R.drawable.gif10,
-                    R.drawable.gif11,
-                    R.drawable.gif12,
-                    R.drawable.gif13,
-                    R.drawable.gif14
+                    R.drawable.g5,
+                    R.drawable.g20,
+                    R.drawable.g50,
+                    R.drawable.g70,
+                    R.drawable.g110,
+                    R.drawable.g150,
+                    R.drawable.g170,
+                    R.drawable.g180,
+                    R.drawable.g190,
+                    R.drawable.g210,
+                    R.drawable.g240,
+                    R.drawable.g250,
+                    R.drawable.g280,
+                    R.drawable.g300,
+                    R.drawable.g310,
+                    R.drawable.g350,
+                    R.drawable.g380,
+                    R.drawable.g450,
+                    R.drawable.g500,
+                    R.drawable.g610,
+                    R.drawable.g700,
+                    R.drawable.g800,
+                    R.drawable.g900,
+                    R.drawable.g999
             };
+
+
+
 
 
     public void showGift(String giftId, String text) {

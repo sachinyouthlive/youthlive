@@ -129,6 +129,7 @@ public class SplashActivity extends AppCompatActivity {
                     edit.putString("type", "phone");
                     edit.putString("user", phone);
                     edit.putString("pass", pass);
+                    edit.putString("userType" , response.body().getData().getType());
                     edit.commit();
 
                     Intent Inbt = new Intent(SplashActivity.this, HomeActivity.class);
@@ -197,6 +198,7 @@ public class SplashActivity extends AppCompatActivity {
                     edit.putString("type", "social");
                     edit.putString("user", email);
                     edit.putString("pass", pid);
+                    edit.putString("userType" , response.body().getData().getType());
                     edit.commit();
 
                     Toast.makeText(SplashActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
