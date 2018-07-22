@@ -132,7 +132,7 @@ public class Rating1 extends Fragment {
 
 
             holder.name.setText(item.getUserName());
-            holder.beans.setText("Beans - " + item.getBeans());
+            holder.beans.setText("Coins - " + item.getBeans());
             holder.change.setText(String.valueOf(position + 1));
             holder.rankno.setText(String.valueOf(position + 1));
             if (position < 3) {

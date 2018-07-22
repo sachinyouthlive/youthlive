@@ -43,7 +43,7 @@
                     android:layout_height="20dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Beans Earned"
+                    android:text="Coins Earned"
                     android:textSize="15sp" />
 
             </TableRow>
@@ -90,7 +90,7 @@
                     android:layout_height="30dp"
                     android:layout_weight="1"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/coffeebean" />
+                    android:src="@drawable/coin" />
 
             </TableRow>
 

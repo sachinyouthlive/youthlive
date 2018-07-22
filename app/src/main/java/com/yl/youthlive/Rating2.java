@@ -135,7 +135,7 @@ public class Rating2 extends Fragment {
             holder.setIsRecyclable(false);
             final Datum item = list.get(position);
             holder.name.setText(item.getUserName());
-            holder.beans.setText("Beans - " + item.getBeans());
+            holder.beans.setText("Coins - " + item.getBeans());
             holder.change.setText(String.valueOf(position + 1));
             holder.rankno.setText(String.valueOf(position + 1));
             if (position < 3) {

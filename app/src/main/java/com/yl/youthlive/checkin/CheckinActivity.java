@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class CheckinActivity extends AppCompatActivity {
     MyRecyclerViewAdapter adapter;
     Toolbar toolbar;
     TextView total_broadcast, monthheader;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class CheckinActivity extends AppCompatActivity {
 
 
         toolbar.setTitleTextColor(Color.WHITE);
+        progressBar = findViewById(R.id.progress);
         monthheader = findViewById(R.id.header);
         total_broadcast = findViewById(R.id.total_broadcast);
         //using calender to find number of days in month and current date
@@ -124,6 +127,8 @@ public class CheckinActivity extends AppCompatActivity {
 
 
     public void totalbroadcast(String month) {
+        total_broadcast.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
 
         final bean b = (bean) getContext().getApplicationContext();
         final Retrofit retrofit = new Retrofit.Builder()
@@ -140,6 +145,8 @@ public class CheckinActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<TotalbroadcastPOJO> call, Response<TotalbroadcastPOJO> response) {
 
+                progressBar.setVisibility(View.GONE);
+                total_broadcast.setVisibility(View.VISIBLE);
                 try {
                     if (!response.body().getTotalMonthlyBroadcast().toString().isEmpty()) {
                         long totalSecs = response.body().getTotalMonthlyBroadcast();
@@ -159,7 +166,8 @@ public class CheckinActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<TotalbroadcastPOJO> call, Throwable t) {
-
+                progressBar.setVisibility(View.GONE);
+                total_broadcast.setVisibility(View.VISIBLE);
             }
 
         });

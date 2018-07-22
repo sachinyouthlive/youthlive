@@ -99,7 +99,7 @@
                     android:layout_height="10dp"
                     android:layout_gravity="center_vertical"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/coffeebean" />
+                    android:src="@drawable/coin" />
 
                 <TextView
                     android:id="@+id/beans"
@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="3dp"
-                    android:text="Beans"
+                    android:text="Coins"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp" />
 

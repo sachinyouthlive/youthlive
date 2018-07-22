@@ -98,6 +98,15 @@
                     android:text="GoLive Time"
                     android:textSize="@dimen/dimen_14sp" />
 
+                <ProgressBar
+                    android:id="@+id/progress"
+                    android:layout_width="100dp"
+                    android:layout_height="16dp"
+                    android:layout_alignBaseline="@+id/total_broadcast_header"
+                    android:layout_toRightOf="@+id/total_broadcast_header"
+                    android:gravity="center"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/total_broadcast"
                     android:layout_width="wrap_content"
