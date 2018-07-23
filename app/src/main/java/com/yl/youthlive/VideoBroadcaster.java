@@ -686,8 +686,8 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 //Create the player
                 thumbPlayer1 = ExoPlayerFactory.newSimpleInstance(VideoBroadcaster.this, trackSelector, new DefaultLoadControl(
                         new DefaultAllocator(true, 1000),
-                        500,  // min buffer 0.5s
-                        1000, //max buffer 3s
+                        1000,  // min buffer 0.5s
+                        3000, //max buffer 3s
                         1000, // playback 1s
                         1000,   //playback after rebuffer 1s
                         1,

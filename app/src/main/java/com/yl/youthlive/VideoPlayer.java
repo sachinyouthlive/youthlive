@@ -696,8 +696,8 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         }));
         mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
-        mPublisher.setOutputResolution(480, 360);
-        mPublisher.setPreviewResolution(360, 480);
+        mPublisher.setPreviewResolution(384, 216);
+        mPublisher.setOutputResolution(360, 480);
 
         //mPublisher.setVideoBitRate(128000);
 
@@ -850,7 +850,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         }));
         mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
 
-        mPublisher.setPreviewResolution(360, 480);
+        mPublisher.setPreviewResolution(384, 216);
         mPublisher.setOutputResolution(480, 360);
 
         //mPublisher.setVideoBitRate(128000);
