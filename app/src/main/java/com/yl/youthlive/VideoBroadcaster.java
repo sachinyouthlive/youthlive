@@ -260,7 +260,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
-        mPublisher.setPreviewResolution(360, 640);
+        mPublisher.setPreviewResolution(640, 360);
         mPublisher.setOutputResolution(640, 360);
         //mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
         mPublisher.setVideoSmoothMode();
