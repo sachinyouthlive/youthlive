@@ -32,6 +32,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -1508,7 +1511,21 @@ public class BroadcasterFragment1 extends Fragment {
             } else if (type.equals("gift")) {
 
                 String us = item.getUserId().replace("\"", "");
-                holder.name.setText(us + " has sent a ");
+                holder.name.setText(us + " has sent a  ");
+
+                Drawable drawable = context.getResources().getDrawable(R.drawable.gift);
+
+                drawable.setBounds(0, 0, 40, 40);
+
+                int selectionCursor = holder.name.getSelectionStart();
+                //holder.name.getText().insert(selectionCursor, ".");
+                selectionCursor = holder.name.getText().length();
+
+                SpannableStringBuilder builder = new SpannableStringBuilder(holder.name.getText());
+                builder.setSpan(new ImageSpan(drawable), selectionCursor - ".".length(), selectionCursor , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                holder.name.setText(builder);
+                //holder.name.setSelection(selectionCursor);
+
                 holder.add.setVisibility(View.GONE);
 
                 holder.container.setBackground(context.getResources().getDrawable(R.drawable.blue_round2));
