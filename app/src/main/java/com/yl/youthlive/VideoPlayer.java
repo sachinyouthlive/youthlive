@@ -284,7 +284,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         mainPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
                 new DefaultAllocator(true, 1000),
                 1000,  // min buffer 0.5s
-                3000, //max buffer 3s
+                2000, //max buffer 3s
                 1000, // playback 1s
                 1000,   //playback after rebuffer 1s
                 1,
@@ -696,9 +696,8 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         }));
         mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
-        mPublisher.setPreviewResolution(384, 216);
-        mPublisher.setOutputResolution(360, 480);
-
+        mPublisher.setPreviewResolution(480, 360);
+        mPublisher.setOutputResolution(360, 640);
         //mPublisher.setVideoBitRate(128000);
 
         mPublisher.setVideoSmoothMode();
@@ -850,9 +849,8 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         }));
         mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
 
-        mPublisher.setPreviewResolution(384, 216);
-        mPublisher.setOutputResolution(480, 360);
-
+        mPublisher.setPreviewResolution(480, 360);
+        mPublisher.setOutputResolution(360, 640);
         //mPublisher.setVideoBitRate(128000);
 
         mPublisher.setVideoSmoothMode();
@@ -898,10 +896,10 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 //Create the player
         thumbPlayer1 = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
                 new DefaultAllocator(true, 1000),
-                200,  // min buffer 0.5s
-                500, //max buffer 3s
-                500, // playback 1s
-                500,   //playback after rebuffer 1s
+                1000,  // min buffer 0.5s
+                2000, //max buffer 3s
+                1000, // playback 1s
+                1000,   //playback after rebuffer 1s
                 1,
                 true
         ));

@@ -243,11 +243,13 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         stateText = findViewById(R.id.textView3);
         //start = findViewById(R.id.imageButton2);
 
+/*
 
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+*/
 
         mPublisher = new SrsPublisher(cameraPreview);
 /*
@@ -260,8 +262,8 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
-        mPublisher.setPreviewResolution(640, 360);
-        mPublisher.setOutputResolution(640, 360);
+        mPublisher.setPreviewResolution(480, 360);
+        mPublisher.setOutputResolution(360, 640);
         //mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
         mPublisher.setVideoSmoothMode();
 
@@ -687,7 +689,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
                 thumbPlayer1 = ExoPlayerFactory.newSimpleInstance(VideoBroadcaster.this, trackSelector, new DefaultLoadControl(
                         new DefaultAllocator(true, 1000),
                         1000,  // min buffer 0.5s
-                        3000, //max buffer 3s
+                        2000, //max buffer 3s
                         1000, // playback 1s
                         1000,   //playback after rebuffer 1s
                         1,
@@ -716,6 +718,8 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
                     @Override
                     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
+                        Log.d("ddata" , String.valueOf(playbackState));
 
                         if (playbackState == 4)
                         {

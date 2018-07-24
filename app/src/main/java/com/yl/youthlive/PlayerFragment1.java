@@ -121,6 +121,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     BroadcastReceiver giftReceiver;
     BroadcastReceiver endReceiver;
     BroadcastReceiver requestReceiver;
+    BroadcastReceiver requestReceiver2;
     BroadcastReceiver connectionReceiver;
     BroadcastReceiver statusReceiver;
     BroadcastReceiver statusReceiverPlayer;
@@ -134,7 +135,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     String liveId;
 
     ImageButton timeLineFollow;
-
 
 
     private static final int REQUEST_CODE = 100;
@@ -215,7 +215,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
         bubbleView = (BubbleView) view.findViewById(R.id.bubble);
         timeLineFollow = view.findViewById(R.id.folloview_friends);
-
 
 
         List<Drawable> drawableList = new ArrayList<>();
@@ -726,7 +725,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
-                    Log.d("data", intent.getStringExtra("data"));
+                    Log.d("ddata", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
@@ -859,6 +858,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 
                         }
+                        else
+                        {
+                            isConnection = true;
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -890,7 +893,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     // now subscribe to `global` topic to receive app wide notifications
 
 
-                    Log.d("uurrii", intent.getStringExtra("data"));
+                    Log.d("ddata", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
@@ -908,7 +911,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 
                             if (!uid.equals(b.userId)) {
-                                Log.d("uurrii", uri);
+                                Log.d("ddata", uri);
 
 
                                 new CountDownTimer(8000, 1000) {
@@ -934,10 +937,14 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                             }
 
                         }
+                        else
+                        {
+                            isConnection = false;
+                        }
 
 
                     } catch (JSONException e) {
-                        Log.d("uurrii", e.toString());
+                        Log.d("ddata", e.toString());
                         e.printStackTrace();
                     }
 
@@ -1036,8 +1043,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         String uid = obj.getString("uid");
 
 
-                        if (uid.equals(b.userId))
-                        {
+                        if (uid.equals(b.userId)) {
                             if (mode.equals("2")) {
 
 
@@ -1058,9 +1064,43 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                             }
 
+                        } else {
+
+                            if (mode.equals("2")) {
+
+
+                                new CountDownTimer(8000, 1000) {
+
+
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+
+                                        reject1.setVisibility(View.GONE);
+
+                                        isConnection = true;
+
+                                        player.startThumbPlayer1(uri);
+                                        thumbCameraContainer1.setVisibility(View.VISIBLE);
+
+                                    }
+                                }.start();
+
+
+                            } else {
+
+                                isConnection = false;
+
+
+                            }
+
+
+
+
                         }
-
-
 
 
                     } catch (JSONException e) {
@@ -1070,6 +1110,51 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 
                     //displayFirebaseRegId();
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        requestReceiver2 = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("request_player")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+                    isConnection = true;
+
+                    Log.d("ddata", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject object = new JSONObject(json);
+
+                        connId = object.getString("conId");
+
+                        final String uid = object.getString("uid");
+
+
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+
                 }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
@@ -1304,7 +1389,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     }
 
 
-
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
 
@@ -1442,7 +1526,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 selectionCursor = holder.name.getText().length();
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(holder.name.getText());
-                builder.setSpan(new ImageSpan(drawable), selectionCursor - ".".length(), selectionCursor , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new ImageSpan(drawable), selectionCursor - ".".length(), selectionCursor, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 holder.name.setText(builder);
 
                 holder.add.setVisibility(View.GONE);
@@ -1476,11 +1560,9 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 public void onClick(View view) {
 
 
-
                     bean b = (bean) context.getApplicationContext();
 
-                    if (!uid.equals(b.userId))
-                    {
+                    if (!uid.equals(b.userId)) {
                         final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.follow_dialog);
@@ -1650,17 +1732,14 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     timelineId = response.body().getData().getTimelineId();
 
 
-
                     commentsAdapter.setGridData(response.body().getData().getComments());
 
 
-                    for (int i = 0 ; i < response.body().getData().getViews().size() ; i++)
-                    {
+                    for (int i = 0; i < response.body().getData().getViews().size(); i++) {
 
                         final String uid = response.body().getData().getViews().get(i).getUserId().replace("\"", "");
 
-                        if (!uid.equals(b.userId))
-                        {
+                        if (!uid.equals(b.userId)) {
                             viewsAdapter.addView(response.body().getData().getViews().get(i));
                         }
 
@@ -1758,11 +1837,13 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                             new IntentFilter("live_end"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver,
                             new IntentFilter("request"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver2,
+                            new IntentFilter("request_player"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionReceiver,
                             new IntentFilter("connection_end"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
                             new IntentFilter("status"));
-  LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiverPlayer,
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiverPlayer,
                             new IntentFilter("status_player"));
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
@@ -1808,6 +1889,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(endReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver2);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiverPlayer);
@@ -2134,22 +2216,19 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             ImageLoader loader = ImageLoader.getInstance();
 
 
-
             final String uid = item.getUserId().replace("\"", "");
             final String imm = item.getUserImage().replace("\"", "");
             final String un = item.getUserName().replace("\"", "");
 
 
-
-            loader.displayImage(b.BASE_URL + imm , holder.image, options);
+            loader.displayImage(b.BASE_URL + imm, holder.image, options);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
 
-                    if (!uid.equals(b.userId))
-                    {
+                    if (!uid.equals(b.userId)) {
                         final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.follow_dialog);
@@ -2163,10 +2242,9 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
 
 
-
                         ImageLoader loader1 = ImageLoader.getInstance();
 
-                        loader1.displayImage(b.BASE_URL + imm, image , options);
+                        loader1.displayImage(b.BASE_URL + imm, image, options);
 
                         name.setText(un);
 
@@ -2212,9 +2290,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                             }
                         });
                     }
-
-
-
 
 
                 }
@@ -2438,9 +2513,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     R.drawable.g900,
                     R.drawable.g999
             };
-
-
-
 
 
     public void showGift(String giftId, String text) {

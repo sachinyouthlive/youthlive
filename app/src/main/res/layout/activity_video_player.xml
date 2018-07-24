@@ -66,6 +66,8 @@
             android:id="@+id/thumb_frame1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:surface_type="texture_view"
+            app:resize_mode="fill"
             android:visibility="gone"/>
 
 

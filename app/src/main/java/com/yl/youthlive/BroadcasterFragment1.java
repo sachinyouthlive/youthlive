@@ -728,7 +728,7 @@ public class BroadcasterFragment1 extends Fragment {
                     // now subscribe to `global` topic to receive app wide notifications
 
 
-                    Log.d("uurrii", intent.getStringExtra("data"));
+                    Log.d("ddata", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
@@ -744,7 +744,7 @@ public class BroadcasterFragment1 extends Fragment {
                         if (mode.equals("2")) {
 
 
-                            Log.d("uurrii", uri);
+                            Log.d("ddata", uri);
 
                             broadcaster.startThumbPlayer1(uri, thumbPic1 , connId);
                             playerFrame1.setVisibility(View.VISIBLE);
@@ -763,7 +763,7 @@ public class BroadcasterFragment1 extends Fragment {
 
 
                     } catch (JSONException e) {
-                        Log.d("uurrii", e.toString());
+                        Log.d("ddata", e.toString());
                         e.printStackTrace();
                     }
 
@@ -900,7 +900,7 @@ public class BroadcasterFragment1 extends Fragment {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
-                    Log.d("data", intent.getStringExtra("data"));
+                    Log.d("ddata", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
@@ -945,7 +945,7 @@ public class BroadcasterFragment1 extends Fragment {
                                         @Override
                                         public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
 
-                                            try {
+                                            /*try {
 
 
 
@@ -960,7 +960,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                                             } catch (Exception e) {
                                                 e.printStackTrace();
-                                            }
+                                            }*/
 
                                             reject1.setVisibility(View.VISIBLE);
 
@@ -1336,6 +1336,7 @@ public class BroadcasterFragment1 extends Fragment {
                             if (response.body().getStatus().equals("1"))
                             {
                                 thumbPic1 = imm;
+                                isConnection = true;
                                 Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
@@ -1346,6 +1347,7 @@ public class BroadcasterFragment1 extends Fragment {
                         @Override
                         public void onFailure(Call<requestConnectionBean> call, Throwable t) {
                             thumbPic1 = imm;
+                            isConnection = false;
                             dialogProgress.setVisibility(View.GONE);
                             Log.d("asdasdasdas", t.toString());
                         }
@@ -1646,6 +1648,7 @@ public class BroadcasterFragment1 extends Fragment {
                                             thumbPic1 = im;
 
 
+                                            isConnection = true;
                                             dialog.dismiss();
 
 
@@ -1655,6 +1658,7 @@ public class BroadcasterFragment1 extends Fragment {
                                         @Override
                                         public void onFailure(Call<requestConnectionBean> call, Throwable t) {
                                             thumbPic1 = item.getUserImage();
+                                            isConnection = false;
                                             bar.setVisibility(View.GONE);
                                             Log.d("asdasdasdas", t.toString());
                                         }
@@ -2702,6 +2706,7 @@ public class BroadcasterFragment1 extends Fragment {
                                             String im = item.getUserImage().replace("\"", "");
                                             thumbPic1 = im;
 
+                                            isConnection = true;
 
                                             dialog.dismiss();
 
@@ -2712,6 +2717,7 @@ public class BroadcasterFragment1 extends Fragment {
                                         @Override
                                         public void onFailure(Call<requestConnectionBean> call, Throwable t) {
                                             thumbPic1 = item.getUserImage();
+                                            isConnection = false;
                                             bar.setVisibility(View.GONE);
                                             Log.d("asdasdasdas", t.toString());
                                         }
