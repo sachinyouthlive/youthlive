@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Region;
+import android.hardware.Camera;
 import android.media.audiofx.Visualizer;
 import android.net.Uri;
 import android.os.CountDownTimer;
@@ -256,6 +257,9 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         pager = findViewById(R.id.pager);
 
 
+
+
+
         //SurfaceHolder holder = surfaceView.getHolder();
         //holder.setFormat(PixelFormat.UNKNOWN);
         //holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -304,30 +308,6 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
             @Override
             public void onAudioSessionId(int audioSessionId) {
 
-                Log.d("sessionId", String.valueOf(audioSessionId));
-
-                Visualizer visualizer = new Visualizer(0);
-
-                visualizer.setCaptureSize(256);
-                visualizer.setEnabled(true);
-
-                Log.d("sessionId", String.valueOf(visualizer.getScalingMode()));
-
-                visualizer.setDataCaptureListener(new Visualizer.OnDataCaptureListener() {
-                    @Override
-                    public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform, int samplingRate) {
-
-                        Log.d("sessionId", "1");
-
-                    }
-
-                    @Override
-                    public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
-                        Log.d("sessionId", "1");
-                    }
-
-
-                }, Visualizer.getMaxCaptureRate(), true, false);
 
             }
 
@@ -358,6 +338,8 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
                 .createMediaSource(uri);
 
         mainPlayer.prepare(videoSource);
+
+        mainPlayer.setVolume(0.1f);
 
         mainPlayer.setPlayWhenReady(true);
 
@@ -599,12 +581,14 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
             @Override
             public void onRtmpConnecting(String s) {
 
+                Log.d("rreess" , s);
+
             }
 
             @Override
             public void onRtmpConnected(String s) {
                 progress.setVisibility(View.VISIBLE);
-
+                Log.d("rreess" , s);
                 Log.d("rreess", connId);
 
 
@@ -640,7 +624,6 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
             @Override
             public void onRtmpVideoStreaming() {
-
             }
 
             @Override
@@ -650,12 +633,13 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
             @Override
             public void onRtmpStopped() {
+                Log.d("rreess" , "stopped");
 
             }
 
             @Override
             public void onRtmpDisconnected() {
-
+                Log.d("rreess" , "disconnected");
             }
 
             @Override
@@ -680,29 +664,58 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
             @Override
             public void onRtmpIOException(IOException e) {
-
+                Log.d("rreess" , e.toString());
             }
 
             @Override
             public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-
+                Log.d("rreess" , e.toString());
             }
 
             @Override
             public void onRtmpIllegalStateException(IllegalStateException e) {
-
+                Log.d("rreess" , e.toString());
             }
 
 
         }));
         mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
-        mPublisher.setPreviewResolution(480, 360);
-        mPublisher.setOutputResolution(360, 640);
-        //mPublisher.setVideoBitRate(128000);
+        mPublisher.getmCameraView().open_camera();
+
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager)
+                getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
+
+
+        Camera.Size best_size= mPublisher.getmCameraView().get_best_size(screenWidth , screenHeight);
+
+        if(best_size!=null)
+        {
+            Log.d("asdasd","************ Best size is "+best_size.width+" Height: "+best_size.height+" ********************");
+            mPublisher.setPreviewResolution(best_size.width, best_size.height);
+            mPublisher.setOutputResolution(best_size.height, best_size.width);
+        }
+        else
+        {
+            Log.d("asdasd","************ Best size is NULL ********************");
+            mPublisher.setPreviewResolution(640, 480);
+            mPublisher.setOutputResolution(480, 640);
+        }
+
+
+        thumbCamera1.startCamera();
+
 
         mPublisher.setVideoSmoothMode();
+
+
+
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
-        thumbCamera1.startCamera();
+
 
 
         new CountDownTimer(8000, 1000) {
@@ -849,12 +862,34 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         }));
         mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
 
-        mPublisher.setPreviewResolution(480, 360);
-        mPublisher.setOutputResolution(360, 640);
-        //mPublisher.setVideoBitRate(128000);
+        mPublisher.getmCameraView().open_camera();
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager)
+                getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
+
+
+        Camera.Size best_size= mPublisher.getmCameraView().get_best_size(screenWidth , screenHeight);
+
+        if(best_size!=null)
+        {
+            Log.d("asdasd","************ Best size is "+best_size.width+" Height: "+best_size.height+" ********************");
+            mPublisher.setPreviewResolution(best_size.width, best_size.height);
+            mPublisher.setOutputResolution(best_size.height, best_size.width);
+        }
+        else
+        {
+            Log.d("asdasd","************ Best size is NULL ********************");
+            mPublisher.setPreviewResolution(640, 480);
+            mPublisher.setOutputResolution(480, 640);
+        }
+
+        thumbCamera1.startCamera();
 
         mPublisher.setVideoSmoothMode();
-        thumbCamera1.startCamera();
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 
 

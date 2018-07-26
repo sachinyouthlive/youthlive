@@ -9,6 +9,9 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.WindowManager;
 
 import com.seu.magicfilter.base.gpuimage.GPUImageFilter;
 import com.seu.magicfilter.utils.MagicFilterFactory;
@@ -134,7 +137,7 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
     public void setPreviewCallback(PreviewCallback cb) {
         mPrevCb = cb;
     }
-    
+
     public Camera getCamera(){
         return this.mCamera;
     }
@@ -269,6 +272,70 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
             worker = null;
         }
     }
+
+
+    Camera.Size best_size;  // Instance variable
+    public Camera.Size get_best_size(int wid , int hei)
+    {
+
+
+        float rat = hei / wid;
+
+
+        if(mCamera==null)
+            return null;
+        Camera.Parameters params = mCamera.getParameters();
+
+        List<Camera.Size> sizes =params.getSupportedPreviewSizes();
+        int bes_width=0;
+        int max_limit=480;
+        for(Camera.Size size : sizes)
+        {
+            Log.d("SrsCamera","Size width:"+size.width+" height:"+size.height);
+            if(size.height>bes_width && size.height<=max_limit)
+            {
+                if (size.width / size.height == rat)
+                {
+                    bes_width=size.width;
+                    best_size=size;
+                }
+            }
+        }
+
+        return best_size;
+    }
+
+    Camera.Size best_size2;  // Instance variable
+    public Camera.Size get_best_size2()
+    {
+        if(mCamera==null)
+            return null;
+        Camera.Parameters params = mCamera.getParameters();
+
+        List<Camera.Size> sizes =params.getSupportedPreviewSizes();
+        int bes_width=0;
+        int max_limit=480;
+        for(Camera.Size size : sizes)
+        {
+            Log.d("SrsCamera","Size width:"+size.width+" height:"+size.height);
+            if(size.width>bes_width && size.width<=max_limit)
+            {
+                bes_width=size.width;
+                best_size2=size;
+            }
+        }
+
+        return best_size2;
+    }
+
+
+    public void open_camera()
+    {
+        if (mCamera == null) {
+            mCamera = openCamera();
+        }
+    }
+
 
     public boolean startCamera() {
         if (mCamera == null) {

@@ -25,6 +25,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -34,6 +35,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -243,8 +245,8 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         stateText = findViewById(R.id.textView3);
         //start = findViewById(R.id.imageButton2);
 
-/*
 
+/*
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -259,17 +261,67 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         mPublisher.setRecordEventHandler(new RecordHandler(this));
 */
 
+
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
-        mPublisher.setPreviewResolution(480, 360);
-        mPublisher.setOutputResolution(360, 640);
-        //mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
-        mPublisher.setVideoSmoothMode();
+
+        mPublisher.getmCameraView().open_camera();
 
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager)
+                getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
 
-        mPublisher.startCamera();
+
+        Camera.Size best_size= mPublisher.getmCameraView().get_best_size(screenWidth , screenHeight);
+
+        Log.d("asdasdasd" , String.valueOf(screenWidth));
+        Log.d("asdasdasd" , String.valueOf(screenHeight));
+
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+
+        Log.d("asdasdasd" , String.valueOf(result));
+
+        if(best_size!=null)
+        {
+            Log.d("asdasd","************ Best size is "+best_size.width+" Height: "+best_size.height+" ********************");
+            mPublisher.setPreviewResolution(best_size.width, best_size.height);
+            mPublisher.setOutputResolution(best_size.height, best_size.width);
+            //mPublisher.setPreviewResolution((int) (screenWidth * 0.375), (int) (screenHeight * 0.375));
+            //mPublisher.setOutputResolution((int) (screenHeight * 0.375), (int) (screenWidth * 0.375));
+        }
+        else
+        {
+            Log.d("asdasd","************ Best size is NULL ********************");
+            mPublisher.setPreviewResolution(480, 320);
+            mPublisher.setOutputResolution(320, 480);
+            //mPublisher.setPreviewResolution((int) (screenWidth * 0.375), (int) (screenHeight * 0.375));
+            //mPublisher.setOutputResolution((int) (screenHeight * 0.375), (int) (screenWidth * 0.375));
+        }
+
+        mPublisher.setVideoHDMode();
+
+        mPublisher.switchCameraFilter(MagicFilterType.COOL);
+
+//        mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
+//        mPublisher.setRtmpHandler(new RtmpHandler(this));
+//        mPublisher.setRecordHandler(new SrsRecordHandler(this));
+//        mPublisher.setPreviewResolution(640, 480);
+//        mPublisher.setOutputResolution(360, 640);
+//        //mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
+//        mPublisher.setVideoSmoothMode();
+//
+//
+//
+//        mPublisher.startCamera();
 
 
 
@@ -800,6 +852,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
                 thumbPlayer1.setPlayWhenReady(true);
 
 
+                thumbPlayer1.setVolume(0.5f);
 
 
                 thumbPlayerView1.setVisibility(View.VISIBLE);

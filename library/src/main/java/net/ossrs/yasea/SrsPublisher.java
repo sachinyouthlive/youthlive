@@ -334,4 +334,8 @@ public class SrsPublisher {
             mEncoder.setMp4Muxer(mMp4Muxer);
         }
     }
+
+    public SrsCameraView getmCameraView() {
+        return mCameraView;
+    }
 }

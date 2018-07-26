@@ -42,6 +42,7 @@ import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -632,15 +633,29 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     try {
 
-                        String giftName = item.getGiftName();
+
+
+                        String giftName = item.getGiftName().replace("\"", "");
+
+                        totalBeans.setText(giftName + " Coins");
 
                         Comment comm = new Comment();
 
                         comm.setType("gift");
                         comm.setUserId(item.getSenbdId());
+                        comm.setComment(item.getGiftId());
 
                         commentsAdapter.addComment(comm);
 
+                        if (loading) {
+                            commentGrid.scrollToPosition(0);
+                            loading = true;
+                            newMessage.setVisibility(View.GONE);
+                        } else {
+                            Log.d("lloogg", "new message");
+
+                            newMessage.setVisibility(View.VISIBLE);
+                        }
                         //comm.set
 
 
@@ -752,21 +767,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                                 @Override
                                 public void onClick(View v) {
 
-
-                            /*final bean b = (bean) player.getApplicationContext();
-
-                            mPublisher = new StreamaxiaPublisher(thumbCamera1, player);
-
-                            mPublisher.setEncoderHandler(new EncoderHandler(PlayerFragment1.this));
-                            mPublisher.setRtmpHandler(new RtmpHandler(PlayerFragment1.this));
-                            mPublisher.setRecordEventHandler(new RecordHandler(PlayerFragment1.this));
-                            thumbCamera1.startCamera();
-                            mPublisher.setVideoOutputResolution(160, 120, getResources().getConfiguration().orientation);
-
-
-                            mPublisher.startPublish("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/live/" + liveId + b.userId);
-*/
-                                    //thumbCamera1.setVisibility(View.VISIBLE);
 
 
                                     thumbCameraContainer1.setVisibility(View.VISIBLE);
@@ -1395,6 +1395,39 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         List<Comment> list = new ArrayList<>();
         Context context;
 
+
+        Integer gifts[] = new Integer[]
+                {
+                        R.drawable.g52,
+                        R.drawable.g20,
+                        R.drawable.g32,
+                        R.drawable.g1500,
+                        R.drawable.g72,
+                        R.drawable.g112,
+                        R.drawable.g152,
+                        R.drawable.g172,
+                        R.drawable.g180,
+                        R.drawable.g192,
+                        R.drawable.g212,
+                        R.drawable.g240,
+                        R.drawable.g252,
+                        R.drawable.g280,
+                        R.drawable.g300,
+                        R.drawable.g312,
+                        R.drawable.g352,
+                        R.drawable.g380,
+                        R.drawable.g452,
+                        R.drawable.g500,
+                        R.drawable.g612,
+                        R.drawable.g700,
+                        R.drawable.g800,
+                        R.drawable.g900,
+                        R.drawable.g1000,
+                        R.drawable.g1100,
+                        R.drawable.g1200
+                };
+
+
         public CommentsAdapter(Context context, List<Comment> list) {
             this.context = context;
             this.list = list;
@@ -1514,12 +1547,13 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             } else if (type.equals("gift")) {
 
                 String us = item.getUserId().replace("\"", "");
-                holder.name.setText(us + " has sent a ");
+                String gid = item.getComment().replace("\"", "");
+                holder.name.setText(us + " has sent a  ");
 
 
-                Drawable drawable = context.getResources().getDrawable(R.drawable.gift);
+                Drawable drawable = context.getResources().getDrawable(gifts[Integer.parseInt(gid) - 1]);
 
-                drawable.setBounds(0, 0, 40, 40);
+                drawable.setBounds(0, 0, 50, 50);
 
                 int selectionCursor = holder.name.getSelectionStart();
                 //holder.name.getText().insert(selectionCursor, ".");
@@ -1776,6 +1810,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                         player.startThumbPlayer1(response.body().getData().getConnid());
                         thumbCameraContainer1.setVisibility(View.VISIBLE);
+
+                        isConnection = true;
 
                     }
 
@@ -2330,58 +2366,95 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         Dialog dialog;
         Integer gifs[] = new Integer[]
                 {
-                        R.drawable.g5,
+                        R.drawable.g52,
                         R.drawable.g20,
-                        R.drawable.g50,
-                        R.drawable.g70,
-                        R.drawable.g110,
-                        R.drawable.g150,
-                        R.drawable.g170,
+                        R.drawable.g32,
+                        R.drawable.g1500,
+                        R.drawable.g72,
+                        R.drawable.g112,
+                        R.drawable.g152,
+                        R.drawable.g172,
                         R.drawable.g180,
-                        R.drawable.g190,
-                        R.drawable.g210,
+                        R.drawable.g192,
+                        R.drawable.g212,
                         R.drawable.g240,
-                        R.drawable.g250,
+                        R.drawable.g252,
                         R.drawable.g280,
                         R.drawable.g300,
-                        R.drawable.g310,
-                        R.drawable.g350,
+                        R.drawable.g312,
+                        R.drawable.g352,
                         R.drawable.g380,
-                        R.drawable.g450,
+                        R.drawable.g452,
                         R.drawable.g500,
-                        R.drawable.g610,
+                        R.drawable.g612,
                         R.drawable.g700,
                         R.drawable.g800,
                         R.drawable.g900,
-                        R.drawable.g999
+                        R.drawable.g1000,
+                        R.drawable.g1100,
+                        R.drawable.g1200
                 };
 
 
         String diamonds[] = {
-                "5",
+                "12",
                 "20",
-                "50",
-                "70",
-                "110",
-                "150",
-                "170",
+                "32",
+                "52",
+                "72",
+                "112",
+                "152",
+                "172",
                 "180",
-                "190",
-                "210",
+                "192",
+                "212",
                 "240",
-                "250",
+                "252",
                 "280",
                 "300",
-                "310",
-                "350",
+                "312",
+                "352",
                 "380",
-                "450",
+                "452",
                 "500",
-                "610",
+                "612",
                 "700",
                 "800",
                 "900",
-                "999"
+                "1000",
+                "1100",
+                "1200"
+        };
+
+
+        String names[] = {
+                "heart",
+                "gun",
+                "scooter",
+                "rakhi",
+                "teddy",
+                "chocolates",
+                "treasure",
+                "clap",
+                "clock",
+                "bike",
+                "car",
+                "bird",
+                "rose",
+                "dancing girl",
+                "diamond",
+                "superbee",
+                "hug",
+                "heart beat",
+                "golden egg",
+                "love",
+                "rabbits",
+                "loving heart",
+                "ring",
+                "kiss",
+                "fire",
+                "head phone",
+                "weapon"
         };
 
 
@@ -2405,6 +2478,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             Glide.with(context).load(gifs[position]).into(holder.image);
 
             holder.send.setText(diamonds[position]);
+
+            holder.name.setText(names[position]);
 
             holder.send.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -2468,19 +2543,21 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
         @Override
         public int getItemCount() {
-            return 24;
+            return 27;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
             ImageView image;
             Button send;
+            TextView name;
 
             public ViewHolder(View itemView) {
                 super(itemView);
 
                 image = itemView.findViewById(R.id.imageView12);
                 send = itemView.findViewById(R.id.button8);
+                name = itemView.findViewById(R.id.textView48);
 
             }
         }
@@ -2488,39 +2565,76 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
     Integer gifts[] = new Integer[]
             {
-                    R.drawable.g5,
+                    R.drawable.g52,
                     R.drawable.g20,
-                    R.drawable.g50,
-                    R.drawable.g70,
-                    R.drawable.g110,
-                    R.drawable.g150,
-                    R.drawable.g170,
+                    R.drawable.g32,
+                    R.drawable.g1500,
+                    R.drawable.g72,
+                    R.drawable.g112,
+                    R.drawable.g152,
+                    R.drawable.g172,
                     R.drawable.g180,
-                    R.drawable.g190,
-                    R.drawable.g210,
+                    R.drawable.g192,
+                    R.drawable.g212,
                     R.drawable.g240,
-                    R.drawable.g250,
+                    R.drawable.g252,
                     R.drawable.g280,
                     R.drawable.g300,
-                    R.drawable.g310,
-                    R.drawable.g350,
+                    R.drawable.g312,
+                    R.drawable.g352,
                     R.drawable.g380,
-                    R.drawable.g450,
+                    R.drawable.g452,
                     R.drawable.g500,
-                    R.drawable.g610,
+                    R.drawable.g612,
                     R.drawable.g700,
                     R.drawable.g800,
                     R.drawable.g900,
-                    R.drawable.g999
+                    R.drawable.g1000,
+                    R.drawable.g1100,
+                    R.drawable.g1200
             };
 
+    String names[] = {
+            "heart",
+            "gun",
+            "scooter",
+            "rakhi",
+            "teddy",
+            "chocolates",
+            "treasure",
+            "clap",
+            "clock",
+            "bike",
+            "car",
+            "bird",
+            "rose",
+            "dancing girl",
+            "diamond",
+            "superbee",
+            "hug",
+            "heart beat",
+            "golden egg",
+            "love",
+            "rabbits",
+            "loving heart",
+            "ring",
+            "kiss",
+            "fire",
+            "head phone",
+            "weapon"
+    };
 
     public void showGift(String giftId, String text) {
 
 
         Glide.with(player).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
-        giftText.setText(text);
+        giftText.setText(names[Integer.parseInt(giftId) - 1]);
 
+
+        TranslateAnimation animate = new TranslateAnimation(rootView.getWidth(),0,0,0);
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        giftLayout.startAnimation(animate);
         giftLayout.setVisibility(View.VISIBLE);
 
         Timer t = new Timer();
@@ -2532,6 +2646,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 giftLayout.post(new Runnable() {
                     @Override
                     public void run() {
+                        TranslateAnimation animate = new TranslateAnimation(0,-rootView.getWidth(),0,0);
+                        animate.setDuration(500);
+                        animate.setFillAfter(true);
+                        giftLayout.startAnimation(animate);
                         giftLayout.setVisibility(View.GONE);
                     }
                 });
