@@ -280,9 +280,9 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         Log.d("asdasdasd", String.valueOf(result));
 
         if (best_size != null) {
-            Log.d("asdasd", "************ Best size is " + best_size.width + " Height: " + best_size.height + " ********************");
-            mPublisher.setPreviewResolution(best_size.width, best_size.height);
-            mPublisher.setOutputResolution(best_size.height, best_size.width);
+            Log.d("asdasd", "************ Best size is " + (best_size.width * 4)/10 + " Height: " + (best_size.height * 4)/10 + " ********************");
+            mPublisher.setPreviewResolution((best_size.width * 4)/10, (best_size.height * 4)/10);
+            mPublisher.setOutputResolution((best_size.height * 4)/10, (best_size.width * 4)/10);
             //mPublisher.setPreviewResolution((int) (screenWidth * 0.375), (int) (screenHeight * 0.375));
             //mPublisher.setOutputResolution((int) (screenHeight * 0.375), (int) (screenWidth * 0.375));
         } else {

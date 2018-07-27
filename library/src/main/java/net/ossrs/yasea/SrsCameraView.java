@@ -119,7 +119,13 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        surfaceTexture.updateTexImage();
+        try {
+            surfaceTexture.updateTexImage();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
 
         surfaceTexture.getTransformMatrix(mSurfaceMatrix);
         Matrix.multiplyMM(mTransformMatrix, 0, mSurfaceMatrix, 0, mProjectionMatrix, 0);
@@ -304,7 +310,7 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
             }
         }
 
-        return params.getPreferredPreviewSizeForVideo();
+        return params.getPreviewSize();
         //return best_size;
     }
 
@@ -416,7 +422,13 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
         Log.d("Srs Params" , params.flatten());
 
 
-        mCamera.setParameters(params);
+        try {
+            mCamera.setParameters(params);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
 
         mCamera.setDisplayOrientation(mPreviewRotation);
 

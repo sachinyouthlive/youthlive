@@ -564,179 +564,183 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
     public void startThumbCamera1(final String connId) {
 
-        player_camera_layout1.setVisibility(View.VISIBLE);
 
-        thumbCamera1.setVisibility(View.VISIBLE);
-        thumbCountdown.setVisibility(View.VISIBLE);
+        progress.setVisibility(View.VISIBLE);
+        Log.d("rreess", connId);
 
-
-        this.connId = connId;
 
         final bean b = (bean) getApplicationContext();
 
-        mPublisher = new SrsPublisher(thumbCamera1);
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
-        mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+        Call<String> call1 = cr.acceptReject2(connId, liveId + b.userId, "2", b.userId);
+        call1.enqueue(new Callback<String>() {
             @Override
-            public void onRtmpConnecting(String s) {
+            public void onResponse(Call<String> call, Response<String> response) {
 
-                Log.d("rreess" , s);
+                Log.d("rreess", response.body());
 
-            }
+                isThumbCamera1 = true;
+                progress.setVisibility(View.GONE);
+                player_camera_layout1.setVisibility(View.VISIBLE);
 
-            @Override
-            public void onRtmpConnected(String s) {
-                progress.setVisibility(View.VISIBLE);
-                Log.d("rreess" , s);
-                Log.d("rreess", connId);
+                thumbCamera1.setVisibility(View.VISIBLE);
+                thumbCountdown.setVisibility(View.VISIBLE);
 
+
+                VideoPlayer.this.connId = connId;
 
                 final bean b = (bean) getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
+                mPublisher = new SrsPublisher(thumbCamera1);
 
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                Call<String> call1 = cr.acceptReject2(connId, liveId + b.userId, "2", b.userId);
-                call1.enqueue(new Callback<String>() {
+                mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
+                mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
+                    public void onRtmpConnecting(String s) {
 
-                        Log.d("rreess", response.body());
+                        Log.d("rreess" , s);
 
-                        isThumbCamera1 = true;
-                        progress.setVisibility(View.GONE);
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        progress.setVisibility(View.GONE);
-                        Log.d("rreess", t.toString());
-                        t.printStackTrace();
+                    public void onRtmpConnected(String s) {
+
                     }
-                });
+
+                    @Override
+                    public void onRtmpVideoStreaming() {
+                    }
+
+                    @Override
+                    public void onRtmpAudioStreaming() {
+
+                    }
+
+                    @Override
+                    public void onRtmpStopped() {
+                        Log.d("rreess" , "stopped");
+
+                    }
+
+                    @Override
+                    public void onRtmpDisconnected() {
+                        Log.d("rreess" , "disconnected");
+                    }
+
+                    @Override
+                    public void onRtmpVideoFpsChanged(double v) {
+
+                    }
+
+                    @Override
+                    public void onRtmpVideoBitrateChanged(double v) {
+
+                    }
+
+                    @Override
+                    public void onRtmpAudioBitrateChanged(double v) {
+
+                    }
+
+                    @Override
+                    public void onRtmpSocketException(SocketException e) {
+
+                    }
+
+                    @Override
+                    public void onRtmpIOException(IOException e) {
+                        Log.d("rreess" , e.toString());
+                    }
+
+                    @Override
+                    public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
+                        Log.d("rreess" , e.toString());
+                    }
+
+                    @Override
+                    public void onRtmpIllegalStateException(IllegalStateException e) {
+                        Log.d("rreess" , e.toString());
+                    }
+
+
+                }));
+                mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
+                mPublisher.getmCameraView().open_camera();
+
+
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                WindowManager wm = (WindowManager)
+                        getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+                wm.getDefaultDisplay().getMetrics(displayMetrics);
+                int screenWidth = displayMetrics.widthPixels;
+                int screenHeight = displayMetrics.heightPixels;
+
+
+                Camera.Size best_size= mPublisher.getmCameraView().get_best_size2(screenWidth , screenHeight);
+
+                if(best_size!=null)
+                {
+                    Log.d("asdasd","************ Best size is "+best_size.width+" Height: "+best_size.height+" ********************");
+                    mPublisher.setPreviewResolution(best_size.width, best_size.height);
+                    mPublisher.setOutputResolution(best_size.height, best_size.width);
+                }
+                else
+                {
+                    Log.d("asdasd","************ Best size is NULL ********************");
+                    mPublisher.setPreviewResolution(640, 480);
+                    mPublisher.setOutputResolution(480, 640);
+                }
+
+
+                thumbCamera1.startCamera();
+
+
+                mPublisher.setVideoSmoothMode();
+
+
+
+                mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
+
+
+
+                new CountDownTimer(8000, 1000) {
+
+                    //Toast toast = Toast.makeText(VideoPlayer.this , null , Toast.LENGTH_SHORT);
+
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+
+                        thumbCount.setText(String.valueOf(millisUntilFinished / 1000));
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                        thumbCountdown.setVisibility(View.GONE);
+
+
+                    }
+                }.start();
             }
 
             @Override
-            public void onRtmpVideoStreaming() {
+            public void onFailure(Call<String> call, Throwable t) {
+                progress.setVisibility(View.GONE);
+                Log.d("rreess", t.toString());
+                t.printStackTrace();
             }
-
-            @Override
-            public void onRtmpAudioStreaming() {
-
-            }
-
-            @Override
-            public void onRtmpStopped() {
-                Log.d("rreess" , "stopped");
-
-            }
-
-            @Override
-            public void onRtmpDisconnected() {
-                Log.d("rreess" , "disconnected");
-            }
-
-            @Override
-            public void onRtmpVideoFpsChanged(double v) {
-
-            }
-
-            @Override
-            public void onRtmpVideoBitrateChanged(double v) {
-
-            }
-
-            @Override
-            public void onRtmpAudioBitrateChanged(double v) {
-
-            }
-
-            @Override
-            public void onRtmpSocketException(SocketException e) {
-
-            }
-
-            @Override
-            public void onRtmpIOException(IOException e) {
-                Log.d("rreess" , e.toString());
-            }
-
-            @Override
-            public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-                Log.d("rreess" , e.toString());
-            }
-
-            @Override
-            public void onRtmpIllegalStateException(IllegalStateException e) {
-                Log.d("rreess" , e.toString());
-            }
-
-
-        }));
-        mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
-        mPublisher.getmCameraView().open_camera();
-
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        WindowManager wm = (WindowManager)
-                getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-        wm.getDefaultDisplay().getMetrics(displayMetrics);
-        int screenWidth = displayMetrics.widthPixels;
-        int screenHeight = displayMetrics.heightPixels;
-
-
-        Camera.Size best_size= mPublisher.getmCameraView().get_best_size2(screenWidth , screenHeight);
-
-        if(best_size!=null)
-        {
-            Log.d("asdasd","************ Best size is "+best_size.width+" Height: "+best_size.height+" ********************");
-            mPublisher.setPreviewResolution(best_size.width, best_size.height);
-            mPublisher.setOutputResolution(best_size.height, best_size.width);
-        }
-        else
-        {
-            Log.d("asdasd","************ Best size is NULL ********************");
-            mPublisher.setPreviewResolution(640, 480);
-            mPublisher.setOutputResolution(480, 640);
-        }
-
-
-        thumbCamera1.startCamera();
-
-
-        mPublisher.setVideoSmoothMode();
+        });
 
 
 
-        mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
-
-
-
-        new CountDownTimer(8000, 1000) {
-
-            //Toast toast = Toast.makeText(VideoPlayer.this , null , Toast.LENGTH_SHORT);
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-                thumbCount.setText(String.valueOf(millisUntilFinished / 1000));
-
-            }
-
-            @Override
-            public void onFinish() {
-
-                thumbCountdown.setVisibility(View.GONE);
-
-
-            }
-        }.start();
 
 
     }
