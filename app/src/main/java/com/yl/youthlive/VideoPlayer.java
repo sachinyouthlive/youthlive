@@ -691,7 +691,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         int screenHeight = displayMetrics.heightPixels;
 
 
-        Camera.Size best_size= mPublisher.getmCameraView().get_best_size(screenWidth , screenHeight);
+        Camera.Size best_size= mPublisher.getmCameraView().get_best_size2(screenWidth , screenHeight);
 
         if(best_size!=null)
         {
@@ -872,7 +872,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         int screenHeight = displayMetrics.heightPixels;
 
 
-        Camera.Size best_size= mPublisher.getmCameraView().get_best_size(screenWidth , screenHeight);
+        Camera.Size best_size= mPublisher.getmCameraView().get_best_size2(screenWidth , screenHeight);
 
         if(best_size!=null)
         {

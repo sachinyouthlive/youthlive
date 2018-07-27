@@ -9,9 +9,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 
 import com.seu.magicfilter.base.gpuimage.GPUImageFilter;
 import com.seu.magicfilter.utils.MagicFilterFactory;
@@ -30,7 +28,7 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * Created by Leo Ma on 2016/2/25.
  */
-public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Renderer {
+public class SrsCameraView2 extends GLSurfaceView implements GLSurfaceView.Renderer {
 
     private GPUImageFilter magicFilter;
     private SurfaceTexture surfaceTexture;
@@ -58,11 +56,11 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
     private ConcurrentLinkedQueue<IntBuffer> mGLIntBufferCache = new ConcurrentLinkedQueue<>();
     private PreviewCallback mPrevCb;
 
-    public SrsCameraView(Context context) {
+    public SrsCameraView2(Context context) {
         this(context, null);
     }
 
-    public SrsCameraView(Context context, AttributeSet attrs) {
+    public SrsCameraView2(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         setEGLContextClientVersion(2);
@@ -138,10 +136,11 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
         mPrevCb = cb;
     }
 
-    public Camera getCamera(){
+    public Camera getCamera() {
         return this.mCamera;
     }
-    public void setPreviewCallback(Camera.PreviewCallback previewCallback){
+
+    public void setPreviewCallback(Camera.PreviewCallback previewCallback) {
         this.mCamera.setPreviewCallback(previewCallback);
     }
 
@@ -160,9 +159,9 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
 
         mGLPreviewBuffer = ByteBuffer.allocate(mPreviewWidth * mPreviewHeight * 4);
         mInputAspectRatio = mPreviewWidth > mPreviewHeight ?
-            (float) mPreviewWidth / mPreviewHeight : (float) mPreviewHeight / mPreviewWidth;
+                (float) mPreviewWidth / mPreviewHeight : (float) mPreviewHeight / mPreviewWidth;
 
-        return new int[] { mPreviewWidth, mPreviewHeight };
+        return new int[]{mPreviewWidth, mPreviewHeight};
     }
 
     public boolean setFilter(final MagicFilterType type) {
@@ -193,7 +192,7 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
             queueEvent(new Runnable() {
                 @Override
                 public void run() {
-                    GLES20.glDeleteTextures(1, new int[]{ mOESTextureId }, 0);
+                    GLES20.glDeleteTextures(1, new int[]{mOESTextureId}, 0);
                     mOESTextureId = OpenGLUtils.NO_TEXTURE;
                 }
             });
@@ -275,96 +274,62 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
 
 
     Camera.Size best_size;  // Instance variable
-    public Camera.Size get_best_size(int wid , int hei)
-    {
+
+    public Camera.Size get_best_size(int wid, int hei) {
 
 
         float rat = hei / wid;
 
 
-        if(mCamera==null)
+        if (mCamera == null)
             return null;
-
-
         Camera.Parameters params = mCamera.getParameters();
 
-        List<Camera.Size> sizes =params.getSupportedPreviewSizes();
-        int bes_width=0;
-        int max_limit=480;
-        for(Camera.Size size : sizes)
-        {
-            Log.d("SrsCamera","Size width:"+size.width+" height:"+size.height);
-            if(size.height>bes_width && size.height<=max_limit)
-            {
-                if (size.width / size.height == rat)
-                {
-                    bes_width=size.width;
-                    best_size=size;
+        List<Camera.Size> sizes = params.getSupportedPreviewSizes();
+        int bes_width = 0;
+        int max_limit = 720;
+        for (Camera.Size size : sizes) {
+            Log.d("SrsCamera", "Size width:" + size.width + " height:" + size.height);
+            if (size.height > bes_width && size.height <= max_limit) {
+                if (size.width / size.height == rat) {
+                    bes_width = size.width;
+                    best_size = size;
                 }
             }
         }
 
-        return params.getPreferredPreviewSizeForVideo();
-        //return best_size;
-    }
-
-    public void checkSizes()
-    {
-        Log.d("Srs" , "5");
-        if(mCamera==null)
-            return;
-
-        Log.d("Srs" , "6");
-
-        Camera.Parameters params = mCamera.getParameters();
-
-        List<Camera.Size> sizes =params.getSupportedPreviewSizes();
-        int bes_width=0;
-        int max_limit=480;
-        for(Camera.Size size : sizes)
-        {
-            Log.d("SrsCamera","Size width:"+size.width+" height:"+size.height);
-            if(size.height>bes_width && size.height<=max_limit)
-            {
-                    bes_width=size.width;
-                    best_size=size;
-            }
-        }
-
+        return best_size;
     }
 
     Camera.Size best_size2;  // Instance variable
-    public Camera.Size get_best_size2(int wid , int hei)
-    {
+
+    public Camera.Size get_best_size2(int wid, int hei) {
         float rat = hei / wid;
 
 
-        if(mCamera==null)
+        if (mCamera == null)
             return null;
         Camera.Parameters params = mCamera.getParameters();
 
-        List<Camera.Size> sizes =params.getSupportedPreviewSizes();
-        int bes_width=0;
-        int max_limit=480;
-        for(Camera.Size size : sizes)
-        {
-            Log.d("SrsCamera","Size width:"+size.width+" height:"+size.height);
-            if(size.height>bes_width && size.height<=max_limit)
-            {
-                if (size.width / size.height == rat)
-                {
-                    bes_width=size.width;
-                    best_size=size;
+        List<Camera.Size> sizes = params.getSupportedPreviewSizes();
+        int bes_width = 0;
+        int max_limit = 480;
+        for (Camera.Size size : sizes) {
+            Log.d("SrsCamera", "Size width:" + size.width + " height:" + size.height);
+            if (size.height > bes_width && size.height <= max_limit) {
+                if (size.width / size.height == rat) {
+                    bes_width = size.width;
+                    best_size = size;
                 }
             }
         }
+
 
         return best_size2;
     }
 
 
-    public void open_camera()
-    {
+    public void open_camera() {
         if (mCamera == null) {
             mCamera = openCamera();
         }
@@ -411,10 +376,6 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
                 params.setFlashMode(supportedFlashModes.get(0));
             }
         }
-
-
-        Log.d("Srs Params" , params.flatten());
-
 
         mCamera.setParameters(params);
 

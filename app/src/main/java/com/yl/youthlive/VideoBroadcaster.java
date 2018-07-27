@@ -111,8 +111,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHandler.SrsEncodeListener, com.github.faucamp.simplertmp.RtmpHandler.RtmpListener, SrsRecordHandler.SrsRecordListener
-{
+public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHandler.SrsEncodeListener, com.github.faucamp.simplertmp.RtmpHandler.RtmpListener, SrsRecordHandler.SrsRecordListener {
 
     //CameraPreview cameraPreview;
     //private StreamaxiaPublisher mPublisher;
@@ -123,17 +122,15 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     TextView stateText;
 
 
-
     boolean torchStatus = false;
 
     ViewPager pager;
 
 
-
     Toast toast;
 
     View popup;
-    Button end , cancel;
+    Button end, cancel;
     //ImageButton start;
 
 
@@ -158,11 +155,8 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     boolean isEnded = false;
 
 
-
-
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-
 
 
     private SrsPublisher mPublisher;
@@ -180,10 +174,10 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_broadcaster);
 
-        pref = getSharedPreferences("offline" , Context.MODE_PRIVATE);
+        pref = getSharedPreferences("offline", Context.MODE_PRIVATE);
         editor = pref.edit();
 
-        toast = Toast.makeText(this , null , Toast.LENGTH_SHORT);
+        toast = Toast.makeText(this, null, Toast.LENGTH_SHORT);
 
 
         earphones = findViewById(R.id.earphones);
@@ -194,18 +188,14 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
             public void onReceive(Context context, Intent intent) {
 
 
-
                 if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
                     boolean connectedHeadphones = (intent.getIntExtra("state", 0) == 1);
 
-                    if (connectedHeadphones)
-                    {
+                    if (connectedHeadphones) {
 
                         earphones.setVisibility(View.GONE);
 
-                    }
-                    else
-                    {
+                    } else {
 
                         earphones.setVisibility(View.VISIBLE);
 
@@ -239,7 +229,6 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
 
         pager = findViewById(R.id.pager);
-
 
 
         stateText = findViewById(R.id.textView3);
@@ -277,10 +266,10 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         int screenHeight = displayMetrics.heightPixels;
 
 
-        Camera.Size best_size= mPublisher.getmCameraView().get_best_size(screenWidth , screenHeight);
+        Camera.Size best_size = mPublisher.getmCameraView().get_best_size(screenWidth, screenHeight);
 
-        Log.d("asdasdasd" , String.valueOf(screenWidth));
-        Log.d("asdasdasd" , String.valueOf(screenHeight));
+        Log.d("asdasdasd", String.valueOf(screenWidth));
+        Log.d("asdasdasd", String.valueOf(screenHeight));
 
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -288,19 +277,16 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
             result = getResources().getDimensionPixelSize(resourceId);
         }
 
-        Log.d("asdasdasd" , String.valueOf(result));
+        Log.d("asdasdasd", String.valueOf(result));
 
-        if(best_size!=null)
-        {
-            Log.d("asdasd","************ Best size is "+best_size.width+" Height: "+best_size.height+" ********************");
+        if (best_size != null) {
+            Log.d("asdasd", "************ Best size is " + best_size.width + " Height: " + best_size.height + " ********************");
             mPublisher.setPreviewResolution(best_size.width, best_size.height);
             mPublisher.setOutputResolution(best_size.height, best_size.width);
             //mPublisher.setPreviewResolution((int) (screenWidth * 0.375), (int) (screenHeight * 0.375));
             //mPublisher.setOutputResolution((int) (screenHeight * 0.375), (int) (screenWidth * 0.375));
-        }
-        else
-        {
-            Log.d("asdasd","************ Best size is NULL ********************");
+        } else {
+            Log.d("asdasd", "************ Best size is NULL ********************");
             mPublisher.setPreviewResolution(480, 320);
             mPublisher.setOutputResolution(320, 480);
             //mPublisher.setPreviewResolution((int) (screenWidth * 0.375), (int) (screenHeight * 0.375));
@@ -375,8 +361,6 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         pager.setAdapter(adapter);
 
 
-
-
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -393,7 +377,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
                 progress.setVisibility(View.VISIBLE);
 
-                bean b = (bean)getApplicationContext();
+                bean b = (bean) getApplicationContext();
 
                 final Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl(b.BASE_URL)
@@ -404,21 +388,20 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<endLiveBean> call = cr.endLive(b.userId , liveId);
+                Call<endLiveBean> call = cr.endLive(b.userId, liveId);
 
                 call.enqueue(new Callback<endLiveBean>() {
                     @Override
                     public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
 
 
-                        if (response.body().getStatus().equals("1"))
-                        {
+                        if (response.body().getStatus().equals("1")) {
 
                             isEnded = true;
 
-                            Intent intent = new Intent(VideoBroadcaster.this , LiveEndedBroadcaster.class);
-                            intent.putExtra("liveTime" , response.body().getData().getLiveTime());
-                            intent.putExtra("views" , response.body().getData().getViewers());
+                            Intent intent = new Intent(VideoBroadcaster.this, LiveEndedBroadcaster.class);
+                            intent.putExtra("liveTime", response.body().getData().getLiveTime());
+                            intent.putExtra("views", response.body().getData().getViewers());
                             startActivity(intent);
                             finish();
 
@@ -443,7 +426,6 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         registerReceiver(headsetPlug, intentFilter);
 
 
-
     }
 
     @Override
@@ -452,8 +434,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     }
 
 
-    public class FragAdapter extends FragmentStatePagerAdapter
-    {
+    public class FragAdapter extends FragmentStatePagerAdapter {
 
         public FragAdapter(FragmentManager fm) {
             super(fm);
@@ -461,12 +442,9 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 0)
-            {
+            if (position == 0) {
                 return new BroadcasterFragment1();
-            }
-            else
-            {
+            } else {
                 return new secondfrag();
             }
         }
@@ -495,14 +473,13 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     protected void onStop() {
         super.onStop();
 
-        if (!isEnded)
-        {
+        if (!isEnded) {
 
             String et = String.valueOf((SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000);
 
 
-            editor.putString("offline" , et);
-            editor.putString("liveId" , liveId);
+            editor.putString("offline", et);
+            editor.putString("liveId", liveId);
             editor.apply();
 
         }
@@ -512,7 +489,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     @Override
     protected void onDestroy() {
 
-        Log.d("offline" , "destroy");
+        Log.d("offline", "destroy");
 
         if (headsetPlug != null) {
             unregisterReceiver(headsetPlug);
@@ -521,20 +498,17 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
         try {
             thumbPlayer1.stop();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            if (mPublisher != null)
-            {
+            if (mPublisher != null) {
                 mPublisher.stopPublish();
                 mPublisher.stopRecord();
                 chronometer.stop();
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -657,23 +631,18 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     }
 
 
-    public void switchTorch()
-    {
-        if (torchStatus)
-        {
+    public void switchTorch() {
+        if (torchStatus) {
             cameraPreview.stopTorch();
             torchStatus = false;
-        }
-        else
-        {
+        } else {
             cameraPreview.startTorch();
             torchStatus = true;
         }
     }
 
 
-    public void startPublish(String liveId)
-    {
+    public void startPublish(String liveId) {
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
         mPublisher.startCamera();
 
@@ -682,21 +651,18 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     }
 
 
-    public void switchCamera()
-    {
+    public void switchCamera() {
         mPublisher.switchCameraFace((mPublisher.getCamraId() + 1) % Camera.getNumberOfCameras());
         //mPublisher.switchCamera();
     }
 
 
-    public void endLive(String liveId)
-    {
+    public void endLive(String liveId) {
         this.liveId = liveId;
         popup.setVisibility(View.VISIBLE);
     }
 
-    public void setLiveId(String liveId)
-    {
+    public void setLiveId(String liveId) {
         this.liveId = liveId;
     }
 
@@ -706,8 +672,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     }
 
 
-    public void startThumbPlayer1(final String url , String thumbPic , final String connId)
-    {
+    public void startThumbPlayer1(final String url, String thumbPic, final String connId) {
 
         thumbContainer1.setVisibility(View.VISIBLE);
         thumbcountdown.setVisibility(View.VISIBLE);
@@ -727,7 +692,6 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
             @Override
             public void onFinish() {
-
 
 
                 Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + url);
@@ -771,10 +735,9 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
                     @Override
                     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
-                        Log.d("ddata" , String.valueOf(playbackState));
+                        Log.d("ddata", String.valueOf(playbackState));
 
-                        if (playbackState == 4)
-                        {
+                        if (playbackState == 4) {
                             progress.setVisibility(View.VISIBLE);
 
                             final bean b = (bean) getApplicationContext();
@@ -823,7 +786,6 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
                     public void onPlayerError(ExoPlaybackException error) {
 
 
-
                     }
 
                     @Override
@@ -860,13 +822,8 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
                 thumbcountdown.setVisibility(View.GONE);
 
 
-
-
             }
         }.start();
-
-
-
 
 
     }
@@ -918,8 +875,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
 
-                if (response.body().equals("success"))
-                {
+                if (response.body().equals("success")) {
 
                     chronometer.setBase(SystemClock.elapsedRealtime());
 
@@ -928,11 +884,9 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
                     chronometer.start();
 
 
-                }
-                else
-                {
+                } else {
 
-                    Toast.makeText(VideoBroadcaster.this , "Error gounf live" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VideoBroadcaster.this, "Error gounf live", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -948,12 +902,10 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     }
 
 
-    public void endThumbPlayer1()
-    {
+    public void endThumbPlayer1() {
         try {
             thumbPlayer1.stop();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -963,8 +915,6 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
 
     }
-
-
 
 
 }
