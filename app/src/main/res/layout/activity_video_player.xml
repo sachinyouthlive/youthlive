@@ -44,7 +44,7 @@
             android:layout_height="match_parent"
             android:visibility="gone">
 
-            <net.ossrs.yasea.SrsCameraView
+            <com.streamaxia.android.CameraPreview
                 android:id="@+id/thumb_camera1"
                 android:layout_width="120dp"
                 android:layout_height="160dp" />
@@ -62,6 +62,10 @@
         </RelativeLayout>
 
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/thumb_frame1"
             android:layout_width="match_parent"
@@ -70,6 +74,14 @@
             app:resize_mode="fill"
             android:visibility="gone"/>
 
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                android:id="@+id/thumb_progress1"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
@@ -84,7 +96,7 @@
         android:visibility="gone">
 
 
-        <net.ossrs.yasea.SrsCameraView
+        <com.streamaxia.android.CameraPreview
             android:id="@+id/thumb_camera2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

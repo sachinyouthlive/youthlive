@@ -46,6 +46,14 @@
         app:resize_mode="zoom"
         />
 
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/thumb_progress1"/>
+
+
         <include
             layout="@layout/thumb_count_layout"
             android:layout_width="match_parent"
@@ -58,7 +66,7 @@
     </RelativeLayout>
 
 
-    <net.ossrs.yasea.SrsCameraView
+    <com.streamaxia.android.CameraPreview
         android:id="@+id/preview"
         android:layout_width="0dp"
         android:layout_height="0dp"

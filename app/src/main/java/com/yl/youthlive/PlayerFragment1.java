@@ -55,6 +55,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -2017,6 +2018,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
             try {
 
+                Log.d("screenshot" , String.valueOf(coun));
 
                 if (coun == 0) {
                     image = reader.acquireLatestImage();
@@ -2114,6 +2116,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         stopProjection();
 
                     }
+                }
+                else
+                {
+
                 }
 
 

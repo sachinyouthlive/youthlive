@@ -1054,7 +1054,7 @@ public class BroadcasterFragment1 extends Fragment {
 */
 
 
-                                                reject1.setVisibility(View.GONE);
+                                                //reject1.setVisibility(View.GONE);
 
                                             } catch (Exception e) {
                                                 e.printStackTrace();
@@ -1940,8 +1940,7 @@ public class BroadcasterFragment1 extends Fragment {
 
         if (requestCode == REQUEST_CODE) {
 
-            if (resultCode == Activity.RESULT_OK)
-            {
+
                 sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
 
                 if (sMediaProjection != null) {
@@ -1978,11 +1977,7 @@ public class BroadcasterFragment1 extends Fragment {
                     // register media projection stop callback
                     sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
                 }
-            }
-            else
-            {
 
-            }
 
 
         }

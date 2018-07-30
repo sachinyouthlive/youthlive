@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -42,7 +43,7 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
-import com.github.faucamp.simplertmp.RtmpHandler;
+
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -77,13 +78,14 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 
+import com.streamaxia.android.CameraPreview;
+import com.streamaxia.android.StreamaxiaPublisher;
+import com.streamaxia.android.handlers.EncoderHandler;
+import com.streamaxia.android.handlers.RecordHandler;
+import com.streamaxia.android.handlers.RtmpHandler;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 
-import net.ossrs.yasea.SrsCameraView;
-import net.ossrs.yasea.SrsEncodeHandler;
-import net.ossrs.yasea.SrsPublisher;
-import net.ossrs.yasea.SrsRecordHandler;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -98,7 +100,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener {
+public class VideoPlayer extends AppCompatActivity implements EncoderHandler.EncodeListener, RecordHandler.RecordListener, RtmpHandler.RtmpListener {
 
     String liveId;
 
@@ -117,7 +119,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     TextView stateText;
 
 
-    SrsCameraView thumbCamera1, thumbCamera2;
+    CameraPreview thumbCamera1, thumbCamera2;
 
 
     String loadingpic;
@@ -150,6 +152,8 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
     boolean isThumbCamera1 = false;
 
+    ProgressBar thumbProgress1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +163,12 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         loadingpic = getIntent().getStringExtra("pic");
 
         earphones = findViewById(R.id.earphones);
+
+        thumbProgress1 = findViewById(R.id.thumb_progress1);
+
+        DoubleBounce doubleBounce = new DoubleBounce();
+        thumbProgress1.setIndeterminateDrawable(doubleBounce);
+
 
         thumbCountdown = findViewById(R.id.thumb_countdown);
         thumbCount = findViewById(R.id.textView33);
@@ -206,7 +216,6 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         loading = findViewById(R.id.loading);
         loadingProgress = findViewById(R.id.loading_progress);
 
-        DoubleBounce doubleBounce = new DoubleBounce();
         loadingProgress.setIndeterminateDrawable(doubleBounce);
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
@@ -288,7 +297,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         mainPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
                 new DefaultAllocator(true, 1000),
                 1000,  // min buffer 0.5s
-                2000, //max buffer 3s
+                3000, //max buffer 3s
                 1000, // playback 1s
                 1000,   //playback after rebuffer 1s
                 1,
@@ -339,7 +348,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         mainPlayer.prepare(videoSource);
 
-        mainPlayer.setVolume(0.1f);
+
 
         mainPlayer.setPlayWhenReady(true);
 
@@ -497,40 +506,109 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     }
 
 
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
     @Override
     public void onRecordPause() {
-
-        Log.d("recordloistener", "paused");
 
     }
 
     @Override
     public void onRecordResume() {
-        Log.d("recordloistener", "resume");
+
     }
 
     @Override
     public void onRecordStarted(String s) {
-        Log.d("recordloistener", s);
+
     }
 
     @Override
     public void onRecordFinished(String s) {
-        Log.d("recordloistener", s);
+
     }
 
     @Override
     public void onRecordIllegalArgumentException(IllegalArgumentException e) {
-        Log.d("recordloistener", e.toString());
+
     }
 
     @Override
     public void onRecordIOException(IOException e) {
-        Log.d("recordloistener", e.toString());
+
     }
 
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
+    public void onRtmpConnecting(String s) {
+
+    }
+
+    @Override
+    public void onRtmpConnected(String s) {
+
+    }
+
+    @Override
+    public void onRtmpVideoStreaming() {
+
+    }
+
+    @Override
+    public void onRtmpAudioStreaming() {
+
+    }
+
+    @Override
+    public void onRtmpStopped() {
+
+    }
+
+    @Override
+    public void onRtmpDisconnected() {
+
+    }
+
+    @Override
+    public void onRtmpVideoFpsChanged(double v) {
+
+    }
+
+    @Override
+    public void onRtmpVideoBitrateChanged(double v) {
+
+    }
+
+    @Override
+    public void onRtmpAudioBitrateChanged(double v) {
+
+    }
+
+    @Override
+    public void onRtmpSocketException(SocketException e) {
+
+    }
+
+    @Override
+    public void onRtmpIOException(IOException e) {
+
+    }
+
+    @Override
+    public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
+
+    }
+
+    @Override
+    public void onRtmpIllegalStateException(IllegalStateException e) {
+
+    }
+
+    @Override
+    public void onRtmpAuthenticationg(String s) {
 
     }
 
@@ -560,7 +638,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         }
     }
 
-    SrsPublisher mPublisher;
+    StreamaxiaPublisher mPublisher;
 
     public void startThumbCamera1(final String connId) {
 
@@ -598,9 +676,9 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
                 final bean b = (bean) getApplicationContext();
 
-                mPublisher = new SrsPublisher(thumbCamera1);
+                mPublisher = new StreamaxiaPublisher(thumbCamera1 , VideoPlayer.this);
 
-                mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
+                mPublisher.setEncoderHandler(new EncoderHandler(VideoPlayer.this));
                 mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
                     @Override
                     public void onRtmpConnecting(String s) {
@@ -669,10 +747,15 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
                         Log.d("rreess" , e.toString());
                     }
 
+                    @Override
+                    public void onRtmpAuthenticationg(String s) {
+
+                    }
+
 
                 }));
-                mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
-                mPublisher.getmCameraView().open_camera();
+                mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
+                /*mPublisher.getmCameraView().open_camera();
 
 
                 DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -698,15 +781,35 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
                     mPublisher.setOutputResolution(480, 640);
                 }
 
+*/
+
+                mPublisher = new StreamaxiaPublisher(thumbCamera1 , VideoPlayer.this);
+/*
+
+        mPublisher.setEncoderHandler(new EncoderjHandler(this));
+        mPublisher.setRtmpHandler(new RtmpHandler(this));
+        mPublisher.setRecordEventHandler(new RecordHandler(this));
+*/
+
+
+                mPublisher.setEncoderHandler(new EncoderHandler(VideoPlayer.this));
+                mPublisher.setRtmpHandler(new RtmpHandler(VideoPlayer.this));
+                mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
+
 
                 thumbCamera1.startCamera();
 
 
-                mPublisher.setVideoSmoothMode();
+                mPublisher.setCameraFacing(1);
 
+                mPublisher.setScreenOrientation(Configuration.ORIENTATION_PORTRAIT);
 
+                mPublisher.setVideoBitRate(300 * 1024);
+
+                mPublisher.setVideoOutputResolution(480 , 360 , 1);
 
                 mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
+
 
 
 
@@ -758,9 +861,9 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         final bean b = (bean) getApplicationContext();
 
-        mPublisher = new SrsPublisher(thumbCamera1);
+        mPublisher = new StreamaxiaPublisher(thumbCamera1 , VideoPlayer.this);
 
-        mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
+        mPublisher.setEncoderHandler(new EncoderHandler(VideoPlayer.this));
         mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
             @Override
             public void onRtmpConnecting(String s) {
@@ -862,13 +965,18 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
             }
 
+            @Override
+            public void onRtmpAuthenticationg(String s) {
+
+            }
+
 
         }));
-        mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
+        mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
 
-        mPublisher.getmCameraView().open_camera();
+        //mPublisher.getmCameraView().open_camera();
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
+        /*DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager wm = (WindowManager)
                 getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(displayMetrics);
@@ -890,10 +998,15 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
             mPublisher.setPreviewResolution(640, 480);
             mPublisher.setOutputResolution(480, 640);
         }
-
+*/
         thumbCamera1.startCamera();
 
-        mPublisher.setVideoSmoothMode();
+        mPublisher.setCameraFacing(1);
+
+        mPublisher.setVideoBitRate(300 * 1024);
+
+        mPublisher.setVideoOutputResolution(480 , 360 , 1);
+
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 
 
@@ -965,6 +1078,11 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
+                if (playWhenReady)
+                {
+                        thumbProgress1.setVisibility(View.GONE);
+                }
 
             }
 

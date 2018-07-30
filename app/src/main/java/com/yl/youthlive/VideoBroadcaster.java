@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Camera;
@@ -50,7 +51,8 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 //import com.google.android.exoplayer.AspectRatioFrameLayout;
-import com.github.faucamp.simplertmp.RtmpHandler;
+
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -79,7 +81,13 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 /**/
 //import com.streamaxia.player.StreamaxiaPlayer;
 //import com.streamaxia.player.listener.StreamaxiaPlayerState;
-import com.seu.magicfilter.utils.MagicFilterType;
+
+import com.streamaxia.android.CameraPreview;
+import com.streamaxia.android.StreamaxiaPublisher;
+import com.streamaxia.android.handlers.EncoderHandler;
+import com.streamaxia.android.handlers.RecordHandler;
+import com.streamaxia.android.handlers.RtmpHandler;
+import com.streamaxia.android.utils.Size;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
 import com.yl.youthlive.followPOJO.followBean;
@@ -89,10 +97,6 @@ import com.yl.youthlive.goLivePOJO.goLiveBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
 
-import net.ossrs.yasea.SrsCameraView;
-import net.ossrs.yasea.SrsEncodeHandler;
-import net.ossrs.yasea.SrsPublisher;
-import net.ossrs.yasea.SrsRecordHandler;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -111,7 +115,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHandler.SrsEncodeListener, com.github.faucamp.simplertmp.RtmpHandler.RtmpListener, SrsRecordHandler.SrsRecordListener {
+public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.RtmpListener, EncoderHandler.EncodeListener, RecordHandler.RecordListener {
 
     //CameraPreview cameraPreview;
     //private StreamaxiaPublisher mPublisher;
@@ -159,8 +163,8 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     SharedPreferences.Editor editor;
 
 
-    private SrsPublisher mPublisher;
-    SrsCameraView cameraPreview;
+    private StreamaxiaPublisher mPublisher;
+    CameraPreview cameraPreview;
 
 
     BroadcastReceiver headsetPlug;
@@ -168,6 +172,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
     TextView earphones;
 
+    ProgressBar thumbProgress1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +186,12 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
 
         earphones = findViewById(R.id.earphones);
+        thumbProgress1 = findViewById(R.id.thumb_progress1);
+
+        DoubleBounce doubleBounce = new DoubleBounce();
+        thumbProgress1.setIndeterminateDrawable(doubleBounce);
+
+
 //        Log.d("offline" , String.valueOf(db.queries().getAll().size()));
 
         headsetPlug = new BroadcastReceiver() {
@@ -242,7 +253,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         decorView.setSystemUiVisibility(uiOptions);
 */
 
-        mPublisher = new SrsPublisher(cameraPreview);
+        mPublisher = new StreamaxiaPublisher(cameraPreview, this);
 /*
 
         mPublisher.setEncoderHandler(new EncoderjHandler(this));
@@ -251,11 +262,11 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 */
 
 
-        mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
+        mPublisher.setEncoderHandler(new EncoderHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
-        mPublisher.setRecordHandler(new SrsRecordHandler(this));
+        mPublisher.setRecordEventHandler(new RecordHandler(this));
 
-        mPublisher.getmCameraView().open_camera();
+        /*mPublisher.getmCameraView().open_camera();
 
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -281,6 +292,8 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
         if (best_size != null) {
             Log.d("asdasd", "************ Best size is " + (best_size.width * 4)/10 + " Height: " + (best_size.height * 4)/10 + " ********************");
+
+
             mPublisher.setPreviewResolution((best_size.width * 4)/10, (best_size.height * 4)/10);
             mPublisher.setOutputResolution((best_size.height * 4)/10, (best_size.width * 4)/10);
             //mPublisher.setPreviewResolution((int) (screenWidth * 0.375), (int) (screenHeight * 0.375));
@@ -294,8 +307,73 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
         }
 
         mPublisher.setVideoHDMode();
+*/
 
-        mPublisher.switchCameraFilter(MagicFilterType.COOL);
+
+        cameraPreview.startCamera();
+
+
+        mPublisher.setCameraFacing(1);
+
+        mPublisher.setScreenOrientation(Configuration.ORIENTATION_PORTRAIT);
+
+        Size supportedRes = mPublisher.getSupportedPictureSizes(1).get(1);
+
+        Toast.makeText(VideoBroadcaster.this, String.valueOf(supportedRes.width) + " X " + String.valueOf(supportedRes.height), Toast.LENGTH_SHORT).show();
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager wm = (WindowManager)
+                getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        int screenHeight = displayMetrics.widthPixels;
+        int screenWidth = displayMetrics.heightPixels;
+
+
+        Log.d("asdasdasd", String.valueOf(screenWidth));
+        Log.d("asdasdasd", String.valueOf(screenHeight));
+
+
+        float rat = screenWidth / screenHeight;
+
+
+        Toast.makeText(VideoBroadcaster.this, String.valueOf(screenWidth) + " X " + String.valueOf(screenHeight), Toast.LENGTH_SHORT).show();
+
+
+        List<Size> sizes = mPublisher.getSupportedPictureSizes(1);
+        int bes_width = 0;
+        int max_limit = 480;
+
+        Size best_size = null;
+
+        for (Size size : sizes) {
+            Log.d("SrsCamera", "Size width:" + size.width + " height:" + size.height);
+            if (size.height > bes_width && size.height <= max_limit) {
+                if (size.width / size.height == rat) {
+                    bes_width = size.width;
+                    best_size = size;
+                }
+            }
+        }
+
+        mPublisher.setVideoOutputResolution(best_size.width, best_size.height, 1);
+
+
+
+
+/*
+        for (int i = 0 ; i < mPublisher.getSupportedPictureSizes(1).size() ; i++)
+        {
+            Size s = mPublisher.getSupportedPictureSizes(1).get(i);
+            Log.d("asdasdasd" , "1");
+            Log.d("asdasdasd" , "width - " + String.valueOf(s.width) + " ; height - " + String.valueOf(s.height));
+
+        }
+*/
+
+
+        mPublisher.setVideoBitRate(500 * 1024);
+
+        //mPublisher.switchCameraFilter(MagicFilterType.COOL);
 
 //        mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
 //        mPublisher.setRtmpHandler(new RtmpHandler(this));
@@ -433,6 +511,55 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
     }
 
+    @Override
+    public void onNetworkWeak() {
+
+        toast.setText("Network Weak");
+        toast.show();
+
+    }
+
+    @Override
+    public void onNetworkResume() {
+        toast.setText("Network Resume");
+        toast.show();
+    }
+
+    @Override
+    public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
+
+    }
+
+    @Override
+    public void onRecordPause() {
+
+    }
+
+    @Override
+    public void onRecordResume() {
+
+    }
+
+    @Override
+    public void onRecordStarted(String s) {
+
+    }
+
+    @Override
+    public void onRecordFinished(String s) {
+
+    }
+
+    @Override
+    public void onRecordIllegalArgumentException(IllegalArgumentException e) {
+
+    }
+
+    @Override
+    public void onRecordIOException(IOException e) {
+
+    }
+
 
     public class FragAdapter extends FragmentStatePagerAdapter {
 
@@ -518,8 +645,10 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
     }
 
-    @Override
+    /*@Override
     public void onNetworkWeak() {
+
+        Toast.makeText(VideoBroadcaster.this , "Network Weak" , Toast.LENGTH_SHORT).show();
 
     }
 
@@ -531,7 +660,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     @Override
     public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
 
-    }
+    }*/
 
     @Override
     public void onRtmpConnecting(String s) {
@@ -601,6 +730,12 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     }
 
     @Override
+    public void onRtmpAuthenticationg(String s) {
+
+    }
+
+/*
+    @Override
     public void onRecordPause() {
 
     }
@@ -629,6 +764,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
     public void onRecordIOException(IOException e) {
 
     }
+*/
 
 
     public void switchTorch() {
@@ -644,15 +780,12 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
     public void startPublish(String liveId) {
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
-        mPublisher.startCamera();
-
-
         //mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
     }
 
 
     public void switchCamera() {
-        mPublisher.switchCameraFace((mPublisher.getCamraId() + 1) % Camera.getNumberOfCameras());
+        mPublisher.switchCamera();
         //mPublisher.switchCamera();
     }
 
@@ -676,6 +809,7 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
 
         thumbContainer1.setVisibility(View.VISIBLE);
         thumbcountdown.setVisibility(View.VISIBLE);
+        thumbProgress1.setVisibility(View.VISIBLE);
 
 
         new CountDownTimer(8000, 1000) {
@@ -736,6 +870,10 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
                     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
                         Log.d("ddata", String.valueOf(playbackState));
+
+                        if (playWhenReady) {
+                            thumbProgress1.setVisibility(View.GONE);
+                        }
 
                         if (playbackState == 4) {
                             progress.setVisibility(View.VISIBLE);
@@ -812,9 +950,6 @@ public class VideoBroadcaster extends AppCompatActivity implements SrsEncodeHand
                 thumbPlayer1.prepare(videoSource);
 
                 thumbPlayer1.setPlayWhenReady(true);
-
-
-                thumbPlayer1.setVolume(0.5f);
 
 
                 thumbPlayerView1.setVisibility(View.VISIBLE);
