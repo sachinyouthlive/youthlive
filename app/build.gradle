@@ -21,8 +21,8 @@ android {
         applicationId "com.yl.youthlive"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 13
-        versionName "1.12"
+        versionCode 14
+        versionName "1.13"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -137,7 +137,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     implementation 'com.karumi:dexter:2.3.1'
-    //implementation project(':streamaxia-opensdk')
+    implementation project(':streamaxia-opensdk')
     //implementation project(':streamaxia-player')
     implementation 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
     implementation 'com.otaliastudios:cameraview:1.5.1'
@@ -157,7 +157,7 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
 
-    implementation project(path: ':library')
+    //implementation project(path: ':library')
 
 }
 apply plugin: 'com.google.gms.google-services'

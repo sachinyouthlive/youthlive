@@ -45,6 +45,7 @@ import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -684,14 +685,27 @@ public class BroadcasterFragment1 extends Fragment {
 
                     try {
 
-                        String giftName = item.getGiftName();
+                        String giftName = item.getGiftName().replace("\"", "");
+
+                        totalBeans.setText(giftName + " Coins");
 
                         Comment comm = new Comment();
 
                         comm.setType("gift");
                         comm.setUserId(item.getSenbdId());
+                        comm.setComment(item.getGiftId());
 
                         commentsAdapter.addComment(comm);
+
+                        if (loading) {
+                            commentGrid.scrollToPosition(0);
+                            loading = true;
+                            newMessage.setVisibility(View.GONE);
+                        } else {
+                            Log.d("lloogg", "new message");
+
+                            newMessage.setVisibility(View.VISIBLE);
+                        }
 
                         //comm.set
 
@@ -728,7 +742,7 @@ public class BroadcasterFragment1 extends Fragment {
                     // now subscribe to `global` topic to receive app wide notifications
 
 
-                    Log.d("uurrii", intent.getStringExtra("data"));
+                    Log.d("ddata", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
@@ -744,7 +758,7 @@ public class BroadcasterFragment1 extends Fragment {
                         if (mode.equals("2")) {
 
 
-                            Log.d("uurrii", uri);
+                            Log.d("ddata", uri);
 
                             broadcaster.startThumbPlayer1(uri, thumbPic1 , connId);
                             playerFrame1.setVisibility(View.VISIBLE);
@@ -763,7 +777,7 @@ public class BroadcasterFragment1 extends Fragment {
 
 
                     } catch (JSONException e) {
-                        Log.d("uurrii", e.toString());
+                        Log.d("ddata", e.toString());
                         e.printStackTrace();
                     }
 
@@ -900,7 +914,7 @@ public class BroadcasterFragment1 extends Fragment {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
-                    Log.d("data", intent.getStringExtra("data"));
+                    Log.d("ddata", intent.getStringExtra("data"));
 
                     String json = intent.getStringExtra("data");
 
@@ -945,7 +959,7 @@ public class BroadcasterFragment1 extends Fragment {
                                         @Override
                                         public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
 
-                                            try {
+                                            /*try {
 
 
 
@@ -960,7 +974,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                                             } catch (Exception e) {
                                                 e.printStackTrace();
-                                            }
+                                            }*/
 
                                             reject1.setVisibility(View.VISIBLE);
 
@@ -1040,7 +1054,7 @@ public class BroadcasterFragment1 extends Fragment {
 */
 
 
-                                                reject1.setVisibility(View.GONE);
+                                                //reject1.setVisibility(View.GONE);
 
                                             } catch (Exception e) {
                                                 e.printStackTrace();
@@ -1316,6 +1330,11 @@ public class BroadcasterFragment1 extends Fragment {
                 @Override
                 public void onClick(View v) {
 
+
+                    if (!isConnection)
+                    {
+
+
                     dialogProgress.setVisibility(View.VISIBLE);
 
                     final Retrofit retrofit = new Retrofit.Builder()
@@ -1336,6 +1355,7 @@ public class BroadcasterFragment1 extends Fragment {
                             if (response.body().getStatus().equals("1"))
                             {
                                 thumbPic1 = imm;
+                                isConnection = true;
                                 Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
@@ -1346,12 +1366,15 @@ public class BroadcasterFragment1 extends Fragment {
                         @Override
                         public void onFailure(Call<requestConnectionBean> call, Throwable t) {
                             thumbPic1 = imm;
+                            isConnection = false;
                             dialogProgress.setVisibility(View.GONE);
                             Log.d("asdasdasdas", t.toString());
                         }
                     });
 
-
+                    } else {
+                        Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
             });
@@ -1392,6 +1415,37 @@ public class BroadcasterFragment1 extends Fragment {
 
         List<Comment> list = new ArrayList<>();
         Context context;
+
+        Integer gifts[] = new Integer[]
+                {
+                        R.drawable.g52,
+                        R.drawable.g20,
+                        R.drawable.g32,
+                        R.drawable.g1500,
+                        R.drawable.g72,
+                        R.drawable.g112,
+                        R.drawable.g152,
+                        R.drawable.g172,
+                        R.drawable.g180,
+                        R.drawable.g192,
+                        R.drawable.g212,
+                        R.drawable.g240,
+                        R.drawable.g252,
+                        R.drawable.g280,
+                        R.drawable.g300,
+                        R.drawable.g312,
+                        R.drawable.g352,
+                        R.drawable.g380,
+                        R.drawable.g452,
+                        R.drawable.g500,
+                        R.drawable.g612,
+                        R.drawable.g700,
+                        R.drawable.g800,
+                        R.drawable.g900,
+                        R.drawable.g1000,
+                        R.drawable.g1100,
+                        R.drawable.g1200
+                };
 
         public CommentsAdapter(Context context, List<Comment> list) {
             this.context = context;
@@ -1511,9 +1565,10 @@ public class BroadcasterFragment1 extends Fragment {
             } else if (type.equals("gift")) {
 
                 String us = item.getUserId().replace("\"", "");
+                String gid = item.getComment().replace("\"", "");
                 holder.name.setText(us + " has sent a  ");
 
-                Drawable drawable = context.getResources().getDrawable(R.drawable.gift);
+                Drawable drawable = context.getResources().getDrawable(gifts[Integer.parseInt(gid) - 1]);
 
                 drawable.setBounds(0, 0, 40, 40);
 
@@ -1646,6 +1701,7 @@ public class BroadcasterFragment1 extends Fragment {
                                             thumbPic1 = im;
 
 
+                                            isConnection = true;
                                             dialog.dismiss();
 
 
@@ -1655,6 +1711,7 @@ public class BroadcasterFragment1 extends Fragment {
                                         @Override
                                         public void onFailure(Call<requestConnectionBean> call, Throwable t) {
                                             thumbPic1 = item.getUserImage();
+                                            isConnection = false;
                                             bar.setVisibility(View.GONE);
                                             Log.d("asdasdasdas", t.toString());
                                         }
@@ -1883,8 +1940,7 @@ public class BroadcasterFragment1 extends Fragment {
 
         if (requestCode == REQUEST_CODE) {
 
-            if (resultCode == Activity.RESULT_OK)
-            {
+
                 sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
 
                 if (sMediaProjection != null) {
@@ -1921,11 +1977,7 @@ public class BroadcasterFragment1 extends Fragment {
                     // register media projection stop callback
                     sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
                 }
-            }
-            else
-            {
 
-            }
 
 
         }
@@ -2702,6 +2754,7 @@ public class BroadcasterFragment1 extends Fragment {
                                             String im = item.getUserImage().replace("\"", "");
                                             thumbPic1 = im;
 
+                                            isConnection = true;
 
                                             dialog.dismiss();
 
@@ -2712,6 +2765,7 @@ public class BroadcasterFragment1 extends Fragment {
                                         @Override
                                         public void onFailure(Call<requestConnectionBean> call, Throwable t) {
                                             thumbPic1 = item.getUserImage();
+                                            isConnection = false;
                                             bar.setVisibility(View.GONE);
                                             Log.d("asdasdasdas", t.toString());
                                         }
@@ -2753,32 +2807,64 @@ public class BroadcasterFragment1 extends Fragment {
 
     Integer gifts[] = new Integer[]
             {
-                    R.drawable.g5,
+                    R.drawable.g52,
                     R.drawable.g20,
-                    R.drawable.g50,
-                    R.drawable.g70,
-                    R.drawable.g110,
-                    R.drawable.g150,
-                    R.drawable.g170,
+                    R.drawable.g32,
+                    R.drawable.g1500,
+                    R.drawable.g72,
+                    R.drawable.g112,
+                    R.drawable.g152,
+                    R.drawable.g172,
                     R.drawable.g180,
-                    R.drawable.g190,
-                    R.drawable.g210,
+                    R.drawable.g192,
+                    R.drawable.g212,
                     R.drawable.g240,
-                    R.drawable.g250,
+                    R.drawable.g252,
                     R.drawable.g280,
                     R.drawable.g300,
-                    R.drawable.g310,
-                    R.drawable.g350,
+                    R.drawable.g312,
+                    R.drawable.g352,
                     R.drawable.g380,
-                    R.drawable.g450,
+                    R.drawable.g452,
                     R.drawable.g500,
-                    R.drawable.g610,
+                    R.drawable.g612,
                     R.drawable.g700,
                     R.drawable.g800,
                     R.drawable.g900,
-                    R.drawable.g999
+                    R.drawable.g1000,
+                    R.drawable.g1100,
+                    R.drawable.g1200
             };
 
+    String names[] = {
+            "heart",
+            "gun",
+            "scooter",
+            "rakhi",
+            "teddy",
+            "chocolates",
+            "treasure",
+            "clap",
+            "clock",
+            "bike",
+            "car",
+            "bird",
+            "rose",
+            "dancing girl",
+            "diamond",
+            "superbee",
+            "hug",
+            "heart beat",
+            "golden egg",
+            "love",
+            "rabbits",
+            "loving heart",
+            "ring",
+            "kiss",
+            "fire",
+            "head phone",
+            "weapon"
+    };
 
 
 
@@ -2787,8 +2873,12 @@ public class BroadcasterFragment1 extends Fragment {
 
 
         Glide.with(broadcaster).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
-        giftText.setText(text);
+        giftText.setText(names[Integer.parseInt(giftId) - 1]);
 
+        TranslateAnimation animate = new TranslateAnimation(rootView.getWidth(),0,0,0);
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        giftLayout.startAnimation(animate);
         giftLayout.setVisibility(View.VISIBLE);
 
         Timer t = new Timer();
@@ -2800,6 +2890,10 @@ public class BroadcasterFragment1 extends Fragment {
                 giftLayout.post(new Runnable() {
                     @Override
                     public void run() {
+                        TranslateAnimation animate = new TranslateAnimation(0,-rootView.getWidth(),0,0);
+                        animate.setDuration(500);
+                        animate.setFillAfter(true);
+                        giftLayout.startAnimation(animate);
                         giftLayout.setVisibility(View.GONE);
                     }
                 });

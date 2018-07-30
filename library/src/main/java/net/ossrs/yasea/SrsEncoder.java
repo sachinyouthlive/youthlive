@@ -526,7 +526,7 @@ public class SrsEncoder {
     }
 
     private void swRgbaFrame(byte[] data, int width, int height, long pts) {
-        RGBASoftEncode(data, width, height, true, 180, pts);
+        RGBASoftEncode(data, width, height, false, 180, pts);
     }
 
     public AudioRecord chooseAudioRecord() {

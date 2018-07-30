@@ -300,15 +300,22 @@ public class SrsPublisher {
     public void switchCameraFace(int id) {
         mCameraView.stopCamera();
         mCameraView.setCameraId(id);
+        Log.d("Srs" , "1");
         if (id == 0) {
             mEncoder.setCameraBackFace();
+            mCameraView.checkSizes();
+            Log.d("Srs" , "2");
         } else {
             mEncoder.setCameraFrontFace();
+            mCameraView.checkSizes();
+            Log.d("Srs" , "3");
         }
         if (mEncoder != null && mEncoder.isEnabled()) {
             mCameraView.enableEncoding();
+            Log.d("Srs" , "4");
         }
         mCameraView.startCamera();
+        Log.d("Srs" , "5");
     }
 
     public void setRtmpHandler(RtmpHandler handler) {
@@ -333,5 +340,9 @@ public class SrsPublisher {
         if (mMp4Muxer != null) {
             mEncoder.setMp4Muxer(mMp4Muxer);
         }
+    }
+
+    public SrsCameraView getmCameraView() {
+        return mCameraView;
     }
 }
