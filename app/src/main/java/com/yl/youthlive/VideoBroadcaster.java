@@ -1,56 +1,34 @@
 package com.yl.youthlive;
 
-import android.app.Dialog;
-import android.arch.persistence.room.Room;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.hardware.Camera;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.Surface;
-import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
-
-//import com.google.android.exoplayer.AspectRatioFrameLayout;
 
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -73,15 +51,6 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.gson.Gson;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-/**/
-//import com.streamaxia.player.StreamaxiaPlayer;
-//import com.streamaxia.player.listener.StreamaxiaPlayerState;
-
 import com.streamaxia.android.CameraPreview;
 import com.streamaxia.android.StreamaxiaPublisher;
 import com.streamaxia.android.handlers.EncoderHandler;
@@ -90,30 +59,22 @@ import com.streamaxia.android.handlers.RtmpHandler;
 import com.streamaxia.android.utils.Size;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
-import com.yl.youthlive.followPOJO.followBean;
-import com.yl.youthlive.getIpdatedPOJO.Comment;
-import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
-import com.yl.youthlive.goLivePOJO.goLiveBean;
-import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
-import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
-
 
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
-import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
-import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+//import com.google.android.exoplayer.AspectRatioFrameLayout;
+/**/
+//import com.streamaxia.player.StreamaxiaPlayer;
+//import com.streamaxia.player.listener.StreamaxiaPlayerState;
 
 public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.RtmpListener, EncoderHandler.EncodeListener, RecordHandler.RecordListener {
 
@@ -319,7 +280,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
         Size supportedRes = mPublisher.getSupportedPictureSizes(1).get(1);
 
-        Toast.makeText(VideoBroadcaster.this, String.valueOf(supportedRes.width) + " X " + String.valueOf(supportedRes.height), Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(VideoBroadcaster.this, String.valueOf(supportedRes.width) + " X " + String.valueOf(supportedRes.height), Toast.LENGTH_SHORT).show();
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager wm = (WindowManager)
@@ -336,7 +297,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         float rat = screenWidth / screenHeight;
 
 
-        Toast.makeText(VideoBroadcaster.this, String.valueOf(screenWidth) + " X " + String.valueOf(screenHeight), Toast.LENGTH_SHORT).show();
+        //   Toast.makeText(VideoBroadcaster.this, String.valueOf(screenWidth) + " X " + String.valueOf(screenHeight), Toast.LENGTH_SHORT).show();
 
 
         List<Size> sizes = mPublisher.getSupportedPictureSizes(1);
