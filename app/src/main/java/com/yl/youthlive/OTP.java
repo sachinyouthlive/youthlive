@@ -65,7 +65,7 @@ public class OTP extends AppCompatActivity {
         progress = (ProgressBar) findViewById(R.id.progress);
 
 
-        // phone=getIntent().getStringExtra("phone");
+        phone = getIntent().getStringExtra("phone");
         // countryCode=getIntent().getStringExtra("countryCode");
         regeneratepassword = (TextView) findViewById(R.id.regeneratepassword);
         pDialog = new ProgressDialog(this);
@@ -208,8 +208,7 @@ public class OTP extends AppCompatActivity {
 
             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-
-            Call<otpBean> call = cr.verify(userId, codee);
+            Call<otpBean> call = cr.verify(phone, codee);
 
             call.enqueue(new Callback<otpBean>() {
                 @Override
@@ -220,7 +219,7 @@ public class OTP extends AppCompatActivity {
 
                         //   Toast.makeText(OTP.this , "OTP verified, Please create a Password" , Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(OTP.this, CreatePassword.class);
-                        intent.putExtra("userId", userId);
+                        intent.putExtra("userId", response.body().getData().getUserId().toString());
                         startActivity(intent);
                         finish();
 

@@ -243,7 +243,7 @@ public interface AllAPIs {
     @Multipart
     @POST("api/varify_code.php")
     Call<otpBean> verify(
-            @Part("userId") String userId,
+            @Part("phone") String phone,
             @Part("code") String code
     );
 
