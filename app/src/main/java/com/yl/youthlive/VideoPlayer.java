@@ -382,7 +382,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
                 }
 
-                if (playbackState == 4) {
+                /*if (playbackState == 4) {
 
 
                     Dialog dialog = new Dialog(VideoPlayer.this);
@@ -403,7 +403,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
                     });
 
 
-                }
+                }*/
 
             }
 
@@ -803,10 +803,11 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
                 mPublisher.setScreenOrientation(Configuration.ORIENTATION_PORTRAIT);
 
-                mPublisher.setVideoBitRate(56 * 1024);
+                mPublisher.setVideoBitRate(200 * 1024);
 
-                mPublisher.setOutputResolution(144 , 176);
-                mPublisher.setPreviewResolution(176 , 144);
+
+                mPublisher.setOutputResolution(144 * 3 , 192 * 3);
+                mPublisher.setPreviewResolution(192 * 3 , 144 * 3);
 
                 mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 
@@ -999,10 +1000,11 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         //mPublisher.setCameraFacing(1);
 
-        mPublisher.setVideoBitRate(56 * 1024);
+        mPublisher.setVideoBitRate(200 * 1024);
 
-        mPublisher.setOutputResolution(144 , 176);
-        mPublisher.setPreviewResolution(176 , 144);
+
+        mPublisher.setOutputResolution(144 * 3 , 192 * 3);
+        mPublisher.setPreviewResolution(192 * 3 , 144 * 3);
 
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 

@@ -885,7 +885,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
                             thumbProgress1.setVisibility(View.GONE);
                         }
 
-                        if (playbackState == 4) {
+                        /*if (playbackState == 4) {
                             progress.setVisibility(View.VISIBLE);
 
                             final bean b = (bean) getApplicationContext();
@@ -917,7 +917,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
                         }
-
+*/
                     }
 
                     @Override
