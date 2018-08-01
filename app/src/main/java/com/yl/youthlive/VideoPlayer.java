@@ -44,6 +44,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import com.github.faucamp.simplertmp.RtmpHandler;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -78,14 +79,14 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 
-import com.streamaxia.android.CameraPreview;
-import com.streamaxia.android.StreamaxiaPublisher;
-import com.streamaxia.android.handlers.EncoderHandler;
-import com.streamaxia.android.handlers.RecordHandler;
-import com.streamaxia.android.handlers.RtmpHandler;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 
+
+import net.ossrs.yasea.SrsCameraView;
+import net.ossrs.yasea.SrsEncodeHandler;
+import net.ossrs.yasea.SrsPublisher;
+import net.ossrs.yasea.SrsRecordHandler;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -100,7 +101,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class VideoPlayer extends AppCompatActivity implements EncoderHandler.EncodeListener, RecordHandler.RecordListener, RtmpHandler.RtmpListener {
+public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener, RtmpHandler.RtmpListener{
 
     String liveId;
 
@@ -119,7 +120,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
     TextView stateText;
 
 
-    CameraPreview thumbCamera1, thumbCamera2;
+    SrsCameraView thumbCamera1, thumbCamera2;
 
 
     String loadingpic;
@@ -607,10 +608,12 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
     }
 
+/*
     @Override
     public void onRtmpAuthenticationg(String s) {
 
     }
+*/
 
 
     public class FragAdapter extends FragmentStatePagerAdapter {
@@ -638,7 +641,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
         }
     }
 
-    StreamaxiaPublisher mPublisher;
+    SrsPublisher mPublisher;
 
     public void startThumbCamera1(final String connId) {
 
@@ -676,9 +679,9 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
                 final bean b = (bean) getApplicationContext();
 
-                mPublisher = new StreamaxiaPublisher(thumbCamera1 , VideoPlayer.this);
+                mPublisher = new SrsPublisher(thumbCamera1);
 
-                mPublisher.setEncoderHandler(new EncoderHandler(VideoPlayer.this));
+                mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
                 mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
                     @Override
                     public void onRtmpConnecting(String s) {
@@ -747,14 +750,10 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
                         Log.d("rreess" , e.toString());
                     }
 
-                    @Override
-                    public void onRtmpAuthenticationg(String s) {
-
-                    }
 
 
                 }));
-                mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
+                mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
                 /*mPublisher.getmCameraView().open_camera();
 
 
@@ -783,7 +782,7 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
 */
 
-                mPublisher = new StreamaxiaPublisher(thumbCamera1 , VideoPlayer.this);
+                mPublisher = new SrsPublisher(thumbCamera1);
 /*
 
         mPublisher.setEncoderHandler(new EncoderjHandler(this));
@@ -792,21 +791,22 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 */
 
 
-                mPublisher.setEncoderHandler(new EncoderHandler(VideoPlayer.this));
+                mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
                 mPublisher.setRtmpHandler(new RtmpHandler(VideoPlayer.this));
-                mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
+                mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
 
 
                 thumbCamera1.startCamera();
 
 
-                mPublisher.setCameraFacing(1);
+                //mPublisher.setCameraFacing(1);
 
                 mPublisher.setScreenOrientation(Configuration.ORIENTATION_PORTRAIT);
 
-                mPublisher.setVideoBitRate(300 * 1024);
+                mPublisher.setVideoBitRate(56 * 1024);
 
-                mPublisher.setVideoOutputResolution(480 , 360 , 1);
+                mPublisher.setOutputResolution(144 , 176);
+                mPublisher.setPreviewResolution(176 , 144);
 
                 mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 
@@ -861,9 +861,9 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
         final bean b = (bean) getApplicationContext();
 
-        mPublisher = new StreamaxiaPublisher(thumbCamera1 , VideoPlayer.this);
+        mPublisher = new SrsPublisher(thumbCamera1);
 
-        mPublisher.setEncoderHandler(new EncoderHandler(VideoPlayer.this));
+        mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
         mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
             @Override
             public void onRtmpConnecting(String s) {
@@ -965,14 +965,10 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 
             }
 
-            @Override
-            public void onRtmpAuthenticationg(String s) {
-
-            }
 
 
         }));
-        mPublisher.setRecordEventHandler(new RecordHandler(VideoPlayer.this));
+        mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
 
         //mPublisher.getmCameraView().open_camera();
 
@@ -1001,11 +997,12 @@ public class VideoPlayer extends AppCompatActivity implements EncoderHandler.Enc
 */
         thumbCamera1.startCamera();
 
-        mPublisher.setCameraFacing(1);
+        //mPublisher.setCameraFacing(1);
 
-        mPublisher.setVideoBitRate(300 * 1024);
+        mPublisher.setVideoBitRate(56 * 1024);
 
-        mPublisher.setVideoOutputResolution(480 , 360 , 1);
+        mPublisher.setOutputResolution(144 , 176);
+        mPublisher.setPreviewResolution(176 , 144);
 
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
 

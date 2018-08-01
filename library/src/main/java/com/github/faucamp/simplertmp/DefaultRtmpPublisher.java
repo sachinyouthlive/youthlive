@@ -29,7 +29,13 @@ public class DefaultRtmpPublisher implements RtmpPublisher {
 
     @Override
     public void close() {
-        rtmpConnection.close();
+        try {
+            rtmpConnection.close();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

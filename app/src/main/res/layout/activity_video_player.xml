@@ -44,7 +44,7 @@
             android:layout_height="match_parent"
             android:visibility="gone">
 
-            <com.streamaxia.android.CameraPreview
+            <net.ossrs.yasea.SrsCameraView
                 android:id="@+id/thumb_camera1"
                 android:layout_width="120dp"
                 android:layout_height="160dp" />
@@ -96,7 +96,7 @@
         android:visibility="gone">
 
 
-        <com.streamaxia.android.CameraPreview
+        <net.ossrs.yasea.SrsCameraView
             android:id="@+id/thumb_camera2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

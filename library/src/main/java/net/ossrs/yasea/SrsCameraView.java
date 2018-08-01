@@ -282,6 +282,19 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
     }
 
 
+    public List<Camera.Size> getSupportPreviews()
+    {
+        if(mCamera==null)
+            return null;
+
+
+        Camera.Parameters params = mCamera.getParameters();
+
+        return params.getSupportedPictureSizes();
+
+    }
+
+
     Camera.Size best_size;  // Instance variable
     public Camera.Size get_best_size(int wid , int hei)
     {

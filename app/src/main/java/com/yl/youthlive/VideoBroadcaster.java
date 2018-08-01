@@ -52,6 +52,7 @@ import android.widget.ViewSwitcher;
 
 //import com.google.android.exoplayer.AspectRatioFrameLayout;
 
+import com.github.faucamp.simplertmp.RtmpHandler;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -82,12 +83,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 //import com.streamaxia.player.StreamaxiaPlayer;
 //import com.streamaxia.player.listener.StreamaxiaPlayerState;
 
-import com.streamaxia.android.CameraPreview;
-import com.streamaxia.android.StreamaxiaPublisher;
-import com.streamaxia.android.handlers.EncoderHandler;
-import com.streamaxia.android.handlers.RecordHandler;
-import com.streamaxia.android.handlers.RtmpHandler;
-import com.streamaxia.android.utils.Size;
+
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
 import com.yl.youthlive.followPOJO.followBean;
@@ -97,6 +93,11 @@ import com.yl.youthlive.goLivePOJO.goLiveBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
 
+
+import net.ossrs.yasea.SrsCameraView;
+import net.ossrs.yasea.SrsEncodeHandler;
+import net.ossrs.yasea.SrsPublisher;
+import net.ossrs.yasea.SrsRecordHandler;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -115,7 +116,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.RtmpListener, EncoderHandler.EncodeListener, RecordHandler.RecordListener {
+public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.RtmpListener, SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener{
 
     //CameraPreview cameraPreview;
     //private StreamaxiaPublisher mPublisher;
@@ -163,8 +164,8 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     SharedPreferences.Editor editor;
 
 
-    private StreamaxiaPublisher mPublisher;
-    CameraPreview cameraPreview;
+    private SrsPublisher mPublisher;
+    SrsCameraView cameraPreview;
 
 
     BroadcastReceiver headsetPlug;
@@ -253,7 +254,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         decorView.setSystemUiVisibility(uiOptions);
 */
 
-        mPublisher = new StreamaxiaPublisher(cameraPreview, this);
+        mPublisher = new SrsPublisher(cameraPreview);
 /*
 
         mPublisher.setEncoderHandler(new EncoderjHandler(this));
@@ -262,9 +263,9 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 */
 
 
-        mPublisher.setEncoderHandler(new EncoderHandler(this));
+        mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
-        mPublisher.setRecordEventHandler(new RecordHandler(this));
+        mPublisher.setRecordHandler(new SrsRecordHandler(this));
 
         /*mPublisher.getmCameraView().open_camera();
 
@@ -313,13 +314,13 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         cameraPreview.startCamera();
 
 
-        mPublisher.setCameraFacing(1);
+        //mPublisher.setCameraFacing(1);
 
-        mPublisher.setScreenOrientation(Configuration.ORIENTATION_PORTRAIT);
+        //mPublisher.setScreenOrientation(Configuration.ORIENTATION_PORTRAIT);
 
-        Size supportedRes = mPublisher.getSupportedPictureSizes(1).get(1);
+        Camera.Size supportedRes = mPublisher.getmCameraView().getSupportPreviews().get(1);
 
-        Toast.makeText(VideoBroadcaster.this, String.valueOf(supportedRes.width) + " X " + String.valueOf(supportedRes.height), Toast.LENGTH_SHORT).show();
+
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager wm = (WindowManager)
@@ -336,16 +337,16 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         float rat = screenWidth / screenHeight;
 
 
-        Toast.makeText(VideoBroadcaster.this, String.valueOf(screenWidth) + " X " + String.valueOf(screenHeight), Toast.LENGTH_SHORT).show();
 
 
-        List<Size> sizes = mPublisher.getSupportedPictureSizes(1);
+
+        List<Camera.Size> sizes = mPublisher.getmCameraView().getSupportPreviews();
         int bes_width = 0;
         int max_limit = 480;
 
-        Size best_size = null;
+        Camera.Size best_size = null;
 
-        for (Size size : sizes) {
+        for (Camera.Size size : sizes) {
             Log.d("SrsCamera", "Size width:" + size.width + " height:" + size.height);
             if (size.height > bes_width && size.height <= max_limit) {
                 if (size.width / size.height == rat) {
@@ -355,8 +356,12 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
             }
         }
 
-        mPublisher.setVideoOutputResolution(best_size.width, best_size.height, 1);
 
+        Toast.makeText(VideoBroadcaster.this, String.valueOf(best_size.width) + " X " + String.valueOf(best_size.height), Toast.LENGTH_SHORT).show();
+
+        mPublisher.setOutputResolution(best_size.width, best_size.height);
+
+        mPublisher.setPreviewResolution(best_size.width, best_size.height);
 
 
 
@@ -513,21 +518,17 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     @Override
     public void onNetworkWeak() {
-
-        toast.setText("Network Weak");
-        toast.show();
-
+        Toast.makeText(getApplicationContext(), "Network weak", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNetworkResume() {
-        toast.setText("Network Resume");
-        toast.show();
+        Toast.makeText(getApplicationContext(), "Network resume", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
-
+        handleException(e);
     }
 
     @Override
@@ -585,15 +586,24 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     @Override
     protected void onResume() {
         super.onResume();
-        cameraPreview.startCamera();
-        mPublisher.resumeRecord();
+        if (mPublisher != null)
+        {
+            cameraPreview.startCamera();
+            //mPublisher.setCameraFacing(1);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //cameraPreview.stopCamera();
-        mPublisher.pauseRecord();
+        if (mPublisher != null)
+        {
+            cameraPreview.stopCamera();
+
+            Toast.makeText(getApplicationContext(), "Camera Released", Toast.LENGTH_SHORT).show();
+
+            mPublisher.stopRecord();
+        }
     }
 
     @Override
@@ -664,12 +674,12 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     @Override
     public void onRtmpConnecting(String s) {
-
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRtmpConnected(String s) {
-
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
         // conect api
 
     }
@@ -711,28 +721,28 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     @Override
     public void onRtmpSocketException(SocketException e) {
-
+        handleException(e);
     }
 
     @Override
     public void onRtmpIOException(IOException e) {
-
+        handleException(e);
     }
 
     @Override
     public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-
+        handleException(e);
     }
 
     @Override
     public void onRtmpIllegalStateException(IllegalStateException e) {
-
+        handleException(e);
     }
 
-    @Override
+    /*@Override
     public void onRtmpAuthenticationg(String s) {
 
-    }
+    }*/
 
 /*
     @Override
@@ -785,7 +795,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
     public void switchCamera() {
-        mPublisher.switchCamera();
+        mPublisher.switchCameraFace((mPublisher.getCamraId() + 1) % Camera.getNumberOfCameras());
         //mPublisher.switchCamera();
     }
 
@@ -1051,5 +1061,15 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     }
 
+    public void handleException(Exception e) {
+        try {
+
+            //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            mPublisher.stopPublish();
+            //mPublisher.stopRecord();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+    }
 
 }

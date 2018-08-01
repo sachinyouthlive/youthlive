@@ -9,6 +9,7 @@ import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
 import android.media.MediaFormat;
 import android.media.MediaRecorder;
+import android.net.rtp.AudioCodec;
 import android.util.Log;
 
 import java.io.IOException;
@@ -21,20 +22,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SrsEncoder {
     private static final String TAG = "SrsEncoder";
 
-    public static final String VCODEC = "video/avc";
-    public static final String ACODEC = "audio/mp4a-latm";
+    public static final String VCODEC = MediaFormat.MIMETYPE_VIDEO_AVC;
+    //public static final String VCODEC = "video/avc";
+    public static final String ACODEC = MediaFormat.MIMETYPE_AUDIO_AAC;
+    //public static final String ACODEC = "audio/mp4a-latm";
     public static String x264Preset = "veryfast";
-    public static int vPrevWidth = 640;
-    public static int vPrevHeight = 360;
-    public static int vPortraitWidth = 360;
-    public static int vPortraitHeight = 640;
-    public static int vLandscapeWidth = 640;
-    public static int vLandscapeHeight = 360;
-    public static int vOutWidth = 360;   // Note: the stride of resolution must be set as 16x for hard encoding with some chip like MTK
-    public static int vOutHeight = 640;  // Since Y component is quadruple size as U and V component, the stride must be set as 32x
+    public static int vPrevWidth = 480;
+    public static int vPrevHeight = 320;
+    public static int vPortraitWidth = 320;
+    public static int vPortraitHeight = 480;
+    public static int vLandscapeWidth = 480;
+    public static int vLandscapeHeight = 320;
+    public static int vOutWidth = 320;   // Note: the stride of resolution must be set as 16x for hard encoding with some chip like MTK
+    public static int vOutHeight = 480;  // Since Y component is quadruple size as U and V component, the stride must be set as 32x
     public static int vBitrate = 1200 * 1024;  // 1200 kbps
-    public static final int VFPS = 24;
-    public static final int VGOP = 48;
+    public static final int VFPS = 30;
+    public static final int VGOP = 30;
     public static final int ASAMPLERATE = 44100;
     public static int aChannelConfig = AudioFormat.CHANNEL_IN_STEREO;
     public static final int ABITRATE = 64 * 1024;  // 64 kbps
@@ -254,6 +257,11 @@ public class SrsEncoder {
     public void setVideoSmoothMode() {
         vBitrate = 500 * 1024;  // 500 kbps
         x264Preset = "superfast";
+    }
+
+    public void setvBitrate(int bitrate)
+    {
+        this.vBitrate = bitrate;
     }
 
     public int getPreviewWidth() {

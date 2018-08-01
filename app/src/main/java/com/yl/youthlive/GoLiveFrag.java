@@ -2,6 +2,7 @@ package com.yl.youthlive;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,14 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.Facing;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by TBX on 11/22/2017.
@@ -30,7 +35,8 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
 
     Button goLive;
     CircleImageView profile;
-    CameraView cameraPreview;
+    //CameraView cameraPreview;
+    ImageView image;
 
     @Nullable
     @Override
@@ -38,9 +44,13 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
         View view = inflater.inflate(R.layout.activity_go_live, container, false);
 
 
-        cameraPreview = view.findViewById(R.id.preview);
+/*
+
 
         cameraPreview.setFacing(Facing.FRONT);
+*/
+
+        image = view.findViewById(R.id.preview);
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getContext()));
 
@@ -53,8 +63,31 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
 
         ImageLoader loader = ImageLoader.getInstance();
 
+        loader.loadImage(b.userImage, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
 
-        loader.displayImage(b.userImage, profile);
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                profile.setImageBitmap(loadedImage);
+
+                Blurry.with(getContext()).from(loadedImage).into(image);
+
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
 
         goLive.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +113,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
 
         try {
 
-            cameraPreview.start();
+            //cameraPreview.start();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,7 +170,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     public void onPause() {
         super.onPause();
 
-        cameraPreview.stop();
+        //cameraPreview.stop();
     }
 
     @Override
@@ -150,6 +183,6 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     @Override
     public void onDestroy() {
         super.onDestroy();
-        cameraPreview.destroy();
+        //cameraPreview.destroy();
     }
 }

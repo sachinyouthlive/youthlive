@@ -66,7 +66,7 @@
     </RelativeLayout>
 
 
-    <com.streamaxia.android.CameraPreview
+    <net.ossrs.yasea.SrsCameraView
         android:id="@+id/preview"
         android:layout_width="0dp"
         android:layout_height="0dp"

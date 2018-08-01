@@ -314,8 +314,9 @@ public class RtmpConnection implements RtmpPublisher {
     public void close() {
         if (socket != null) {
             closeStream();
+            shutdown();
         }
-        shutdown();
+
     }
 
     private void closeStream() {
@@ -373,7 +374,7 @@ public class RtmpConnection implements RtmpPublisher {
             mHandler.notifyRtmpDisconnected();
         }
 
-        reset();
+        //reset();
     }
 
     private void reset() {
