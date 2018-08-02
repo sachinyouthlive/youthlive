@@ -228,7 +228,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_light_blue_900_24dp));
         //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_lime_a200_24dp));
         //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_pink_900_24dp));
-        drawableList.add(getResources().getDrawable(R.drawable.g52));
+        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_red_900_24dp));
 
         bubbleView.setDrawableList(drawableList);
 
@@ -1767,6 +1767,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onResponse(Call<getUpdatedBean> call, retrofit2.Response<getUpdatedBean> response) {
 
                 try {
+
+                    bubbleChecker.run();
 
                     ylId.setText(response.body().getData().getYouthliveId());
 

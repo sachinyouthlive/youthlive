@@ -471,6 +471,18 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
         }
     }
 
+    public void stopCamera2() {
+        disableEncoding();
+
+        stopTorch();
+        if (mCamera != null) {
+            mCamera.setPreviewCallback(null);
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
+    }
+
     private Camera openCamera() {
         Camera camera;
         if (mCamId < 0) {
