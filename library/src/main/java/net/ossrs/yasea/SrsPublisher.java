@@ -68,7 +68,7 @@ public class SrsPublisher {
     }
 
     private void stopCamera() {
-        mCameraView.stopCamera();
+        mCameraView.stopCamera2();
     }
 
     private void startAudio() {
@@ -316,7 +316,7 @@ public class SrsPublisher {
             Log.d("Srs" , "3");
         }
         if (mEncoder != null && mEncoder.isEnabled()) {
-            mCameraView.enableEncoding();
+            //mCameraView.enableEncoding();
             Log.d("Srs" , "4");
         }
         mCameraView.startCamera();

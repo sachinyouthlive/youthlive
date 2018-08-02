@@ -1134,9 +1134,11 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         try {
 
+            thumbCamera1.stopCamera2();
             mPublisher.stopPublish();
-            mPublisher.stopRecord();
-            thumbCamera1.stopCamera();
+            //mPublisher.stopRecord();
+
+            //mPublisher = null;
             isThumbCamera1 = false;
             player_camera_layout1.setVisibility(View.GONE);
         } catch (Exception e) {
@@ -1152,6 +1154,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         try {
             thumbPlayer1.stop();
+            thumbPlayer1 = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1164,12 +1167,23 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     @Override
     protected void onResume() {
         super.onResume();
-        //cameraPreview.startCamera();
-        try {
-            //mPublisher.resumeRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+
+        /*if (mainPlayer != null)
+        {
+            mainPlayer.setPlayWhenReady(true);
+        }*/
+
+        if (mPublisher != null)
+        {
+            thumbCamera1.startCamera();
         }
+
+        /*if (thumbPlayer1 != null)
+        {
+            thumbPlayer1.setPlayWhenReady(true);
+        }*/
+
 
     }
 
@@ -1177,11 +1191,26 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     protected void onPause() {
         super.onPause();
 
-        try {
-            mPublisher.pauseRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+
+        if (mPublisher != null)
+        {
+            thumbCamera1.stopCamera();
         }
+
+/*
+        if (mainPlayer != null)
+        {
+            mainPlayer.stop();
+        }
+*/
+
+/*
+        if (thumbPlayer1 != null)
+        {
+            thumbPlayer1.stop();
+        }
+*/
 
         //cameraPreview.stopCamera();
 

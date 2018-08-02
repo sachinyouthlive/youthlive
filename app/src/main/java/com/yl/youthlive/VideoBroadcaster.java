@@ -176,6 +176,8 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     ProgressBar thumbProgress1;
 
+    View thumbLoading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,8 +189,9 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         toast = Toast.makeText(this, null, Toast.LENGTH_SHORT);
 
 
+        thumbLoading = findViewById(R.id.thumb_loading);
         earphones = findViewById(R.id.earphones);
-        thumbProgress1 = findViewById(R.id.thumb_progress1);
+        thumbProgress1 = findViewById(R.id.progressBar13);
 
         DoubleBounce doubleBounce = new DoubleBounce();
         thumbProgress1.setIndeterminateDrawable(doubleBounce);
@@ -531,14 +534,6 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         {
             cameraPreview.startCamera();
 
-            /*if (flag > 0)
-            {
-                mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
-            }
-
-            flag++;
-*/
-            //mPublisher.setCameraFacing(1);
         }
 
 
@@ -776,7 +771,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
         thumbContainer1.setVisibility(View.VISIBLE);
         thumbcountdown.setVisibility(View.VISIBLE);
-        thumbProgress1.setVisibility(View.VISIBLE);
+        thumbLoading.setVisibility(View.VISIBLE);
 
 
         new CountDownTimer(8000, 1000) {
@@ -839,7 +834,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
                         Log.d("ddata", String.valueOf(playbackState));
 
                         if (playWhenReady) {
-                            thumbProgress1.setVisibility(View.GONE);
+                            thumbLoading.setVisibility(View.GONE);
                         }
 
                         /*if (playbackState == 4) {
