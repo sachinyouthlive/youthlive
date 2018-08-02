@@ -1,28 +1,48 @@
 package com.yl.youthlive;
 
+import android.app.Dialog;
+import android.arch.persistence.room.Room;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.hardware.Camera;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextSwitcher;
@@ -30,6 +50,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+//import com.google.android.exoplayer.AspectRatioFrameLayout;
+
+import com.github.faucamp.simplertmp.RtmpHandler;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -51,19 +74,41 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.streamaxia.android.CameraPreview;
-import com.streamaxia.android.StreamaxiaPublisher;
-import com.streamaxia.android.handlers.EncoderHandler;
-import com.streamaxia.android.handlers.RecordHandler;
-import com.streamaxia.android.handlers.RtmpHandler;
-import com.streamaxia.android.utils.Size;
+import com.google.gson.Gson;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+/**/
+//import com.streamaxia.player.StreamaxiaPlayer;
+//import com.streamaxia.player.listener.StreamaxiaPlayerState;
+
+
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
+import com.yl.youthlive.followPOJO.followBean;
+import com.yl.youthlive.getIpdatedPOJO.Comment;
+import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
+import com.yl.youthlive.goLivePOJO.goLiveBean;
+import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
+import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
+
+
+import net.ossrs.yasea.SrsCameraView;
+import net.ossrs.yasea.SrsEncodeHandler;
+import net.ossrs.yasea.SrsPublisher;
+import net.ossrs.yasea.SrsRecordHandler;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
+import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,12 +116,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-//import com.google.android.exoplayer.AspectRatioFrameLayout;
-/**/
-//import com.streamaxia.player.StreamaxiaPlayer;
-//import com.streamaxia.player.listener.StreamaxiaPlayerState;
-
-public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.RtmpListener, EncoderHandler.EncodeListener, RecordHandler.RecordListener {
+public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.RtmpListener, SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener{
 
     //CameraPreview cameraPreview;
     //private StreamaxiaPublisher mPublisher;
@@ -105,8 +145,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     RelativeLayout thumbContainer1;
 
 
-    String liveId;
-
+    String liveId = "";
     View countDownPopup;
     TextSwitcher countdown;
 
@@ -124,14 +163,16 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     SharedPreferences.Editor editor;
 
 
-    private StreamaxiaPublisher mPublisher;
-    CameraPreview cameraPreview;
+    private SrsPublisher mPublisher;
+    SrsCameraView cameraPreview;
 
 
     BroadcastReceiver headsetPlug;
 
 
     TextView earphones;
+
+    int flag = 0;
 
     ProgressBar thumbProgress1;
 
@@ -206,81 +247,23 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         stateText = findViewById(R.id.textView3);
         //start = findViewById(R.id.imageButton2);
 
+        mPublisher = new SrsPublisher(cameraPreview);
 
-/*
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-*/
 
-        mPublisher = new StreamaxiaPublisher(cameraPreview, this);
-/*
-
-        mPublisher.setEncoderHandler(new EncoderjHandler(this));
+        mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
-        mPublisher.setRecordEventHandler(new RecordHandler(this));
-*/
+        mPublisher.setRecordHandler(new SrsRecordHandler(this));
 
 
-        mPublisher.setEncoderHandler(new EncoderHandler(this));
-        mPublisher.setRtmpHandler(new RtmpHandler(this));
-        mPublisher.setRecordEventHandler(new RecordHandler(this));
-
-        /*mPublisher.getmCameraView().open_camera();
-
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        WindowManager wm = (WindowManager)
-                getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-        wm.getDefaultDisplay().getMetrics(displayMetrics);
-        int screenWidth = displayMetrics.widthPixels;
-        int screenHeight = displayMetrics.heightPixels;
-
-
-        Camera.Size best_size = mPublisher.getmCameraView().get_best_size(screenWidth, screenHeight);
-
-        Log.d("asdasdasd", String.valueOf(screenWidth));
-        Log.d("asdasdasd", String.valueOf(screenHeight));
-
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-
-        Log.d("asdasdasd", String.valueOf(result));
-
-        if (best_size != null) {
-            Log.d("asdasd", "************ Best size is " + (best_size.width * 4)/10 + " Height: " + (best_size.height * 4)/10 + " ********************");
-
-
-            mPublisher.setPreviewResolution((best_size.width * 4)/10, (best_size.height * 4)/10);
-            mPublisher.setOutputResolution((best_size.height * 4)/10, (best_size.width * 4)/10);
-            //mPublisher.setPreviewResolution((int) (screenWidth * 0.375), (int) (screenHeight * 0.375));
-            //mPublisher.setOutputResolution((int) (screenHeight * 0.375), (int) (screenWidth * 0.375));
-        } else {
-            Log.d("asdasd", "************ Best size is NULL ********************");
-            mPublisher.setPreviewResolution(480, 320);
-            mPublisher.setOutputResolution(320, 480);
-            //mPublisher.setPreviewResolution((int) (screenWidth * 0.375), (int) (screenHeight * 0.375));
-            //mPublisher.setOutputResolution((int) (screenHeight * 0.375), (int) (screenWidth * 0.375));
-        }
-
-        mPublisher.setVideoHDMode();
-*/
 
 
         cameraPreview.startCamera();
 
 
-        mPublisher.setCameraFacing(1);
 
-        mPublisher.setScreenOrientation(Configuration.ORIENTATION_PORTRAIT);
+        Camera.Size supportedRes = mPublisher.getmCameraView().getSupportPreviews().get(1);
 
-        Size supportedRes = mPublisher.getSupportedPictureSizes(1).get(1);
 
-        //  Toast.makeText(VideoBroadcaster.this, String.valueOf(supportedRes.width) + " X " + String.valueOf(supportedRes.height), Toast.LENGTH_SHORT).show();
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager wm = (WindowManager)
@@ -297,16 +280,16 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         float rat = screenWidth / screenHeight;
 
 
-        //   Toast.makeText(VideoBroadcaster.this, String.valueOf(screenWidth) + " X " + String.valueOf(screenHeight), Toast.LENGTH_SHORT).show();
 
 
-        List<Size> sizes = mPublisher.getSupportedPictureSizes(1);
+
+        List<Camera.Size> sizes = mPublisher.getmCameraView().getSupportPreviews();
         int bes_width = 0;
         int max_limit = 480;
 
-        Size best_size = null;
+        Camera.Size best_size = null;
 
-        for (Size size : sizes) {
+        for (Camera.Size size : sizes) {
             Log.d("SrsCamera", "Size width:" + size.width + " height:" + size.height);
             if (size.height > bes_width && size.height <= max_limit) {
                 if (size.width / size.height == rat) {
@@ -316,23 +299,26 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
             }
         }
 
-        mPublisher.setVideoOutputResolution(best_size.width, best_size.height, 1);
+
+        Toast.makeText(VideoBroadcaster.this, String.valueOf(best_size.width) + " X " + String.valueOf(best_size.height), Toast.LENGTH_SHORT).show();
+
+        mPublisher.setOutputResolution(best_size.width, best_size.height);
+
+        mPublisher.setPreviewResolution(best_size.width, best_size.height);
+
+
+        mPublisher.setVideoBitRate(500 * 1024);
 
 
 
 
 /*
-        for (int i = 0 ; i < mPublisher.getSupportedPictureSizes(1).size() ; i++)
-        {
-            Size s = mPublisher.getSupportedPictureSizes(1).get(i);
-            Log.d("asdasdasd" , "1");
-            Log.d("asdasdasd" , "width - " + String.valueOf(s.width) + " ; height - " + String.valueOf(s.height));
-
-        }
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
 */
 
-
-        mPublisher.setVideoBitRate(500 * 1024);
 
         //mPublisher.switchCameraFilter(MagicFilterType.COOL);
 
@@ -474,21 +460,17 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     @Override
     public void onNetworkWeak() {
-
-        toast.setText("Network Weak");
-        toast.show();
-
+        Toast.makeText(getApplicationContext(), "Network weak", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNetworkResume() {
-        toast.setText("Network Resume");
-        toast.show();
+        Toast.makeText(getApplicationContext(), "Network resume", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
-
+        handleException(e);
     }
 
     @Override
@@ -545,16 +527,40 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     @Override
     protected void onResume() {
+        if (mPublisher != null)
+        {
+            cameraPreview.startCamera();
+
+            /*if (flag > 0)
+            {
+                mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
+            }
+
+            flag++;
+*/
+            //mPublisher.setCameraFacing(1);
+        }
+
+
+
         super.onResume();
-        cameraPreview.startCamera();
-        mPublisher.resumeRecord();
+
     }
 
     @Override
     protected void onPause() {
+
+        if (mPublisher != null)
+        {
+            cameraPreview.stopCamera();
+            //mPublisher.stopPublish();
+            //Toast.makeText(getApplicationContext(), "Camera Released", Toast.LENGTH_SHORT).show();
+
+            //mPublisher.stopRecord();
+        }
+
         super.onPause();
-        //cameraPreview.stopCamera();
-        mPublisher.pauseRecord();
+
     }
 
     @Override
@@ -593,7 +599,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         try {
             if (mPublisher != null) {
                 mPublisher.stopPublish();
-                mPublisher.stopRecord();
+                //mPublisher.stopRecord();
                 chronometer.stop();
             }
         } catch (Exception e) {
@@ -625,12 +631,12 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     @Override
     public void onRtmpConnecting(String s) {
-
+        //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRtmpConnected(String s) {
-
+        //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
         // conect api
 
     }
@@ -672,28 +678,28 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     @Override
     public void onRtmpSocketException(SocketException e) {
-
+        handleException(e);
     }
 
     @Override
     public void onRtmpIOException(IOException e) {
-
+        handleException(e);
     }
 
     @Override
     public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-
+        handleException(e);
     }
 
     @Override
     public void onRtmpIllegalStateException(IllegalStateException e) {
-
+        handleException(e);
     }
 
-    @Override
+    /*@Override
     public void onRtmpAuthenticationg(String s) {
 
-    }
+    }*/
 
 /*
     @Override
@@ -746,7 +752,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
     public void switchCamera() {
-        mPublisher.switchCamera();
+        mPublisher.switchCameraFace((mPublisher.getCamraId() + 1) % Camera.getNumberOfCameras());
         //mPublisher.switchCamera();
     }
 
@@ -836,7 +842,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
                             thumbProgress1.setVisibility(View.GONE);
                         }
 
-                        if (playbackState == 4) {
+                        /*if (playbackState == 4) {
                             progress.setVisibility(View.VISIBLE);
 
                             final bean b = (bean) getApplicationContext();
@@ -868,7 +874,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
                         }
-
+*/
                     }
 
                     @Override
@@ -1012,5 +1018,15 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     }
 
+    public void handleException(Exception e) {
+        try {
+
+            //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            mPublisher.stopPublish();
+            //mPublisher.stopRecord();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+    }
 
 }

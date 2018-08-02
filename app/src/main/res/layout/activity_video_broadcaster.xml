@@ -20,8 +20,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
-        android:layout_width="120dp"
-        android:layout_height="180dp"
+        android:layout_width="93dp"
+        android:layout_height="144dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:layout_marginBottom="110dp"
@@ -39,8 +39,8 @@
         >
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/video_frame"
-        android:layout_width="120dp"
-        android:layout_height="160dp"
+        android:layout_width="93dp"
+        android:layout_height="124dp"
         android:layout_alignParentTop="true"
         app:surface_type="texture_view"
         app:resize_mode="zoom"
@@ -66,7 +66,7 @@
     </RelativeLayout>
 
 
-    <com.streamaxia.android.CameraPreview
+    <net.ossrs.yasea.SrsCameraView
         android:id="@+id/preview"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -80,8 +80,8 @@
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/video_frame1"
-        android:layout_width="120dp"
-        android:layout_height="160dp"
+        android:layout_width="93dp"
+        android:layout_height="124dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"

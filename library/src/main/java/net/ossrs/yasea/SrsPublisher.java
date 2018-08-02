@@ -270,6 +270,11 @@ public class SrsPublisher {
         mEncoder.setVideoSmoothMode();
     }
 
+    public void setVideoBitRate(int bitRate)
+    {
+        mEncoder.setvBitrate(bitRate);
+    }
+
     public void setSendVideoOnly(boolean flag) {
 
         try {
