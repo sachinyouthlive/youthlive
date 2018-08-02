@@ -313,8 +313,9 @@ public class Register extends AppCompatActivity {
 
                         intent.putExtra("code", response.body().getData().getVerificationCode());
                         intent.putExtra("userId", response.body().getData().getUserId());
-                        intent.putExtra("phone", response.body().getData().getPhone());
+                        intent.putExtra("phone", Phone_no.getText().toString());
                         intent.putExtra("country", response.body().getData().getCountryCode());
+                        // Toast.makeText(Register.this, ""+Phone_no.getText().toString(), Toast.LENGTH_SHORT).show();
 
 
                         startActivity(intent);
