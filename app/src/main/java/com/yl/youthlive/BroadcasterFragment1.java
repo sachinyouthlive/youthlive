@@ -232,15 +232,15 @@ public class BroadcasterFragment1 extends Fragment {
         reject1.setZ(21);
 
         List<Drawable> drawableList = new ArrayList<>();
-        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_indigo_900_24dp));
-        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
-        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_cyan_900_24dp));
-        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_blue_900_24dp));
-        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
-        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_light_blue_900_24dp));
-        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_lime_a200_24dp));
-        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_pink_900_24dp));
-        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_red_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_indigo_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
+        drawableList.add(getResources().getDrawable(R.drawable.g52));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_blue_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_light_blue_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_lime_a200_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_pink_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_red_900_24dp));
         bubbleView.setDrawableList(drawableList);
 
         commentList = new ArrayList<>();
@@ -1790,6 +1790,9 @@ public class BroadcasterFragment1 extends Fragment {
                 try {
 
 
+                    bubbleChecker.run();
+
+
                     ylId.setText(response.body().getData().getYouthliveId());
 
 
@@ -2902,6 +2905,32 @@ public class BroadcasterFragment1 extends Fragment {
         }, 2500);
 
 
+    }
+
+    private Handler bubbleHandler;
+
+    Runnable bubbleChecker = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                 //this function can change value of mInterval.
+
+                if (randomBoolean())
+                {
+                    bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+                }
+
+            } finally {
+                // 100% guarantee that this always happens, even if
+                // your update method throws an exception
+                mHandler.postDelayed(bubbleChecker, 800);
+            }
+        }
+    };
+
+
+    public boolean randomBoolean(){
+        return Math.random() < 0.5;
     }
 
 

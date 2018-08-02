@@ -145,8 +145,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     RelativeLayout thumbContainer1;
 
 
-    String liveId;
-
+    String liveId = "";
     View countDownPopup;
     TextSwitcher countdown;
 
@@ -172,6 +171,8 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
     TextView earphones;
+
+    int flag = 0;
 
     ProgressBar thumbProgress1;
 
@@ -246,77 +247,19 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         stateText = findViewById(R.id.textView3);
         //start = findViewById(R.id.imageButton2);
 
-
-/*
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-*/
-
         mPublisher = new SrsPublisher(cameraPreview);
-/*
-
-        mPublisher.setEncoderHandler(new EncoderjHandler(this));
-        mPublisher.setRtmpHandler(new RtmpHandler(this));
-        mPublisher.setRecordEventHandler(new RecordHandler(this));
-*/
 
 
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
 
-        /*mPublisher.getmCameraView().open_camera();
 
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        WindowManager wm = (WindowManager)
-                getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-        wm.getDefaultDisplay().getMetrics(displayMetrics);
-        int screenWidth = displayMetrics.widthPixels;
-        int screenHeight = displayMetrics.heightPixels;
-
-
-        Camera.Size best_size = mPublisher.getmCameraView().get_best_size(screenWidth, screenHeight);
-
-        Log.d("asdasdasd", String.valueOf(screenWidth));
-        Log.d("asdasdasd", String.valueOf(screenHeight));
-
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-
-        Log.d("asdasdasd", String.valueOf(result));
-
-        if (best_size != null) {
-            Log.d("asdasd", "************ Best size is " + (best_size.width * 4)/10 + " Height: " + (best_size.height * 4)/10 + " ********************");
-
-
-            mPublisher.setPreviewResolution((best_size.width * 4)/10, (best_size.height * 4)/10);
-            mPublisher.setOutputResolution((best_size.height * 4)/10, (best_size.width * 4)/10);
-            //mPublisher.setPreviewResolution((int) (screenWidth * 0.375), (int) (screenHeight * 0.375));
-            //mPublisher.setOutputResolution((int) (screenHeight * 0.375), (int) (screenWidth * 0.375));
-        } else {
-            Log.d("asdasd", "************ Best size is NULL ********************");
-            mPublisher.setPreviewResolution(480, 320);
-            mPublisher.setOutputResolution(320, 480);
-            //mPublisher.setPreviewResolution((int) (screenWidth * 0.375), (int) (screenHeight * 0.375));
-            //mPublisher.setOutputResolution((int) (screenHeight * 0.375), (int) (screenWidth * 0.375));
-        }
-
-        mPublisher.setVideoHDMode();
-*/
 
 
         cameraPreview.startCamera();
 
 
-        //mPublisher.setCameraFacing(1);
-
-        //mPublisher.setScreenOrientation(Configuration.ORIENTATION_PORTRAIT);
 
         Camera.Size supportedRes = mPublisher.getmCameraView().getSupportPreviews().get(1);
 
@@ -364,19 +307,18 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         mPublisher.setPreviewResolution(best_size.width, best_size.height);
 
 
+        mPublisher.setVideoBitRate(500 * 1024);
+
+
+
 
 /*
-        for (int i = 0 ; i < mPublisher.getSupportedPictureSizes(1).size() ; i++)
-        {
-            Size s = mPublisher.getSupportedPictureSizes(1).get(i);
-            Log.d("asdasdasd" , "1");
-            Log.d("asdasdasd" , "width - " + String.valueOf(s.width) + " ; height - " + String.valueOf(s.height));
-
-        }
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
 */
 
-
-        mPublisher.setVideoBitRate(500 * 1024);
 
         //mPublisher.switchCameraFilter(MagicFilterType.COOL);
 
@@ -585,25 +527,40 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     @Override
     protected void onResume() {
-        super.onResume();
         if (mPublisher != null)
         {
             cameraPreview.startCamera();
+
+            /*if (flag > 0)
+            {
+                mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
+            }
+
+            flag++;
+*/
             //mPublisher.setCameraFacing(1);
         }
+
+
+
+        super.onResume();
+
     }
 
     @Override
     protected void onPause() {
-        super.onPause();
+
         if (mPublisher != null)
         {
             cameraPreview.stopCamera();
+            //mPublisher.stopPublish();
+            //Toast.makeText(getApplicationContext(), "Camera Released", Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(getApplicationContext(), "Camera Released", Toast.LENGTH_SHORT).show();
-
-            mPublisher.stopRecord();
+            //mPublisher.stopRecord();
         }
+
+        super.onPause();
+
     }
 
     @Override
@@ -642,7 +599,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         try {
             if (mPublisher != null) {
                 mPublisher.stopPublish();
-                mPublisher.stopRecord();
+                //mPublisher.stopRecord();
                 chronometer.stop();
             }
         } catch (Exception e) {
@@ -674,12 +631,12 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     @Override
     public void onRtmpConnecting(String s) {
-        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRtmpConnected(String s) {
-        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
         // conect api
 
     }
