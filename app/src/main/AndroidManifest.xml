@@ -33,12 +33,12 @@
     <uses-feature
         android:name="android.hardware.camera.flash"
         android:required="false" />
-<!--
+
+    <!--
     <uses-feature
         android:name="android.hardware.camera.front"
         android:required="false" />
--->
-
+    -->
     <application
         android:name=".bean"
         android:allowBackup="true"
@@ -163,8 +163,8 @@
         <activity
             android:name=".HomeActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_home" />
+            android:label="@string/title_activity_home"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ChatScreen"
             android:screenOrientation="portrait" />
@@ -261,6 +261,10 @@
         <activity
             android:name=".Activitys.PhoneUpdateActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".YoutubePlayer"
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

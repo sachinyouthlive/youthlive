@@ -24,6 +24,12 @@ public class liveBean {
     @SerializedName("title")
     @Expose
     private String title;
+    @SerializedName("type")
+    @Expose
+    private String type;
+    @SerializedName("channel_url")
+    @Expose
+    private String channelUrl;
 
     public String getUserId() {
         return userId;
@@ -63,6 +69,22 @@ public class liveBean {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getChannelUrl() {
+        return channelUrl;
+    }
+
+    public void setChannelUrl(String channelUrl) {
+        this.channelUrl = channelUrl;
     }
 
 }

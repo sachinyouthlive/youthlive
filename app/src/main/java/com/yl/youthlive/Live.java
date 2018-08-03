@@ -283,20 +283,46 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
             loader.displayImage(b.BASE_URL + item.getUserImage() , holder.image , options);
 
-            holder.viewCount.setText(item.getLiveUsers());
+            int lu = Integer.parseInt(item.getLiveUsers());
+
+            if (item.getType().equals("live"))
+            {
+                holder.viewCount.setText(String.valueOf(lu));
+            }
+            else
+            {
+                holder.viewCount.setText(String.valueOf(lu + 300));
+            }
+
+
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+                    if (item.getType().equals("live"))
+                    {
+                        //Intent intent = new Intent(context, PlayerActivityNew.class);
+                        Intent intent = new Intent(context, VideoPlayer.class);
+                        intent.putExtra("uri", item.getLiveId());
+                        intent.putExtra("liveId", item.getLiveId());
+                        intent.putExtra("pic",b.BASE_URL + item.getUserImage());
+                        intent.putExtra("timelineId", String.valueOf(item.getUserId()));
+                        startActivity(intent);
 
-                    //Intent intent = new Intent(context, PlayerActivityNew.class);
-                    Intent intent = new Intent(context, VideoPlayer.class);
-                    intent.putExtra("uri", item.getLiveId());
-                    intent.putExtra("liveId", item.getLiveId());
-                    intent.putExtra("pic",b.BASE_URL + item.getUserImage());
-                    intent.putExtra("timelineId", String.valueOf(item.getUserId()));
-                    startActivity(intent);
+                    }
+                    else
+                    {
+
+                        Intent intent = new Intent(context, YoutubePlayer.class);
+                        intent.putExtra("uri", item.getChannelUrl());
+                        intent.putExtra("liveId", item.getLiveId());
+                        intent.putExtra("pic",b.BASE_URL + item.getUserImage());
+                        intent.putExtra("timelineId", String.valueOf(item.getUserId()));
+                        startActivity(intent);
+
+                    }
+
 
                 }
             });
