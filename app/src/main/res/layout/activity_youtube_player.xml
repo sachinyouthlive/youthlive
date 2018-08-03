@@ -4,7 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".YoutubePlayer">
+
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageButton
@@ -16,6 +30,7 @@
         android:background="@drawable/ic_action_navigation_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -44,19 +59,19 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingEnd="5dp"
-                android:paddingStart="5dp"
                 android:ellipsize="marquee"
                 android:maxLength="15"
                 android:maxWidth="110dp"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
                 android:singleLine="true"
                 android:textColor="#000000"
                 android:textSize="14sp" />
@@ -84,9 +99,10 @@
             android:background="@drawable/circle"
             android:padding="8dp"
             android:src="@drawable/add"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -121,6 +137,22 @@
     </LinearLayout>
 
 
+    <TextView
+        android:id="@+id/view_count"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/grey_round"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_user"
+        android:gravity="center"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout4"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout4"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout4" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/viewers_grid"
         android:layout_width="0dp"
@@ -130,7 +162,6 @@
         app:layout_constraintEnd_toStartOf="@+id/imageButton10"
         app:layout_constraintStart_toEndOf="@+id/linearLayout2"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <ImageView
         android:id="@+id/imageView6"
@@ -243,7 +274,7 @@
         android:background="@drawable/circle"
         android:padding="8dp"
         android:scaleType="centerInside"
-        android:src="@drawable/light"
+        android:src="@drawable/gift"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButton3" />
 
@@ -254,7 +285,6 @@
         android:layout_marginBottom="110dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/frame_back"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -266,26 +296,26 @@
             android:id="@+id/reject1"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="12sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="1dp"
             android:layout_marginEnd="1dp"
             android:layout_marginStart="1dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:background="#ffffff"
-            android:text="END"/>
+            android:gravity="center"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:text="END"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>
 
     <View
         android:id="@+id/view4"
-        android:layout_width="93dp"
-        android:layout_height="124dp"
+        android:layout_width="120dp"
+        android:layout_height="160dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/frame_back"
@@ -317,7 +347,8 @@
         android:background="@drawable/circle"
         android:padding="8dp"
         android:scaleType="centerInside"
-        android:src="@drawable/camera_switch"
+        android:src="@drawable/networking"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButton6" />
 
@@ -341,6 +372,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -372,54 +404,49 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:text="0"
-        android:visibility="gone"
         android:textColor="#ffffff"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageButton5" />
 
+
     <include
         android:id="@+id/gift_layout"
-        layout="@layout/gift_layout2"
+        layout="@layout/gift_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+
+
+    <include
+        android:id="@+id/loading_popup"
+        layout="@layout/player_loading"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <ImageButton
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:src="@drawable/networking"
-        android:padding="8dp"
-        android:id="@+id/connect"
-        android:background="@drawable/circle"
-        android:scaleType="centerInside"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton7" />
-
-    <TextView
-        android:id="@+id/view_count"
-        android:layout_width="wrap_content"
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/player"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:text="0"
-        android:drawableStart="@drawable/ic_user"
-        android:drawablePadding="5dp"
-        android:gravity="center"
-        android:background="@drawable/grey_round"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout4"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout4"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout4" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.727"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
 
 </android.support.constraint.ConstraintLayout>
