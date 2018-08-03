@@ -288,7 +288,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
         List<Camera.Size> sizes = mPublisher.getmCameraView().getSupportPreviews();
         int bes_width = 0;
-        int max_limit = 480;
+        int max_limit = 720;
 
         Camera.Size best_size = null;
 
@@ -303,7 +303,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         }
 
 
-        Toast.makeText(VideoBroadcaster.this, String.valueOf(best_size.width) + " X " + String.valueOf(best_size.height), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(VideoBroadcaster.this, String.valueOf(best_size.width) + " X " + String.valueOf(best_size.height), Toast.LENGTH_SHORT).show();
 
         mPublisher.setOutputResolution(best_size.width, best_size.height);
 

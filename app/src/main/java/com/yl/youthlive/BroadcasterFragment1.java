@@ -194,6 +194,8 @@ public class BroadcasterFragment1 extends Fragment {
     View giftLayout;
     ImageView giftImage;
     TextView giftText;
+    CircleImageView giftProfile;
+    TextView giftUser;
 
 
     ImageButton connection;
@@ -221,8 +223,10 @@ public class BroadcasterFragment1 extends Fragment {
         bubbleView = (BubbleView) view.findViewById(R.id.bubble);
         playerFrame1 = view.findViewById(R.id.view3);
 
-        giftImage = view.findViewById(R.id.imageView13);
-        giftText = view.findViewById(R.id.textView28);
+        giftImage = view.findViewById(R.id.imageView18);
+        giftText = view.findViewById(R.id.textView50);
+        giftProfile = view.findViewById(R.id.circleImageView);
+        giftUser = view.findViewById(R.id.textView49);
 
         giftLayout = view.findViewById(R.id.gift_layout);
 
@@ -710,7 +714,10 @@ public class BroadcasterFragment1 extends Fragment {
                         //comm.set
 
 
-                        showGift(item.getGiftId(), item.getGiftName());
+
+
+
+                        showGift(item.getGiftId(), item.getGiftName() , item.getIcon() , item.getSenbdId());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -2872,11 +2879,20 @@ public class BroadcasterFragment1 extends Fragment {
 
 
 
-    public void showGift(String giftId, String text) {
+    public void showGift(String giftId, String text , String profile , String user) {
 
 
         Glide.with(broadcaster).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
         giftText.setText(names[Integer.parseInt(giftId) - 1]);
+
+        Toast.makeText(broadcaster , profile , Toast.LENGTH_SHORT).show();
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
+        ImageLoader loader = ImageLoader.getInstance();
+
+        loader.displayImage(profile , giftProfile , options);
+
+        giftUser.setText(user);
 
         TranslateAnimation animate = new TranslateAnimation(rootView.getWidth(),0,0,0);
         animate.setDuration(500);
