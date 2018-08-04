@@ -468,7 +468,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     @Override
     public void onNetworkResume() {
-        Toast.makeText(getApplicationContext(), "Network resume", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "resume" , Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -674,6 +674,22 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     @Override
     public void onRtmpSocketException(SocketException e) {
         handleException(e);
+
+        Toast.makeText(getApplicationContext() , "No Internet Connection" , Toast.LENGTH_SHORT).show();
+
+        if (!isEnded) {
+
+            String et = String.valueOf((SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000);
+
+
+            editor.putString("offline", et);
+            editor.putString("liveId", liveId);
+            editor.apply();
+
+            finish();
+
+        }
+
     }
 
     @Override
