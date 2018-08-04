@@ -71,7 +71,7 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.setIsRecyclable(false);
+        // holder.setIsRecyclable(false);
         final Datum item = list.get(position);
         holder.title.setText(item.getTimelineName());
         holder.likes.setText(item.getLikesCount());

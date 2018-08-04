@@ -376,7 +376,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
 
-            holder.setIsRecyclable(false);
+            //  holder.setIsRecyclable(false);
 
             final wowzaAPIBean item = list.get(position);
 
