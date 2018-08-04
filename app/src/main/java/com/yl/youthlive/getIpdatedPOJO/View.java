@@ -18,6 +18,9 @@ public class View {
     @SerializedName("userImage")
     @Expose
     private String userImage;
+    @SerializedName("type")
+    @Expose
+    private String type;
 
     public String getUserId() {
         return userId;
@@ -42,4 +45,13 @@ public class View {
     public void setUserImage(String userImage) {
         this.userImage = userImage;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 }

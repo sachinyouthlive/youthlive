@@ -68,6 +68,8 @@ import com.payu.magicretry.MainActivity;
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
+import com.yl.youthlive.dummyPOJO.Datum;
+import com.yl.youthlive.dummyPOJO.dummyBean;
 import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.getIpdatedPOJO.Comment;
 import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
@@ -207,12 +209,16 @@ public class BroadcasterFragment1 extends Fragment {
 
     SharedPreferences pref;
 
+    List<Datum> dummyList;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.broadcaster_fragment_layout1, container, false);
 
         broadcaster = (VideoBroadcaster) getActivity();
+
+        dummyList = new ArrayList<>();
 
         pref = broadcaster.getSharedPreferences("pref", Context.MODE_PRIVATE);
 
@@ -359,6 +365,40 @@ public class BroadcasterFragment1 extends Fragment {
         });
 
 
+        final bean b = (bean) getActivity().getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+
+        Call<dummyBean> call = cr.getDummy();
+
+        call.enqueue(new Callback<dummyBean>() {
+            @Override
+            public void onResponse(Call<dummyBean> call, Response<dummyBean> response) {
+
+                if (response.body().getStatus().equals("1"))
+                {
+
+                    dummyList = response.body().getData();
+
+                    runDummy();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<dummyBean> call, Throwable t) {
+
+            }
+        });
 
         userType = pref.getString("userType" , "");
 
@@ -366,15 +406,6 @@ public class BroadcasterFragment1 extends Fragment {
         if (userType.equals("user"))
         {
             progress.setVisibility(View.VISIBLE);
-            final bean b = (bean) getActivity().getApplicationContext();
-
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
 
             Call<goLiveBean> call3 = cr.goLive(b.userId, b.userId, "");
 
@@ -1316,7 +1347,7 @@ public class BroadcasterFragment1 extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-            com.yl.youthlive.getIpdatedPOJO.View item = list.get(position);
+            final com.yl.youthlive.getIpdatedPOJO.View item = list.get(position);
 
             final String uid = item.getUserId().replace("\"", "");
             final String imm = item.getUserImage().replace("\"", "");
@@ -1338,46 +1369,82 @@ public class BroadcasterFragment1 extends Fragment {
                 public void onClick(View v) {
 
 
-                    if (!isConnection)
-                    {
+                    if (!isConnection) {
+
+                        String t = item.getType().replace("\"", "");
+
+                        if (t.equals("d"))
+                        {
+
+                            Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
+
+                            new CountDownTimer(3000, 1000) {
+
+                                @Override
+                                public void onTick(long millisUntilFinished) {
 
 
-                    dialogProgress.setVisibility(View.VISIBLE);
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
+                                }
 
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+                                @Override
+                                public void onFinish() {
+
+                                    isConnection = false;
+                                    Toast.makeText(context, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
+
+                                }
+                            }.start();
 
 
-                    Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
+                            dialog.dismiss();
 
-                    call.enqueue(new Callback<requestConnectionBean>() {
-                        @Override
-                        public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
 
-                            if (response.body().getStatus().equals("1"))
-                            {
-                                thumbPic1 = imm;
-                                isConnection = true;
-                                Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            }
+                        }
+                        else
+                        {
+                            dialogProgress.setVisibility(View.VISIBLE);
 
-                            dialogProgress.setVisibility(View.GONE);
+                            final bean b = (bean) context.getApplicationContext();
+
+                            final Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.BASE_URL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+
+                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                            Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
+
+                            call.enqueue(new Callback<requestConnectionBean>() {
+                                @Override
+                                public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+                                    Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
+                                    String im = item.getUserImage().replace("\"", "");
+                                    thumbPic1 = im;
+
+                                    isConnection = true;
+
+                                    dialog.dismiss();
+
+
+                                    dialogProgress.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+                                    thumbPic1 = item.getUserImage();
+                                    isConnection = false;
+                                    dialogProgress.setVisibility(View.GONE);
+                                    Log.d("asdasdasdas", t.toString());
+                                }
+                            });
                         }
 
-                        @Override
-                        public void onFailure(Call<requestConnectionBean> call, Throwable t) {
-                            thumbPic1 = imm;
-                            isConnection = false;
-                            dialogProgress.setVisibility(View.GONE);
-                            Log.d("asdasdasdas", t.toString());
-                        }
-                    });
+
+
 
                     } else {
                         Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
@@ -1797,7 +1864,7 @@ public class BroadcasterFragment1 extends Fragment {
                 try {
 
 
-                    bubbleChecker.run();
+                    //bubbleChecker.run();
 
 
                     ylId.setText(response.body().getData().getYouthliveId());
@@ -2697,6 +2764,9 @@ public class BroadcasterFragment1 extends Fragment {
                             @Override
                             public void onClick(View view) {
 
+
+
+
                                 bar.setVisibility(View.VISIBLE);
 
                                 final bean b = (bean) context.getApplicationContext();
@@ -2742,44 +2812,79 @@ public class BroadcasterFragment1 extends Fragment {
 
 
                                 if (!isConnection) {
-                                    bar.setVisibility(View.VISIBLE);
 
-                                    final bean b = (bean) context.getApplicationContext();
+                                    String t = item.getType().replace("\"", "");
 
-                                    final Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(b.BASE_URL)
-                                            .addConverterFactory(ScalarsConverterFactory.create())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
+                                    if (t.equals("d"))
+                                    {
 
-                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+                                        Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
 
+                                        new CountDownTimer(3000, 1000) {
 
-                                    Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
-
-                                    call.enqueue(new Callback<requestConnectionBean>() {
-                                        @Override
-                                        public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
-
-                                            String im = item.getUserImage().replace("\"", "");
-                                            thumbPic1 = im;
-
-                                            isConnection = true;
-
-                                            dialog.dismiss();
+                                            @Override
+                                            public void onTick(long millisUntilFinished) {
 
 
-                                            bar.setVisibility(View.GONE);
-                                        }
 
-                                        @Override
-                                        public void onFailure(Call<requestConnectionBean> call, Throwable t) {
-                                            thumbPic1 = item.getUserImage();
-                                            isConnection = false;
-                                            bar.setVisibility(View.GONE);
-                                            Log.d("asdasdasdas", t.toString());
-                                        }
-                                    });
+                                            }
+
+                                            @Override
+                                            public void onFinish() {
+
+                                                isConnection = false;
+                                                Toast.makeText(context, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        }.start();
+
+
+                                        dialog.dismiss();
+
+                                    }
+                                    else
+                                    {
+                                        bar.setVisibility(View.VISIBLE);
+
+                                        final bean b = (bean) context.getApplicationContext();
+
+                                        final Retrofit retrofit = new Retrofit.Builder()
+                                                .baseUrl(b.BASE_URL)
+                                                .addConverterFactory(ScalarsConverterFactory.create())
+                                                .addConverterFactory(GsonConverterFactory.create())
+                                                .build();
+
+                                        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                                        Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
+
+                                        call.enqueue(new Callback<requestConnectionBean>() {
+                                            @Override
+                                            public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+                                                Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
+                                                String im = item.getUserImage().replace("\"", "");
+                                                thumbPic1 = im;
+
+                                                isConnection = true;
+
+                                                dialog.dismiss();
+
+
+                                                bar.setVisibility(View.GONE);
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+                                                thumbPic1 = item.getUserImage();
+                                                isConnection = false;
+                                                bar.setVisibility(View.GONE);
+                                                Log.d("asdasdasdas", t.toString());
+                                            }
+                                        });
+                                    }
+
+
 
 
                                 } else {
@@ -2949,5 +3054,83 @@ public class BroadcasterFragment1 extends Fragment {
         return Math.random() < 0.5;
     }
 
+
+    Runnable dummyChecker = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                //this function can change value of mInterval.
+
+                if (randomBoolean())
+                {
+                    bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+                }
+
+                if (dummyList.size() > 0)
+                {
+                    if (randomBoolean())
+                    {
+                        final int r = new Random().nextInt(dummyList.size());
+
+                        final bean b = (bean) getActivity().getApplicationContext();
+
+                        final Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(b.BASE_URL)
+                                .addConverterFactory(ScalarsConverterFactory.create())
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+
+                        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                        SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm", Context.MODE_PRIVATE);
+
+                        String keey = fcmPref.getString("token", "");
+
+                        Log.d("keeey", keey);
+
+                        Call<getUpdatedBean> call = cr.getPlayerUpdatedData(dummyList.get(r).getUserId(), liveId, "dummy");
+
+
+                        call.enqueue(new Callback<getUpdatedBean>() {
+                            @Override
+                            public void onResponse(Call<getUpdatedBean> call, Response<getUpdatedBean> response) {
+
+                                if (response.body().getStatus().equals("1"))
+                                {
+
+                                    dummyList.remove(r);
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<getUpdatedBean> call, Throwable t) {
+
+                            }
+                        });
+
+                    }
+                }
+
+            } finally {
+                // 100% guarantee that this always happens, even if
+                // your update method throws an exception
+                mHandler.postDelayed(dummyChecker, 1500);
+            }
+        }
+    };
+
+
+
+    public void runDummy()
+    {
+
+
+        dummyChecker.run();
+
+
+    }
 
 }

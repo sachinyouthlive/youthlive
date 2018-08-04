@@ -186,6 +186,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     View giftLayout;
     ImageView giftImage;
     TextView giftText;
+    CircleImageView giftProfile;
+    TextView giftUser;
 
 
     boolean isConnection = false;
@@ -206,7 +208,13 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         giftImage = view.findViewById(R.id.imageView13);
         giftText = view.findViewById(R.id.textView28);
 
+        giftImage = view.findViewById(R.id.imageView18);
+        giftText = view.findViewById(R.id.textView50);
+        giftProfile = view.findViewById(R.id.circleImageView);
+        giftUser = view.findViewById(R.id.textView49);
+
         giftLayout = view.findViewById(R.id.gift_layout);
+
 
 
         reject1 = view.findViewById(R.id.reject1);
@@ -661,7 +669,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         //comm.set
 
 
-                        showGift(item.getGiftId(), item.getGiftName());
+                        showGift(item.getGiftId(), item.getGiftName() , item.getIcon() , item.getSenbdId());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -2636,12 +2644,20 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             "weapon"
     };
 
-    public void showGift(String giftId, String text) {
+    public void showGift(String giftId, String text , String profile , String user) {
 
 
         Glide.with(player).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
         giftText.setText(names[Integer.parseInt(giftId) - 1]);
 
+        Toast.makeText(player , profile , Toast.LENGTH_SHORT).show();
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
+        ImageLoader loader = ImageLoader.getInstance();
+
+        loader.displayImage(profile , giftProfile , options);
+
+        giftUser.setText(user);
 
         TranslateAnimation animate = new TranslateAnimation(rootView.getWidth(),0,0,0);
         animate.setDuration(500);
