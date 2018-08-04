@@ -19,6 +19,7 @@ import com.yl.youthlive.commentPOJO.commentBean;
 import com.yl.youthlive.deleteCareerPOJO.deleteCareerBean;
 import com.yl.youthlive.deleteVLOGPOJO.deleteVLOGBean;
 import com.yl.youthlive.diamondpurchasehistoryPOJO.DiamondpurchaselistPOJO;
+import com.yl.youthlive.dummyPOJO.dummyBean;
 import com.yl.youthlive.editCareerPOJO.editCareerBean;
 import com.yl.youthlive.editEducationPOJO.editEducationBean;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
@@ -318,6 +319,9 @@ public interface AllAPIs {
             @Part("thirdPartyKey") String key,
             @Part("liveTag") String tag
     );
+
+    @GET("api/getDummyUsers.php")
+    Call<dummyBean> getDummy();
 
     @Multipart
     @POST("api/go_live_end.php")

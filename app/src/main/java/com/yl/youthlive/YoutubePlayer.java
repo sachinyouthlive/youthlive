@@ -209,6 +209,8 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
     View giftLayout;
     ImageView giftImage;
     TextView giftText;
+    CircleImageView giftProfile;
+    TextView giftUser;
 
 
     boolean isConnection = false;
@@ -278,7 +280,13 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
         giftImage = findViewById(R.id.imageView13);
         giftText = findViewById(R.id.textView28);
 
+        giftImage = findViewById(R.id.imageView18);
+        giftText = findViewById(R.id.textView50);
+        giftProfile = findViewById(R.id.circleImageView);
+        giftUser = findViewById(R.id.textView49);
+
         giftLayout = findViewById(R.id.gift_layout);
+
 
 
         reject1 = findViewById(R.id.reject1);
@@ -733,7 +741,7 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
                         //comm.set
 
 
-                        showGift(item.getGiftId(), item.getGiftName());
+                        showGift(item.getGiftId(), item.getGiftName() , item.getIcon() , item.getSenbdId());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -2330,12 +2338,20 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
             "weapon"
     };
 
-    public void showGift(String giftId, String text) {
+    public void showGift(String giftId, String text , String profile , String user) {
 
 
         Glide.with(YoutubePlayer.this).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
         giftText.setText(names[Integer.parseInt(giftId) - 1]);
 
+        Toast.makeText(YoutubePlayer.this , profile , Toast.LENGTH_SHORT).show();
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
+        ImageLoader loader = ImageLoader.getInstance();
+
+        loader.displayImage(profile , giftProfile , options);
+
+        giftUser.setText(user);
 
         TranslateAnimation animate = new TranslateAnimation(rootView.getWidth(),0,0,0);
         animate.setDuration(500);
@@ -2365,6 +2381,7 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
 
 
     }
+
 
 
     Runnable bubbleChecker = new Runnable() {
