@@ -38,7 +38,6 @@ import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
@@ -53,18 +52,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-//import com.streamaxia.player.StreamaxiaPlayer;
-import com.payu.magicretry.MainActivity;
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
@@ -73,7 +68,6 @@ import com.yl.youthlive.dummyPOJO.dummyBean;
 import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.getIpdatedPOJO.Comment;
 import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
-import com.yl.youthlive.getLivePOJO.Result;
 import com.yl.youthlive.goLivePOJO.goLiveBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
@@ -99,7 +93,6 @@ import java.util.TimerTask;
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
-import hani.momanii.supernova_emoji_library.Helper.EmojiconMultiAutoCompleteTextView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -109,6 +102,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+//import com.streamaxia.player.StreamaxiaPlayer;
 
 public class BroadcasterFragment1 extends Fragment {
 
@@ -3117,7 +3112,7 @@ public class BroadcasterFragment1 extends Fragment {
             } finally {
                 // 100% guarantee that this always happens, even if
                 // your update method throws an exception
-                mHandler.postDelayed(dummyChecker, 1500);
+                mHandler.postDelayed(dummyChecker, 2000);
             }
         }
     };
@@ -3127,8 +3122,22 @@ public class BroadcasterFragment1 extends Fragment {
     public void runDummy()
     {
 
+        new CountDownTimer(11000, 1000) {
 
-        dummyChecker.run();
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+
+            }
+
+            @Override
+            public void onFinish() {
+                dummyChecker.run();
+            }
+        }.start();
+
+
+
 
 
     }

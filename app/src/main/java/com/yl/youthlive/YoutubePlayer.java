@@ -17,14 +17,13 @@ import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -73,9 +72,6 @@ import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.liveLikePOJO.liveLikeBean;
 import com.yl.youthlive.sendGiftPOJO.sendGiftBean;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -143,12 +139,14 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
     BroadcastReceiver likeReceiver;
     BroadcastReceiver viewReceiver;
     BroadcastReceiver giftReceiver;
+/*
     BroadcastReceiver endReceiver;
     BroadcastReceiver requestReceiver;
     BroadcastReceiver requestReceiver2;
     BroadcastReceiver connectionReceiver;
     BroadcastReceiver statusReceiver;
     BroadcastReceiver statusReceiverPlayer;
+*/
 
     YouTubePlayer player;
 
@@ -1585,8 +1583,8 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
                     LocalBroadcastManager.getInstance(YoutubePlayer.this).registerReceiver(giftReceiver,
                             new IntentFilter("gift"));
 
-                    LocalBroadcastManager.getInstance(YoutubePlayer.this).registerReceiver(endReceiver,
-                            new IntentFilter("live_end"));
+                    //                 LocalBroadcastManager.getInstance(YoutubePlayer.this).registerReceiver(endReceiver,
+                    //                       new IntentFilter("live_end"));
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
 
@@ -1629,7 +1627,7 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
         LocalBroadcastManager.getInstance(YoutubePlayer.this).unregisterReceiver(likeReceiver);
         LocalBroadcastManager.getInstance(YoutubePlayer.this).unregisterReceiver(viewReceiver);
         LocalBroadcastManager.getInstance(YoutubePlayer.this).unregisterReceiver(giftReceiver);
-        LocalBroadcastManager.getInstance(YoutubePlayer.this).unregisterReceiver(endReceiver);
+        //       LocalBroadcastManager.getInstance(YoutubePlayer.this).unregisterReceiver(endReceiver);
 
     }
 
