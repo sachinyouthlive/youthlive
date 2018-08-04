@@ -238,13 +238,13 @@ public class BroadcasterFragment1 extends Fragment {
         List<Drawable> drawableList = new ArrayList<>();
         //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_indigo_900_24dp));
         //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
-        drawableList.add(getResources().getDrawable(R.drawable.g52));
+        //drawableList.add(getResources().getDrawable(R.drawable.g52));
         //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_blue_900_24dp));
         //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
         //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_light_blue_900_24dp));
         //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_lime_a200_24dp));
         //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_pink_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_red_900_24dp));
+        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_red_900_24dp));
         bubbleView.setDrawableList(drawableList);
 
         commentList = new ArrayList<>();
