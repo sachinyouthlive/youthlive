@@ -167,7 +167,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
                 if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
                     boolean connectedHeadphones = (intent.getIntExtra("state", 0) == 1);
 
-                    if (connectedHeadphones) {
+                    /*if (connectedHeadphones) {
 
                         earphones.setVisibility(View.GONE);
 
@@ -175,7 +175,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
                         earphones.setVisibility(View.VISIBLE);
 
-                    }
+                    }*/
 
 
                 }
@@ -270,7 +270,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         mPublisher.setPreviewResolution(best_size.width, best_size.height);
 
 
-        mPublisher.setVideoBitRate(500 * 1024);
+        mPublisher.setVideoHDMode();
 
 
 
@@ -477,8 +477,10 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         public Fragment getItem(int position) {
             if (position == 0) {
                 return new BroadcasterFragment1();
-            } else {
-                return new secondfrag();
+            }
+            else
+            {
+                return null;
             }
         }
 

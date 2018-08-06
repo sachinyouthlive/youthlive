@@ -631,7 +631,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
                 frag.setArguments(b);
                 return frag;
             } else {
-                return new secondfrag();
+                return null;
             }
         }
 

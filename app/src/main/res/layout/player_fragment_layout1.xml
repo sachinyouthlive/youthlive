@@ -316,6 +316,7 @@
         android:layout_marginStart="8dp"
         android:background="@drawable/circle"
         android:padding="8dp"
+        android:visibility="gone"
         android:scaleType="centerInside"
         android:src="@drawable/networking"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -381,7 +382,7 @@
 
     <include
         android:id="@+id/gift_layout"
-        layout="@layout/gift_layout"
+        layout="@layout/gift_layout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

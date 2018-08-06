@@ -2985,7 +2985,7 @@ public class BroadcasterFragment1 extends Fragment {
         Glide.with(broadcaster).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
         giftText.setText(names[Integer.parseInt(giftId) - 1]);
 
-        Toast.makeText(broadcaster , profile , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(broadcaster , profile , Toast.LENGTH_SHORT).show();
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
         ImageLoader loader = ImageLoader.getInstance();
@@ -3025,24 +3025,7 @@ public class BroadcasterFragment1 extends Fragment {
 
     private Handler bubbleHandler;
 
-    Runnable bubbleChecker = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                 //this function can change value of mInterval.
 
-                if (randomBoolean())
-                {
-                    bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
-                }
-
-            } finally {
-                // 100% guarantee that this always happens, even if
-                // your update method throws an exception
-                mHandler.postDelayed(bubbleChecker, 800);
-            }
-        }
-    };
 
 
     public boolean randomBoolean(){
@@ -3112,7 +3095,7 @@ public class BroadcasterFragment1 extends Fragment {
             } finally {
                 // 100% guarantee that this always happens, even if
                 // your update method throws an exception
-                mHandler.postDelayed(dummyChecker, 2000);
+                bubbleHandler.postDelayed(dummyChecker, 2000);
             }
         }
     };

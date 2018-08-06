@@ -401,6 +401,7 @@
         android:src="@drawable/networking"
         android:padding="8dp"
         android:id="@+id/connect"
+        android:visibility="gone"
         android:background="@drawable/circle"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -30,6 +30,17 @@
     <dimen name="txt_size_extra_large_15">15sp</dimen>
     <dimen name="txt_size_18">18sp</dimen>
     <dimen name="txt_size_22">22sp</dimen>
+    <dimen name="dimen_5dp">5dp</dimen>
+    <dimen name="dimen_12sp">12sp</dimen>
+    <dimen name="dimen_4dp">4dp</dimen>
+    <dimen name="dimen_30dp">30dp</dimen>
+    <dimen name="dimen_2dp">2dp</dimen>
+    <dimen name="dimen_10dp">10dp</dimen>
+    <dimen name="dimen_20dp">20dp</dimen>
+    <dimen name="dimen_14sp">14sp</dimen>
+    <dimen name="dimen_16sp">16sp</dimen>
+    <dimen name="dimen_8dp">8sp</dimen>
+    <dimen name="dimen_16dp">16dp</dimen>
 
 
 </resources>

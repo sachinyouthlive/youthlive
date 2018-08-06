@@ -53,7 +53,7 @@
                 android:layout_gravity="start"
                 android:layout_marginTop="@dimen/dimen_5dp"
                 android:minLines="2"
-                android:text="Hi i am yl user dont copy my dp"
+                android:text="Hi i am yl user don't copy my dp"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="@dimen/dimen_12sp" />
 

@@ -40,7 +40,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
     RecyclerView grid;
     GridLayoutManager manager;
-    LiveAdapter adapter;
+    //LiveAdapter adapter;
     LiveAdapter2 adapter2;
     ProgressBar progress;
     List<wowzaAPIBean> list;
@@ -60,7 +60,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
         progress = (ProgressBar) view.findViewById(R.id.progress);
 
 
-        adapter = new LiveAdapter(getContext(), list);
+        //adapter = new LiveAdapter(getContext(), list);
         adapter2 = new LiveAdapter2(getContext(), list2);
 
         grid.setAdapter(adapter2);
@@ -350,82 +350,6 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
     }
 
 
-    public class LiveAdapter extends RecyclerView.Adapter<LiveAdapter.ViewHolder> {
 
-        Context context;
-        List<wowzaAPIBean> list = new ArrayList<>();
-
-        public LiveAdapter(Context context, List<wowzaAPIBean> list) {
-            this.context = context;
-            this.list = list;
-        }
-
-        public void setGridData(List<wowzaAPIBean> list) {
-            this.list = list;
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.live_list_model, parent, false);
-
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-
-            //  holder.setIsRecyclable(false);
-
-            final wowzaAPIBean item = list.get(position);
-
-            holder.title.setText(item.getName());
-
-            ImageLoader loader = ImageLoader.getInstance();
-
-            //loader.displayImage(item.getUserImage() , holder.image);
-
-            //holder.viewCount.setText(item.getLiveUsers());
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                    bean b = (bean)context.getApplicationContext();
-
-                    b.liveId = item.getLiveId();
-
-                    Intent intent = new Intent(context, PlayerActivityNew.class);
-                    intent.putExtra("uri", item.getPlayerHlsPlaybackUrl());
-                    intent.putExtra("liveId", item.getLiveId());
-                    intent.putExtra("timelineId", item.getUserId());
-                    startActivity(intent);
-
-                }
-            });
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView image;
-            TextView title, viewCount;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-
-                image = (ImageView) itemView.findViewById(R.id.image);
-                title = (TextView) itemView.findViewById(R.id.title);
-                viewCount = (TextView) itemView.findViewById(R.id.view_count);
-
-            }
-        }
-    }
 
 }

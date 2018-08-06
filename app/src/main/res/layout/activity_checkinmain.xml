@@ -34,7 +34,7 @@
                 android:gravity="center_vertical"
                 android:text="Check in monthly"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/dimen_18sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -54,37 +54,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginBottom="@dimen/dimen_5dp"
-                android:paddingEnd="@dimen/dimen_4dp"
+                android:layout_marginBottom="5dp"
+                android:paddingEnd="4dp"
                 android:prompt="@string/spinner_title" />
 
             <FrameLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_18dp"
+                android:layout_marginBottom="18dp"
                 android:orientation="vertical" />
 
             <TextView
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_8dp"
+                android:layout_marginBottom="8dp"
                 android:background="#d3d3d3"
                 android:drawableStart="@drawable/clock_black"
-                android:drawablePadding="@dimen/dimen_4dp"
+                android:drawablePadding="4dp"
                 android:gravity="center_vertical"
-                android:padding="@dimen/dimen_10dp"
+                android:padding="10dp"
                 android:textColor="@android:color/white"
                 android:paddingStart="16dp"
                 tools:text="Your August Month Checkin"
-                android:textSize="@dimen/dimen_16sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dimen_10dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/ripple_effect_grey"
                 android:gravity="center">
 
@@ -92,11 +92,11 @@
                     android:id="@+id/total_broadcast_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dimen_10dp"
+                    android:layout_marginEnd="10dp"
                     android:drawableEnd="@drawable/videoblack"
                     android:gravity="center_vertical"
                     android:text="GoLive Time"
-                    android:textSize="@dimen/dimen_14sp" />
+                    android:textSize="14sp" />
 
                 <ProgressBar
                     android:id="@+id/progress"
@@ -114,9 +114,9 @@
                     android:layout_alignBaseline="@+id/total_broadcast_header"
                     android:layout_toRightOf="@+id/total_broadcast_header"
                     android:gravity="center_vertical"
-                    android:padding="@dimen/dimen_2dp"
+                    android:padding="2dp"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/dimen_14sp"
+                    android:textSize="14sp"
                     tools:text="2 hr 45 min 4 sec " />
 
 

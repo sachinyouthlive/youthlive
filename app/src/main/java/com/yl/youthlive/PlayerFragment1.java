@@ -205,8 +205,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         ylId = view.findViewById(R.id.ylid);
 
         mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        giftImage = view.findViewById(R.id.imageView13);
-        giftText = view.findViewById(R.id.textView28);
+        //giftImage = view.findViewById(R.id.imageView13);
+        //giftText = view.findViewById(R.id.textView28);
 
         giftImage = view.findViewById(R.id.imageView18);
         giftText = view.findViewById(R.id.textView50);
@@ -214,7 +214,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         giftUser = view.findViewById(R.id.textView49);
 
         giftLayout = view.findViewById(R.id.gift_layout);
-
 
 
         reject1 = view.findViewById(R.id.reject1);
@@ -644,7 +643,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     try {
 
 
-
                         String giftName = item.getGiftName().replace("\"", "");
 
                         totalBeans.setText(giftName + " Coins");
@@ -669,7 +667,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         //comm.set
 
 
-                        showGift(item.getGiftId(), item.getGiftName() , item.getIcon() , item.getSenbdId());
+                        showGift(item.getGiftId(), item.getGiftName(), item.getIcon(), item.getSenbdId());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -778,7 +776,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                                 public void onClick(View v) {
 
 
-
                                     thumbCameraContainer1.setVisibility(View.VISIBLE);
 
                                     reject1.setVisibility(View.VISIBLE);
@@ -867,9 +864,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                             });
 
 
-                        }
-                        else
-                        {
+                        } else {
                             isConnection = true;
                         }
 
@@ -946,9 +941,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                             }
 
-                        }
-                        else
-                        {
+                        } else {
                             isConnection = false;
                         }
 
@@ -1108,8 +1101,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                             }
 
 
-
-
                         }
 
 
@@ -1154,8 +1145,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         connId = object.getString("conId");
 
                         final String uid = object.getString("uid");
-
-
 
 
                     } catch (JSONException e) {
@@ -1393,7 +1382,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
             }
         });
-
 
 
         liveId = getArguments().getString("liveId");
@@ -2034,7 +2022,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
             try {
 
-                Log.d("screenshot" , String.valueOf(coun));
+                Log.d("screenshot", String.valueOf(coun));
 
                 if (coun == 0) {
                     image = reader.acquireLatestImage();
@@ -2132,9 +2120,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         stopProjection();
 
                     }
-                }
-                else
-                {
+                } else {
 
                 }
 
@@ -2530,7 +2516,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                             try {
                                 if (Objects.equals(response.body().getStatus(), "1")) {
-                                    Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
                                 } else {
                                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -2644,26 +2630,29 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             "weapon"
     };
 
-    public void showGift(String giftId, String text , String profile , String user) {
+    public void showGift(String giftId, String text, String profile, String user) {
+
+        Log.d("ggiidd" , giftId);
 
 
-        Glide.with(player).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
         giftText.setText(names[Integer.parseInt(giftId) - 1]);
 
-        Toast.makeText(player , profile , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(player, profile, Toast.LENGTH_SHORT).show();
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
         ImageLoader loader = ImageLoader.getInstance();
 
-        loader.displayImage(profile , giftProfile , options);
+        loader.displayImage(profile, giftProfile, options);
 
         giftUser.setText(user);
 
-        TranslateAnimation animate = new TranslateAnimation(rootView.getWidth(),0,0,0);
+        TranslateAnimation animate = new TranslateAnimation(rootView.getWidth(), 0, 0, 0);
         animate.setDuration(500);
         animate.setFillAfter(true);
         giftLayout.startAnimation(animate);
         giftLayout.setVisibility(View.VISIBLE);
+
+        Glide.with(player).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
 
         Timer t = new Timer();
 
@@ -2674,7 +2663,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 giftLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        TranslateAnimation animate = new TranslateAnimation(0,-rootView.getWidth(),0,0);
+                        TranslateAnimation animate = new TranslateAnimation(0, -rootView.getWidth(), 0, 0);
                         animate.setDuration(500);
                         animate.setFillAfter(true);
                         giftLayout.startAnimation(animate);
@@ -2695,8 +2684,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             try {
                 //this function can change value of mInterval.
 
-                if (randomBoolean())
-                {
+                if (randomBoolean()) {
                     bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
                 }
 
@@ -2709,7 +2697,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     };
 
 
-    public boolean randomBoolean(){
+    public boolean randomBoolean() {
         return Math.random() < 0.5;
     }
 
