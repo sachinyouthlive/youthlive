@@ -1804,8 +1804,9 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     ImageLoader loader = ImageLoader.getInstance();
 
-                    loader.displayImage(response.body().getData().getTimelineProfileImage(), timelineProfile, options);
+                    loader.displayImage(b.BASE_URL + response.body().getData().getTimelineProfileImage(), timelineProfile, options);
 
+//                    Toast.makeText(player , response.body().getData().getTimelineProfileImage() , Toast.LENGTH_SHORT).show();
 
                     liveUsers.setText(response.body().getData().getViewsCount());
 
