@@ -35,7 +35,7 @@
                 android:gravity="center_vertical"
                 android:text="GoLive Records"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/dimen_18sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="?attr/actionBarSize"></android.support.v7.widget.RecyclerView>
+            android:paddingBottom="?attr/actionBarSize"/>
 
 
         <ProgressBar
@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="No Broadcast on this day"
-                android:textSize="@dimen/dimen_15sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     </FrameLayout>
 

@@ -148,7 +148,7 @@
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:background="@android:color/darker_gray"
-                            android:padding="@dimen/dimen_2dp" />
+                            android:padding="2dp" />
 
                         <LinearLayout
                             android:id="@+id/followings_click"
@@ -182,7 +182,7 @@
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:background="@android:color/darker_gray"
-                            android:padding="@dimen/dimen_2dp" />
+                            android:padding="2dp" />
 
                         <LinearLayout
                             android:id="@+id/fans_click"

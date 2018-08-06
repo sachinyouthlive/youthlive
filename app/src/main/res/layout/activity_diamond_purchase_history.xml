@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="Haven't done any purchase"
-                android:textSize="@dimen/dimen_15sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     </FrameLayout>
 

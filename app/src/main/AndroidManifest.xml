@@ -95,14 +95,6 @@
             android:name=".OTP"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LiveScreen"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name=".LiveScreenNew"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
             android:name=".Activitys.MessaageActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -145,14 +137,7 @@
             android:name=".Activitys.MyVlog"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CameraActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".PlayerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".PlayerActivityNew"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
@@ -169,28 +154,13 @@
             android:name=".ChatScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".WalletActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".TimelineProfile"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".FeedBack"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Content"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Terms"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".IrisLive"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".IrisPlayer"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Player2"
             android:screenOrientation="portrait" />
 
         <receiver
@@ -244,9 +214,6 @@
             android:name=".Activitys.Diamond_purchase_history_Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ExoTest"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".login.ForgotPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -254,9 +221,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".login.OTP_varify"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".RTMPEncoder"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activitys.PhoneUpdateActivity"

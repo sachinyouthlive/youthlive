@@ -41,7 +41,7 @@
         android:layout_centerInParent="true"
         android:text="Not Friend with anyone"
         android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/dimen_14sp"
+        android:textSize="14sp"
         android:visibility="gone" />
 
 

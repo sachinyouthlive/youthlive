@@ -735,9 +735,18 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         call.enqueue(new Callback<addVideoBean>() {
             @Override
             public void onResponse(Call<addVideoBean> call, retrofit2.Response<addVideoBean> response) {
+
+
                 if (getFragmentRefreshListener() != null) {
                     videoProgress.setVisibility(View.VISIBLE);
+
+                try {
                     getFragmentRefreshListener().onRefresh();
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
                 }
 
                 Toast.makeText(HomeActivity.this, "Video Uploaded Successfully", Toast.LENGTH_SHORT).show();

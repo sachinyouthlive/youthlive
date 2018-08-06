@@ -100,7 +100,7 @@
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:background="@android:color/darker_gray"
-                            android:padding="@dimen/dimen_2dp" />
+                            android:padding="2dp" />
 
                         <LinearLayout
                             android:id="@+id/followings_click"
@@ -133,7 +133,7 @@
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:background="@android:color/darker_gray"
-                            android:padding="@dimen/dimen_2dp" />
+                            android:padding="2dp" />
 
                         <LinearLayout
                             android:id="@+id/fans_click"
@@ -224,7 +224,7 @@
                 android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_5dp"
+                android:layout_marginTop="5dp"
                 android:fillViewport="true" />
 
             <TextView
@@ -234,9 +234,9 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="100dp"
                 android:drawableEnd="@drawable/videoblack"
-                android:drawablePadding="@dimen/dimen_4dp"
+                android:drawablePadding="4dp"
                 android:text="Your VLOG is empty, No video uploaded yet"
-                android:textSize="@dimen/dimen_14sp"
+                android:textSize="14sp"
                 android:visibility="gone" />
 
         </LinearLayout>

@@ -371,15 +371,13 @@ public class BroadcasterFragment1 extends Fragment {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-
         Call<dummyBean> call = cr.getDummy();
 
         call.enqueue(new Callback<dummyBean>() {
             @Override
             public void onResponse(Call<dummyBean> call, Response<dummyBean> response) {
 
-                if (response.body().getStatus().equals("1"))
-                {
+                if (response.body().getStatus().equals("1")) {
 
                     dummyList = response.body().getData();
 
@@ -395,11 +393,10 @@ public class BroadcasterFragment1 extends Fragment {
             }
         });
 
-        userType = pref.getString("userType" , "");
+        userType = pref.getString("userType", "");
 
 
-        if (userType.equals("user"))
-        {
+        if (userType.equals("user")) {
             progress.setVisibility(View.VISIBLE);
 
             Call<goLiveBean> call3 = cr.goLive(b.userId, b.userId, "");
@@ -445,8 +442,7 @@ public class BroadcasterFragment1 extends Fragment {
 
             });
 
-        }else
-        {
+        } else {
 
             coun2 = 0;
             startActivityForResult(mProjectionManager2.createScreenCaptureIntent(), REQUEST_CODE2);
@@ -740,10 +736,7 @@ public class BroadcasterFragment1 extends Fragment {
                         //comm.set
 
 
-
-
-
-                        showGift(item.getGiftId(), item.getGiftName() , item.getIcon() , item.getSenbdId());
+                        showGift(item.getGiftId(), item.getGiftName(), item.getIcon(), item.getSenbdId());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -793,11 +786,9 @@ public class BroadcasterFragment1 extends Fragment {
 
                             Log.d("ddata", uri);
 
-                            broadcaster.startThumbPlayer1(uri, thumbPic1 , connId);
+                            broadcaster.startThumbPlayer1(uri, thumbPic1, connId);
                             playerFrame1.setVisibility(View.VISIBLE);
                             isConnection = true;
-
-
 
 
                         } else {
@@ -856,11 +847,9 @@ public class BroadcasterFragment1 extends Fragment {
 
                             Log.d("uurrii", uri);
 
-                            broadcaster.startThumbPlayer1(uri, thumbPic1 , connId);
+                            broadcaster.startThumbPlayer1(uri, thumbPic1, connId);
                             playerFrame1.setVisibility(View.VISIBLE);
                             isConnection = true;
-
-
 
 
                         } else {
@@ -959,38 +948,38 @@ public class BroadcasterFragment1 extends Fragment {
                         final String uid = object.getString("uid");
 
 
-                            final Dialog dialog = new Dialog(broadcaster);
-                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            dialog.setCancelable(false);
-                            dialog.setContentView(R.layout.new_connection_dialog);
-                            dialog.show();
+                        final Dialog dialog = new Dialog(broadcaster);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setCancelable(false);
+                        dialog.setContentView(R.layout.new_connection_dialog);
+                        dialog.show();
 
-                            Button accept = dialog.findViewById(R.id.button11);
-                            Button deny = dialog.findViewById(R.id.button12);
-                            final ProgressBar dp = dialog.findViewById(R.id.progressBar9);
-
-
-                            accept.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
+                        Button accept = dialog.findViewById(R.id.button11);
+                        Button deny = dialog.findViewById(R.id.button12);
+                        final ProgressBar dp = dialog.findViewById(R.id.progressBar9);
 
 
-                                    dp.setVisibility(View.VISIBLE);
+                        accept.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                                    final bean b = (bean) broadcaster.getApplicationContext();
 
-                                    final Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(b.BASE_URL)
-                                            .addConverterFactory(ScalarsConverterFactory.create())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
+                                dp.setVisibility(View.VISIBLE);
 
-                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+                                final bean b = (bean) broadcaster.getApplicationContext();
 
-                                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(connId, liveId + uid, "2", uid);
-                                    call1.enqueue(new Callback<acceptRejectBean>() {
-                                        @Override
-                                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+                                final Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl(b.BASE_URL)
+                                        .addConverterFactory(ScalarsConverterFactory.create())
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+
+                                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                                Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(connId, liveId + uid, "2", uid);
+                                call1.enqueue(new Callback<acceptRejectBean>() {
+                                    @Override
+                                    public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
 
                                             /*try {
 
@@ -1009,57 +998,54 @@ public class BroadcasterFragment1 extends Fragment {
                                                 e.printStackTrace();
                                             }*/
 
-                                            reject1.setVisibility(View.VISIBLE);
+                                        reject1.setVisibility(View.VISIBLE);
 
-                                            isConnection = true;
-
-
-                                            dialog.dismiss();
-
-                                            dp.setVisibility(View.GONE);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
-                                            dp.setVisibility(View.GONE);
-                                            t.printStackTrace();
-                                        }
-                                    });
+                                        isConnection = true;
 
 
+                                        dialog.dismiss();
+
+                                        dp.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                                        dp.setVisibility(View.GONE);
+                                        t.printStackTrace();
+                                    }
+                                });
 
 
-                                }
-                            });
+                            }
+                        });
 
 
-                            deny.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
+                        deny.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                                    dp.setVisibility(View.VISIBLE);
+                                dp.setVisibility(View.VISIBLE);
 
-                                    final bean b = (bean) broadcaster.getApplicationContext();
+                                final bean b = (bean) broadcaster.getApplicationContext();
 
-                                    final Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(b.BASE_URL)
-                                            .addConverterFactory(ScalarsConverterFactory.create())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
+                                final Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl(b.BASE_URL)
+                                        .addConverterFactory(ScalarsConverterFactory.create())
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
 
-                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+                                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(connId, liveId + uid, "1", uid);
-                                    call1.enqueue(new Callback<acceptRejectBean>() {
-                                        @Override
-                                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+                                Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(connId, liveId + uid, "1", uid);
+                                call1.enqueue(new Callback<acceptRejectBean>() {
+                                    @Override
+                                    public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
 
-                                            try {
+                                        try {
 
 
-
-                                                isConnection = false;
-                                                //cameraLayout1.setVisibility(View.VISIBLE);
+                                            isConnection = false;
+                                            //cameraLayout1.setVisibility(View.VISIBLE);
 
 /*
                             goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
@@ -1087,29 +1073,27 @@ public class BroadcasterFragment1 extends Fragment {
 */
 
 
-                                                //reject1.setVisibility(View.GONE);
+                                            //reject1.setVisibility(View.GONE);
 
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-
-                                            dialog.dismiss();
-
-                                            dp.setVisibility(View.GONE);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
 
-                                        @Override
-                                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
-                                            dp.setVisibility(View.GONE);
-                                            t.printStackTrace();
-                                        }
-                                    });
+                                        dialog.dismiss();
+
+                                        dp.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                                        dp.setVisibility(View.GONE);
+                                        t.printStackTrace();
+                                    }
+                                });
 
 
-                                }
-                            });
-
-
+                            }
+                        });
 
 
                     } catch (JSONException e) {
@@ -1232,10 +1216,24 @@ public class BroadcasterFragment1 extends Fragment {
             public void run() {
                 try {
                     Looper.prepare();
+                    bubbleHandler = new Handler();
+                    Looper.loop();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }.start();
+
+
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Looper.prepare();
                     mHandler = new Handler();
                     Looper.loop();
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -1265,7 +1263,6 @@ public class BroadcasterFragment1 extends Fragment {
         });
 
 
-
         connection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1283,11 +1280,11 @@ public class BroadcasterFragment1 extends Fragment {
 
                 ImageButton dialogClose = dialog.findViewById(R.id.imageButton9);
 
-                GridLayoutManager dialogManager = new GridLayoutManager(broadcaster , 1);
+                GridLayoutManager dialogManager = new GridLayoutManager(broadcaster, 1);
 
                 List<com.yl.youthlive.getIpdatedPOJO.View> l2 = viewsAdapter.getList();
 
-                DialogAdapter dialogAdapter  = new DialogAdapter(broadcaster , l2 , dialogBar , dialog);
+                DialogAdapter dialogAdapter = new DialogAdapter(broadcaster, l2, dialogBar, dialog);
 
                 dialogGrid.setAdapter(dialogAdapter);
                 dialogGrid.setLayoutManager(dialogManager);
@@ -1301,8 +1298,6 @@ public class BroadcasterFragment1 extends Fragment {
                 });
 
 
-
-
             }
         });
 
@@ -1311,10 +1306,7 @@ public class BroadcasterFragment1 extends Fragment {
     }
 
 
-
-
-    class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder>
-    {
+    class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder> {
 
         Context context;
         List<com.yl.youthlive.getIpdatedPOJO.View> list = new ArrayList<>();
@@ -1322,8 +1314,7 @@ public class BroadcasterFragment1 extends Fragment {
         Dialog dialog;
 
 
-        public DialogAdapter(Context context , List<com.yl.youthlive.getIpdatedPOJO.View> list , ProgressBar dialogProgress , Dialog dialog)
-        {
+        public DialogAdapter(Context context, List<com.yl.youthlive.getIpdatedPOJO.View> list, ProgressBar dialogProgress, Dialog dialog) {
             this.context = context;
             this.list = list;
             this.dialogProgress = dialogProgress;
@@ -1334,8 +1325,8 @@ public class BroadcasterFragment1 extends Fragment {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.guest_list_model , parent , false);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.guest_list_model, parent, false);
             return new ViewHolder(view);
         }
 
@@ -1348,13 +1339,13 @@ public class BroadcasterFragment1 extends Fragment {
             final String imm = item.getUserImage().replace("\"", "");
             final String un = item.getUserName().replace("\"", "");
 
-            final bean b = (bean)context.getApplicationContext();
+            final bean b = (bean) context.getApplicationContext();
 
             DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
             ImageLoader loader = ImageLoader.getInstance();
 
-            loader.displayImage(b.BASE_URL + imm , holder.image , options);
+            loader.displayImage(b.BASE_URL + imm, holder.image, options);
 
             holder.name.setText(un);
 
@@ -1368,16 +1359,14 @@ public class BroadcasterFragment1 extends Fragment {
 
                         String t = item.getType().replace("\"", "");
 
-                        if (t.equals("d"))
-                        {
+                        if (t.equals("d")) {
 
-                            Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Your request has been sent to the user", Toast.LENGTH_SHORT).show();
 
                             new CountDownTimer(3000, 1000) {
 
                                 @Override
                                 public void onTick(long millisUntilFinished) {
-
 
 
                                 }
@@ -1395,9 +1384,7 @@ public class BroadcasterFragment1 extends Fragment {
                             dialog.dismiss();
 
 
-                        }
-                        else
-                        {
+                        } else {
                             dialogProgress.setVisibility(View.VISIBLE);
 
                             final bean b = (bean) context.getApplicationContext();
@@ -1416,7 +1403,7 @@ public class BroadcasterFragment1 extends Fragment {
                             call.enqueue(new Callback<requestConnectionBean>() {
                                 @Override
                                 public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
-                                    Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Your request has been sent to the user", Toast.LENGTH_SHORT).show();
                                     String im = item.getUserImage().replace("\"", "");
                                     thumbPic1 = im;
 
@@ -1439,8 +1426,6 @@ public class BroadcasterFragment1 extends Fragment {
                         }
 
 
-
-
                     } else {
                         Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
                     }
@@ -1456,8 +1441,7 @@ public class BroadcasterFragment1 extends Fragment {
             return list.size();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder
-        {
+        class ViewHolder extends RecyclerView.ViewHolder {
 
             CircleImageView image;
             TextView name;
@@ -1475,8 +1459,6 @@ public class BroadcasterFragment1 extends Fragment {
             }
         }
     }
-
-
 
 
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
@@ -1646,7 +1628,7 @@ public class BroadcasterFragment1 extends Fragment {
                 selectionCursor = holder.name.getText().length();
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(holder.name.getText());
-                builder.setSpan(new ImageSpan(drawable), selectionCursor - ".".length(), selectionCursor , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new ImageSpan(drawable), selectionCursor - ".".length(), selectionCursor, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 holder.name.setText(builder);
                 //holder.name.setSelection(selectionCursor);
 
@@ -1676,8 +1658,7 @@ public class BroadcasterFragment1 extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    if (!uid.equals(b.userId))
-                    {
+                    if (!uid.equals(b.userId)) {
                         final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.connect_dialog);
@@ -1796,8 +1777,6 @@ public class BroadcasterFragment1 extends Fragment {
                     }
 
 
-
-
                 }
             });
 
@@ -1850,7 +1829,7 @@ public class BroadcasterFragment1 extends Fragment {
 
         Call<getUpdatedBean> call = cr.getUpdatedData(b.userId, liveId, keey);
 
-        Log.d("asdasd" , b.userId);
+        Log.d("asdasd", b.userId);
 
         call.enqueue(new Callback<getUpdatedBean>() {
             @Override
@@ -1868,19 +1847,16 @@ public class BroadcasterFragment1 extends Fragment {
                     commentsAdapter.setGridData(response.body().getData().getComments());
 
 
-                    for (int i = 0 ; i < response.body().getData().getViews().size() ; i++)
-                    {
+                    for (int i = 0; i < response.body().getData().getViews().size(); i++) {
 
                         final String uid = response.body().getData().getViews().get(i).getUserId().replace("\"", "");
 
-                        if (!uid.equals(b.userId))
-                        {
+                        if (!uid.equals(b.userId)) {
                             viewsAdapter.addView(response.body().getData().getViews().get(i));
                         }
 
 
                     }
-
 
 
                     int count1 = Integer.parseInt(response.body().getData().getLikesCount());
@@ -1968,7 +1944,7 @@ public class BroadcasterFragment1 extends Fragment {
                             new IntentFilter("status"));
 */
                 } catch (Exception e) {
-                     e.printStackTrace();
+                    e.printStackTrace();
                     Log.d("asdasd", e.toString());
                 }
 
@@ -1978,7 +1954,7 @@ public class BroadcasterFragment1 extends Fragment {
             @Override
             public void onFailure(Call<getUpdatedBean> call, Throwable t) {
 
-                 Log.d("asdasd", t.toString());
+                Log.d("asdasd", t.toString());
 
             }
         });
@@ -2013,51 +1989,47 @@ public class BroadcasterFragment1 extends Fragment {
         if (requestCode == REQUEST_CODE) {
 
 
-                sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
+            sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
 
-                if (sMediaProjection != null) {
-                    File externalFilesDir = broadcaster.getExternalFilesDir(null);
-                    if (externalFilesDir != null) {
-                        STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/youthive/";
-                        File storeDirectory = new File(STORE_DIRECTORY);
-                        if (!storeDirectory.exists()) {
-                            boolean success = storeDirectory.mkdirs();
-                            if (!success) {
-                                Log.e(TAG, "failed to create file storage directory.");
-                                return;
-                            }
+            if (sMediaProjection != null) {
+                File externalFilesDir = broadcaster.getExternalFilesDir(null);
+                if (externalFilesDir != null) {
+                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/youthive/";
+                    File storeDirectory = new File(STORE_DIRECTORY);
+                    if (!storeDirectory.exists()) {
+                        boolean success = storeDirectory.mkdirs();
+                        if (!success) {
+                            Log.e(TAG, "failed to create file storage directory.");
+                            return;
                         }
-                    } else {
-                        Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
-                        return;
                     }
-
-                    // display metrics
-                    DisplayMetrics metrics = getResources().getDisplayMetrics();
-                    mDensity = metrics.densityDpi;
-                    mDisplay = broadcaster.getWindowManager().getDefaultDisplay();
-
-                    // create virtual display depending on device width / height
-                    createVirtualDisplay();
-
-                    // register orientation change callback
-                    mOrientationChangeCallback = new OrientationChangeCallback(getContext());
-                    if (mOrientationChangeCallback.canDetectOrientation()) {
-                        mOrientationChangeCallback.enable();
-                    }
-
-                    // register media projection stop callback
-                    sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
+                } else {
+                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
+                    return;
                 }
 
+                // display metrics
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+                mDensity = metrics.densityDpi;
+                mDisplay = broadcaster.getWindowManager().getDefaultDisplay();
+
+                // create virtual display depending on device width / height
+                createVirtualDisplay();
+
+                // register orientation change callback
+                mOrientationChangeCallback = new OrientationChangeCallback(getContext());
+                if (mOrientationChangeCallback.canDetectOrientation()) {
+                    mOrientationChangeCallback.enable();
+                }
+
+                // register media projection stop callback
+                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
+            }
 
 
-        }
-        else if (requestCode == REQUEST_CODE2) {
+        } else if (requestCode == REQUEST_CODE2) {
 
-            if (resultCode == Activity.RESULT_OK)
-            {
-
+            if (resultCode == Activity.RESULT_OK) {
 
 
                 progress.setVisibility(View.VISIBLE);
@@ -2099,12 +2071,10 @@ public class BroadcasterFragment1 extends Fragment {
                                 @Override
                                 public void run() {
                                     try {
-                                        repeat(resultCode , data);
-                                    }catch (Exception e)
-                                    {
+                                        repeat(resultCode, data);
+                                    } catch (Exception e) {
                                         e.printStackTrace();
-                                    }
-                                    finally {
+                                    } finally {
                                         // 100% guarantee that this always happens, even if
                                         // your update method throws an exception
                                         mHandler.postDelayed(mStatusChecker, 60000);
@@ -2140,13 +2110,8 @@ public class BroadcasterFragment1 extends Fragment {
                 });
 
 
-
-
-
-            }
-            else
-            {
-                Toast.makeText(broadcaster , "This permission is required to go live" , Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(broadcaster, "This permission is required to go live", Toast.LENGTH_SHORT).show();
                 broadcaster.finish();
             }
 
@@ -2165,16 +2130,14 @@ public class BroadcasterFragment1 extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        if (repeatHandler != null)
-        {
+        if (repeatHandler != null) {
             repeatHandler.removeCallbacks(mStatusChecker);
         }
 
 
     }
 
-    public void repeat(int resultCode, Intent data)
-    {
+    public void repeat(int resultCode, Intent data) {
 
         coun2 = 0;
 
@@ -2198,32 +2161,30 @@ public class BroadcasterFragment1 extends Fragment {
             }
 
 
-           try {
-               // display metrics
-               DisplayMetrics metrics = getResources().getDisplayMetrics();
-               mDensity2 = metrics.densityDpi;
-               mDisplay2 = broadcaster.getWindowManager().getDefaultDisplay();
+            try {
+                // display metrics
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+                mDensity2 = metrics.densityDpi;
+                mDisplay2 = broadcaster.getWindowManager().getDefaultDisplay();
 
-               // create virtual display depending on device width / height
-               createVirtualDisplay2();
+                // create virtual display depending on device width / height
+                createVirtualDisplay2();
 
-               // register orientation change callback
-               mOrientationChangeCallback2 = new OrientationChangeCallback2(getContext());
-               if (mOrientationChangeCallback2.canDetectOrientation()) {
-                   mOrientationChangeCallback2.enable();
-               }
+                // register orientation change callback
+                mOrientationChangeCallback2 = new OrientationChangeCallback2(getContext());
+                if (mOrientationChangeCallback2.canDetectOrientation()) {
+                    mOrientationChangeCallback2.enable();
+                }
 
-               // register media projection stop callback
-               sMediaProjection2.registerCallback(new MediaProjectionStopCallback2(), mHandler2);
-           }catch (Exception e)
-           {
-               e.printStackTrace();
-           }
+                // register media projection stop callback
+                sMediaProjection2.registerCallback(new MediaProjectionStopCallback2(), mHandler2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
         }
     }
-
 
 
     private int mWidth;
@@ -2242,7 +2203,6 @@ public class BroadcasterFragment1 extends Fragment {
     private VirtualDisplay mVirtualDisplay;
     private VirtualDisplay mVirtualDisplay2;
     private static final String SCREENCAP_NAME = "screencap";
-
 
 
     private static final int VIRTUAL_DISPLAY_FLAGS = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
@@ -2478,8 +2438,7 @@ public class BroadcasterFragment1 extends Fragment {
                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-
-                        Call<String> call = cr.addScreenshot(b.userId , liveId , body2);
+                        Call<String> call = cr.addScreenshot(b.userId, liveId, body2);
 
                         call.enqueue(new Callback<String>() {
                             @Override
@@ -2496,16 +2455,6 @@ public class BroadcasterFragment1 extends Fragment {
 
                             }
                         });
-
-
-
-
-
-
-
-
-
-
 
 
                         Log.e(TAG, "6");
@@ -2606,8 +2555,9 @@ public class BroadcasterFragment1 extends Fragment {
                 mRotation2 = rotation;
                 try {
                     // clean up
-                    if (mVirtualDisplay2!= null) mVirtualDisplay2.release();
-                    if (mImageReader2 != null) mImageReader2.setOnImageAvailableListener(null, null);
+                    if (mVirtualDisplay2 != null) mVirtualDisplay2.release();
+                    if (mImageReader2 != null)
+                        mImageReader2.setOnImageAvailableListener(null, null);
 
                     // re-create virtual display depending on device width / height
                     createVirtualDisplay2();
@@ -2619,7 +2569,6 @@ public class BroadcasterFragment1 extends Fragment {
     }
 
     private OrientationChangeCallback2 mOrientationChangeCallback2;
-
 
 
     private class MediaProjectionStopCallback extends MediaProjection.Callback {
@@ -2647,7 +2596,8 @@ public class BroadcasterFragment1 extends Fragment {
                 @Override
                 public void run() {
                     if (mVirtualDisplay2 != null) mVirtualDisplay2.release();
-                    if (mImageReader2 != null) mImageReader2.setOnImageAvailableListener(null, null);
+                    if (mImageReader2 != null)
+                        mImageReader2.setOnImageAvailableListener(null, null);
                     if (mOrientationChangeCallback2 != null) mOrientationChangeCallback2.disable();
                     sMediaProjection2.unregisterCallback(MediaProjectionStopCallback2.this);
                 }
@@ -2708,7 +2658,7 @@ public class BroadcasterFragment1 extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             holder.setIsRecyclable(false);
 
-            final bean b = (bean)context.getApplicationContext();
+            final bean b = (bean) context.getApplicationContext();
 
             final com.yl.youthlive.getIpdatedPOJO.View item = list.get(position);
 
@@ -2717,24 +2667,23 @@ public class BroadcasterFragment1 extends Fragment {
             ImageLoader loader = ImageLoader.getInstance();
 
 
-                final String uid = item.getUserId().replace("\"", "");
-                final String imm = item.getUserImage().replace("\"", "");
-                final String un = item.getUserName().replace("\"", "");
+            final String uid = item.getUserId().replace("\"", "");
+            final String imm = item.getUserImage().replace("\"", "");
+            final String un = item.getUserName().replace("\"", "");
 
 
-                Log.d("imageaaa" , item.getUserImage());
-                Log.d("imageaaa" , imm);
+            Log.d("imageaaa", item.getUserImage());
+            Log.d("imageaaa", imm);
 
 
-            loader.displayImage(b.BASE_URL + imm , holder.image, options);
+            loader.displayImage(b.BASE_URL + imm, holder.image, options);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
 
-                    if (!uid.equals(b.userId))
-                    {
+                    if (!uid.equals(b.userId)) {
                         final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.connect_dialog);
@@ -2751,15 +2700,13 @@ public class BroadcasterFragment1 extends Fragment {
 
                         ImageLoader loader1 = ImageLoader.getInstance();
 
-                        loader1.displayImage(b.BASE_URL + imm, image , options);
+                        loader1.displayImage(b.BASE_URL + imm, image, options);
 
                         name.setText(un);
 
                         follo.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-
-
 
 
                                 bar.setVisibility(View.VISIBLE);
@@ -2810,16 +2757,14 @@ public class BroadcasterFragment1 extends Fragment {
 
                                     String t = item.getType().replace("\"", "");
 
-                                    if (t.equals("d"))
-                                    {
+                                    if (t.equals("d")) {
 
-                                        Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, "Your request has been sent to the user", Toast.LENGTH_SHORT).show();
 
                                         new CountDownTimer(3000, 1000) {
 
                                             @Override
                                             public void onTick(long millisUntilFinished) {
-
 
 
                                             }
@@ -2836,9 +2781,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                                         dialog.dismiss();
 
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         bar.setVisibility(View.VISIBLE);
 
                                         final bean b = (bean) context.getApplicationContext();
@@ -2857,7 +2800,7 @@ public class BroadcasterFragment1 extends Fragment {
                                         call.enqueue(new Callback<requestConnectionBean>() {
                                             @Override
                                             public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
-                                                Toast.makeText(context , "Your request has been sent to the user" , Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, "Your request has been sent to the user", Toast.LENGTH_SHORT).show();
                                                 String im = item.getUserImage().replace("\"", "");
                                                 thumbPic1 = im;
 
@@ -2880,8 +2823,6 @@ public class BroadcasterFragment1 extends Fragment {
                                     }
 
 
-
-
                                 } else {
                                     Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
                                 }
@@ -2889,9 +2830,6 @@ public class BroadcasterFragment1 extends Fragment {
                             }
                         });
                     }
-
-
-
 
 
                 }
@@ -2977,24 +2915,22 @@ public class BroadcasterFragment1 extends Fragment {
     };
 
 
-
-
-    public void showGift(String giftId, String text , String profile , String user) {
+    public void showGift(String giftId, String text, String profile, String user) {
 
 
         Glide.with(broadcaster).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
         giftText.setText(names[Integer.parseInt(giftId) - 1]);
 
-        Toast.makeText(broadcaster , profile , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(broadcaster , profile , Toast.LENGTH_SHORT).show();
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
         ImageLoader loader = ImageLoader.getInstance();
 
-        loader.displayImage(profile , giftProfile , options);
+        loader.displayImage(profile, giftProfile, options);
 
         giftUser.setText(user);
 
-        TranslateAnimation animate = new TranslateAnimation(rootView.getWidth(),0,0,0);
+        TranslateAnimation animate = new TranslateAnimation(rootView.getWidth(), 0, 0, 0);
         animate.setDuration(500);
         animate.setFillAfter(true);
         giftLayout.startAnimation(animate);
@@ -3009,7 +2945,7 @@ public class BroadcasterFragment1 extends Fragment {
                 giftLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        TranslateAnimation animate = new TranslateAnimation(0,-rootView.getWidth(),0,0);
+                        TranslateAnimation animate = new TranslateAnimation(0, -rootView.getWidth(), 0, 0);
                         animate.setDuration(500);
                         animate.setFillAfter(true);
                         giftLayout.startAnimation(animate);
@@ -3025,27 +2961,8 @@ public class BroadcasterFragment1 extends Fragment {
 
     private Handler bubbleHandler;
 
-    Runnable bubbleChecker = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                 //this function can change value of mInterval.
 
-                if (randomBoolean())
-                {
-                    bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
-                }
-
-            } finally {
-                // 100% guarantee that this always happens, even if
-                // your update method throws an exception
-                mHandler.postDelayed(bubbleChecker, 800);
-            }
-        }
-    };
-
-
-    public boolean randomBoolean(){
+    public boolean randomBoolean() {
         return Math.random() < 0.5;
     }
 
@@ -3056,15 +2973,12 @@ public class BroadcasterFragment1 extends Fragment {
             try {
                 //this function can change value of mInterval.
 
-                if (randomBoolean())
-                {
+                if (randomBoolean()) {
                     bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
                 }
 
-                if (dummyList.size() > 0)
-                {
-                    if (randomBoolean())
-                    {
+                if (dummyList.size() > 0) {
+                    if (randomBoolean()) {
                         final int r = new Random().nextInt(dummyList.size());
 
                         final bean b = (bean) getActivity().getApplicationContext();
@@ -3091,8 +3005,7 @@ public class BroadcasterFragment1 extends Fragment {
                             @Override
                             public void onResponse(Call<getUpdatedBean> call, Response<getUpdatedBean> response) {
 
-                                if (response.body().getStatus().equals("1"))
-                                {
+                                if (response.body().getStatus().equals("1")) {
 
                                     dummyList.remove(r);
 
@@ -3112,17 +3025,15 @@ public class BroadcasterFragment1 extends Fragment {
             } finally {
                 // 100% guarantee that this always happens, even if
                 // your update method throws an exception
-                mHandler.postDelayed(dummyChecker, 2000);
+                bubbleHandler.postDelayed(dummyChecker, 2000);
             }
         }
     };
 
 
+    public void runDummy() {
 
-    public void runDummy()
-    {
-
-        new CountDownTimer(11000, 1000) {
+        new CountDownTimer(12000, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -3135,9 +3046,6 @@ public class BroadcasterFragment1 extends Fragment {
                 dummyChecker.run();
             }
         }.start();
-
-
-
 
 
     }

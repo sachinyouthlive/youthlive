@@ -80,7 +80,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libx264.libs')
     //angstart
     //angend
-    implementation 'com.github.bumptech.glide:glide:4.5.0'
+    //implementation 'com.github.bumptech.glide:glide:4.5.0'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:multidex:1.0.3'
@@ -90,8 +90,8 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'yasic.library.BubbleView:bubbleview:0.0.4'
-    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
-    implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+    //implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+    //implementation 'com.github.zcweng:switch-button:0.0.3@aar'
     implementation 'com.sackcentury:shinebutton:0.1.9'
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
@@ -103,7 +103,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
     implementation 'com.facebook.android:facebook-android-sdk:4.31.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
-    implementation 'com.wowza.gocoder.sdk.android:com.wowza.gocoder.sdk:2.0@aar'
+    //implementation 'com.wowza.gocoder.sdk.android:com.wowza.gocoder.sdk:2.0@aar'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
     implementation 'com.google.firebase:firebase-auth:12.0.0'
@@ -112,11 +112,11 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.1.0'
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
     implementation 'me.relex:circleindicator:1.2.2@aar'
-    implementation 'com.github.bumptech.glide:glide:4.5.0'
-    implementation 'com.github.karanvs:hiddenshot:v1.2'
-    implementation 'uk.co.jakelee:vidsta:1.0.0'
-    implementation 'com.payumoney.core:payumoney-sdk:7.1.0'
-    implementation 'com.payumoney.sdkui:plug-n-play:1.0.0'
+    //implementation 'com.github.bumptech.glide:glide:4.5.0'
+    //implementation 'com.github.karanvs:hiddenshot:v1.2'
+    //implementation 'uk.co.jakelee:vidsta:1.0.0'
+    //implementation 'com.payumoney.core:payumoney-sdk:7.1.0'
+    //implementation 'com.payumoney.sdkui:plug-n-play:1.0.0'
     //compile 'com.twilio:client-android:1.2.21'
     testImplementation 'junit:junit:4.12'
     //implementation project(':streamaxia-opensdk')
@@ -129,8 +129,8 @@ dependencies {
                 //support x86
                 compile 'com.github.tcking:ijkplayer-x86_64:0.8.8-full'*/
     //support x86_64
-    implementation 'com.github.nisrulz:screenshott:2.0.0'
-    implementation 'com.github.tarek360:instacapture:2.0.0'
+    //implementation 'com.github.nisrulz:screenshott:2.0.0'
+    //implementation 'com.github.tarek360:instacapture:2.0.0'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.2.31'
     implementation 'com.koushikdutta.ion:ion:2.+'
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
@@ -140,14 +140,14 @@ dependencies {
     //implementation project(':streamaxia-opensdk')
     //implementation project(':streamaxia-player')
     implementation 'hani.momanii.supernova_emoji_library:supernova-emoji-library:0.0.2'
-    implementation 'com.otaliastudios:cameraview:1.5.1'
+    //implementation 'com.otaliastudios:cameraview:1.5.1'
     implementation 'com.anjlab.android.iab.v3:library:1.0.44'
     implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
     implementation 'com.google.android.exoplayer:extension-rtmp:2.7.3'
     implementation 'jp.wasabeef:blurry:2.1.1'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-    implementation 'com.github.ybq:Android-SpinKit:1.1.0'
+    //implementation 'com.github.ybq:Android-SpinKit:1.1.0'
     //implementation 'com.github.pedroSG94.rtmp-rtsp-stream-client-java:rtplibrary:1.3.9'
     def room_version = "1.1.1"
     implementation "android.arch.persistence.room:runtime:$room_version"

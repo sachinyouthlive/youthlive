@@ -20,8 +20,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.otaliastudios.cameraview.CameraView;
-import com.otaliastudios.cameraview.Facing;
+
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
 import de.hdodenhof.circleimageview.CircleImageView;
