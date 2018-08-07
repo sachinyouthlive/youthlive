@@ -3,10 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthlive.iml" filepath="$PROJECT_DIR$/.idea/youthlive.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/youthlive2.iml" filepath="$PROJECT_DIR$/.idea/youthlive2.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthlive4.iml" filepath="$PROJECT_DIR$/.idea/youthlive4.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthlive5.iml" filepath="$PROJECT_DIR$/.idea/youthlive5.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthlive6.iml" filepath="$PROJECT_DIR$/.idea/youthlive6.iml" />

@@ -506,6 +506,13 @@ public interface AllAPIs {
     );
 
     @Multipart
+    @POST("api/exitPlayer.php")
+    Call<String> exitPlayer(
+            @Part("userId") String userId,
+            @Part("liveId") String liveId
+    );
+
+    @Multipart
     @POST("api/go_live_like.php")
     Call<liveLikeBean> likeLive(
             @Part("userId") String userId,

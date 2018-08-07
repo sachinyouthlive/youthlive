@@ -1217,4 +1217,40 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     }
 
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        final bean b = (bean) getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+        Call<String> call = cr.exitPlayer(b.userId , liveId);
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+
+                progress.setVisibility(View.GONE);
+
+                finish();
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+                progress.setVisibility(View.GONE);
+
+            }
+        });
+
+    }
 }

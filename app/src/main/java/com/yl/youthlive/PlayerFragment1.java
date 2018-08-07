@@ -127,6 +127,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     BroadcastReceiver connectionReceiver;
     BroadcastReceiver statusReceiver;
     BroadcastReceiver statusReceiverPlayer;
+    BroadcastReceiver exitReceiver;
 
 
     View rootView;
@@ -829,7 +830,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                             WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
 
                             //if (configValidationError != null) {
-                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDescription(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDes`cription(), Toast.LENGTH_LONG).show();
                             //} else if (goCoderBroadcaster.getStatus().isRunning()) {
                             // Stop the broadcast that is currently running
                             //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
@@ -1163,6 +1164,35 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     txtMessage.setText(message);
                 }*/
+            }
+        };
+
+
+        exitReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                if (intent.getAction().equals("exit")) {
+
+
+                    Log.d("data", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    Gson gson = new Gson();
+
+                    com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
+
+                    final String uid = item.getUserId().replace("\"", "");
+
+                    final bean b = (bean) getActivity().getApplicationContext();
+
+                    String id = item.getUserId();
+                    if (!uid.equals(b.userId)) {
+                        viewsAdapter.removeView(item);
+                    }
+                }
+
             }
         };
 
@@ -1887,6 +1917,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                             new IntentFilter("status"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiverPlayer,
                             new IntentFilter("status_player"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(exitReceiver,
+                            new IntentFilter("exit"));
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
 
@@ -1925,16 +1957,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     @Override
     public void onStop() {
         super.onStop();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(commentReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(endReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver2);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiverPlayer);
+
     }
 
 
@@ -2633,7 +2656,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
     public void showGift(String giftId, String text, String profile, String user) {
 
-        Log.d("ggiidd" , giftId);
+        Log.d("ggiidd", giftId);
 
 
         giftText.setText(names[Integer.parseInt(giftId) - 1]);
@@ -2702,5 +2725,22 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         return Math.random() < 0.5;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(commentReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(endReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver2);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiverPlayer);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(exitReceiver);
+
+
+    }
 }
