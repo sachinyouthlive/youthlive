@@ -125,14 +125,17 @@ public class BroadcasterFragment1 extends Fragment {
     CommentsAdapter commentsAdapter;
     List<Comment> commentList;
 
-    BroadcastReceiver commentReceiver;
-    BroadcastReceiver likeReceiver;
-    BroadcastReceiver viewReceiver;
-    BroadcastReceiver giftReceiver;
-    BroadcastReceiver statusReceiver;
-    BroadcastReceiver playerStatusReceiver;
-    BroadcastReceiver connectionReceiver;
-    BroadcastReceiver requestReceiver;
+    //BroadcastReceiver commentReceiver;
+    //BroadcastReceiver likeReceiver;
+    //BroadcastReceiver viewReceiver;
+    //BroadcastReceiver giftReceiver;
+    //BroadcastReceiver statusReceiver;
+    //BroadcastReceiver playerStatusReceiver;
+    //BroadcastReceiver connectionReceiver;
+    //BroadcastReceiver requestReceiver;
+
+    BroadcastReceiver singleReceiver;
+
     View rootView;
     private EmojIconActions emojIcon;
 
@@ -371,7 +374,7 @@ public class BroadcasterFragment1 extends Fragment {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<dummyBean> call = cr.getDummy();
+        final Call<dummyBean> call = cr.getDummy();
 
         call.enqueue(new Callback<dummyBean>() {
             @Override
@@ -559,7 +562,430 @@ public class BroadcasterFragment1 extends Fragment {
             }
         });
 
-        commentReceiver = new BroadcastReceiver() {
+
+        singleReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                switch (intent.getAction())
+                {
+                    case "commentData":
+                    {
+                        Log.d("data", intent.getStringExtra("data"));
+
+                        String json = intent.getStringExtra("data");
+
+                        Gson gson = new Gson();
+
+                        Comment item = gson.fromJson(json, Comment.class);
+
+                        commentsAdapter.addComment(item);
+
+                        if (loading) {
+                            commentGrid.scrollToPosition(0);
+                            loading = true;
+                            newMessage.setVisibility(View.GONE);
+                        } else {
+                            Log.d("lloogg", "new message");
+
+                            newMessage.setVisibility(View.VISIBLE);
+                        }
+
+                        break;
+                    }
+                    case "like":
+                    {
+                        Log.d("data", intent.getStringExtra("data"));
+
+                        String json = intent.getStringExtra("data");
+
+                        int count1 = Integer.parseInt(json);
+
+                        if (count1 > count) {
+                            for (int i = 0; i < count1 - count; i++) {
+                                bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+                            }
+
+
+                            likeCount.setText(json);
+
+                            count = count1;
+                        }
+
+                        break;
+                    }
+                    case "view":
+                    {
+                        Log.d("data", intent.getStringExtra("data"));
+
+                        String json = intent.getStringExtra("data");
+
+                        Gson gson = new Gson();
+
+                        com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
+
+                        final String uid = item.getUserId().replace("\"", "");
+
+                        final bean b = (bean) getActivity().getApplicationContext();
+
+                        String id = item.getUserId();
+                        if (!uid.equals(b.userId)) {
+                            viewsAdapter.addView(item);
+                        }
+
+                        break;
+                    }
+                    case "gift":
+                    {
+                        Log.d("data", intent.getStringExtra("data"));
+
+                        String json = intent.getStringExtra("data");
+
+                        Gson gson = new Gson();
+
+                        com.yl.youthlive.getIpdatedPOJO.Gift item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.Gift.class);
+
+
+                        try {
+
+                            String giftName = item.getGiftName().replace("\"", "");
+
+                            totalBeans.setText(giftName + " Coins");
+
+                            Comment comm = new Comment();
+
+                            comm.setType("gift");
+                            comm.setUserId(item.getSenbdId());
+                            comm.setComment(item.getGiftId());
+
+                            commentsAdapter.addComment(comm);
+
+                            if (loading) {
+                                commentGrid.scrollToPosition(0);
+                                loading = true;
+                                newMessage.setVisibility(View.GONE);
+                            } else {
+                                Log.d("lloogg", "new message");
+
+                                newMessage.setVisibility(View.VISIBLE);
+                            }
+
+                            //comm.set
+
+
+                            showGift(item.getGiftId(), item.getGiftName(), item.getIcon(), item.getSenbdId());
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    }
+                    case "status":
+                    {
+                        Log.d("ddata", intent.getStringExtra("data"));
+
+                        String json = intent.getStringExtra("data");
+
+                        try {
+                            JSONObject obj = new JSONObject(json);
+
+                            connId = obj.getString("connId");
+
+                            String mode = obj.getString("status");
+                            final String uri = obj.getString("uri");
+
+
+                            if (mode.equals("2")) {
+
+
+                                Log.d("ddata", uri);
+
+                                broadcaster.startThumbPlayer1(uri, thumbPic1, connId);
+                                playerFrame1.setVisibility(View.VISIBLE);
+                                isConnection = true;
+
+
+                            } else {
+
+                                isConnection = false;
+                                Toast.makeText(broadcaster, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
+
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            Log.d("ddata", e.toString());
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                    case "status_player":
+                    {
+                        Log.d("uurrii", intent.getStringExtra("data"));
+
+                        String json = intent.getStringExtra("data");
+
+                        try {
+                            JSONObject obj = new JSONObject(json);
+
+                            connId = obj.getString("connId");
+
+                            String mode = obj.getString("status");
+                            final String uri = obj.getString("uri");
+
+
+                            if (mode.equals("2")) {
+
+
+                                Log.d("uurrii", uri);
+
+                                broadcaster.startThumbPlayer1(uri, thumbPic1, connId);
+                                playerFrame1.setVisibility(View.VISIBLE);
+                                isConnection = true;
+
+
+                            } else {
+
+                                isConnection = false;
+                                Toast.makeText(broadcaster, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
+
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            Log.d("uurrii", e.toString());
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                    case "request_player":
+                    {
+                        Log.d("ddata", intent.getStringExtra("data"));
+
+                        String json = intent.getStringExtra("data");
+
+                        try {
+                            JSONObject object = new JSONObject(json);
+
+                            connId = object.getString("conId");
+
+                            final String uid = object.getString("uid");
+
+
+                            final Dialog dialog = new Dialog(broadcaster);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            dialog.setCancelable(false);
+                            dialog.setContentView(R.layout.new_connection_dialog);
+                            dialog.show();
+
+                            Button accept = dialog.findViewById(R.id.button11);
+                            Button deny = dialog.findViewById(R.id.button12);
+                            final ProgressBar dp = dialog.findViewById(R.id.progressBar9);
+
+
+                            accept.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+
+                                    dp.setVisibility(View.VISIBLE);
+
+                                    final bean b = (bean) broadcaster.getApplicationContext();
+
+                                    final Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(b.BASE_URL)
+                                            .addConverterFactory(ScalarsConverterFactory.create())
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(connId, liveId + uid, "2", uid);
+                                    call1.enqueue(new Callback<acceptRejectBean>() {
+                                        @Override
+                                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+
+                                            /*try {
+
+
+
+                                                isConnection = false;
+                                                //cameraLayout1.setVisibility(View.VISIBLE);
+
+
+
+
+
+                                                reject1.setVisibility(View.GONE);
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }*/
+
+                                            reject1.setVisibility(View.VISIBLE);
+
+                                            isConnection = true;
+
+
+                                            dialog.dismiss();
+
+                                            dp.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                                            dp.setVisibility(View.GONE);
+                                            t.printStackTrace();
+                                        }
+                                    });
+
+
+                                }
+                            });
+
+
+                            deny.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    dp.setVisibility(View.VISIBLE);
+
+                                    final bean b = (bean) broadcaster.getApplicationContext();
+
+                                    final Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(b.BASE_URL)
+                                            .addConverterFactory(ScalarsConverterFactory.create())
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(connId, liveId + uid, "1", uid);
+                                    call1.enqueue(new Callback<acceptRejectBean>() {
+                                        @Override
+                                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+
+                                            try {
+
+
+                                                isConnection = false;
+                                                //cameraLayout1.setVisibility(View.VISIBLE);
+
+/*
+                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
+                            goCoderBroadcastConfig.setPortNumber(1935);
+                            goCoderBroadcastConfig.setApplicationName("live");
+                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
+                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
+                            // Set the bitrate to 4000 Kbps
+                            goCoderBroadcastConfig.setVideoBitRate(1200);
+
+                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
+
+                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
+
+                            //if (configValidationError != null) {
+                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDescription(), Toast.LENGTH_LONG).show();
+                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
+                            // Stop the broadcast that is currently running
+                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
+                            //} else {
+                            // Start streaming
+                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
+                            //}
+
+*/
+
+
+                                                //reject1.setVisibility(View.GONE);
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            dialog.dismiss();
+
+                                            dp.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                                            dp.setVisibility(View.GONE);
+                                            t.printStackTrace();
+                                        }
+                                    });
+
+
+                                }
+                            });
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                    case "connection_end":
+                    {
+                        Log.d("uurrii", intent.getStringExtra("data"));
+
+                        String json = intent.getStringExtra("data");
+
+                        try {
+                            JSONObject obj = new JSONObject(json);
+
+
+                            String conn = obj.getString("connId");
+                            String uid = obj.getString("userId");
+
+
+                            isConnection = false;
+                            playerFrame1.setVisibility(View.GONE);
+                            broadcaster.endThumbPlayer1();
+
+
+                        } catch (JSONException e) {
+                            Log.d("uurrii", e.toString());
+                            e.printStackTrace();
+                        }
+
+
+                        break;
+                    }
+                    case "exit":
+                    {
+
+                        Log.d("data", intent.getStringExtra("data"));
+
+                        String json = intent.getStringExtra("data");
+
+                        Gson gson = new Gson();
+
+                        com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
+
+                        final String uid = item.getUserId().replace("\"", "");
+
+                        final bean b = (bean) getActivity().getApplicationContext();
+
+                        String id = item.getUserId();
+                        if (!uid.equals(b.userId)) {
+                            viewsAdapter.removeView(item);
+                        }
+
+                        break;
+                    }
+
+
+
+                }
+
+            }
+        };
+
+        /*commentReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
@@ -593,7 +1019,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -601,11 +1027,11 @@ public class BroadcasterFragment1 extends Fragment {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
-        };
+        };*/
 
-        likeReceiver = new BroadcastReceiver() {
+        /*likeReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
@@ -635,7 +1061,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -643,11 +1069,11 @@ public class BroadcasterFragment1 extends Fragment {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
-        };
+        };*/
 
-        viewReceiver = new BroadcastReceiver() {
+        /*viewReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
@@ -677,7 +1103,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -685,12 +1111,12 @@ public class BroadcasterFragment1 extends Fragment {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
         };
+*/
 
-
-        giftReceiver = new BroadcastReceiver() {
+        /*giftReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
@@ -745,7 +1171,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -753,12 +1179,12 @@ public class BroadcasterFragment1 extends Fragment {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
-        };
+        };*/
 
 
-        statusReceiver = new BroadcastReceiver() {
+        /*statusReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
@@ -807,7 +1233,7 @@ public class BroadcasterFragment1 extends Fragment {
 
 
                     //displayFirebaseRegId();
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -815,11 +1241,11 @@ public class BroadcasterFragment1 extends Fragment {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
-        };
+        };*/
 
-        playerStatusReceiver = new BroadcastReceiver() {
+        /*playerStatusReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
@@ -868,7 +1294,7 @@ public class BroadcasterFragment1 extends Fragment {
 
 
                     //displayFirebaseRegId();
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -876,11 +1302,11 @@ public class BroadcasterFragment1 extends Fragment {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
-        };
+        };*/
 
-        connectionReceiver = new BroadcastReceiver() {
+        /*connectionReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
@@ -914,7 +1340,7 @@ public class BroadcasterFragment1 extends Fragment {
 
 
                     //displayFirebaseRegId();
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -922,12 +1348,12 @@ public class BroadcasterFragment1 extends Fragment {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
-        };
+        };*/
 
 
-        requestReceiver = new BroadcastReceiver() {
+        /*requestReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
@@ -981,7 +1407,7 @@ public class BroadcasterFragment1 extends Fragment {
                                     @Override
                                     public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
 
-                                            /*try {
+                                            *//*try {
 
 
 
@@ -996,7 +1422,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                                             } catch (Exception e) {
                                                 e.printStackTrace();
-                                            }*/
+                                            }*//*
 
                                         reject1.setVisibility(View.VISIBLE);
 
@@ -1047,7 +1473,7 @@ public class BroadcasterFragment1 extends Fragment {
                                             isConnection = false;
                                             //cameraLayout1.setVisibility(View.VISIBLE);
 
-/*
+*//*
                             goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
                             goCoderBroadcastConfig.setPortNumber(1935);
                             goCoderBroadcastConfig.setApplicationName("live");
@@ -1070,7 +1496,7 @@ public class BroadcasterFragment1 extends Fragment {
                             goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
                             //}
 
-*/
+*//*
 
 
                                             //reject1.setVisibility(View.GONE);
@@ -1103,7 +1529,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                }*//* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
@@ -1111,9 +1537,9 @@ public class BroadcasterFragment1 extends Fragment {
                     Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                     txtMessage.setText(message);
-                }*/
+                }*//*
             }
-        };
+        };*/
 
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -1913,6 +2339,31 @@ public class BroadcasterFragment1 extends Fragment {
                     }*/
 
 
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("commentData"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("like"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("view"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("gift"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("status"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("connection_end"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("request_player"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("status_player"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("exit"));
+
+
+/*
+
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
                             new IntentFilter("commentData"));
 
@@ -1932,17 +2383,10 @@ public class BroadcasterFragment1 extends Fragment {
                             new IntentFilter("request_player"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(playerStatusReceiver,
                             new IntentFilter("status_player"));
-                    /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
-                            new IntentFilter("view"));
 
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
-                            new IntentFilter("like"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
-                            new IntentFilter("gift"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
-                            new IntentFilter("status"));
 */
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d("asdasd", e.toString());
@@ -1971,14 +2415,7 @@ public class BroadcasterFragment1 extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(commentReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(playerStatusReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);
+
     }
 
 
@@ -2133,7 +2570,16 @@ public class BroadcasterFragment1 extends Fragment {
         if (repeatHandler != null) {
             repeatHandler.removeCallbacks(mStatusChecker);
         }
-
+/*
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(commentReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(playerStatusReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(requestReceiver);*/
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(singleReceiver);
 
     }
 
