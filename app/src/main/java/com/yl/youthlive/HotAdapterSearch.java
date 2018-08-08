@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yl.youthlive.pl.MainVideoActivity;
 import com.yl.youthlive.vlogsearchListPOJO.Datum;
 
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public class HotAdapterSearch extends RecyclerView.Adapter<HotAdapterSearch.MyVi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ctx, SingleVideoActivity.class);
+                Intent intent = new Intent(ctx, MainVideoActivity.class);
                 intent.putExtra("videoId", item.getVideoId());
                 intent.putExtra("url", item.getVideoURL());
                 intent.putExtra("thumb", item.getThumbURL());

@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthlive.iml" filepath="$PROJECT_DIR$/.idea/youthlive.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthlive4.iml" filepath="$PROJECT_DIR$/.idea/youthlive4.iml" />
@@ -19,6 +17,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/youthliveS16.iml" filepath="$PROJECT_DIR$/.idea/youthliveS16.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthliveS19.iml" filepath="$PROJECT_DIR$/.idea/youthliveS19.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthliveS20.iml" filepath="$PROJECT_DIR$/.idea/youthliveS20.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/youthliveS21.iml" filepath="$PROJECT_DIR$/.idea/youthliveS21.iml" />
       <module fileurl="file://$PROJECT_DIR$/youthliveS6.iml" filepath="$PROJECT_DIR$/youthliveS6.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthliveS7.iml" filepath="$PROJECT_DIR$/.idea/youthliveS7.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthliveS8.iml" filepath="$PROJECT_DIR$/.idea/youthliveS8.iml" />

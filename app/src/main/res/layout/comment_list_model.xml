@@ -1,89 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/msgprofile_pic"
+        android:layout_width="75dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorforeground"
+        android:paddingEnd="@dimen/dimen_20dp"
+        android:paddingStart="10dp"
+        tools:src="@drawable/user_default" />
 
     <LinearLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="3dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="3dp"
-        android:orientation="vertical">
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="1"
+        android:background="@color/colorforeground"
+        android:paddingBottom="18dp"
+        android:paddingRight="@dimen/dimen_10dp"
+        android:paddingTop="18dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/bubble"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bubble_me"
+            android:layout_weight="1"
             android:orientation="horizontal"
             tools:ignore="UselessParent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/msgprofile_pic"
-                android:layout_width="35dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="2dp" />
-
-            <LinearLayout
-                android:id="@+id/bubblein"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="100dp"
-                android:orientation="vertical"
-                tools:ignore="UselessParent">
+                android:layout_gravity="start"
+                android:gravity="start"
+                android:paddingTop="1dp"
+                android:text="username"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                tools:ignore="RtlSymmetry" />
 
 
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:gravity="start"
-                    android:paddingStart="10dp"
-                    android:paddingTop="1dp"
-                    android:textColor="@color/video_comment_msg"
-                    android:textSize="10sp"
-                    tools:ignore="RtlSymmetry"
-                    tools:text="username" />
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/name"
+                android:layout_below="@+id/name"
+                android:paddingEnd="15dp"
+                android:paddingTop="2dp"
+                android:text="asdasd"
+                android:textColor="@color/greyfont"
+                android:textSize="13sp"
+
+                />
 
 
-                <TextView
-                    android:id="@+id/message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingEnd="15dp"
-                    android:paddingStart="10dp"
-                    android:text="asdasd"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
+        </RelativeLayout>
 
-                    />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|right"
-                    android:paddingBottom="2dp"
-                    android:paddingEnd="6dp"
-                    android:text="1212121212"
-                    android:textColor="#7e7e7e"
-                    android:textSize="10sp" />
-
-
-            </LinearLayout>
-
-
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="top"
+                android:text="1212121212"
+                android:textColor="@color/grey_light"
+                android:textSize="10sp" />
         </LinearLayout>
-
-
     </LinearLayout>
 
-</android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

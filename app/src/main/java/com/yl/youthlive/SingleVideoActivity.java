@@ -1,4 +1,5 @@
 package com.yl.youthlive;
+/*
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,26 +21,50 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.PlayerControlView;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultAllocator;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.commentPOJO.commentBean;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
+import com.yl.youthlive.pl.MainVideoActivity;
 import com.yl.youthlive.sharePOJO.shareBean;
 import com.yl.youthlive.singleVideoPOJO.Comment;
 import com.yl.youthlive.singleVideoPOJO.singleVideoBean;
 
-import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,12 +81,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-import tcking.github.com.giraffeplayer2.GiraffePlayer;
-import tcking.github.com.giraffeplayer2.PlayerListener;
-import tv.danmaku.ijk.media.player.IjkTimedText;
 
 
-public class SingleVideoActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
+public class SingleVideoActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener{
 
     Toolbar toolbar;
     CircleImageView profile;
@@ -71,178 +93,154 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
     EditText comment;
     CommentsAdapter adapter;
     List<Comment> list;
-    ProgressBar progress;
-    String videoId, url;
+    ProgressBar progress, progressv;
+    String videoId, url, thumb;
+    PlayerView mainPlayerView;
+    SimpleExoPlayer mainPlayer;
+
 
     int count = 0;
+    private Uri uri;
 
     String timelineId;
 
-    FloatingActionButton send;
-    tcking.github.com.giraffeplayer2.VideoView player;
+    Button followbtn;
+
+    ImageView send;
     ImageButton play;
-    private int mSeekPosition;
-
-    //ImageView image;
-
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.single_video2);
+        setContentView(R.layout.single_video);
         checkConnection();
         videoId = getIntent().getStringExtra("videoId");
         url = getIntent().getStringExtra("url");
+        thumb = getIntent().getStringExtra("thumb");
         list = new ArrayList<>();
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // image = findViewById(R.id.image);
-        ImageLoader loader = ImageLoader.getInstance();
-
-        player = (tcking.github.com.giraffeplayer2.VideoView) findViewById(R.id.player);
-
-
-
-/*
-        MediaPlayerConfig wzPlayerConfig = new MediaPlayerConfig();
-
-        wzPlayerConfig.setConnectionUrl(url);
-
-        Log.d("asdasdasd" , url);
-*/
-
-/*
-        wzPlayerConfig.setConnectionNetworkProtocol(-1);
-        wzPlayerConfig.setConnectionDetectionTime(300);
-        wzPlayerConfig.setConnectionBufferingTime(0);
-        wzPlayerConfig.setConnectionBufferingSize(0);
-        wzPlayerConfig.setDecodingType(0);
-        wzPlayerConfig.setDecoderLatency(1);
-        wzPlayerConfig.setNumberOfCPUCores(0);
-        wzPlayerConfig.setRendererType(1);
-        wzPlayerConfig.setSynchroEnable(0);
-        wzPlayerConfig.setSynchroNeedDropVideoFrames(0);
-        wzPlayerConfig.setEnableAspectRatio(2);
-        wzPlayerConfig.setDataReceiveTimeout(30000);
-        wzPlayerConfig.setNumberOfCPUCores(0);
-*/
-
-
-        /*VideoInfo videoInfo = new VideoInfo(Uri.parse(url))
-                .setTitle("test video") //config title
-                .setAspectRatio(VideoInfo.AR_ASPECT_FILL_PARENT) //aspectRatio
-                .setShowTopBar(true) //show mediacontroller top bar
-                .setPortraitWhenFullScreen(false);//portrait when full screen
-
-        */
-
-
-        DisplayImageOptions options = new DisplayImageOptions.Builder().resetViewBeforeLoading(false).cacheInMemory(true).cacheOnDisk(true).build();
-
-        //  loader.displayImage(getIntent().getStringExtra("thumb") , image , options);
-
-
-        player.setVideoPath(url).getPlayer().setPlayerListener(new PlayerListener() {
+        followbtn=findViewById(R.id.follow);
+        followbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPrepared(GiraffePlayer giraffePlayer) {
+            public void onClick(View view) {
+                Intent intent =new Intent(SingleVideoActivity.this, MainVideoActivity.class);
+                startActivity(intent);
+            }
+        });
+        toolbar = findViewById(R.id.toolbar);
+        mainPlayerView = findViewById(R.id.main_player);
+        uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/vod/" + url);
 
-                //         image.setVisibility(View.GONE);
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+        //Create the player
+        mainPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
+                new DefaultAllocator(true, 1000),
+                1000,  // min buffer 0.5s
+                3000, //max buffer 3s
+                1000, // playback 1s
+                1000,   //playback after rebuffer 1s
+                1,
+                true
+        ));
+
+        mainPlayerView.setPlayer(mainPlayer);
+
+        mainPlayerView.setUseController(false);
+        RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
+        // This is the MediaSource representing the media to be played.
+        final MediaSource videoSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
+                .createMediaSource(uri);
+
+        mainPlayer.prepare(videoSource);
+        mainPlayer.setPlayWhenReady(true);
+        mainPlayer.setRepeatMode(Player.REPEAT_MODE_ONE);
+
+        mainPlayer.addListener(new ExoPlayer.EventListener() {
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
 
             }
 
             @Override
-            public void onBufferingUpdate(GiraffePlayer giraffePlayer, int percent) {
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
 
             }
 
             @Override
-            public boolean onInfo(GiraffePlayer giraffePlayer, int what, int extra) {
-                return false;
-            }
-
-            @Override
-            public void onCompletion(GiraffePlayer giraffePlayer) {
+            public void onLoadingChanged(boolean isLoading) {
 
             }
 
             @Override
-            public void onSeekComplete(GiraffePlayer giraffePlayer) {
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
+                if(playbackState==3)
+                {
+                    progressv.setVisibility(View.GONE);
+                }
+
+               // Toast.makeText(SingleVideoActivity.this, ""+playWhenReady+" "+playbackState, Toast.LENGTH_SHORT).show();
+
 
             }
 
             @Override
-            public boolean onError(GiraffePlayer giraffePlayer, int what, int extra) {
-                return false;
-            }
-
-            @Override
-            public void onPause(GiraffePlayer giraffePlayer) {
+            public void onRepeatModeChanged(int repeatMode) {
 
             }
 
             @Override
-            public void onRelease(GiraffePlayer giraffePlayer) {
+            public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
 
             }
 
             @Override
-            public void onStart(GiraffePlayer giraffePlayer) {
+            public void onPlayerError(ExoPlaybackException error) {
+                pausePlayer();
+                progressv.setVisibility(View.VISIBLE);
+
 
             }
 
             @Override
-            public void onTargetStateChange(int oldState, int newState) {
+            public void onPositionDiscontinuity(int reason) {
 
             }
 
             @Override
-            public void onCurrentStateChange(int oldState, int newState) {
+            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
 
             }
 
             @Override
-            public void onDisplayModelChange(int oldModel, int newModel) {
-
-            }
-
-            @Override
-            public void onPreparing(GiraffePlayer giraffePlayer) {
-
-            }
-
-            @Override
-            public void onTimedText(GiraffePlayer giraffePlayer, IjkTimedText text) {
-
-            }
-
-            @Override
-            public void onLazyLoadProgress(GiraffePlayer giraffePlayer, int progress) {
-
-            }
-
-            @Override
-            public void onLazyLoadError(GiraffePlayer giraffePlayer, String message) {
+            public void onSeekProcessed() {
 
             }
         });
-        player.getPlayer().start();
 
 
-        /*player.setVideoSource(url);
 
-        player.setAutoLoop(true);
-        player.setAutoPlay(true);
 
-        player.setFullScreenButtonVisible(false);
-        player.setFullScreen(false);*/
 
-        play = (ImageButton) findViewById(R.id.play);
+        /////////////////////
 
-        share = (TextView) findViewById(R.id.share);
 
-        progress = (ProgressBar) findViewById(R.id.progress);
-        DoubleBounce doubleBounce = new DoubleBounce();
+        ///////////////////
+
+
+
+
+
+        play = findViewById(R.id.play);
+
+        share = findViewById(R.id.share);
+
+        progress = findViewById(R.id.progress);
+        progressv = findViewById(R.id.progressv);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationIcon(R.drawable.arrow);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -253,19 +251,19 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
 
         });
         profile = (CircleImageView) findViewById(R.id.profile);
-        name = (TextView) findViewById(R.id.name);
-        time = (TextView) findViewById(R.id.time);
-        views = (TextView) findViewById(R.id.views);
-        comments = (TextView) findViewById(R.id.comments);
-        likes = (TextView) findViewById(R.id.like);
-        comment = (EditText) findViewById(R.id.comment);
-        grid = (RecyclerView) findViewById(R.id.grid);
+        name = findViewById(R.id.name);
+        time = findViewById(R.id.time);
+        views = findViewById(R.id.views);
+        comments = findViewById(R.id.comments);
+        likes = findViewById(R.id.like);
+        comment = findViewById(R.id.comment);
+        grid = findViewById(R.id.grid);
         manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         adapter = new CommentsAdapter(this, list);
         grid.setLayoutManager(manager);
         grid.setAdapter(adapter);
 
-        send = (FloatingActionButton) findViewById(R.id.send);
+        send = findViewById(R.id.send);
 
         likes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,72 +292,8 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
                 });
             }
         });
-        /*comment.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                final int DRAWABLE_LEFT = 0;
-                final int DRAWABLE_TOP = 1;
-                final int DRAWABLE_RIGHT = 2;
-                final int DRAWABLE_BOTTOM = 3;
-                if(event.getRawX() >= (comment.getRight() - comment.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()) - 60)
-                {
-                    // your action here
 
-                    //og.d("asdasd" , "clicked");
-
-
-
-                    String mess = comment.getText().toString();
-
-                    if (mess.length() > 0)
-                    {
-                        progress.setVisibility(View.VISIBLE);
-
-                        final bean b = (bean) getApplicationContext();
-
-                        final Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(b.BASE_URL)
-                                .addConverterFactory(ScalarsConverterFactory.create())
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-
-                        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                        Call<commentBean> call = cr.comment(b.userId , videoId , mess);
-
-                        call.enqueue(new Callback<commentBean>() {
-                            @Override
-                            public void onResponse(Call<commentBean> call, Response<commentBean> response) {
-
-
-                                if (Objects.equals(response.body().getMessage(), "Video Comment Success"))
-                                {
-                                    comment.setText("");
-                                }
-
-                                progress.setVisibility(View.GONE);
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<commentBean> call, Throwable t) {
-                                progress.setVisibility(View.GONE);
-                                Log.d("Video upload find " , t.toString());
-                            }
-                        });
-                    }
-
-
-                    return true;
-                }
-                return false;
-            }
-        });
-*/
-
-
-        share.setOnClickListener(new View.OnClickListener() {
+       share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -503,121 +437,14 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
         });
 
 
-        /*send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                String mess = comment.getText().toString();
-
-                if (mess.length() > 0)
-                {
-                    progress.setVisibility(View.VISIBLE);
-
-                    final bean b = (bean) getApplicationContext();
-
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    Call<vlogListBean> call = cr.comment(b.userId , videoId , mess);
-
-                    call.enqueue(new Callback<vlogListBean>() {
-                        @Override
-                        public void onResponse(Call<vlogListBean> call, Response<vlogListBean> response) {
-
-                            progress.setVisibility(View.GONE);
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<vlogListBean> call, Throwable t) {
-                            progress.setVisibility(View.GONE);
-                        }
-                    });
-                }
-
-            }
-        });*/
-
-        //video.setMediaController(controller);
-
-
-        /*video.setVideoViewCallback(new UniversalVideoView.VideoViewCallback() {
-            @Override
-            public void onScaleChange(boolean isFullscreen) {
-            }
-
-            @Override
-            public void onPause(MediaPlayer mediaPlayer) { // Video pause
-                Log.d("Asdasd", "onPause UniversalVideoView callback");
-            }
-
-            @Override
-            public void onStart(MediaPlayer mediaPlayer) { // Video start/resume to play
-                Log.d("Asdasd", "onStart UniversalVideoView callback");
-            }
-
-            @Override
-            public void onBufferingStart(MediaPlayer mediaPlayer) {// steam start loading
-                Log.d("Asdasd", "onBufferingStart UniversalVideoView callback");
-            }
-
-            @Override
-            public void onBufferingEnd(MediaPlayer mediaPlayer) {// steam end loading
-                Log.d("asdasd", "onBufferingEnd UniversalVideoView callback");
-            }
-
-        });*/
-
-
-/*
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //video.setVideoPath(url);
-                //video.requestFocus();
-
-                player.setVideoSource(url);
-
-                if (mSeekPosition > 0) {
-                    //video.seekTo(mSeekPosition);
-                }
-                //video.start();
-                //holder.controller.setTitle("Big Buck Bunny");
-            }
-        });
-*/
-
-
-        //Uri uri = Uri.parse(url);
-        /*video.setVideoURI(uri);
-        video.start();
-
-        video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                //close the progress dialog when buffering is done
-
-                mp.setLooping(true);
-            }
-        });*/
-
-
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-
-// register connection status listener
+        startPlayer();
+       // register connection status listener
         bean.getInstance().setConnectivityListener(this);
         progress.setVisibility(View.VISIBLE);
 
@@ -719,12 +546,6 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
                         name.setText(response.body().getData().getTimelineName());
                     }
 
-                    //   name.setText(response.body().getData().getTimelineName());
-
-
-                    //  Toast.makeText(SingleVideoActivity.this, "hello"+times, Toast.LENGTH_SHORT).show();
-
-
                     schedule();
 
                 } catch (Exception e) {
@@ -741,6 +562,7 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
         });
 
 
+
     }
 
     ////////////////////internet connectivity check///////////////
@@ -750,14 +572,7 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
     }
 
     private void showSnack(boolean isConnected) {
-        String message;
-        int color;
-        if (isConnected) {
-
-            // Toast.makeText(this, "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
-            //    message = "Good! Connected to Internet";
-            //    color = Color.WHITE;
-        } else {
+        if (!isConnected) {
             // Toast.makeText(this, "Sorry! Not connected to internet", Toast.LENGTH_SHORT).show();
             try {
                 AlertDialog.Builder builder;
@@ -786,20 +601,8 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
             } catch (Exception e) {
                 Log.d("TAG", "Show Dialog: " + e.getMessage());
             }
-            //      message = "Sorry! Not connected to internet";
-            //     color = Color.RED;
         }
-
-       /* Snackbar snackbar = Snackbar
-                .make(findViewById(R.id.fab), message, Snackbar.LENGTH_LONG);
-
-        View sbView = snackbar.getView();
-        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(color);
-        snackbar.show();
-        */
     }
-
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showSnack(isConnected);
@@ -880,24 +683,14 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
         }, 0, 1000);
 
     }
-/*
-    @Override
-    public int Status(int i) {
-        Log.d("status", String.valueOf(i));
-        return 0;
-    }
-
-    @Override
-    public int OnReceiveData(ByteBuffer byteBuffer, int i, long l) {
-
-        return 0;
-    }*/
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
 
     }
+
+
 
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
@@ -958,7 +751,8 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
             }
             //.............
 
-
+           */
+/*
             bean b = (bean) context.getApplicationContext();
 
 
@@ -966,15 +760,7 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             int width = displayMetrics.widthPixels;
-
-            //ViewGroup.LayoutParams params = holder.bubble.getLayoutParams();
-            //Changes the height and width to the specified *pixels*
-            // params.width = (width/5)*4;
-            //  holder.bubblewrap.setLayoutParams(params);
-
-            //setting message textview size to custom
             holder.message.setMaxWidth((width / 5) * 4);
-
 
             if (Objects.equals(item.getUserId(), b.userId)) {
                 holder.container.setGravity(Gravity.END);
@@ -982,11 +768,10 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
             } else {
                 holder.container.setGravity(Gravity.START);
                 holder.bubble.setBackgroundResource(R.drawable.bubble);
-            }
+            }*//*
 
 
         }
-
         @Override
         public int getItemCount() {
             //return list.size();
@@ -996,7 +781,8 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
         class ViewHolder extends RecyclerView.ViewHolder {
 
             TextView message, time, name;
-            LinearLayout bubble, container;
+            LinearLayout  container;
+            RelativeLayout bubble;
             CircleImageView msgprofileimg;
 
             public ViewHolder(View itemView) {
@@ -1005,13 +791,32 @@ public class SingleVideoActivity extends AppCompatActivity implements Connectivi
                 message = (TextView) itemView.findViewById(R.id.message);
                 time = (TextView) itemView.findViewById(R.id.time);
                 name = (TextView) itemView.findViewById(R.id.name);
-                bubble = (LinearLayout) itemView.findViewById(R.id.bubble);
+                bubble = itemView.findViewById(R.id.bubble);
                 container = (LinearLayout) itemView.findViewById(R.id.container);
                 msgprofileimg = itemView.findViewById(R.id.msgprofile_pic);
-
 
             }
         }
 
     }
-}
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mainPlayer.stop();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        pausePlayer();
+    }
+    private void pausePlayer(){
+        mainPlayer.setPlayWhenReady(false);
+        mainPlayer.getPlaybackState();
+    }
+    private void startPlayer(){
+        mainPlayer.setPlayWhenReady(true);
+        mainPlayer.getPlaybackState();
+    }
+
+    }
+*/

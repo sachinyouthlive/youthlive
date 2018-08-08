@@ -5,50 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:contentInsetStart="0dp"
-        android:contentInsetStartWithNavigation="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-        app:contentInsetStartWithNavigation="0dp"
-        app:layout_collapseMode="pin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="?android:attr/actionBarSize"
-            android:orientation="horizontal">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical|start"
-                android:src="@drawable/user_default"
-                app:civ_border_color="#ffffff"
-                app:civ_border_width="1dp" />
-
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:layout_marginStart="8dp"
-                android:gravity="center_vertical"
-                android:maxLength="18"
-                android:textColor="#ffffff"
-                android:textSize="16sp"
-                tools:text="Sachin kumar Pandey" />
-        </LinearLayout>
-    </android.support.v7.widget.Toolbar>
 
     <!--
 
@@ -79,36 +35,30 @@
     -->
 
 
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="4dp"
-        android:drawableEnd="@drawable/clock"
-        android:drawablePadding="4dp"
-        android:gravity="center_vertical"
-        android:textColor="#ffffff"
-        android:textSize="@dimen/dimen_12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar"
-        app:layout_constraintTop_toTopOf="@+id/toolbar"
-        tools:ignore="RelativeOverlap"
-        tools:text="15 min ago" />
-
-
-    <tcking.github.com.giraffeplayer2.VideoView
-        android:id="@+id/player"
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/main_player"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="wrap_content"
+        android:background="#f5f5f5"
+        app:default_artwork="@drawable/videoplayerbg"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:resize_mode="fit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:surface_type="texture_view"
         app:layout_constraintVertical_bias="0.0">
 
-    </tcking.github.com.giraffeplayer2.VideoView>
+        <ProgressBar
+            android:id="@+id/progressv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:visibility="visible" />
+
+    </com.google.android.exoplayer2.ui.PlayerView>
 
 
     <ImageButton
@@ -119,10 +69,10 @@
         android:layout_marginStart="8dp"
         android:background="@drawable/play"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/player"
-        app:layout_constraintEnd_toEndOf="@+id/player"
-        app:layout_constraintStart_toStartOf="@+id/player"
-        app:layout_constraintTop_toTopOf="@+id/player" />
+        app:layout_constraintBottom_toBottomOf="@+id/main_player"
+        app:layout_constraintEnd_toEndOf="@+id/main_player"
+        app:layout_constraintStart_toStartOf="@+id/main_player"
+        app:layout_constraintTop_toTopOf="@+id/main_player" />
 
 
     <TextView
@@ -144,7 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player"
+        app:layout_constraintTop_toBottomOf="@+id/main_player"
         app:layout_constraintVertical_bias="0.0" />
 
 
@@ -267,6 +217,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <!--
         <ImageView
             android:id="@+id/image"
@@ -278,6 +229,69 @@
             app:layout_constraintTop_toTopOf="@+id/player"
              />
     -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradienttopblack"
+        android:contentInsetStart="0dp"
+        android:contentInsetStartWithNavigation="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        app:layout_collapseMode="pin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@android:color/transparent"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|start"
+                android:src="@drawable/user_default"
+                app:civ_border_color="#ffffff"
+                app:civ_border_width="1dp" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                android:maxLength="18"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                tools:text="Sachin kumar Pandey" />
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="4dp"
+        android:drawableEnd="@drawable/clock"
+        android:drawablePadding="4dp"
+        android:gravity="center_vertical"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/dimen_12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        tools:ignore="RelativeOverlap"
+        tools:text="15 min ago" />
 
 
 </android.support.constraint.ConstraintLayout>

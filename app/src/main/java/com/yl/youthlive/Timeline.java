@@ -1,9 +1,7 @@
 package com.yl.youthlive;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -43,7 +41,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-import tcking.github.com.giraffeplayer2.VideoView;
+//import tcking.github.com.giraffeplayer2.VideoView;
 
 
 public class Timeline extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
@@ -282,13 +280,13 @@ public class Timeline extends Fragment implements ConnectivityReceiver.Connectiv
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Activity activity = (Activity) context;
+                 /*   Activity activity = (Activity) context;
                     Intent intent = new Intent(context, SingleVideoActivity.class);
                     intent.putExtra("videoId", item.getVideoId());
                     intent.putExtra("url", item.getVideoURL());
                     intent.putExtra("thumb", item.getThumbURL());
                     context.startActivity(intent);
-                    activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);*/
                 }
             });
 
@@ -357,7 +355,7 @@ public class Timeline extends Fragment implements ConnectivityReceiver.Connectiv
             TextView name, time;
             TextView likes;
             ImageView imageView;
-            VideoView video;
+            //    VideoView video;
             ImageButton play;
 
             public ViewHolder(View itemView) {

@@ -449,7 +449,7 @@ public interface AllAPIs {
 
 
     @Multipart
-    @POST("api/all_video.php")
+    @POST("api/all_videolist.php")
     Call<vlogListBean> getVlogList(
             @Part("userId") String userId
     );

@@ -18,5 +18,25 @@
     <color name="green_light">#388E3C</color>
     <color name="dark_gold">#bf9b30</color>
     <color name="colorRipple">#E040FB</color>
+
     <color name="red">#cc1111</color>
+    <color name="colorforeground">#FFFFFF</color>
+    <color name="colorbackground">#F8F8F8</color>
+    <color name="greyfont">#D7D7D7</color>
+
+    <color name="darkfont">#515056</color>
+    <color name="greyborder">#dfdfdf</color>
+
+
+    <color name="inke_color_86">#99ffffff</color>
+    <color name="inke_color_29">#00000000</color>
+    <color name="payeco_bgColor">#ffe8e8e8</color>
+    <color name="payeco_hintTextColor">#ffc4c4c4</color>
+    <color name="payeco_textColorBlack">#ff2b2b2b</color>
+    <color name="payeco_textColorBlue">#ff6ca6cd</color>
+    <color name="payeco_textColorGrayTwo">#ffa2a2a2</color>
+    <color name="payeco_textColorWhite">#ffffffff</color>
+    <color name="payeco_textColorYellow">#ffff8c00</color>
+    <color name="payeco_tipsTextColor">#ff4a5761</color>
+
 </resources>

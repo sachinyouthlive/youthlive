@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yl.youthlive.pl.MainVideoActivity;
 import com.yl.youthlive.vlogListPOJO.Datum;
 
 import java.util.ArrayList;
@@ -100,7 +101,7 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyViewHolder> {
             @Override
             public void onClick(View view) {
                 Activity activity = (Activity) context;
-                Intent intent = new Intent(context, SingleVideoActivity.class);
+                Intent intent = new Intent(context, MainVideoActivity.class);
                 intent.putExtra("videoId", item.getVideoId());
                 intent.putExtra("url", item.getVideoURL());
                 intent.putExtra("thumb", item.getThumbURL());

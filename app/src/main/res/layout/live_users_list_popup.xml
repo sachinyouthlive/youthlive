@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:minWidth="300dp"
     android:minHeight="400dp"
@@ -54,5 +52,5 @@
         app:layout_constraintBottom_toTopOf="@+id/grid"
         app:layout_constraintEnd_toEndOf="@+id/textView35"
         app:layout_constraintTop_toTopOf="@+id/textView35"
-        android:background="@drawable/ic_close_white_24dp" />
+        android:background="@drawable/close" />
 </android.support.constraint.ConstraintLayout>

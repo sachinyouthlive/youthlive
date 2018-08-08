@@ -23,6 +23,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.deleteVLOGPOJO.deleteVLOGBean;
+import com.yl.youthlive.pl.MainVideoActivity;
 import com.yl.youthlive.vlogListPOJO.Datum;
 import com.yl.youthlive.vlogListPOJO.vlogListBean;
 
@@ -152,7 +153,7 @@ public class MyVLOGs extends Fragment {
             holder.play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, SingleVideoActivity.class);
+                    Intent intent = new Intent(context, MainVideoActivity.class);
                     intent.putExtra("videoId", item.getVideoId());
                     intent.putExtra("url", item.getVideoURL());
                     intent.putExtra("thumb", item.getThumbURL());
