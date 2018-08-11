@@ -7,12 +7,10 @@
     tools:context=".VideoPlayer">
 
 
-    <com.google.android.exoplayer2.ui.PlayerView
+    <com.pili.pldroid.player.widget.PLVideoTextureView
         android:id="@+id/main_player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:surface_type="texture_view"
-        app:resize_mode="fill"
         android:layout_centerInParent="true"/>
 
 
@@ -66,13 +64,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:id="@+id/thumb_frame1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:surface_type="texture_view"
-            app:resize_mode="fill"
-            android:visibility="gone"/>
+            <com.google.android.exoplayer2.ui.PlayerView
+                android:id="@+id/thumb_frame1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:surface_type="texture_view"
+                app:resize_mode="fill"
+                android:visibility="gone"/>
 
             <ProgressBar
                 android:layout_width="wrap_content"
@@ -140,19 +138,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ImageView
-        android:id="@+id/loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:scaleType="centerCrop"
-        />
-
     <include
         layout="@layout/player_loading"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:id="@+id/loading_popup"
+        android:visibility="visible"
         />
 
     <ProgressBar

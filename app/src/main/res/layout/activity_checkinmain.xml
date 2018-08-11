@@ -49,6 +49,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:background="@drawable/ic_untitled_1"
+                android:text="EMPLOYEE ID : 12345678"
+                />
+
+
             <Spinner
                 android:id="@+id/spinner"
                 android:layout_width="wrap_content"

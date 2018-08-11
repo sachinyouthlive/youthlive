@@ -11,6 +11,7 @@ import android.opengl.Matrix;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Size;
 import android.view.WindowManager;
 
 import com.seu.magicfilter.base.gpuimage.GPUImageFilter;
@@ -279,6 +280,12 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
             }
             worker = null;
         }
+    }
+
+
+    public Camera.Size getPreferedPreviews()
+    {
+        return mCamera.getParameters().getPreferredPreviewSizeForVideo();
     }
 
 

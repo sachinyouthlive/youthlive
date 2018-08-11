@@ -26,6 +26,9 @@ public class bean extends Application {
     String userName = "";
     String userImage = "";
     String liveId = "";
+
+    boolean frag = false;
+
     private String TAG = "myApp";
 
     public bean() {

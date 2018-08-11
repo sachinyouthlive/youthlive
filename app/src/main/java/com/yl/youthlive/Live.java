@@ -267,7 +267,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(ViewHolder holder, final int position) {
 
             holder.setIsRecyclable(false);
 
@@ -300,17 +300,32 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                 @Override
                 public void onClick(View v) {
 
+/*
                     if (item.getType().equals("live"))
                     {
-                        //Intent intent = new Intent(context, PlayerActivityNew.class);
+*/
+
+                        b.frag = true;
+
+                        FragmentTransaction ft = ((HomeActivity)context).getSupportFragmentManager().beginTransaction();
+                        VerticalFragment frag1 = new VerticalFragment();
+                        frag1.setList(list , position);
+                        ft.replace(R.id.replace2, frag1);
+                        ft.addToBackStack(null);
+                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                        ft.commit();
+
+
+
+                        /*
                         Intent intent = new Intent(context, VideoPlayer.class);
                         intent.putExtra("uri", item.getLiveId());
                         intent.putExtra("liveId", item.getLiveId());
                         intent.putExtra("pic",b.BASE_URL + item.getUserImage());
                         intent.putExtra("timelineId", String.valueOf(item.getUserId()));
-                        startActivity(intent);
+                        startActivity(intent);*/
 
-                    }
+                 /*   }
                     else
                     {
 
@@ -322,7 +337,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                         startActivity(intent);
 
                     }
-
+*/
 
                 }
             });

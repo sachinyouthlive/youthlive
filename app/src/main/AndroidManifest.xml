@@ -137,15 +137,15 @@
         <activity
             android:name=".Activitys.MyVlog"
             android:screenOrientation="portrait" />
-        <!--        <activity
-                    android:name=".PlayerActivity"
-                    android:configChanges="orientation|keyboardHidden|screenSize"
-                    android:screenOrientation="portrait" />
-                <activity
-                    android:name=".SingleVideoActivity"
-                    android:configChanges="screenSize|orientation|keyboardHidden"
-                    android:screenOrientation="portrait"
-                    android:windowSoftInputMode="stateHidden|adjustPan" />-->
+<!--        <activity
+            android:name=".PlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SingleVideoActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />-->
         <activity
             android:name=".HomeActivity"
             android:configChanges="orientation|screenSize"
@@ -231,8 +231,7 @@
             android:screenOrientation="portrait"
             />
         <activity
-            android:name=".pl.MainVideoActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".pl.MainVideoActivity" android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
     </application>

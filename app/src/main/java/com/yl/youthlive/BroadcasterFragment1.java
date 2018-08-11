@@ -84,6 +84,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -567,10 +569,8 @@ public class BroadcasterFragment1 extends Fragment {
             @Override
             public void onReceive(Context context, Intent intent) {
 
-                switch (intent.getAction())
-                {
-                    case "commentData":
-                    {
+                switch (intent.getAction()) {
+                    case "commentData": {
                         Log.d("data", intent.getStringExtra("data"));
 
                         String json = intent.getStringExtra("data");
@@ -593,8 +593,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                         break;
                     }
-                    case "like":
-                    {
+                    case "like": {
                         Log.d("data", intent.getStringExtra("data"));
 
                         String json = intent.getStringExtra("data");
@@ -614,8 +613,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                         break;
                     }
-                    case "view":
-                    {
+                    case "view": {
                         Log.d("data", intent.getStringExtra("data"));
 
                         String json = intent.getStringExtra("data");
@@ -631,12 +629,12 @@ public class BroadcasterFragment1 extends Fragment {
                         String id = item.getUserId();
                         if (!uid.equals(b.userId)) {
                             viewsAdapter.addView(item);
+                            viewersGrid.smoothScrollToPosition(0);
                         }
 
                         break;
                     }
-                    case "gift":
-                    {
+                    case "gift": {
                         Log.d("data", intent.getStringExtra("data"));
 
                         String json = intent.getStringExtra("data");
@@ -681,8 +679,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                         break;
                     }
-                    case "status":
-                    {
+                    case "status": {
                         Log.d("ddata", intent.getStringExtra("data"));
 
                         String json = intent.getStringExtra("data");
@@ -721,8 +718,7 @@ public class BroadcasterFragment1 extends Fragment {
                         }
                         break;
                     }
-                    case "status_player":
-                    {
+                    case "status_player": {
                         Log.d("uurrii", intent.getStringExtra("data"));
 
                         String json = intent.getStringExtra("data");
@@ -761,8 +757,7 @@ public class BroadcasterFragment1 extends Fragment {
                         }
                         break;
                     }
-                    case "request_player":
-                    {
+                    case "request_player": {
                         Log.d("ddata", intent.getStringExtra("data"));
 
                         String json = intent.getStringExtra("data");
@@ -928,8 +923,7 @@ public class BroadcasterFragment1 extends Fragment {
                         }
                         break;
                     }
-                    case "connection_end":
-                    {
+                    case "connection_end": {
                         Log.d("uurrii", intent.getStringExtra("data"));
 
                         String json = intent.getStringExtra("data");
@@ -955,8 +949,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                         break;
                     }
-                    case "exit":
-                    {
+                    case "exit": {
 
                         Log.d("data", intent.getStringExtra("data"));
 
@@ -977,7 +970,6 @@ public class BroadcasterFragment1 extends Fragment {
 
                         break;
                     }
-
 
 
                 }
@@ -3077,8 +3069,27 @@ public class BroadcasterFragment1 extends Fragment {
 
         public void addView(com.yl.youthlive.getIpdatedPOJO.View item) {
             list.add(0, item);
-            notifyItemInserted(0);
-            liveUsers.setText(String.valueOf(list.size()));
+            //notifyItemInserted(0);
+            noti();
+            liveUsers.setText(String.valueOf(list.size() - 1));
+        }
+
+        public void noti()
+        {
+
+            Collections.sort(list, new Comparator<com.yl.youthlive.getIpdatedPOJO.View>() {
+                @Override
+                public int compare(com.yl.youthlive.getIpdatedPOJO.View view, com.yl.youthlive.getIpdatedPOJO.View t1) {
+
+                    String lhs = view.getType().replace("\"", "");
+                    String rhs = t1.getType().replace("\"", "");
+
+                    return rhs.compareToIgnoreCase(lhs);
+                }
+            });
+
+            notifyDataSetChanged();
+
         }
 
         public void removeView(com.yl.youthlive.getIpdatedPOJO.View item) {

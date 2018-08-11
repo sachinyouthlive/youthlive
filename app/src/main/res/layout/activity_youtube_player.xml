@@ -5,15 +5,14 @@
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    tools:context=".YoutubePlayer">
+    android:background="#000000">
 
 
     <ImageView
         android:id="@+id/background"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -430,17 +429,19 @@
         layout="@layout/player_loading"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.youtube.player.YouTubePlayerView
+    <LinearLayout
         android:id="@+id/player"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
         android:layout_marginBottom="8dp"
+        android:orientation="vertical"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"

@@ -37,14 +37,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         >
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:id="@+id/video_frame"
-        android:layout_width="93dp"
-        android:layout_height="124dp"
-        android:layout_alignParentTop="true"
-        app:surface_type="texture_view"
-        app:resize_mode="zoom"
-        />
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/video_frame"
+            android:layout_width="93dp"
+            android:layout_height="124dp"
+            android:layout_alignParentTop="true"
+            app:surface_type="texture_view"
+            app:resize_mode="zoom"
+            />
 
 
         <include

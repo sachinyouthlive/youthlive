@@ -1,63 +1,37 @@
 package com.yl.youthlive;
 
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.graphics.Region;
-import android.hardware.Camera;
-import android.media.audiofx.Visualizer;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-
-import com.bumptech.glide.Glide;
 
 import com.github.faucamp.simplertmp.RtmpHandler;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.audio.AudioAttributes;
-import com.google.android.exoplayer2.audio.AudioRendererEventListener;
-import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -71,22 +45,15 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.video.VideoListener;
-import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
-
 import com.pili.pldroid.player.AVOptions;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
-import com.pili.pldroid.player.widget.PLVideoView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
-import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 import com.yl.youthlive.pl.widget.MediaController;
-
 
 import net.ossrs.yasea.SrsCameraView;
 import net.ossrs.yasea.SrsEncodeHandler;
@@ -95,8 +62,6 @@ import net.ossrs.yasea.SrsRecordHandler;
 
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.Arrays;
-import java.util.List;
 
 import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
@@ -106,7 +71,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener, RtmpHandler.RtmpListener, PLMediaPlayer.OnErrorListener, PLMediaPlayer.OnCompletionListener {
+import static com.facebook.FacebookSdk.getApplicationContext;
+
+public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCompletionListener, SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener, RtmpHandler.RtmpListener {
 
     String liveId;
 
@@ -162,24 +129,27 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
     private int mDisplayAspectRatio = PLVideoTextureView.ASPECT_RATIO_PAVED_PARENT;
 
+
+
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_player);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        liveId = getIntent().getStringExtra("uri");
-        loadingpic = getIntent().getStringExtra("pic");
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_video_player , container , false);
 
-        earphones = findViewById(R.id.earphones);
+        liveId = getArguments().getString("uri");
+        loadingpic = getArguments().getString("pic");
 
-        thumbProgress1 = findViewById(R.id.thumb_progress1);
+        earphones = view.findViewById(R.id.earphones);
+
+        thumbProgress1 = view.findViewById(R.id.thumb_progress1);
 
         DoubleBounce doubleBounce = new DoubleBounce();
         thumbProgress1.setIndeterminateDrawable(doubleBounce);
 
 
-        thumbCountdown = findViewById(R.id.thumb_countdown);
-        thumbCount = findViewById(R.id.textView33);
+        thumbCountdown = view.findViewById(R.id.thumb_countdown);
+        thumbCount = view.findViewById(R.id.textView33);
 
 
         headsetPlug = new BroadcastReceiver() {
@@ -216,10 +186,10 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         };
 
 
-        loadingPopup = findViewById(R.id.loading_popup);
+        loadingPopup = view.findViewById(R.id.loading_popup);
 
-        loading = findViewById(R.id.loading);
-        loadingProgress = findViewById(R.id.loading_progress);
+        loading = view.findViewById(R.id.loading);
+        loadingProgress = view.findViewById(R.id.loading_progress);
 
         loadingProgress.setIndeterminateDrawable(doubleBounce);
 
@@ -241,7 +211,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                Blurry.with(VideoPlayer.this).from(loadedImage).into(loading);
+                Blurry.with(getContext()).from(loadedImage).into(loading);
 
             }
 
@@ -252,23 +222,23 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         });
 
 
-        mainPlayerView = findViewById(R.id.main_player);
+        mainPlayerView = view.findViewById(R.id.main_player);
 
-        progress = findViewById(R.id.progressBar4);
-        stateText = findViewById(R.id.textView3);
+        progress = view.findViewById(R.id.progressBar4);
+        stateText = view.findViewById(R.id.textView3);
 
-        container = findViewById(R.id.view2);
+        container = view.findViewById(R.id.view2);
 
-        player_camera_layout1 = findViewById(R.id.thumb_camera_layout1);
+        player_camera_layout1 = view.findViewById(R.id.thumb_camera_layout1);
 
-        thumbCamera1 = findViewById(R.id.thumb_camera1);
-        thumbCamera2 = findViewById(R.id.thumb_camera2);
+        thumbCamera1 = view.findViewById(R.id.thumb_camera1);
+        thumbCamera2 = view.findViewById(R.id.thumb_camera2);
 
 
-        thumbSurface1 = findViewById(R.id.thumb_frame1);
-        thumbSurface2 = findViewById(R.id.thumb_frame2);
+        thumbSurface1 = view.findViewById(R.id.thumb_frame1);
+        thumbSurface2 = view.findViewById(R.id.thumb_frame2);
 
-        pager = findViewById(R.id.pager);
+        pager = view.findViewById(R.id.pager);
 
 
         //SurfaceHolder holder = surfaceView.getHolder();
@@ -295,14 +265,14 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
 
-        MediaController mMediaController = new MediaController(this, false, true);
+        MediaController mMediaController = new MediaController(getContext(), false, true);
 
         //mainPlayerView.setMediaController(mMediaController);
 
 
         mainPlayerView.setBufferingIndicator(loadingPopup);
 
-        mainPlayerView.setOnCompletionListener(this);
+        mainPlayerView.setOnCompletionListener(VideoPlayerFragment.this);
         mainPlayerView.setOnErrorListener(new PLMediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(PLMediaPlayer plMediaPlayer, int i) {
@@ -509,14 +479,15 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         });*/
 
 
-        FragAdapter adapter = new FragAdapter(getSupportFragmentManager());
+        FragAdapter adapter = new FragAdapter(getChildFragmentManager());
 
         pager.setAdapter(adapter);
+
+        return view;
     }
 
-
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         mainPlayerView.stopPlayback();
 
@@ -552,11 +523,6 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         Log.d(TAG, "illegal argument: " + e.toString());
     }
 
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
 
     @Override
     public void onRecordPause() {
@@ -654,11 +620,6 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     }
 
     @Override
-    public boolean onError(PLMediaPlayer plMediaPlayer, int i) {
-        return false;
-    }
-
-    @Override
     public void onCompletion(PLMediaPlayer plMediaPlayer) {
 
     }
@@ -730,13 +691,13 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
                 thumbCountdown.setVisibility(View.VISIBLE);
 
 
-                VideoPlayer.this.connId = connId;
+                VideoPlayerFragment.this.connId = connId;
 
                 final bean b = (bean) getApplicationContext();
 
                 mPublisher = new SrsPublisher(thumbCamera1);
 
-                mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
+                mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayerFragment.this));
                 mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
                     @Override
                     public void onRtmpConnecting(String s) {
@@ -807,7 +768,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
 
                 }));
-                mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
+                mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayerFragment.this));
                 /*mPublisher.getmCameraView().open_camera();
 
 
@@ -845,9 +806,9 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 */
 
 
-                mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
-                mPublisher.setRtmpHandler(new RtmpHandler(VideoPlayer.this));
-                mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
+                mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayerFragment.this));
+                mPublisher.setRtmpHandler(new RtmpHandler(VideoPlayerFragment.this));
+                mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayerFragment.this));
 
 
                 thumbCamera1.startCamera();
@@ -913,7 +874,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         mPublisher = new SrsPublisher(thumbCamera1);
 
-        mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
+        mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayerFragment.this));
         mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
             @Override
             public void onRtmpConnecting(String s) {
@@ -1017,7 +978,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
 
         }));
-        mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
+        mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayerFragment.this));
 
         //mPublisher.getmCameraView().open_camera();
 
@@ -1093,7 +1054,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
 //Create the player
-        thumbPlayer1 = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
+        thumbPlayer1 = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, new DefaultLoadControl(
                 new DefaultAllocator(true, 1000),
                 1000,  // min buffer 0.5s
                 2000, //max buffer 3s
@@ -1109,7 +1070,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         thumbPlayer1.addListener(new Player.EventListener() {
             @Override
-            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+            public void onTimelineChanged(com.google.android.exoplayer2.Timeline timeline, Object manifest, int reason) {
 
             }
 
@@ -1212,8 +1173,9 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
+
 
         mainPlayerView.start();
 
@@ -1235,7 +1197,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
 
         mainPlayerView.pause();
@@ -1264,7 +1226,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     }
 
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         super.onBackPressed();
 
@@ -1299,7 +1261,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
             }
         });
 
-    }
+    }*/
 
     private AVOptions options2;
 

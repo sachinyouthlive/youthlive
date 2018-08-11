@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ public class MainVideoActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
     private static final int MESSAGE_ID_RECONNECTING = 0x01;
+    public ProgressBar progressBar;
     //private static final String DEFAULT_TEST_URL = "http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8";
     private static final String DEFAULT_TEST_URL = "rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/vod/maharani.mp4";
     private static final String DEFAULT_TEST_URL2 = "rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/vod/ilovu.mp4";
@@ -149,10 +152,6 @@ public class MainVideoActivity extends AppCompatActivity {
         mFragmentContainer = (FrameLayout) mRoomContainer.findViewById(R.id.fragment_container);
         mVideoView = (PLVideoTextureView) mRoomContainer.findViewById(R.id.texture_view);
         mVideoView.setDisplayAspectRatio(mDisplayAspectRatio);
-
-        stringlist[0] = DEFAULT_TEST_URL;
-        stringlist[1] = DEFAULT_TEST_URL2;
-        stringlist[2] = DEFAULT_TEST_URL3;
 
 
         mVideoPath = DEFAULT_TEST_URL;
@@ -293,12 +292,13 @@ public class MainVideoActivity extends AppCompatActivity {
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object object) {
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
             return view == object;
         }
 
+        @NonNull
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
             View view = LayoutInflater.from(container.getContext()).inflate(R.layout.view_room_item, null);
             view.setId(position);
             container.addView(view);
@@ -306,7 +306,7 @@ public class MainVideoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             container.removeView(container.findViewById(position));
         }
     }
