@@ -14,8 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_bronze" />
-                            <entry key="sourceFile" value="C:\Users\mukul\Downloads\bronze-medal.svg" />
+                            <entry key="outputName" value="ic_checked" />
+                            <entry key="sourceFile" value="C:\Users\mukul\Downloads\checked.svg" />
                           </map>
                         </option>
                       </PersistentState>

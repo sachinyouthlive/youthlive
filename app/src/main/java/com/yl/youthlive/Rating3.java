@@ -199,10 +199,10 @@ public class Rating3 extends Fragment {
                     try {
                         if (!item.getUserId().toString().equals(b.userId)) {
                             if (response.body().getMessage().equals("Following")) {
-                                holder.follow.setBackgroundResource(R.drawable.rightcheck);
+                                holder.follow.setBackgroundResource(R.drawable.ic_checked);
                             }
                             if (response.body().getMessage().equals("Not Following")) {
-                                holder.follow.setBackgroundResource(R.drawable.plussign);
+                                holder.follow.setBackgroundResource(R.drawable.ic_plus);
                             }
 
                         } else {
@@ -257,10 +257,10 @@ public class Rating3 extends Fragment {
 
                             if (!item.getUserId().equals(b.userId)) {
                                 if (response.body().getMessage().equals("Follow Success")) {
-                                    holder.follow.setBackgroundResource(R.drawable.rightcheck);
+                                    holder.follow.setBackgroundResource(R.drawable.ic_checked);
                                 }
                                 if (response.body().getMessage().equals("Unfollow Success")) {
-                                    holder.follow.setBackgroundResource(R.drawable.plussign);
+                                    holder.follow.setBackgroundResource(R.drawable.ic_plus);
                                 }
                                 ((RattingActivity) Objects.requireNonNull(getActivity())).methodd();
                                 bar.setVisibility(View.GONE);
