@@ -1,7 +1,6 @@
 package com.yl.youthlive;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.deleteVLOGPOJO.deleteVLOGBean;
-import com.yl.youthlive.pl.MainVideoActivity;
 import com.yl.youthlive.vlogListPOJO.Datum;
 import com.yl.youthlive.vlogListPOJO.vlogListBean;
 
@@ -150,17 +148,17 @@ public class MyVLOGs extends Fragment {
             loader.displayImage(item.getThumbURL(), holder.image, options);
 
 
-            holder.play.setOnClickListener(new View.OnClickListener() {
+           /* holder.play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, MainVideoActivity.class);
+                    Intent intent = new Intent(context, VerticalFragmentVodActivity.class);
                     intent.putExtra("videoId", item.getVideoId());
                     intent.putExtra("url", item.getVideoURL());
                     intent.putExtra("thumb", item.getThumbURL());
                     context.startActivity(intent);
                 }
             });
-
+           */
             holder.cross.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -234,6 +234,11 @@
             android:name=".pl.MainVideoActivity" android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+
+        <activity
+            android:name=".VerticalFragmentVodActivity"
+            android:screenOrientation="portrait"></activity>
+
     </application>
 
 

@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.castorflex.android.verticalviewpager.VerticalViewPager;
-
 public class VerticalFragment extends Fragment {
 
 

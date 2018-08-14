@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yl.youthlive.pl.MainVideoActivity;
 import com.yl.youthlive.vlogListPOJO.Datum;
 
 import java.util.ArrayList;
@@ -23,6 +22,8 @@ import java.util.List;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+//import com.yl.youthlive.pl.MainVideoActivity;
 
 
 public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyViewHolder> {
@@ -71,7 +72,7 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         // holder.setIsRecyclable(false);
         final Datum item = list.get(position);
         holder.title.setText(item.getTimelineName());
@@ -101,10 +102,14 @@ public class HotAdapter extends RecyclerView.Adapter<HotAdapter.MyViewHolder> {
             @Override
             public void onClick(View view) {
                 Activity activity = (Activity) context;
-                Intent intent = new Intent(context, MainVideoActivity.class);
+                Intent intent = new Intent(context, VerticalFragmentVodActivity.class);
+                intent.putExtra("position", String.valueOf(position));
                 intent.putExtra("videoId", item.getVideoId());
                 intent.putExtra("url", item.getVideoURL());
                 intent.putExtra("thumb", item.getThumbURL());
+                intent.putExtra("userName", item.getTimelineName());
+
+
                 context.startActivity(intent);
                 activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }

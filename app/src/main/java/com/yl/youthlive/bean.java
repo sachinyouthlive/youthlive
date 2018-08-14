@@ -7,8 +7,10 @@ import android.util.Log;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
+import com.yl.youthlive.vlogListPOJO.Datum;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -30,6 +32,7 @@ public class bean extends Application {
     boolean frag = false;
 
     private String TAG = "myApp";
+    List<Datum> vlist = new ArrayList<>();
 
     public bean() {
         mylist = new ArrayList<String>();
