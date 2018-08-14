@@ -148,11 +148,12 @@
 
 
     <include
-        android:id="@+id/end_popup"
         layout="@layout/activity_live_ended_player"
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:layout_width="match_parent"
+        android:id="@+id/end_popup"
+        android:visibility="gone"
+        />
 
 
     <ProgressBar

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class liveEndedFragment extends Fragment {
+public class liveEndedFragment extends Fragment{
 
     String image, name, id, views, time;
 
@@ -32,7 +32,10 @@ public class liveEndedFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_live_ended_player, container, false);
+        View view = inflater.inflate(R.layout.activity_live_ended_player , container , false);
+
+
+
 
 
         return view;

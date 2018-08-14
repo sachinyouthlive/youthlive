@@ -81,6 +81,8 @@ public class VerticalFragment extends Fragment {
                 Bundle b = new Bundle();
                 b.putString("uri", ll.get(position).getLiveId());
                 b.putString("pic", b1.BASE_URL + ll.get(position).getUserImage());
+                b.putString("tid", ll.get(position).getUserId());
+                b.putString("tname", ll.get(position).getTitle());
                 frag.setArguments(b);
                 return frag;
             }

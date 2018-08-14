@@ -60,12 +60,21 @@
 
         </LinearLayout>
 
-        <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+        <include
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            layout="@layout/bottom_menu"
+            android:layout_marginBottom="-16dp"
+            />
+
+        <!--<com.aurelhubert.ahbottomnavigation.AHBottomNavigation
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_alignParentBottom="true"
-            />
+            />-->
 
         <LinearLayout
             android:layout_width="match_parent"

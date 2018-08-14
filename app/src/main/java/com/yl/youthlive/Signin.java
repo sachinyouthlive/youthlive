@@ -144,7 +144,7 @@ public class Signin extends AppCompatActivity {
 
                                             String keey = fcmPref.getString("token", "");
 
-                                            Call<socialBean> call = cr.socialSignIn(id, email, keey);
+                                            Call<socialBean> call = cr.socialSignIn(id, email , keey);
 
                                             call.enqueue(new Callback<socialBean>() {
                                                 @Override
@@ -166,6 +166,7 @@ public class Signin extends AppCompatActivity {
                                                         edit.putString("user", email);
                                                         edit.putString("pass", id);
                                                         edit.putString("userType" , response.body().getData().getType());
+                                                        edit.putString("yid" , response.body().getData().getYouthLiveId());
                                                         edit.apply();
 
                                                         Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -412,7 +413,7 @@ public class Signin extends AppCompatActivity {
                 String keey = fcmPref.getString("token", "");
 
 
-                Call<login2Bean> call = cr.signIn(phone, password, keey);
+                Call<login2Bean> call = cr.signIn(phone, password , keey);
 
 
                 call.enqueue(new Callback<login2Bean>() {
@@ -436,6 +437,7 @@ public class Signin extends AppCompatActivity {
                             edit.putString("user", phone);
                             edit.putString("pass", password);
                             edit.putString("userType" , response.body().getData().getType());
+                            edit.putString("yid" , response.body().getData().getYouthLiveId());
                             edit.commit();
 
                             Intent Inbt = new Intent(Signin.this, HomeActivity.class);
@@ -722,7 +724,7 @@ public class Signin extends AppCompatActivity {
         String keey = fcmPref.getString("token", "");
 
 
-        Call<socialBean> call = cr.socialSignIn(id, email, keey);
+        Call<socialBean> call = cr.socialSignIn(id, email , keey);
 
         call.enqueue(new Callback<socialBean>() {
             @Override
@@ -744,6 +746,7 @@ public class Signin extends AppCompatActivity {
                     edit.putString("user", email);
                     edit.putString("pass", id);
                     edit.putString("userType" , response.body().getData().getType());
+                    edit.putString("yid" , response.body().getData().getYouthLiveId());
                     edit.commit();
 
                     Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();

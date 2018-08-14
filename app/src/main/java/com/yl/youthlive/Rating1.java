@@ -135,10 +135,26 @@ public class Rating1 extends Fragment {
             holder.beans.setText("Coins - " + item.getBeans());
             holder.change.setText(String.valueOf(position + 1));
             holder.rankno.setText(String.valueOf(position + 1));
+
+
+            if (position == 0)
+            {
+                holder.medalimg.setImageDrawable(context.getDrawable(R.drawable.ic_gold));
+            }
+            else if (position == 1)
+            {
+                holder.medalimg.setImageDrawable(context.getDrawable(R.drawable.ic_silver));
+            }
+            else if (position == 2)
+            {
+                holder.medalimg.setImageDrawable(context.getDrawable(R.drawable.ic_bronze));
+            }
+
+
             if (position < 3) {
                 holder.rankno.setVisibility(View.GONE);
                 holder.medalimg.setVisibility(View.VISIBLE);
-                holder.change.setVisibility(View.VISIBLE);
+                holder.change.setVisibility(View.GONE);
             } else {
                 holder.rankno.setVisibility(View.VISIBLE);
                 holder.medalimg.setVisibility(View.GONE);
@@ -178,10 +194,10 @@ public class Rating1 extends Fragment {
 
                         if (!item.getUserId().equals(b.userId)) {
                             if (response.body().getMessage().equals("Following")) {
-                                holder.follow.setBackgroundResource(R.drawable.rightcheck);
+                                holder.follow.setBackgroundResource(R.drawable.ic_checked);
                             }
                             if (response.body().getMessage().equals("Not Following")) {
-                                holder.follow.setBackgroundResource(R.drawable.plussign);
+                                holder.follow.setBackgroundResource(R.drawable.ic_plus);
                             }
                         } else {
                             holder.follow.setVisibility(View.GONE);
@@ -234,10 +250,10 @@ public class Rating1 extends Fragment {
                         public void onResponse(Call<followBean> call, Response<followBean> response) {
                             if (!item.getUserId().equals(b.userId)) {
                                 if (response.body().getMessage().equals("Follow Success")) {
-                                    holder.follow.setBackgroundResource(R.drawable.rightcheck);
+                                    holder.follow.setBackgroundResource(R.drawable.ic_checked);
                                 }
                                 if (response.body().getMessage().equals("Unfollow Success")) {
-                                    holder.follow.setBackgroundResource(R.drawable.plussign);
+                                    holder.follow.setBackgroundResource(R.drawable.ic_plus);
                                 }
                                 ((RattingActivity) Objects.requireNonNull(getActivity())).methodd();
                                 bar.setVisibility(View.GONE);

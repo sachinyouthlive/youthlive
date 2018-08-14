@@ -30,7 +30,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.e(TAG, "Notification Body: " + remoteMessage.getNotification().getBody());
-            handleNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+            handleNotification(remoteMessage.getNotification().getTitle() , remoteMessage.getNotification().getBody());
         }
 
         // Check if message contains a data payload.
@@ -181,7 +181,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
 
-    private void handleNotification(String title, String message) {
+    private void handleNotification(String title , String message) {
 
         Log.d("notificationData", message);
 

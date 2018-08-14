@@ -2,6 +2,7 @@ package com.yl.youthlive;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -47,7 +48,8 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
     HomeActivity homeActivity;
 
-    public void setHomeActivity(HomeActivity homeActivity) {
+    public void setHomeActivity(HomeActivity homeActivity)
+    {
         this.homeActivity = homeActivity;
     }
 
@@ -112,7 +114,17 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
             @Override
             public void onResponse(Call<List<liveBean>> call, Response<List<liveBean>> response) {
 
-                adapter2.setGridData(response.body());
+                List<liveBean> ll = new ArrayList<>();
+
+                for (int i = 0 ; i < response.body().size() ; i++)
+                {
+                    if (response.body().get(i).getType().equals("live"))
+                    {
+                        ll.add(response.body().get(i));
+                    }
+                }
+
+                adapter2.setGridData(ll);
 
                 progress.setVisibility(View.GONE);
 
@@ -314,7 +326,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
                         FragmentTransaction ft = ((HomeActivity)context).getSupportFragmentManager().beginTransaction();
                         VerticalFragment frag1 = new VerticalFragment();
-                    frag1.setHomeActivity(homeActivity);
+                        frag1.setHomeActivity(homeActivity);
                         frag1.setList(list , position);
                         ft.replace(R.id.replace2, frag1);
                         ft.addToBackStack(null);

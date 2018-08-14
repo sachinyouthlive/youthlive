@@ -65,7 +65,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             holder.myTextView.setText(dayNumber);
         }
 
-        holder.myImageView.setImageResource(R.drawable.coin);
+        holder.myImageView.setImageResource(R.drawable.ic_dollar);
     }
 
     // total number of cells

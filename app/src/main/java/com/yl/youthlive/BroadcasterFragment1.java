@@ -2532,8 +2532,8 @@ public class BroadcasterFragment1 extends Fragment {
                     @Override
                     public void onFailure(Call<goLiveBean> call, Throwable t) {
                         progress.setVisibility(View.GONE);
-                        Toast.makeText(getContext(), t.toString(), Toast.LENGTH_SHORT).show();
-                        Log.d("errorr", t.toString());
+                        Toast.makeText(getContext() , t.toString() , Toast.LENGTH_SHORT).show();
+                        Log.d("errorr" , t.toString());
                         //Toast.makeText(getContext() , "Error in going Live" , Toast.LENGTH_SHORT).show();
                         //getActivity().finish();
                     }
