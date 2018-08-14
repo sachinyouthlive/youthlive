@@ -56,14 +56,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#000000"
-                android:textStyle="bold"
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:id="@+id/badge"
                 android:padding="10dp"
                 android:visibility="visible"
-                android:textSize="18sp"
-                android:background="@drawable/ic_untitled_1"
+                android:textSize="14sp"
+                android:elevation="4dp"
+                android:background="@drawable/grey_round"
                 />
 
 

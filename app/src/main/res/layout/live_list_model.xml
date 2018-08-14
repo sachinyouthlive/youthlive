@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    app:cardCornerRadius="3dp"
-    app:cardUseCompatPadding="true">
+    app:cardCornerRadius="2dp"
+    app:cardElevation="3dp"
+    app:contentPadding="1dp">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="220dp"
         android:id="@+id/relative"
         android:background="#D3D3D3"
         android:layout_alignParentTop="true"
@@ -19,7 +20,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="220dp"
             android:scaleType="centerCrop"
             android:id="@+id/image"
             android:fitsSystemWindows="false"
@@ -27,7 +28,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="220dp"
             android:background="@drawable/gradient" />
 
 

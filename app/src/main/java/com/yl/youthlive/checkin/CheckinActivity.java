@@ -83,7 +83,7 @@ public class CheckinActivity extends AppCompatActivity {
         else
         {
             badge.setVisibility(View.VISIBLE);
-            badge.setText(pref.getString("yid" , ""));
+            badge.setText("EMPLOYEE ID : " + pref.getString("yid" , ""));
         }
 
         Calendar c1 = Calendar.getInstance();
