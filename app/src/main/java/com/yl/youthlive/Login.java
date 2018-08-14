@@ -304,6 +304,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                 md.update(signature.toByteArray());
                 String hashKey = new String(Base64.encode(md.digest(), 0));
                 Log.i("asdasd", "printHashKey() Hash Key: " + hashKey);
+
             }
         } catch (NoSuchAlgorithmException e) {
             Log.e("asdasd", "printHashKey()", e);
