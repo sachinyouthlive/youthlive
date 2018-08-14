@@ -37,6 +37,12 @@ public class VerticalFragment extends Fragment {
         this.pos = pos;
     }
 
+    HomeActivity homeActivity;
+
+    public void setHomeActivity(HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,9 +79,12 @@ public class VerticalFragment extends Fragment {
             {
 
                 VideoPlayerFragment frag = new VideoPlayerFragment();
+                frag.setHomeActivity(homeActivity);
                 Bundle b = new Bundle();
                 b.putString("uri", ll.get(position).getLiveId());
                 b.putString("pic", b1.BASE_URL + ll.get(position).getUserImage());
+                b.putString("tid", ll.get(position).getUserId());
+                b.putString("tname", ll.get(position).getTitle());
                 frag.setArguments(b);
                 return frag;
             }

@@ -153,7 +153,12 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                            Call<socialBean> call = cr.socialSignIn(id, email);
+                                            SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
+
+                                            String keey = fcmPref.getString("token", "");
+
+
+                                            Call<socialBean> call = cr.socialSignIn(id, email , keey);
 
                                             call.enqueue(new Callback<socialBean>() {
                                                 @Override
@@ -175,6 +180,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                                                         edit.putString("user", email);
                                                         edit.putString("pass", id);
                                                         edit.putString("userType" , response.body().getData().getType());
+                                                        edit.putString("yid" , response.body().getData().getYouthLiveId());
                                                         edit.apply();
 
                                                         //    Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -547,7 +553,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            @SuppressLint("RestrictedApi") Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
 
@@ -572,8 +578,12 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
 
             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
+            SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
-            Call<socialBean> call = cr.socialSignIn(account.getId(), account.getEmail());
+            String keey = fcmPref.getString("token", "");
+
+
+            Call<socialBean> call = cr.socialSignIn(account.getId(), account.getEmail() , keey);
 
             call.enqueue(new Callback<socialBean>() {
                 @Override
@@ -596,6 +606,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                         edit.putString("user", account.getEmail());
                         edit.putString("pass", account.getId());
                         edit.putString("userType" , response.body().getData().getType());
+                        edit.putString("yid" , response.body().getData().getYouthLiveId());
                         edit.commit();
 
                         //   Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();

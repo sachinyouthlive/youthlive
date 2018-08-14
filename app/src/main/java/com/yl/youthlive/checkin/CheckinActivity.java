@@ -1,5 +1,7 @@
 package com.yl.youthlive.checkin;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.yl.youthlive.Content;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
 import com.yl.youthlive.TotalbroadcastPOJO;
@@ -37,10 +40,17 @@ public class CheckinActivity extends AppCompatActivity {
     TextView total_broadcast, monthheader;
     ProgressBar progressBar;
 
+    TextView badge;
+
+    SharedPreferences pref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkinmain);
+
+        pref = getSharedPreferences("pref" , Context.MODE_PRIVATE);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,7 +68,23 @@ public class CheckinActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress);
         monthheader = findViewById(R.id.header);
         total_broadcast = findViewById(R.id.total_broadcast);
+
+
+        badge = findViewById(R.id.badge);
         //using calender to find number of days in month and current date
+
+
+        String uType = pref.getString("userType" , "");
+
+        if (uType.equals("user"))
+        {
+            badge.setVisibility(View.GONE);
+        }
+        else
+        {
+            badge.setVisibility(View.VISIBLE);
+            badge.setText(pref.getString("yid" , ""));
+        }
 
         Calendar c1 = Calendar.getInstance();
         iMonth = c1.get(Calendar.MONTH); // 1 (months begin with 0)

@@ -221,7 +221,7 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_youtube_player);
+        setContentView(R.layout.yt_pl_layout);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         channelUrl = getIntent().getStringExtra("uri");
@@ -2342,7 +2342,7 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
         Glide.with(YoutubePlayer.this).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
         giftText.setText(names[Integer.parseInt(giftId) - 1]);
 
-        Toast.makeText(YoutubePlayer.this , profile , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(YoutubePlayer.this , profile , Toast.LENGTH_SHORT).show();
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
         ImageLoader loader = ImageLoader.getInstance();

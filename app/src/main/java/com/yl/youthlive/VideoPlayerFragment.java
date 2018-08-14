@@ -3,6 +3,7 @@ package com.yl.youthlive;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,15 +15,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.faucamp.simplertmp.RtmpHandler;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
@@ -45,6 +49,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -53,6 +58,8 @@ import com.pili.pldroid.player.AVOptions;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoTextureView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.endLivePOJO.Data;
+import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.pl.widget.MediaController;
 
 import net.ossrs.yasea.SrsCameraView;
@@ -63,6 +70,7 @@ import net.ossrs.yasea.SrsRecordHandler;
 import java.io.IOException;
 import java.net.SocketException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,9 +81,10 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCompletionListener, SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener, RtmpHandler.RtmpListener {
+public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCompletionListener, SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener, RtmpHandler.RtmpListener{
 
     String liveId;
+    String tid , tname;
 
 
     ProgressBar progress;
@@ -129,8 +138,25 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
     private int mDisplayAspectRatio = PLVideoTextureView.ASPECT_RATIO_PAVED_PARENT;
 
+    ImageView endImage;
+    TextView endTime , endUsers;
+    CircleImageView endProfile;
+    TextView endName;
+    Button endFollow;
+    Button endBack;
+    ProgressBar endProgress;
 
 
+
+    View endPopup;
+
+    BroadcastReceiver endReceiver;
+
+    HomeActivity homeActivity;
+
+    public void setHomeActivity(HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
+    }
 
     @Nullable
     @Override
@@ -139,10 +165,25 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
         liveId = getArguments().getString("uri");
         loadingpic = getArguments().getString("pic");
+        tid = getArguments().getString("tid");
+        tname = getArguments().getString("tname");
+
+        homeActivity.fragTag = getTag();
 
         earphones = view.findViewById(R.id.earphones);
 
         thumbProgress1 = view.findViewById(R.id.thumb_progress1);
+
+        endImage = view.findViewById(R.id.imageView8);
+        endTime = view.findViewById(R.id.textView19);
+        endUsers = view.findViewById(R.id.textView20);
+        endProfile = view.findViewById(R.id.view7);
+        endName = view.findViewById(R.id.textView21);
+        endFollow = view.findViewById(R.id.button5);
+        endBack = view.findViewById(R.id.button6);
+        endProgress = view.findViewById(R.id.progressBar7);
+        endPopup = view.findViewById(R.id.end_popup);
+
 
         DoubleBounce doubleBounce = new DoubleBounce();
         thumbProgress1.setIndeterminateDrawable(doubleBounce);
@@ -272,12 +313,23 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
         mainPlayerView.setBufferingIndicator(loadingPopup);
 
-        mainPlayerView.setOnCompletionListener(VideoPlayerFragment.this);
+        mainPlayerView.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(PLMediaPlayer plMediaPlayer) {
+                Log.d("completecode", "completed");
+                onEror(loadingpic , tid , tname);
+            }
+        });
         mainPlayerView.setOnErrorListener(new PLMediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(PLMediaPlayer plMediaPlayer, int i) {
 
                 Log.d("errorcode", String.valueOf(i));
+
+                if (i == -1)
+                {
+                    onEror(loadingpic , tid , tname);
+                }
 
                 return true;
             }
@@ -289,6 +341,12 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
                 Log.d("infocode", String.valueOf(i));
                 return true;
+            }
+        });
+        mainPlayerView.setOnSeekCompleteListener(new PLMediaPlayer.OnSeekCompleteListener() {
+            @Override
+            public void onSeekComplete(PLMediaPlayer plMediaPlayer) {
+                Log.d("seekcode", "seek completed");
             }
         });
         mainPlayerView.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
@@ -479,6 +537,49 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
         });*/
 
 
+        endReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("eenndd")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+                    try {
+
+                        String image = intent.getStringExtra("image");
+                        String tid = intent.getStringExtra("tid");
+                        String tname = intent.getStringExtra("tname");
+                        String ltime = intent.getStringExtra("ltime");
+                        String views = intent.getStringExtra("views");
+
+                        onEndListener(image , tid , tname , ltime , views);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(endReceiver,
+                new IntentFilter("eenndd"));
+
+
         FragAdapter adapter = new FragAdapter(getChildFragmentManager());
 
         pager.setAdapter(adapter);
@@ -504,6 +605,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
             e.printStackTrace();
         }
 
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(endReceiver);
 
     }
 
@@ -624,6 +726,240 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
     }
 
+
+    public void onEror(String image, final String timelineId, String timelineName) {
+
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
+
+        ImageLoader loader = ImageLoader.getInstance();
+
+        loader.loadImage(image, options, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                Blurry.with(getContext()).from(loadedImage).into(endImage);
+                endProfile.setImageBitmap(loadedImage);
+
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+
+        //loader.displayImage(image , background , options);
+        //loader.displayImage(image , profile , options);
+
+        endName.setText(timelineName);
+        endUsers.setVisibility(View.GONE);
+        endTime.setVisibility(View.GONE);
+
+
+
+        endFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                progress.setVisibility(View.VISIBLE);
+
+                final bean b = (bean) getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                retrofit2.Call<followBean> call = cr.follow(b.userId, timelineId);
+
+                call.enqueue(new retrofit2.Callback<followBean>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+
+                        if (response.body().getStatus().equals("1")) {
+                            Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            endFollow.setVisibility(View.GONE);
+                        }
+
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+                });
+
+
+            }
+        });
+
+
+        endBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                homeActivity.removeFrag();
+
+
+            }
+        });
+
+
+        endPopup.setVisibility(View.VISIBLE);
+
+
+    }
+
+
+    public void onEndListener(String image, final String timelineId, String timelineName, String liveTime, String viewers) {
+
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
+
+        ImageLoader loader = ImageLoader.getInstance();
+
+        loader.loadImage(image, options, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                Blurry.with(getContext()).from(loadedImage).into(endImage);
+                endProfile.setImageBitmap(loadedImage);
+
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+
+        //loader.displayImage(image , background , options);
+        //loader.displayImage(image , profile , options);
+
+        endName.setText(timelineName);
+        endUsers.setText(viewers);
+        endTime.setText(getDurationString(Integer.parseInt(liveTime)));
+
+
+
+        endBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                homeActivity.removeFrag();
+
+
+            }
+        });
+
+
+
+        endFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                progress.setVisibility(View.VISIBLE);
+
+                final bean b = (bean) getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                retrofit2.Call<followBean> call = cr.follow(b.userId, timelineId);
+
+                call.enqueue(new retrofit2.Callback<followBean>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+
+                        if (response.body().getStatus().equals("1")) {
+                            Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            endFollow.setVisibility(View.GONE);
+                        }
+
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+                });
+
+
+            }
+        });
+
+
+
+        endPopup.setVisibility(View.VISIBLE);
+
+
+    }
+
+    private String getDurationString(int seconds) {
+
+        int hours = seconds / 3600;
+        int minutes = (seconds % 3600) / 60;
+        seconds = seconds % 60;
+
+        return twoDigitString(hours) + " : " + twoDigitString(minutes) + " : " + twoDigitString(seconds);
+    }
+
+    private String twoDigitString(int number) {
+
+        if (number == 0) {
+            return "00";
+        }
+
+        if (number / 10 == 0) {
+            return "0" + number;
+        }
+
+        return String.valueOf(number);
+    }
+
 /*
     @Override
     public void onRtmpAuthenticationg(String s) {
@@ -642,6 +978,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
         public Fragment getItem(int position) {
             if (position == 0) {
                 PlayerFragment1 frag = new PlayerFragment1();
+                frag.setHomeActivity(homeActivity);
                 Bundle b = new Bundle();
                 b.putString("liveId", liveId);
                 frag.setArguments(b);

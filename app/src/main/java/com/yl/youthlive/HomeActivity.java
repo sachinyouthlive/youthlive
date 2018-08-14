@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,6 +37,7 @@ import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,7 +81,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener , PlayerFragment1.endListener {
 
 
     public final int MEDIA_TYPE_VIDEO = 2;
@@ -87,7 +89,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public final int GALLEY_REQUEST_CODE_CUSTOMER = 10;
     final int REQUEST_VIDEO_CAPTURE = 1;
     private final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
-    AHBottomNavigation bottom;
+    //AHBottomNavigation bottom;
     DrawerLayout drawer;
     Toolbar toolbar;
     TextView name, logout;
@@ -116,6 +118,14 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     SharedPreferences offlinePref;
     SharedPreferences.Editor offlineEdit;
+
+    public String fragTag;
+
+
+
+    ImageView live , vlog , golive , channel , profile;
+
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -153,13 +163,19 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
 
+        live = findViewById(R.id.imageView);
+        vlog = findViewById(R.id.imageView2);
+        golive = findViewById(R.id.imageView19);
+        channel = findViewById(R.id.imageView20);
+        profile = findViewById(R.id.imageView21);
+
 
 
 
 
         String offline = offlinePref.getString("offline" , "");
 
-        String liveId = offlinePref.getString("liveId" , "");
+        final String liveId = offlinePref.getString("liveId" , "");
 
         if (offline.length() > 0 && liveId.length() > 0)
         {
@@ -223,26 +239,151 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
 
+        live.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                toolbar.setTitle("Live Users");
 
 
 
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-        bottom = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
+                while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStackImmediate();
+                }
+
+                Live frag1 = new Live();
+                frag1.setHomeActivity(HomeActivity.this);
+                ft.replace(R.id.replace, frag1);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                ft.commit();
+
+                live.setImageTintList(ColorStateList.valueOf(Color.parseColor("#c62828")));
+                vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+
+
+            }
+        });
+
+        vlog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toolbar.setTitle("Vlog");
+
+
+                FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
+
+                while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStackImmediate();
+                }
+
+                Vlog frag3 = new Vlog();
+                ft2.replace(R.id.replace, frag3);
+                ft2.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                ft2.commit();
+                live.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#c62828")));
+                channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+
+            }
+        });
+
+        golive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toolbar.setTitle("Go Live");
+
+
+                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+
+                while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStackImmediate();
+                }
+
+                GoLiveFrag frag2 = new GoLiveFrag();
+                ft1.replace(R.id.replace, frag2);
+                ft1.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                ft1.commit();
+                live.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+
+            }
+        });
+
+
+        channel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toolbar.setTitle("Channel");
+
+
+                FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
+
+                while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStackImmediate();
+                }
+
+                Channel frag4 = new Channel();
+                ft3.replace(R.id.replace, frag4);
+                ft3.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                ft3.commit();
+                live.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#c62828")));
+                profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+
+            }
+        });
+
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toolbar.setTitle("Profile");
+
+                FragmentTransaction ft5 = getSupportFragmentManager().beginTransaction();
+
+                while (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStackImmediate();
+                }
+
+                Profile frag5 = new Profile();
+                ft5.replace(R.id.replace, frag5);
+                ft5.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                ft5.commit();
+
+
+                live.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+                profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#c62828")));
+
+
+            }
+        });
+
+        /*bottom = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
 
         AHBottomNavigationItem item1 =
-                new AHBottomNavigationItem("Live Users", R.drawable.live);
+                new AHBottomNavigationItem("" , R.drawable.live);
 
         AHBottomNavigationItem item2 =
-                new AHBottomNavigationItem("VLOG", R.drawable.icon);
+                new AHBottomNavigationItem("", R.drawable.icon);
 
         AHBottomNavigationItem item3 =
-                new AHBottomNavigationItem("Go Live", R.drawable.eye);
+                new AHBottomNavigationItem("", R.drawable.eye);
 
         AHBottomNavigationItem item4 =
-                new AHBottomNavigationItem("Timeline", R.drawable.timeline);
+                new AHBottomNavigationItem("", R.drawable.timeline);
 
         AHBottomNavigationItem item5 =
-                new AHBottomNavigationItem("Profile", R.drawable.user2);
+                new AHBottomNavigationItem("", R.drawable.user2);
 
 
         bottom.addItem(item1);
@@ -251,11 +392,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         bottom.addItem(item4);
         bottom.addItem(item5);
 
-        bottom.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
+        bottom.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
 
         bottom.setDefaultBackgroundColor(Color.parseColor("#ccffffff"));
         bottom.setAccentColor(Color.parseColor("#E91E63"));
-        bottom.setInactiveColor(Color.parseColor("#333333"));
+        bottom.setInactiveColor(Color.parseColor("#333333"));*/
 
 
         feedBack.setOnClickListener(new View.OnClickListener() {
@@ -338,7 +479,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         });
 
 
-        bottom.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
+        /*bottom.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public boolean onTabSelected(int position, boolean wasSelected) {
 
@@ -354,6 +495,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                         }
 
                         Live frag1 = new Live();
+                        frag1.setHomeActivity(HomeActivity.this);
                         ft.replace(R.id.replace, frag1);
                         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                         ft.commit();
@@ -429,7 +571,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 return false;
             }
-        });
+        });*/
 
 
         buildGoogleApiClient();
@@ -465,9 +607,15 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Live frag1 = new Live();
+        frag1.setHomeActivity(HomeActivity.this);
         ft.replace(R.id.replace, frag1);
         //ft.addToBackStack(null);
         ft.commit();
+
+        live.setImageTintList(ColorStateList.valueOf(Color.RED));
+        vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+        channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
+        profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
 
 
     }
@@ -903,6 +1051,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     }
 
+    public void removeFrag()
+    {
+        getSupportFragmentManager().popBackStack();
+    }
 
     @Override
     public void onBackPressed() {
@@ -910,7 +1062,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         bean b = (bean)getApplicationContext();
 
         if(getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
+            removeFrag();
         }
         else
         {
@@ -940,6 +1092,20 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
 
+
+    }
+
+
+    @Override
+    public void onEndListener(String image, String timelineId, String timelineName, String liveTime, String viewers) {
+
+/*
+
+        VideoPlayerFragment f = (VideoPlayerFragment) getSupportFragmentManager().findFragmentByTag(fragTag);
+
+        f.onEndListener(image , timelineId , timelineName , liveTime , viewers);
+
+*/
 
     }
 

@@ -1,5 +1,6 @@
 package com.yl.youthlive;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -61,6 +62,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.Response.AddPostImageResponse;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 import com.yl.youthlive.endLivePOJO.Data;
 import com.yl.youthlive.followPOJO.followBean;
@@ -194,6 +196,13 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     boolean isConnection = false;
 
     TextView ylId;
+
+    HomeActivity homeActivity;
+
+    public void setHomeActivity(HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
+    }
+
 
     @Nullable
     @Override
@@ -371,6 +380,9 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     public void onResponse(Call<String> call, Response<String> response) {
 
                         progress.setVisibility(View.GONE);
+
+
+                        homeActivity.removeFrag();
 
                         //player.finish();
 
@@ -741,6 +753,19 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     try {
 
+                        Intent registrationComplete = new Intent("eenndd");
+                        registrationComplete.putExtra("image", image);
+                        registrationComplete.putExtra("tid", timelineId);
+                        registrationComplete.putExtra("tname", timelineName.getText().toString());
+                        registrationComplete.putExtra("ltime", item.getLiveTime());
+                        registrationComplete.putExtra("views", item.getViewers());
+
+                        LocalBroadcastManager.getInstance(player).sendBroadcast(registrationComplete);
+
+                        //mCallback.onEndListener(image , timelineId , timelineName.getText().toString() , item.getLiveTime() , item.getViewers());
+
+
+/*
                         Intent intent1 = new Intent(getContext(), LiveEndedPlayer.class);
                         intent1.putExtra("image", image);
                         intent1.putExtra("id", timelineId);
@@ -749,6 +774,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         intent1.putExtra("views", item.getViewers());
                         startActivity(intent1);
                         getActivity().finish();
+*/
 
 
                     } catch (Exception e) {
@@ -2774,4 +2800,30 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 
     }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof endListener) {
+            mCallback = (endListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnGreenFragmentListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
+
+
+    endListener mCallback;
+
+    public interface endListener{
+        public void onEndListener(String image , String timelineId , String timelineName , String liveTime , String viewers);
+    }
+
 }

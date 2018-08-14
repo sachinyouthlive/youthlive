@@ -146,6 +146,16 @@
         android:visibility="visible"
         />
 
+
+    <include
+        layout="@layout/activity_live_ended_player"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/end_popup"
+        android:visibility="gone"
+        />
+
+
     <ProgressBar
         android:id="@+id/progressBar4"
         android:layout_width="wrap_content"

@@ -46,6 +46,13 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
     List<wowzaAPIBean> list;
     List<liveBean> list2;
 
+    HomeActivity homeActivity;
+
+    public void setHomeActivity(HomeActivity homeActivity)
+    {
+        this.homeActivity = homeActivity;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -107,7 +114,17 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
             @Override
             public void onResponse(Call<List<liveBean>> call, Response<List<liveBean>> response) {
 
-                adapter2.setGridData(response.body());
+                List<liveBean> ll = new ArrayList<>();
+
+                for (int i = 0 ; i < response.body().size() ; i++)
+                {
+                    if (response.body().get(i).getType().equals("live"))
+                    {
+                        ll.add(response.body().get(i));
+                    }
+                }
+
+                adapter2.setGridData(ll);
 
                 progress.setVisibility(View.GONE);
 
@@ -309,6 +326,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
                         FragmentTransaction ft = ((HomeActivity)context).getSupportFragmentManager().beginTransaction();
                         VerticalFragment frag1 = new VerticalFragment();
+                        frag1.setHomeActivity(homeActivity);
                         frag1.setList(list , position);
                         ft.replace(R.id.replace2, frag1);
                         ft.addToBackStack(null);

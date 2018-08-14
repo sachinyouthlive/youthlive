@@ -105,9 +105,9 @@
                         android:id="@+id/personal_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
                         android:background="@drawable/ripple_effect_trasprntcornrless"
-                        android:drawableStart="@drawable/businessman"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/ic_businessman"
                         android:gravity="center_vertical"
                         android:padding="14dp"
                         android:text="Personal Info" />
@@ -123,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
-                        android:drawableStart="@drawable/hand"
+                        android:drawableStart="@drawable/ic_followers"
                         android:gravity="center_vertical"
                         android:padding="14dp"
                         android:text="My Followings" />
@@ -138,9 +138,9 @@
                         android:id="@+id/vlogActivity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
                         android:background="@drawable/ripple_effect_trasprntcornrless"
-                        android:drawableStart="@drawable/youtube"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/ic_tv"
                         android:gravity="center_vertical"
                         android:padding="14dp"
                         android:text="My Vlog" />
@@ -155,9 +155,9 @@
                         android:id="@+id/messagechatee"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
                         android:background="@drawable/ripple_effect_trasprntcornrless"
-                        android:drawableStart="@drawable/mess"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/ic_marketing"
                         android:gravity="center_vertical"
                         android:padding="14dp"
                         android:text="My Messages" />
@@ -172,9 +172,9 @@
                         android:id="@+id/wallet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
                         android:background="@drawable/ripple_effect_trasprntcornrless"
-                        android:drawableStart="@drawable/walle"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/ic_money"
                         android:gravity="center_vertical"
                         android:padding="14dp"
                         android:text="Wallet" />
@@ -189,9 +189,9 @@
                         android:id="@+id/mycheckin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
                         android:background="@drawable/ripple_effect_trasprntcornrless"
-                        android:drawableStart="@drawable/checkin"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/ic_calendar"
                         android:gravity="center_vertical"
                         android:padding="14dp"
                         android:text="My CheckIn" />
@@ -205,9 +205,9 @@
                         android:id="@+id/ratting_act"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
                         android:background="@drawable/ripple_effect_trasprntcornrless"
-                        android:drawableStart="@drawable/chevron"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/ic_promotion"
                         android:gravity="center_vertical"
                         android:padding="14dp"
                         android:text="Ranking" />
@@ -221,11 +221,11 @@
                         android:id="@+id/beggage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
                         android:drawableStart="@drawable/lugg"
                         android:gravity="center_vertical"
                         android:padding="14dp"
-                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:text="Baggage"
                         android:visibility="gone" />
 
@@ -239,8 +239,8 @@
                         android:id="@+id/check"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
                         android:background="@drawable/ripple_effect_trasprntcornrless"
+                        android:drawablePadding="10dp"
                         android:drawableStart="@drawable/success"
                         android:gravity="center_vertical"
                         android:padding="14dp"
@@ -257,11 +257,11 @@
                         android:id="@+id/blocked"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
                         android:drawableStart="@drawable/blocking"
                         android:gravity="center_vertical"
                         android:padding="14dp"
-                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:text="Blocked List"
                         android:visibility="gone" />
 
@@ -275,11 +275,11 @@
                         android:id="@+id/about"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
-                        android:drawableStart="@drawable/info"
+                        android:drawableStart="@drawable/ic_info"
                         android:gravity="center_vertical"
                         android:padding="14dp"
-                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:text="About Us" />
 
 
@@ -292,11 +292,11 @@
                         android:id="@+id/policy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
-                        android:drawableStart="@drawable/login"
+                        android:drawableStart="@drawable/ic_keyhole"
                         android:gravity="center_vertical"
                         android:padding="14dp"
-                        android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:text="Privacy Policy" />
 
 
