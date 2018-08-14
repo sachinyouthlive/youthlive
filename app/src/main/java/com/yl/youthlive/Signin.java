@@ -140,8 +140,11 @@ public class Signin extends AppCompatActivity {
 
                                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
+                                            SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
-                                            Call<socialBean> call = cr.socialSignIn(id, email);
+                                            String keey = fcmPref.getString("token", "");
+
+                                            Call<socialBean> call = cr.socialSignIn(id, email, keey);
 
                                             call.enqueue(new Callback<socialBean>() {
                                                 @Override
@@ -404,7 +407,13 @@ public class Signin extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<login2Bean> call = cr.signIn(phone, password);
+                SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
+
+                String keey = fcmPref.getString("token", "");
+
+
+                Call<login2Bean> call = cr.signIn(phone, password, keey);
+
 
                 call.enqueue(new Callback<login2Bean>() {
                     @Override
@@ -708,8 +717,12 @@ public class Signin extends AppCompatActivity {
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
+        SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
-        Call<socialBean> call = cr.socialSignIn(id, email);
+        String keey = fcmPref.getString("token", "");
+
+
+        Call<socialBean> call = cr.socialSignIn(id, email, keey);
 
         call.enqueue(new Callback<socialBean>() {
             @Override

@@ -106,8 +106,12 @@ public class SplashActivity extends AppCompatActivity {
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
+        SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
-        Call<login2Bean> call = cr.signIn(phone, pass);
+        String keey = fcmPref.getString("token", "");
+
+
+        Call<login2Bean> call = cr.signIn(phone, pass, keey);
 
         call.enqueue(new Callback<login2Bean>() {
             @Override
@@ -176,8 +180,11 @@ public class SplashActivity extends AppCompatActivity {
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
+        SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
-        Call<socialBean> call = cr.socialSignIn(pid, email);
+        String keey = fcmPref.getString("token", "");
+
+        Call<socialBean> call = cr.socialSignIn(pid, email, keey);
 
         call.enqueue(new Callback<socialBean>() {
             @Override

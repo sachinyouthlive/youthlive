@@ -33,7 +33,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -79,7 +78,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PlayerFragment1.endListener {
 
 
     public final int MEDIA_TYPE_VIDEO = 2;
@@ -116,6 +115,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     SharedPreferences offlinePref;
     SharedPreferences.Editor offlineEdit;
+
+    public String fragTag;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -354,6 +355,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                         }
 
                         Live frag1 = new Live();
+                        frag1.setHomeActivity(HomeActivity.this);
                         ft.replace(R.id.replace, frag1);
                         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                         ft.commit();
@@ -465,6 +467,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Live frag1 = new Live();
+        frag1.setHomeActivity(HomeActivity.this);
         ft.replace(R.id.replace, frag1);
         //ft.addToBackStack(null);
         ft.commit();
@@ -939,6 +942,18 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
 
+
+
+    }
+
+
+    @Override
+    public void onEndListener(String image, String timelineId, String timelineName, String liveTime, String viewers) {
+
+
+        VideoPlayerFragment f = (VideoPlayerFragment) getSupportFragmentManager().findFragmentByTag(fragTag);
+
+        f.onEndListener(image, timelineId, timelineName, liveTime, viewers);
 
 
     }

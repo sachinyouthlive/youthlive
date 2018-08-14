@@ -141,7 +141,8 @@ public interface AllAPIs {
     @POST("api/socialsign_up.php")
     Call<socialBean> socialSignIn(
             @Part("pid") String pid,
-            @Part("email") String email
+            @Part("email") String email,
+            @Part("keey") String keey
     );
 
     @Multipart
@@ -388,7 +389,8 @@ public interface AllAPIs {
     @POST("api/mobile_signin.php")
     Call<login2Bean> signIn(
             @Part("phone") String phone,
-            @Part("password") String password
+            @Part("password") String password,
+            @Part("keey") String keey
     );
 
     @Multipart

@@ -84,6 +84,7 @@ public class HotVolg extends Fragment {
 
                 try {
                     adapter.setGridData(response.body().getData());
+                    b.vlist = response.body().getData();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

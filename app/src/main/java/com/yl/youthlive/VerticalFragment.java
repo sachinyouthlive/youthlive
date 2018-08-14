@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.castorflex.android.verticalviewpager.VerticalViewPager;
-
 public class VerticalFragment extends Fragment {
 
 
@@ -35,6 +33,12 @@ public class VerticalFragment extends Fragment {
         }*/
 
         this.pos = pos;
+    }
+
+    HomeActivity homeActivity;
+
+    public void setHomeActivity(HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
     }
 
     @Nullable
@@ -73,6 +77,7 @@ public class VerticalFragment extends Fragment {
             {
 
                 VideoPlayerFragment frag = new VideoPlayerFragment();
+                frag.setHomeActivity(homeActivity);
                 Bundle b = new Bundle();
                 b.putString("uri", ll.get(position).getLiveId());
                 b.putString("pic", b1.BASE_URL + ll.get(position).getUserImage());

@@ -58,7 +58,6 @@ import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
@@ -78,7 +77,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -195,1261 +193,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
     TextView ylId;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.player_fragment_layout1, container, false);
-
-
-        player = getActivity();
-
-        ylId = view.findViewById(R.id.ylid);
-
-        mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        //giftImage = view.findViewById(R.id.imageView13);
-        //giftText = view.findViewById(R.id.textView28);
-
-        giftImage = view.findViewById(R.id.imageView18);
-        giftText = view.findViewById(R.id.textView50);
-        giftProfile = view.findViewById(R.id.circleImageView);
-        giftUser = view.findViewById(R.id.textView49);
-
-        giftLayout = view.findViewById(R.id.gift_layout);
-
-
-        reject1 = view.findViewById(R.id.reject1);
-
-        reject1.setZ(21);
-
-        thumbCameraContainer1 = view.findViewById(R.id.view3);
-
-        bubbleView = (BubbleView) view.findViewById(R.id.bubble);
-        timeLineFollow = view.findViewById(R.id.folloview_friends);
-
-
-        List<Drawable> drawableList = new ArrayList<>();
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_indigo_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_cyan_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_blue_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_light_blue_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_lime_a200_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_pink_900_24dp));
-        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_red_900_24dp));
-
-        bubbleView.setDrawableList(drawableList);
-
-        commentList = new ArrayList<>();
-        viewsList = new ArrayList<>();
-
-        newMessage = view.findViewById(R.id.textView4);
-        likeCount = view.findViewById(R.id.textView5);
-
-        emoji = view.findViewById(R.id.imageButton4);
-        message = view.findViewById(R.id.imageButton3);
-        send = view.findViewById(R.id.imageButton5);
-        gift = view.findViewById(R.id.imageButton6);
-        connect = view.findViewById(R.id.imageButton2);
-        crop = view.findViewById(R.id.imageButton7);
-
-        progress = view.findViewById(R.id.progressBar3);
-
-        rootView = view.findViewById(R.id.root_view);
-
-        comment = view.findViewById(R.id.editText);
-        commentGrid = view.findViewById(R.id.comment_grid);
-
-        heart = view.findViewById(R.id.imageButton);
-
-        timelineProfile = view.findViewById(R.id.image);
-        timelineName = view.findViewById(R.id.name);
-        liveUsers = view.findViewById(R.id.view_count);
-        totalBeans = view.findViewById(R.id.beans);
-        end = view.findViewById(R.id.imageButton10);
-        viewersGrid = view.findViewById(R.id.viewers_grid);
-        viewersManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        viewsAdapter = new ViewsAdapter(getContext(), viewsList);
-        viewersGrid.setAdapter(viewsAdapter);
-        viewersGrid.setLayoutManager(viewersManager);
-
-
-        emojIcon = new EmojIconActions(getActivity(), rootView, comment, emoji);
-        emojIcon.ShowEmojIcon();
-
-
-        comment.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    //do here your stuff f
-
-                    String mess = comment.getText().toString();
-
-                    if (mess.length() > 0) {
-                        progress.setVisibility(View.VISIBLE);
-
-                        final bean b = (bean) getActivity().getApplicationContext();
-
-                        final Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(b.BASE_URL)
-                                .addConverterFactory(ScalarsConverterFactory.create())
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-
-                        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                        Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
-
-                        call.enqueue(new Callback<liveCommentBean>() {
-                            @Override
-                            public void onResponse(Call<liveCommentBean> call, retrofit2.Response<liveCommentBean> response) {
-
-
-                                if (Objects.equals(response.body().getMessage(), "Video Comment Success")) {
-                                    comment.setText("");
-                                }
-
-                                progress.setVisibility(View.GONE);
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<liveCommentBean> call, Throwable t) {
-                                progress.setVisibility(View.GONE);
-                                Log.d("Video upload find ", t.toString());
-                            }
-                        });
-                    }
-
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-
-        commentsManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true);
-
-        commentsAdapter = new CommentsAdapter(getContext(), commentList);
-
-        commentGrid.setAdapter(commentsAdapter);
-        commentGrid.setLayoutManager(commentsManager);
-
-        newMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                commentGrid.smoothScrollToPosition(0);
-                loading = true;
-                newMessage.setVisibility(View.GONE);
-
-            }
-        });
-
-
-        end.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final bean b = (bean) player.getApplicationContext();
-
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                Call<String> call = cr.exitPlayer(b.userId , liveId);
-
-                call.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-
-                        progress.setVisibility(View.GONE);
-
-                        //player.finish();
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-
-                        progress.setVisibility(View.GONE);
-
-                    }
-                });
-            }
-        });
-
-
-        /*start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Uri uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/videochat/demo");
-                StreamaxiaPlayer mStreamaxiaPlayer = new StreamaxiaPlayer();
-
-                mStreamaxiaPlayer.initStreamaxiaPlayer(surfaceView, frameLayout,
-                        stateText, VideoBroadcaster.this, VideoBroadcaster.this, uri);
-
-
-                mStreamaxiaPlayer.play(uri, StreamaxiaPlayer.TYPE_RTMP);
-
-
-            }
-        });*/
-
-        final bean b = (bean) getContext().getApplicationContext();
-
-        heart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                final bean b = (bean) getContext().getApplicationContext();
-
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                retrofit2.Call<liveLikeBean> call = cr.likeLive(b.userId, liveId);
-
-                call.enqueue(new retrofit2.Callback<liveLikeBean>() {
-                    @Override
-                    public void onResponse(retrofit2.Call<liveLikeBean> call, retrofit2.Response<liveLikeBean> response) {
-
-                        bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
-
-                    }
-
-                    @Override
-                    public void onFailure(retrofit2.Call<liveLikeBean> call, Throwable t) {
-
-                    }
-                });
-
-
-            }
-        });
-
-
-        reject1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                progress.setVisibility(View.VISIBLE);
-
-                final bean b = (bean) getContext().getApplicationContext();
-
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                Call<String> call = cr.endConnection(connId);
-
-                call.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-
-
-                        progress.setVisibility(View.GONE);
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        progress.setVisibility(View.GONE);
-                    }
-                });
-
-
-            }
-        });
-
-
-        commentGrid.setOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if (dy > 0) {
-                    visibleItemCount = recyclerView.getChildCount();
-                    totalItemCount = commentsManager.getItemCount();
-                    firstVisibleItem = commentsManager.findFirstVisibleItemPosition();
-
-                    if (loading) {
-                        if (totalItemCount > previousTotal) {
-                            loading = false;
-                            previousTotal = totalItemCount;
-                        }
-                    }
-                    if (!loading && (totalItemCount - visibleItemCount)
-                            <= (firstVisibleItem + visibleThreshold)) {
-                        // End has been reached
-
-                        // Do something
-                        current_page++;
-                        newMessage.setVisibility(View.GONE);
-
-                        //onLoadMore(current_page);
-
-                        loading = true;
-                    }
-
-                } else if (dy < 0) {
-
-                    loading = false;
-
-                }
-
-
-            }
-        });
-
-        commentReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals("commentData")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
-
-                    Log.d("data", intent.getStringExtra("data"));
-
-                    String json = intent.getStringExtra("data");
-
-                    Gson gson = new Gson();
-
-                    Comment item = gson.fromJson(json, Comment.class);
-
-                    commentsAdapter.addComment(item);
-
-                    if (loading) {
-                        commentGrid.scrollToPosition(0);
-                        loading = true;
-                        newMessage.setVisibility(View.GONE);
-                    } else {
-                        Log.d("lloogg", "new message");
-
-                        newMessage.setVisibility(View.VISIBLE);
-                    }
-
-                    //
-
-                    //displayFirebaseRegId();
-
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
-            }
-        };
-
-        likeReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals("like")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
-
-                    Log.d("data", intent.getStringExtra("data"));
-
-                    String json = intent.getStringExtra("data");
-
-                    int count1 = Integer.parseInt(json);
-
-                    if (count1 > count) {
-                        for (int i = 0; i < count1 - count; i++) {
-                            bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
-                        }
-
-
-                        likeCount.setText(json);
-
-                        count = count1;
-                    }
-
-
-                    //displayFirebaseRegId();
-
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
-            }
-        };
-
-        viewReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals("view")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
-
-                    Log.d("data", intent.getStringExtra("data"));
-
-                    String json = intent.getStringExtra("data");
-
-                    Gson gson = new Gson();
-
-                    com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
-
-                    final String uid = item.getUserId().replace("\"", "");
-
-                    String id = item.getUserId();
-                    if (!uid.equals(timelineId)) {
-                        viewsAdapter.addView(item);
-                        viewersGrid.smoothScrollToPosition(0);
-                    }
-
-
-                    //displayFirebaseRegId();
-
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
-            }
-        };
-
-
-        giftReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals("gift")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
-
-                    Log.d("data", intent.getStringExtra("data"));
-
-                    String json = intent.getStringExtra("data");
-
-                    Gson gson = new Gson();
-
-                    com.yl.youthlive.getIpdatedPOJO.Gift item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.Gift.class);
-
-
-                    try {
-
-
-                        String giftName = item.getGiftName().replace("\"", "");
-
-                        totalBeans.setText(giftName + " Coins");
-
-                        Comment comm = new Comment();
-
-                        comm.setType("gift");
-                        comm.setUserId(item.getSenbdId());
-                        comm.setComment(item.getGiftId());
-
-                        commentsAdapter.addComment(comm);
-
-                        if (loading) {
-                            commentGrid.scrollToPosition(0);
-                            loading = true;
-                            newMessage.setVisibility(View.GONE);
-                        } else {
-                            Log.d("lloogg", "new message");
-
-                            newMessage.setVisibility(View.VISIBLE);
-                        }
-                        //comm.set
-
-
-                        showGift(item.getGiftId(), item.getGiftName(), item.getIcon(), item.getSenbdId());
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-
-                    //displayFirebaseRegId();
-
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
-            }
-        };
-
-
-        endReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals("live_end")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
-
-                    Log.d("data", intent.getStringExtra("data"));
-
-                    String json = intent.getStringExtra("data");
-
-                    Gson gson = new Gson();
-
-                    Data item = gson.fromJson(json, Data.class);
-
-
-                    try {
-
-                        Intent intent1 = new Intent(getContext(), LiveEndedPlayer.class);
-                        intent1.putExtra("image", image);
-                        intent1.putExtra("id", timelineId);
-                        intent1.putExtra("name", timelineName.getText().toString());
-                        intent1.putExtra("time", item.getLiveTime());
-                        intent1.putExtra("views", item.getViewers());
-                        startActivity(intent1);
-                        getActivity().finish();
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-
-                    //displayFirebaseRegId();
-
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
-            }
-        };
-
-        requestReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals("request")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
-                    Log.d("ddata", intent.getStringExtra("data"));
-
-                    String json = intent.getStringExtra("data");
-
-                    try {
-                        JSONObject object = new JSONObject(json);
-
-                        connId = object.getString("conId");
-
-                        String uid = object.getString("uid");
-
-                        if (uid.equals(b.userId)) {
-                            final Dialog dialog = new Dialog(player);
-                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            dialog.setCancelable(false);
-                            dialog.setContentView(R.layout.new_connection_dialog);
-                            dialog.show();
-
-                            Button accept = dialog.findViewById(R.id.button11);
-                            Button deny = dialog.findViewById(R.id.button12);
-                            final ProgressBar dp = dialog.findViewById(R.id.progressBar9);
-
-
-                            accept.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-
-                                    thumbCameraContainer1.setVisibility(View.VISIBLE);
-
-                                    reject1.setVisibility(View.VISIBLE);
-
-                                    isConnection = true;
-
-                                    //player.startThumbCamera1(connId);
-                                    dialog.dismiss();
-                                }
-                            });
-
-
-                            deny.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    dp.setVisibility(View.VISIBLE);
-
-                                    final bean b = (bean) player.getApplicationContext();
-
-                                    final Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(b.BASE_URL)
-                                            .addConverterFactory(ScalarsConverterFactory.create())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
-
-                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                                    Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1", b.userId);
-                                    call1.enqueue(new Callback<acceptRejectBean>() {
-                                        @Override
-                                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
-
-                                            try {
-
-
-                                                isConnection = false;
-                                                //cameraLayout1.setVisibility(View.VISIBLE);
-
-/*
-                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
-                            goCoderBroadcastConfig.setPortNumber(1935);
-                            goCoderBroadcastConfig.setApplicationName("live");
-                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
-                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
-                            // Set the bitrate to 4000 Kbps
-                            goCoderBroadcastConfig.setVideoBitRate(1200);
-
-                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
-
-                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
-
-                            //if (configValidationError != null) {
-                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDes`cription(), Toast.LENGTH_LONG).show();
-                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
-                            // Stop the broadcast that is currently running
-                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
-                            //} else {
-                            // Start streaming
-                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
-                            //}
-
-*/
-
-
-                                                reject1.setVisibility(View.GONE);
-
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-
-                                            dialog.dismiss();
-
-                                            dp.setVisibility(View.GONE);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
-                                            dp.setVisibility(View.GONE);
-                                            t.printStackTrace();
-                                        }
-                                    });
-
-
-                                }
-                            });
-
-
-                        } else {
-                            isConnection = true;
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    //displayFirebaseRegId();
-
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
-            }
-        };
-
-
-        statusReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals("status")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
-
-                    Log.d("ddata", intent.getStringExtra("data"));
-
-                    String json = intent.getStringExtra("data");
-
-                    try {
-                        JSONObject obj = new JSONObject(json);
-
-                        connId = obj.getString("connId");
-
-                        String mode = obj.getString("status");
-                        final String uri = obj.getString("uri");
-
-                        String uid = obj.getString("uid");
-
-                        if (mode.equals("2")) {
-
-
-                            if (!uid.equals(b.userId)) {
-                                Log.d("ddata", uri);
-
-
-                                new CountDownTimer(8000, 1000) {
-
-
-                                    @Override
-                                    public void onTick(long millisUntilFinished) {
-                                    }
-
-                                    @Override
-                                    public void onFinish() {
-
-                                        reject1.setVisibility(View.GONE);
-
-                                        isConnection = true;
-
-                                        //player.startThumbPlayer1(uri);
-                                        thumbCameraContainer1.setVisibility(View.VISIBLE);
-
-                                    }
-                                }.start();
-
-                            }
-
-                        } else {
-                            isConnection = false;
-                        }
-
-
-                    } catch (JSONException e) {
-                        Log.d("ddata", e.toString());
-                        e.printStackTrace();
-                    }
-
-
-                    //displayFirebaseRegId();
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
-            }
-        };
-
-
-        connectionReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals("connection_end")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
-
-                    Log.d("uurrii", intent.getStringExtra("data"));
-
-                    String json = intent.getStringExtra("data");
-
-                    try {
-                        JSONObject obj = new JSONObject(json);
-
-
-                        String conn = obj.getString("connId");
-                        String uid = obj.getString("userId");
-
-
-                        if (uid.equals(b.userId)) {
-                            //player.endThumbCamera1();
-                            thumbCameraContainer1.setVisibility(View.GONE);
-                            isConnection = false;
-                        } else {
-                            //player.endThumbPlayer1();
-                            thumbCameraContainer1.setVisibility(View.GONE);
-                            isConnection = false;
-
-                        }
-
-
-                    } catch (JSONException e) {
-                        Log.d("uurrii", e.toString());
-                        e.printStackTrace();
-                    }
-
-
-                    //displayFirebaseRegId();
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
-            }
-        };
-
-
-        statusReceiverPlayer = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals("status_player")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
-
-                    Log.d("uurrii", intent.getStringExtra("data"));
-
-                    String json = intent.getStringExtra("data");
-
-                    try {
-                        JSONObject obj = new JSONObject(json);
-
-                        connId = obj.getString("connId");
-
-                        String mode = obj.getString("status");
-                        final String uri = obj.getString("uri");
-
-
-                        String uid = obj.getString("uid");
-
-
-                        if (uid.equals(b.userId)) {
-                            if (mode.equals("2")) {
-
-
-                                thumbCameraContainer1.setVisibility(View.VISIBLE);
-
-                                reject1.setVisibility(View.VISIBLE);
-
-                                isConnection = true;
-
-                                //player.startThumbCamera1FromPlayer(connId);
-
-
-                            } else {
-
-                                isConnection = false;
-                                Toast.makeText(player, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
-
-
-                            }
-
-                        } else {
-
-                            if (mode.equals("2")) {
-
-
-                                new CountDownTimer(8000, 1000) {
-
-
-                                    @Override
-                                    public void onTick(long millisUntilFinished) {
-                                    }
-
-                                    @Override
-                                    public void onFinish() {
-
-                                        reject1.setVisibility(View.GONE);
-
-                                        isConnection = true;
-
-                                        //player.startThumbPlayer1(uri);
-                                        thumbCameraContainer1.setVisibility(View.VISIBLE);
-
-                                    }
-                                }.start();
-
-
-                            } else {
-
-                                isConnection = false;
-
-
-                            }
-
-
-                        }
-
-
-                    } catch (JSONException e) {
-                        Log.d("uurrii", e.toString());
-                        e.printStackTrace();
-                    }
-
-
-                    //displayFirebaseRegId();
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
-            }
-        };
-
-
-        requestReceiver2 = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals("request_player")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
-                    isConnection = true;
-
-                    Log.d("ddata", intent.getStringExtra("data"));
-
-                    String json = intent.getStringExtra("data");
-
-                    try {
-                        JSONObject object = new JSONObject(json);
-
-                        connId = object.getString("conId");
-
-                        final String uid = object.getString("uid");
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    //displayFirebaseRegId();
-
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
-            }
-        };
-
-
-        exitReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                if (intent.getAction().equals("exit")) {
-
-
-                    Log.d("data", intent.getStringExtra("data"));
-
-                    String json = intent.getStringExtra("data");
-
-                    Gson gson = new Gson();
-
-                    com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
-
-                    final String uid = item.getUserId().replace("\"", "");
-
-                    final bean b = (bean) getActivity().getApplicationContext();
-
-                    String id = item.getUserId();
-                    if (!uid.equals(b.userId)) {
-                        viewsAdapter.removeView(item);
-                    }
-                }
-
-            }
-        };
-
-
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                String mess = comment.getText().toString();
-
-                if (mess.length() > 0) {
-                    progress.setVisibility(View.VISIBLE);
-
-                    final bean b = (bean) getActivity().getApplicationContext();
-
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
-
-                    call.enqueue(new Callback<liveCommentBean>() {
-                        @Override
-                        public void onResponse(Call<liveCommentBean> call, retrofit2.Response<liveCommentBean> response) {
-
-
-                            if (Objects.equals(response.body().getMessage(), "Video Comment Success")) {
-                                comment.setText("");
-                            }
-
-                            progress.setVisibility(View.GONE);
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<liveCommentBean> call, Throwable t) {
-                            progress.setVisibility(View.GONE);
-                            Log.d("Video upload find ", t.toString());
-                        }
-                    });
-                }
-
-
-            }
-        });
-
-        message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (comment.getVisibility() == View.GONE) {
-                    comment.setVisibility(View.VISIBLE);
-                    send.setVisibility(View.VISIBLE);
-                    //emoji.setVisibility(View.VISIBLE);
-                } else {
-                    comment.setVisibility(View.GONE);
-                    send.setVisibility(View.GONE);
-                    //emoji.setVisibility(View.GONE);
-                }
-
-            }
-        });
-
-        gift.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                final Dialog dialog = new Dialog(player);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                dialog.setCancelable(true);
-                dialog.setContentView(R.layout.gift_popup);
-                dialog.show();
-
-
-                RecyclerView giftGrid = dialog.findViewById(R.id.grid);
-                ProgressBar bar = dialog.findViewById(R.id.progressBar8);
-                ImageView dialogClose = dialog.findViewById(R.id.close);
-
-
-                dialogClose.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                GridLayoutManager giftManager = new GridLayoutManager(player, 2);
-
-                GiftAdapter giftAdapter = new GiftAdapter(player, bar, dialog);
-
-                giftGrid.setLayoutManager(giftManager);
-                giftGrid.setAdapter(giftAdapter);
-
-
-            }
-        });
-
-
-        connect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //broadcaster.switchCamera();
-
-
-                if (!isConnection) {
-
-                    final bean b = (bean) player.getApplicationContext();
-
-                    progress.setVisibility(View.VISIBLE);
-
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    Call<requestConnectionBean> call = cr.requestConnectionFromPlayer(liveId, timelineId, b.userId);
-
-                    call.enqueue(new Callback<requestConnectionBean>() {
-                        @Override
-                        public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
-                            Toast.makeText(player, "Your request has been sent to the broadcaster", Toast.LENGTH_SHORT).show();
-
-                            progress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onFailure(Call<requestConnectionBean> call, Throwable t) {
-                            progress.setVisibility(View.GONE);
-                            Log.d("asdasdasdas", t.toString());
-                        }
-                    });
-
-
-                } else {
-                    Toast.makeText(player, "Sorry, No room available for guest live", Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-        });
-
-        crop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                coun = 0;
-
-                startProjection();
-
-            }
-        });
-
-
-        new Thread() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                mHandler = new Handler();
-                Looper.loop();
-            }
-        }.start();
-
-
-        timeLineFollow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                progress.setVisibility(View.VISIBLE);
-
-                final bean b = (bean) player.getApplicationContext();
-
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                retrofit2.Call<followBean> call = cr.followLiveUser(b.userId, timelineId, liveId);
-
-                call.enqueue(new retrofit2.Callback<followBean>() {
-                    @Override
-                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
-
-                        if (response.body().getStatus().equals("1")) {
-                            Toast.makeText(player, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                            timeLineFollow.setVisibility(View.GONE);
-                        }
-
-
-                        progress.setVisibility(View.GONE);
-
-                    }
-
-                    @Override
-                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
-
-                        progress.setVisibility(View.GONE);
-
-                    }
-                });
-
-
-            }
-        });
-
-
-        liveId = getArguments().getString("liveId");
-        schedule(liveId);
-
-
-        return view;
-    }
+    endListener mCallback;
 
 
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
@@ -2774,4 +1518,1288 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.player_fragment_layout1, container, false);
+
+
+        player = getActivity();
+
+        ylId = view.findViewById(R.id.ylid);
+
+        mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        //giftImage = view.findViewById(R.id.imageView13);
+        //giftText = view.findViewById(R.id.textView28);
+
+        giftImage = view.findViewById(R.id.imageView18);
+        giftText = view.findViewById(R.id.textView50);
+        giftProfile = view.findViewById(R.id.circleImageView);
+        giftUser = view.findViewById(R.id.textView49);
+
+        giftLayout = view.findViewById(R.id.gift_layout);
+
+
+        reject1 = view.findViewById(R.id.reject1);
+
+        reject1.setZ(21);
+
+        thumbCameraContainer1 = view.findViewById(R.id.view3);
+
+        bubbleView = (BubbleView) view.findViewById(R.id.bubble);
+        timeLineFollow = view.findViewById(R.id.folloview_friends);
+
+
+        List<Drawable> drawableList = new ArrayList<>();
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_indigo_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_cyan_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_blue_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_light_blue_900_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_lime_a200_24dp));
+        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_pink_900_24dp));
+        drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_red_900_24dp));
+
+        bubbleView.setDrawableList(drawableList);
+
+        commentList = new ArrayList<>();
+        viewsList = new ArrayList<>();
+
+        newMessage = view.findViewById(R.id.textView4);
+        likeCount = view.findViewById(R.id.textView5);
+
+        emoji = view.findViewById(R.id.imageButton4);
+        message = view.findViewById(R.id.imageButton3);
+        send = view.findViewById(R.id.imageButton5);
+        gift = view.findViewById(R.id.imageButton6);
+        connect = view.findViewById(R.id.imageButton2);
+        crop = view.findViewById(R.id.imageButton7);
+
+        progress = view.findViewById(R.id.progressBar3);
+
+        rootView = view.findViewById(R.id.root_view);
+
+        comment = view.findViewById(R.id.editText);
+        commentGrid = view.findViewById(R.id.comment_grid);
+
+        heart = view.findViewById(R.id.imageButton);
+
+        timelineProfile = view.findViewById(R.id.image);
+        timelineName = view.findViewById(R.id.name);
+        liveUsers = view.findViewById(R.id.view_count);
+        totalBeans = view.findViewById(R.id.beans);
+        end = view.findViewById(R.id.imageButton10);
+        viewersGrid = view.findViewById(R.id.viewers_grid);
+        viewersManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        viewsAdapter = new ViewsAdapter(getContext(), viewsList);
+        viewersGrid.setAdapter(viewsAdapter);
+        viewersGrid.setLayoutManager(viewersManager);
+
+
+        emojIcon = new EmojIconActions(getActivity(), rootView, comment, emoji);
+        emojIcon.ShowEmojIcon();
+
+
+        comment.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    //do here your stuff f
+
+                    String mess = comment.getText().toString();
+
+                    if (mess.length() > 0) {
+                        progress.setVisibility(View.VISIBLE);
+
+                        final bean b = (bean) getActivity().getApplicationContext();
+
+                        final Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(b.BASE_URL)
+                                .addConverterFactory(ScalarsConverterFactory.create())
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+
+                        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                        Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
+
+                        call.enqueue(new Callback<liveCommentBean>() {
+                            @Override
+                            public void onResponse(Call<liveCommentBean> call, retrofit2.Response<liveCommentBean> response) {
+
+
+                                if (Objects.equals(response.body().getMessage(), "Video Comment Success")) {
+                                    comment.setText("");
+                                }
+
+                                progress.setVisibility(View.GONE);
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<liveCommentBean> call, Throwable t) {
+                                progress.setVisibility(View.GONE);
+                                Log.d("Video upload find ", t.toString());
+                            }
+                        });
+                    }
+
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+        commentsManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true);
+
+        commentsAdapter = new CommentsAdapter(getContext(), commentList);
+
+        commentGrid.setAdapter(commentsAdapter);
+        commentGrid.setLayoutManager(commentsManager);
+
+        newMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                commentGrid.smoothScrollToPosition(0);
+                loading = true;
+                newMessage.setVisibility(View.GONE);
+
+            }
+        });
+
+
+        end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final bean b = (bean) player.getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                Call<String> call = cr.exitPlayer(b.userId, liveId);
+
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+                        progress.setVisibility(View.GONE);
+
+                        //player.finish();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+                });
+            }
+        });
+
+
+        /*start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Uri uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/videochat/demo");
+                StreamaxiaPlayer mStreamaxiaPlayer = new StreamaxiaPlayer();
+
+                mStreamaxiaPlayer.initStreamaxiaPlayer(surfaceView, frameLayout,
+                        stateText, VideoBroadcaster.this, VideoBroadcaster.this, uri);
+
+
+                mStreamaxiaPlayer.play(uri, StreamaxiaPlayer.TYPE_RTMP);
+
+
+            }
+        });*/
+
+        final bean b = (bean) getContext().getApplicationContext();
+
+        heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                final bean b = (bean) getContext().getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                retrofit2.Call<liveLikeBean> call = cr.likeLive(b.userId, liveId);
+
+                call.enqueue(new retrofit2.Callback<liveLikeBean>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<liveLikeBean> call, retrofit2.Response<liveLikeBean> response) {
+
+                        bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<liveLikeBean> call, Throwable t) {
+
+                    }
+                });
+
+
+            }
+        });
+
+
+        reject1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                progress.setVisibility(View.VISIBLE);
+
+                final bean b = (bean) getContext().getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                Call<String> call = cr.endConnection(connId);
+
+                call.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                    }
+                });
+
+
+            }
+        });
+
+
+        commentGrid.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (dy > 0) {
+                    visibleItemCount = recyclerView.getChildCount();
+                    totalItemCount = commentsManager.getItemCount();
+                    firstVisibleItem = commentsManager.findFirstVisibleItemPosition();
+
+                    if (loading) {
+                        if (totalItemCount > previousTotal) {
+                            loading = false;
+                            previousTotal = totalItemCount;
+                        }
+                    }
+                    if (!loading && (totalItemCount - visibleItemCount)
+                            <= (firstVisibleItem + visibleThreshold)) {
+                        // End has been reached
+
+                        // Do something
+                        current_page++;
+                        newMessage.setVisibility(View.GONE);
+
+                        //onLoadMore(current_page);
+
+                        loading = true;
+                    }
+
+                } else if (dy < 0) {
+
+                    loading = false;
+
+                }
+
+
+            }
+        });
+
+        commentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("commentData")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("data", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    Gson gson = new Gson();
+
+                    Comment item = gson.fromJson(json, Comment.class);
+
+                    commentsAdapter.addComment(item);
+
+                    if (loading) {
+                        commentGrid.scrollToPosition(0);
+                        loading = true;
+                        newMessage.setVisibility(View.GONE);
+                    } else {
+                        Log.d("lloogg", "new message");
+
+                        newMessage.setVisibility(View.VISIBLE);
+                    }
+
+                    //
+
+                    //displayFirebaseRegId();
+
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+        likeReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("like")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("data", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    int count1 = Integer.parseInt(json);
+
+                    if (count1 > count) {
+                        for (int i = 0; i < count1 - count; i++) {
+                            bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+                        }
+
+
+                        likeCount.setText(json);
+
+                        count = count1;
+                    }
+
+
+                    //displayFirebaseRegId();
+
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+        viewReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("view")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("data", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    Gson gson = new Gson();
+
+                    com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
+
+                    final String uid = item.getUserId().replace("\"", "");
+
+                    String id = item.getUserId();
+                    if (!uid.equals(timelineId)) {
+                        viewsAdapter.addView(item);
+                        viewersGrid.smoothScrollToPosition(0);
+                    }
+
+
+                    //displayFirebaseRegId();
+
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        giftReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("gift")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("data", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    Gson gson = new Gson();
+
+                    com.yl.youthlive.getIpdatedPOJO.Gift item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.Gift.class);
+
+
+                    try {
+
+
+                        String giftName = item.getGiftName().replace("\"", "");
+
+                        totalBeans.setText(giftName + " Coins");
+
+                        Comment comm = new Comment();
+
+                        comm.setType("gift");
+                        comm.setUserId(item.getSenbdId());
+                        comm.setComment(item.getGiftId());
+
+                        commentsAdapter.addComment(comm);
+
+                        if (loading) {
+                            commentGrid.scrollToPosition(0);
+                            loading = true;
+                            newMessage.setVisibility(View.GONE);
+                        } else {
+                            Log.d("lloogg", "new message");
+
+                            newMessage.setVisibility(View.VISIBLE);
+                        }
+                        //comm.set
+
+
+                        showGift(item.getGiftId(), item.getGiftName(), item.getIcon(), item.getSenbdId());
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        endReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("live_end")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("data", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    Gson gson = new Gson();
+
+                    Data item = gson.fromJson(json, Data.class);
+
+
+                    try {
+
+
+                        mCallback.onEndListener(image, timelineId, timelineName.getText().toString(), item.getLiveTime(), item.getViewers());
+
+
+/*
+                        Intent intent1 = new Intent(getContext(), LiveEndedPlayer.class);
+                        intent1.putExtra("image", image);
+                        intent1.putExtra("id", timelineId);
+                        intent1.putExtra("name", timelineName.getText().toString());
+                        intent1.putExtra("time", item.getLiveTime());
+                        intent1.putExtra("views", item.getViewers());
+                        startActivity(intent1);
+                        getActivity().finish();
+*/
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+        requestReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("request")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+                    Log.d("ddata", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject object = new JSONObject(json);
+
+                        connId = object.getString("conId");
+
+                        String uid = object.getString("uid");
+
+                        if (uid.equals(b.userId)) {
+                            final Dialog dialog = new Dialog(player);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            dialog.setCancelable(false);
+                            dialog.setContentView(R.layout.new_connection_dialog);
+                            dialog.show();
+
+                            Button accept = dialog.findViewById(R.id.button11);
+                            Button deny = dialog.findViewById(R.id.button12);
+                            final ProgressBar dp = dialog.findViewById(R.id.progressBar9);
+
+
+                            accept.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+
+                                    thumbCameraContainer1.setVisibility(View.VISIBLE);
+
+                                    reject1.setVisibility(View.VISIBLE);
+
+                                    isConnection = true;
+
+                                    //player.startThumbCamera1(connId);
+                                    dialog.dismiss();
+                                }
+                            });
+
+
+                            deny.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    dp.setVisibility(View.VISIBLE);
+
+                                    final bean b = (bean) player.getApplicationContext();
+
+                                    final Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(b.BASE_URL)
+                                            .addConverterFactory(ScalarsConverterFactory.create())
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                                    Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1", b.userId);
+                                    call1.enqueue(new Callback<acceptRejectBean>() {
+                                        @Override
+                                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+
+                                            try {
+
+
+                                                isConnection = false;
+                                                //cameraLayout1.setVisibility(View.VISIBLE);
+
+/*
+                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
+                            goCoderBroadcastConfig.setPortNumber(1935);
+                            goCoderBroadcastConfig.setApplicationName("live");
+                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
+                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
+                            // Set the bitrate to 4000 Kbps
+                            goCoderBroadcastConfig.setVideoBitRate(1200);
+
+                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
+
+                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
+
+                            //if (configValidationError != null) {
+                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDes`cription(), Toast.LENGTH_LONG).show();
+                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
+                            // Stop the broadcast that is currently running
+                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
+                            //} else {
+                            // Start streaming
+                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
+                            //}
+
+*/
+
+
+                                                reject1.setVisibility(View.GONE);
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            dialog.dismiss();
+
+                                            dp.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                                            dp.setVisibility(View.GONE);
+                                            t.printStackTrace();
+                                        }
+                                    });
+
+
+                                }
+                            });
+
+
+                        } else {
+                            isConnection = true;
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        statusReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("status")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("ddata", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject obj = new JSONObject(json);
+
+                        connId = obj.getString("connId");
+
+                        String mode = obj.getString("status");
+                        final String uri = obj.getString("uri");
+
+                        String uid = obj.getString("uid");
+
+                        if (mode.equals("2")) {
+
+
+                            if (!uid.equals(b.userId)) {
+                                Log.d("ddata", uri);
+
+
+                                new CountDownTimer(8000, 1000) {
+
+
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+
+                                        reject1.setVisibility(View.GONE);
+
+                                        isConnection = true;
+
+                                        //player.startThumbPlayer1(uri);
+                                        thumbCameraContainer1.setVisibility(View.VISIBLE);
+
+                                    }
+                                }.start();
+
+                            }
+
+                        } else {
+                            isConnection = false;
+                        }
+
+
+                    } catch (JSONException e) {
+                        Log.d("ddata", e.toString());
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        connectionReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("connection_end")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("uurrii", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject obj = new JSONObject(json);
+
+
+                        String conn = obj.getString("connId");
+                        String uid = obj.getString("userId");
+
+
+                        if (uid.equals(b.userId)) {
+                            //player.endThumbCamera1();
+                            thumbCameraContainer1.setVisibility(View.GONE);
+                            isConnection = false;
+                        } else {
+                            //player.endThumbPlayer1();
+                            thumbCameraContainer1.setVisibility(View.GONE);
+                            isConnection = false;
+
+                        }
+
+
+                    } catch (JSONException e) {
+                        Log.d("uurrii", e.toString());
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        statusReceiverPlayer = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("status_player")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+
+                    Log.d("uurrii", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject obj = new JSONObject(json);
+
+                        connId = obj.getString("connId");
+
+                        String mode = obj.getString("status");
+                        final String uri = obj.getString("uri");
+
+
+                        String uid = obj.getString("uid");
+
+
+                        if (uid.equals(b.userId)) {
+                            if (mode.equals("2")) {
+
+
+                                thumbCameraContainer1.setVisibility(View.VISIBLE);
+
+                                reject1.setVisibility(View.VISIBLE);
+
+                                isConnection = true;
+
+                                //player.startThumbCamera1FromPlayer(connId);
+
+
+                            } else {
+
+                                isConnection = false;
+                                Toast.makeText(player, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
+
+
+                            }
+
+                        } else {
+
+                            if (mode.equals("2")) {
+
+
+                                new CountDownTimer(8000, 1000) {
+
+
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+
+                                        reject1.setVisibility(View.GONE);
+
+                                        isConnection = true;
+
+                                        //player.startThumbPlayer1(uri);
+                                        thumbCameraContainer1.setVisibility(View.VISIBLE);
+
+                                    }
+                                }.start();
+
+
+                            } else {
+
+                                isConnection = false;
+
+
+                            }
+
+
+                        }
+
+
+                    } catch (JSONException e) {
+                        Log.d("uurrii", e.toString());
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        requestReceiver2 = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals("request_player")) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+
+                    isConnection = true;
+
+                    Log.d("ddata", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    try {
+                        JSONObject object = new JSONObject(json);
+
+                        connId = object.getString("conId");
+
+                        final String uid = object.getString("uid");
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //displayFirebaseRegId();
+
+                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                    txtMessage.setText(message);
+                }*/
+            }
+        };
+
+
+        exitReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                if (intent.getAction().equals("exit")) {
+
+
+                    Log.d("data", intent.getStringExtra("data"));
+
+                    String json = intent.getStringExtra("data");
+
+                    Gson gson = new Gson();
+
+                    com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
+
+                    final String uid = item.getUserId().replace("\"", "");
+
+                    final bean b = (bean) getActivity().getApplicationContext();
+
+                    String id = item.getUserId();
+                    if (!uid.equals(b.userId)) {
+                        viewsAdapter.removeView(item);
+                    }
+                }
+
+            }
+        };
+
+
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                String mess = comment.getText().toString();
+
+                if (mess.length() > 0) {
+                    progress.setVisibility(View.VISIBLE);
+
+                    final bean b = (bean) getActivity().getApplicationContext();
+
+                    final Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.BASE_URL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
+
+                    call.enqueue(new Callback<liveCommentBean>() {
+                        @Override
+                        public void onResponse(Call<liveCommentBean> call, retrofit2.Response<liveCommentBean> response) {
+
+
+                            if (Objects.equals(response.body().getMessage(), "Video Comment Success")) {
+                                comment.setText("");
+                            }
+
+                            progress.setVisibility(View.GONE);
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<liveCommentBean> call, Throwable t) {
+                            progress.setVisibility(View.GONE);
+                            Log.d("Video upload find ", t.toString());
+                        }
+                    });
+                }
+
+
+            }
+        });
+
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (comment.getVisibility() == View.GONE) {
+                    comment.setVisibility(View.VISIBLE);
+                    send.setVisibility(View.VISIBLE);
+                    //emoji.setVisibility(View.VISIBLE);
+                } else {
+                    comment.setVisibility(View.GONE);
+                    send.setVisibility(View.GONE);
+                    //emoji.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
+        gift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                final Dialog dialog = new Dialog(player);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCancelable(true);
+                dialog.setContentView(R.layout.gift_popup);
+                dialog.show();
+
+
+                RecyclerView giftGrid = dialog.findViewById(R.id.grid);
+                ProgressBar bar = dialog.findViewById(R.id.progressBar8);
+                ImageView dialogClose = dialog.findViewById(R.id.close);
+
+
+                dialogClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                GridLayoutManager giftManager = new GridLayoutManager(player, 2);
+
+                GiftAdapter giftAdapter = new GiftAdapter(player, bar, dialog);
+
+                giftGrid.setLayoutManager(giftManager);
+                giftGrid.setAdapter(giftAdapter);
+
+
+            }
+        });
+
+
+        connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //broadcaster.switchCamera();
+
+
+                if (!isConnection) {
+
+                    final bean b = (bean) player.getApplicationContext();
+
+                    progress.setVisibility(View.VISIBLE);
+
+                    final Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.BASE_URL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                    Call<requestConnectionBean> call = cr.requestConnectionFromPlayer(liveId, timelineId, b.userId);
+
+                    call.enqueue(new Callback<requestConnectionBean>() {
+                        @Override
+                        public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+                            Toast.makeText(player, "Your request has been sent to the broadcaster", Toast.LENGTH_SHORT).show();
+
+                            progress.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+                            progress.setVisibility(View.GONE);
+                            Log.d("asdasdasdas", t.toString());
+                        }
+                    });
+
+
+                } else {
+                    Toast.makeText(player, "Sorry, No room available for guest live", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+
+        crop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                coun = 0;
+
+                startProjection();
+
+            }
+        });
+
+
+        new Thread() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                mHandler = new Handler();
+                Looper.loop();
+            }
+        }.start();
+
+
+        timeLineFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                progress.setVisibility(View.VISIBLE);
+
+                final bean b = (bean) player.getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                retrofit2.Call<followBean> call = cr.followLiveUser(b.userId, timelineId, liveId);
+
+                call.enqueue(new retrofit2.Callback<followBean>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+
+                        if (response.body().getStatus().equals("1")) {
+                            Toast.makeText(player, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            timeLineFollow.setVisibility(View.GONE);
+                        }
+
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+
+                        progress.setVisibility(View.GONE);
+
+                    }
+                });
+
+
+            }
+        });
+
+
+        liveId = getArguments().getString("liveId");
+        schedule(liveId);
+
+
+        return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof endListener) {
+            mCallback = (endListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnGreenFragmentListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
+
+    public interface endListener {
+        public void onEndListener(String image, String timelineId, String timelineName, String liveTime, String viewers);
+    }
+
 }

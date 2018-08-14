@@ -144,8 +144,12 @@ public class Register extends AppCompatActivity {
 
                                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
+                                            SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
-                                            Call<socialBean> call = cr.socialSignIn(id, email);
+                                            String keey = fcmPref.getString("token", "");
+
+
+                                            Call<socialBean> call = cr.socialSignIn(id, email, keey);
 
                                             call.enqueue(new Callback<socialBean>() {
                                                 @Override
@@ -563,7 +567,12 @@ public class Register extends AppCompatActivity {
             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-            Call<socialBean> call = cr.socialSignIn(account.getId(), account.getEmail());
+            SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
+
+            String keey = fcmPref.getString("token", "");
+
+
+            Call<socialBean> call = cr.socialSignIn(account.getId(), account.getEmail(), keey);
 
             call.enqueue(new Callback<socialBean>() {
                 @Override

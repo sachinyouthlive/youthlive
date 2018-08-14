@@ -2,7 +2,6 @@ package com.yl.youthlive;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -45,6 +44,12 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
     ProgressBar progress;
     List<wowzaAPIBean> list;
     List<liveBean> list2;
+
+    HomeActivity homeActivity;
+
+    public void setHomeActivity(HomeActivity homeActivity) {
+        this.homeActivity = homeActivity;
+    }
 
     @Nullable
     @Override
@@ -309,6 +314,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
                         FragmentTransaction ft = ((HomeActivity)context).getSupportFragmentManager().beginTransaction();
                         VerticalFragment frag1 = new VerticalFragment();
+                    frag1.setHomeActivity(homeActivity);
                         frag1.setList(list , position);
                         ft.replace(R.id.replace2, frag1);
                         ft.addToBackStack(null);
