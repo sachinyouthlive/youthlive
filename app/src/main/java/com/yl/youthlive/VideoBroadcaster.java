@@ -1,5 +1,6 @@
 package com.yl.youthlive;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -52,6 +53,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.seu.magicfilter.utils.MagicFilterType;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
 
@@ -271,7 +273,6 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
         mPublisher.setPreviewResolution(best_size.width, best_size.height);
 
-
         mPublisher.setVideoHDMode();
 
 
@@ -426,11 +427,13 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     @Override
     public void onNetworkWeak() {
         Toast.makeText(getApplicationContext(), "Slow Internet Detected", Toast.LENGTH_SHORT).show();
+        mPublisher.setVideoSmoothMode();
     }
 
     @Override
     public void onNetworkResume() {
-        // Toast.makeText(getApplicationContext(), "resume" , Toast.LENGTH_SHORT).show();
+        mPublisher.setVideoHDMode();
+        //Toast.makeText(getApplicationContext(), "resume" , Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -650,6 +653,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
             editor.putString("liveId", liveId);
             editor.apply();
 
+            setResult(Activity.RESULT_OK , getIntent());
             finish();
 
         }
@@ -722,6 +726,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     public void startPublish(String liveId) {
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
+        mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
         //mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
     }
 

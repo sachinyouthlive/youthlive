@@ -1,7 +1,11 @@
 package com.yl.youthlive;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -21,10 +26,18 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.endLivePOJO.endLiveBean;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.blurry.Blurry;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by TBX on 11/22/2017.
@@ -37,10 +50,17 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     //CameraView cameraPreview;
     ImageView image;
 
+    SharedPreferences offlinePref;
+    SharedPreferences.Editor offlineEdit;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_go_live, container, false);
+
+
+        offlinePref = getContext().getSharedPreferences("offline" , Context.MODE_PRIVATE);
+        offlineEdit = offlinePref.edit();
 
 
 /*
@@ -78,7 +98,13 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
 
                 profile.setImageBitmap(loadedImage);
 
-                Blurry.with(getContext()).from(loadedImage).into(image);
+                try {
+                    Blurry.with(getActivity()).from(loadedImage).into(image);
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
 
             }
 
@@ -95,7 +121,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
                 //Intent intent = new Intent(getContext() , LiveScreenNew.class);
                 //Intent intent = new Intent(getContext() , WowzaLive.class);
                 //intent.putExtra("title" , title.getText().toString());
-                startActivity(intent);
+                startActivityForResult(intent , 112);
             }
         });
 
@@ -183,5 +209,98 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     public void onDestroy() {
         super.onDestroy();
         //cameraPreview.destroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 112 && resultCode == Activity.RESULT_OK)
+        {
+
+
+            String offline = offlinePref.getString("offline" , "");
+
+            final String liveId = offlinePref.getString("liveId" , "");
+
+            if (offline.length() > 0 && liveId.length() > 0)
+            {
+
+
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.offline_sync_dialog);
+                dialog.show();
+
+
+
+
+                bean b = (bean)getActivity().getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                Call<endLiveBean> call = cr.syncLive(offline , liveId);
+
+                call.enqueue(new Callback<endLiveBean>() {
+                    @Override
+                    public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
+
+
+                        if (response.body().getStatus().equals("1"))
+                        {
+
+                            offlineEdit.remove("offline");
+                            offlineEdit.remove("liveId");
+                            offlineEdit.apply();
+
+                            dialog.dismiss();
+
+                        }
+
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<endLiveBean> call, Throwable t) {
+
+                    }
+                });
+
+
+
+
+
+
+            }
+
+
+
+
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.no_internet_dialog);
+            dialog.show();
+
+            Button close = dialog.findViewById(R.id.button10);
+
+            close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+        }
+
     }
 }

@@ -1231,22 +1231,28 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 if (intent.getAction().equals("exit")) {
 
 
-                    Log.d("data", intent.getStringExtra("data"));
+                    try {
+                        Log.d("data", intent.getStringExtra("data"));
 
-                    String json = intent.getStringExtra("data");
+                        String json = intent.getStringExtra("data");
 
-                    Gson gson = new Gson();
+                        Gson gson = new Gson();
 
-                    com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
+                        com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
 
-                    final String uid = item.getUserId().replace("\"", "");
+                        final String uid = item.getUserId().replace("\"", "");
 
-                    final bean b = (bean) getActivity().getApplicationContext();
+                        final bean b = (bean) homeActivity.getApplicationContext();
 
-                    String id = item.getUserId();
-                    if (!uid.equals(b.userId)) {
-                        viewsAdapter.removeView(item);
+                        String id = item.getUserId();
+                        if (!uid.equals(b.userId)) {
+                            viewsAdapter.removeView(item);
+                        }
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
                     }
+
                 }
 
             }
@@ -1866,7 +1872,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                         if (!uid.equals(b.userId)) {
                             viewsAdapter.addView(response.body().getData().getViews().get(i));
-                            viewersGrid.smoothScrollToPosition(0);
+                            //viewersGrid.smoothScrollToPosition(0);
                         }
 
 
@@ -1988,7 +1994,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                             new IntentFilter("status"));
 */
                 } catch (Exception e) {
-                    // e.printStackTrace();
+                    e.printStackTrace();
                 }
 
 
@@ -1997,6 +2003,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             @Override
             public void onFailure(Call<getUpdatedBean> call, Throwable t) {
 
+
+                t.printStackTrace();
                 // Log.d("asdasd", t.toString());
 
             }

@@ -1,8 +1,10 @@
 package com.yl.youthlive;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.endLivePOJO.endLiveBean;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 import com.yl.youthlive.wowzaAPIPOJO.wowzaAPIBean;
 
@@ -48,6 +52,9 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
     HomeActivity homeActivity;
 
+    SharedPreferences offlinePref;
+    SharedPreferences.Editor offlineEdit;
+
     public void setHomeActivity(HomeActivity homeActivity)
     {
         this.homeActivity = homeActivity;
@@ -58,6 +65,10 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.live_layout, container, false);
         checkConnection();
+
+        offlinePref = getContext().getSharedPreferences("offline" , Context.MODE_PRIVATE);
+        offlineEdit = offlinePref.edit();
+
 
         list = new ArrayList<>();
         list2 = new ArrayList<>();
@@ -82,6 +93,71 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
         super.onResume();
         // register connection status listener
         bean.getInstance().setConnectivityListener(this);
+
+
+        String offline = offlinePref.getString("offline" , "");
+
+        final String liveId = offlinePref.getString("liveId" , "");
+
+        if (offline.length() > 0 && liveId.length() > 0)
+        {
+
+
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.offline_sync_dialog);
+            dialog.show();
+
+
+
+
+            bean b = (bean)getActivity().getApplicationContext();
+
+            final Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(b.BASE_URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+            Call<endLiveBean> call = cr.syncLive(offline , liveId);
+
+            call.enqueue(new Callback<endLiveBean>() {
+                @Override
+                public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
+
+
+                    if (response.body().getStatus().equals("1"))
+                    {
+
+                        offlineEdit.remove("offline");
+                        offlineEdit.remove("liveId");
+                        offlineEdit.apply();
+
+                        dialog.dismiss();
+
+                    }
+
+
+
+                }
+
+                @Override
+                public void onFailure(Call<endLiveBean> call, Throwable t) {
+
+                }
+            });
+
+
+
+
+
+
+        }
+
 
 
         progress.setVisibility(View.VISIBLE);

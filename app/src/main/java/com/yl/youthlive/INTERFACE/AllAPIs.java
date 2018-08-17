@@ -508,6 +508,14 @@ public interface AllAPIs {
     );
 
     @Multipart
+    @POST("api/dummy_updated_data.php")
+    Call<getUpdatedBean> getDummyUpdatedData(
+            @Part("userId") String userId,
+            @Part("liveId") String liveId,
+            @Part("keey") String key
+    );
+
+    @Multipart
     @POST("api/exitPlayer.php")
     Call<String> exitPlayer(
             @Part("userId") String userId,

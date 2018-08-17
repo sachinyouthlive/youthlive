@@ -2564,6 +2564,15 @@ public class BroadcasterFragment1 extends Fragment {
         if (repeatHandler != null) {
             repeatHandler.removeCallbacks(mStatusChecker);
         }
+
+        try {
+            stopProjection();
+            stopProjection2();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
 /*
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(commentReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
@@ -3457,7 +3466,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                         Log.d("keeey", keey);
 
-                        Call<getUpdatedBean> call = cr.getPlayerUpdatedData(dummyList.get(r).getUserId(), liveId, "dummy");
+                        Call<getUpdatedBean> call = cr.getDummyUpdatedData(dummyList.get(r).getUserId(), liveId, "dummy");
 
 
                         call.enqueue(new Callback<getUpdatedBean>() {

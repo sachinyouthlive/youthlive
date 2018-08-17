@@ -252,7 +252,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                Blurry.with(getContext()).from(loadedImage).into(loading);
+                Blurry.with(homeActivity).from(loadedImage).into(loading);
 
             }
 

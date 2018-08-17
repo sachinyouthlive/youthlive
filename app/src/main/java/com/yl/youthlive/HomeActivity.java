@@ -173,7 +173,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
 
-        String offline = offlinePref.getString("offline" , "");
+        /*String offline = offlinePref.getString("offline" , "");
 
         final String liveId = offlinePref.getString("liveId" , "");
 
@@ -234,7 +234,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
 
-        }
+        }*/
 
 
 
