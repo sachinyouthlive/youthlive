@@ -200,4 +200,10 @@ public class LiveEndedPlayer extends AppCompatActivity {
         return String.valueOf(number);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(0 , 0);
+    }
 }

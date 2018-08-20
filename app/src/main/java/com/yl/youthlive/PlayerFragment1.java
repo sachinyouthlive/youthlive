@@ -774,6 +774,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         intent1.putExtra("time", item.getLiveTime());
                         intent1.putExtra("views", item.getViewers());
                         startActivity(intent1);
+                        player.overridePendingTransition(0,0);
                         getActivity().finish();
 
 

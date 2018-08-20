@@ -357,6 +357,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         mainPlayerView.setMirror(true);
 
         //mainPlayerView.setVideoPath("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/vod/mi6.mp4");
+        //mainPlayerView.setVideoPath("rtmp://ec2-52-15-208-193.us-east-2.compute.amazonaws.com:1935/connection/" + liveId);
         mainPlayerView.setVideoPath("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
         mainPlayerView.start();
 
@@ -1360,6 +1361,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         intent1.putExtra("time", "");
         intent1.putExtra("views", "");
         startActivity(intent1);
+        overridePendingTransition(0,0);
         finish();
 
     }

@@ -793,6 +793,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
     public void startPublish(String liveId) {
+        //mPublisher.startPublish("rtmp://ec2-52-15-208-193.us-east-2.compute.amazonaws.com:1935/connection/" + liveId);
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
         //mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
         //mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
