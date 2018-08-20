@@ -393,12 +393,10 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                 @Override
                 public void onClick(View v) {
 
-/*
                     if (item.getType().equals("live"))
                     {
-*/
 
-                        b.frag = true;
+  /*                      b.frag = true;
 
                         FragmentTransaction ft = ((HomeActivity)context).getSupportFragmentManager().beginTransaction();
                         VerticalFragment frag1 = new VerticalFragment();
@@ -408,18 +406,17 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                         ft.addToBackStack(null);
                         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                         ft.commit();
+*/
 
 
-
-                        /*
                         Intent intent = new Intent(context, VideoPlayer.class);
                         intent.putExtra("uri", item.getLiveId());
                         intent.putExtra("liveId", item.getLiveId());
                         intent.putExtra("pic",b.BASE_URL + item.getUserImage());
                         intent.putExtra("timelineId", String.valueOf(item.getUserId()));
-                        startActivity(intent);*/
+                        startActivity(intent);
 
-                 /*   }
+                    }
                     else
                     {
 
@@ -431,7 +428,6 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                         startActivity(intent);
 
                     }
-*/
 
                 }
             });

@@ -93,7 +93,7 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
         if (mCamera != null) {
             try {
                 mCamera.setPreviewTexture(surfaceTexture);
-            } catch (IOException ioe) {
+            } catch (Exception ioe) {
                 ioe.printStackTrace();
             }
         }

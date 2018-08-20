@@ -175,7 +175,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     ViewsAdapter viewsAdapter;
     List<com.yl.youthlive.getIpdatedPOJO.View> viewsList;
 
-    Context player;
+    VideoPlayer player;
 
     String timelineId;
 
@@ -210,7 +210,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         View view = inflater.inflate(R.layout.player_fragment_layout1, container, false);
 
 
-        player = getActivity();
+        player = ((VideoPlayer)getActivity());
 
         ylId = view.findViewById(R.id.ylid);
 
@@ -382,9 +382,9 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         progress.setVisibility(View.GONE);
 
 
-                        homeActivity.removeFrag();
+                        //homeActivity.removeFrag();
 
-                        //player.finish();
+                        player.finish();
 
                     }
 
@@ -753,6 +753,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     try {
 
+/*
                         Intent registrationComplete = new Intent("eenndd");
                         registrationComplete.putExtra("image", image);
                         registrationComplete.putExtra("tid", timelineId);
@@ -763,9 +764,9 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         LocalBroadcastManager.getInstance(player).sendBroadcast(registrationComplete);
 
                         //mCallback.onEndListener(image , timelineId , timelineName.getText().toString() , item.getLiveTime() , item.getViewers());
+*/
 
 
-/*
                         Intent intent1 = new Intent(getContext(), LiveEndedPlayer.class);
                         intent1.putExtra("image", image);
                         intent1.putExtra("id", timelineId);
@@ -774,7 +775,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         intent1.putExtra("views", item.getViewers());
                         startActivity(intent1);
                         getActivity().finish();
-*/
 
 
                     } catch (Exception e) {
@@ -1863,6 +1863,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     timelineId = response.body().getData().getTimelineId();
 
 
+
                     commentsAdapter.setGridData(response.body().getData().getComments());
 
 
@@ -1890,6 +1891,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     liveUsers.setText(response.body().getData().getViewsCount());
 
                     timelineName.setText(response.body().getData().getTimelineName());
+
+                    player.setData(timelineId , response.body().getData().getTimelineName());
 
                     image = response.body().getData().getTimelineProfileImage();
 
@@ -2810,7 +2813,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     }
 
 
-    @Override
+    /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof endListener) {
@@ -2819,7 +2822,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             throw new RuntimeException(context.toString()
                     + " must implement OnGreenFragmentListener");
         }
-    }
+    }*/
 
     @Override
     public void onDetach() {

@@ -367,6 +367,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
         //mainPlayerView.setVideoPath("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/vod/mi6.mp4");
         mainPlayerView.setVideoPath("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
+
         mainPlayerView.start();
 
 //Create the player

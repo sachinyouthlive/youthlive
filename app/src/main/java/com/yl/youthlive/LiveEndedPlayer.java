@@ -93,8 +93,31 @@ public class LiveEndedPlayer extends AppCompatActivity {
         //loader.displayImage(image , profile , options);
 
         username.setText(name);
-        viewers.setText(views);
-        liveTime.setText(getDurationString(Integer.parseInt(time)));
+
+        if (views.length() > 0)
+        {
+            viewers.setText(views);
+            viewers.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            viewers.setText("");
+            viewers.setVisibility(View.GONE);
+        }
+
+
+        if (time.length() > 0)
+        {
+            liveTime.setText(getDurationString(Integer.parseInt(time)));
+            liveTime.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            liveTime.setText("");
+            liveTime.setVisibility(View.GONE);
+        }
+
+
 
 
         back.setOnClickListener(new View.OnClickListener() {

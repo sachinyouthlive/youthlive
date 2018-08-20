@@ -265,11 +265,25 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
             }
         }
 
+        int bes_width2 = 0;
+        int max_limit2 = 480;
+        Camera.Size best_size2 = null;
+
+        for (Camera.Size size : sizes) {
+            Log.d("SrsCamera", "Size width:" + size.width + " height:" + size.height);
+            if (size.height > bes_width2 && size.height <= max_limit2) {
+                if (size.width / size.height == rat) {
+                    bes_width2 = size.width;
+                    best_size2 = size;
+                }
+            }
+        }
+
         Camera.Size ps = mPublisher.getmCameraView().getPreferedPreviews();
 
-        //Toast.makeText(VideoBroadcaster.this, String.valueOf(best_size.width) + " X " + String.valueOf(best_size.height), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(VideoBroadcaster.this, String.valueOf(best_size2.height) + " X " + String.valueOf(best_size2.width), Toast.LENGTH_LONG).show();
 
-        mPublisher.setOutputResolution(best_size.height, best_size.width);
+        mPublisher.setOutputResolution(best_size2.height, best_size2.width);
 
         mPublisher.setPreviewResolution(best_size.width, best_size.height);
 
@@ -426,13 +440,67 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     @Override
     public void onNetworkWeak() {
-        Toast.makeText(getApplicationContext(), "Slow Internet Detected", Toast.LENGTH_SHORT).show();
-        mPublisher.setVideoSmoothMode();
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setText("Slow Internet Detected, Exiting broadcast...");
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.show();
+
+//        Toast.makeText(getApplicationContext(), "Slow Internet Detected, Exiting broadcast...", Toast.LENGTH_LONG).setGravity(Gravity.CENTER_VERTICAL, 0, 0).show();
+
+
+
+        progress.setVisibility(View.VISIBLE);
+
+        bean b = (bean) getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+        Call<endLiveBean> call = cr.endLive(b.userId, liveId);
+
+        call.enqueue(new Callback<endLiveBean>() {
+            @Override
+            public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
+
+
+                if (response.body().getStatus().equals("1")) {
+
+                    isEnded = true;
+
+                    Intent intent = new Intent(VideoBroadcaster.this, LiveEndedBroadcaster.class);
+                    intent.putExtra("liveTime", response.body().getData().getLiveTime());
+                    intent.putExtra("views", response.body().getData().getViewers());
+                    startActivity(intent);
+                    finish();
+
+                }
+
+                progress.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onFailure(Call<endLiveBean> call, Throwable t) {
+
+            }
+        });
+
+
+
+        //mPublisher.setVideoSmoothMode();
     }
 
     @Override
     public void onNetworkResume() {
-        mPublisher.setVideoHDMode();
+        //mPublisher.setVideoHDMode();
         //Toast.makeText(getApplicationContext(), "resume" , Toast.LENGTH_SHORT).show();
     }
 
@@ -726,7 +794,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     public void startPublish(String liveId) {
         mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
-        mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
+        //mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
         //mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
     }
 

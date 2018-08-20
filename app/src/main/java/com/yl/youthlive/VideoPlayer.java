@@ -302,12 +302,23 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         mainPlayerView.setBufferingIndicator(loadingPopup);
 
-        mainPlayerView.setOnCompletionListener(this);
+        mainPlayerView.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(PLMediaPlayer plMediaPlayer) {
+                Log.d("completecode", "completed");
+                onEror(loadingpic);
+            }
+        });
         mainPlayerView.setOnErrorListener(new PLMediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(PLMediaPlayer plMediaPlayer, int i) {
 
                 Log.d("errorcode", String.valueOf(i));
+
+                if (i == -1)
+                {
+                    onEror(loadingpic);
+                }
 
                 return true;
             }
@@ -318,7 +329,14 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
             public boolean onInfo(PLMediaPlayer plMediaPlayer, int i, int i1) {
 
                 Log.d("infocode", String.valueOf(i));
+
                 return true;
+            }
+        });
+        mainPlayerView.setOnSeekCompleteListener(new PLMediaPlayer.OnSeekCompleteListener() {
+            @Override
+            public void onSeekComplete(PLMediaPlayer plMediaPlayer) {
+                Log.d("seekcode", "seek completed");
             }
         });
         mainPlayerView.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
@@ -332,6 +350,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         initAVOptions();
         mainPlayerView.setAVOptions(options2);
 
+        mainPlayerView.setDebugLoggingEnabled(true);
 
         mainPlayerView.setDisplayOrientation(0);
 
@@ -1315,10 +1334,34 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         int codec = 0;
         options2.setInteger(AVOptions.KEY_MEDIACODEC, codec);
         options2.setInteger(AVOptions.KEY_DELAY_OPTIMIZATION, 1);
-        options2.setInteger(AVOptions.KEY_CACHE_BUFFER_DURATION, 500);
+        options2.setInteger(AVOptions.KEY_CACHE_BUFFER_DURATION, 1000);
         options2.setInteger(AVOptions.KEY_MAX_CACHE_BUFFER_DURATION, 3000);
         // whether start play automatically after prepared, default value is 1
         options2.setInteger(AVOptions.KEY_START_ON_PREPARED, 0);
+    }
+
+
+    String timelineId , timelineName;
+
+
+    public void setData(String timelineId , String timelineName)
+    {
+        this.timelineId = timelineId;
+        this.timelineName = timelineName;
+    }
+
+
+    public void onEror(String loadingpic)
+    {
+        Intent intent1 = new Intent(VideoPlayer.this, LiveEndedPlayer.class);
+        intent1.putExtra("image", loadingpic);
+        intent1.putExtra("id", timelineId);
+        intent1.putExtra("name", timelineName);
+        intent1.putExtra("time", "");
+        intent1.putExtra("views", "");
+        startActivity(intent1);
+        finish();
+
     }
 
 }
