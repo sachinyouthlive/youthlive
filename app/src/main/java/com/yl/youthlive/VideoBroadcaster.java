@@ -265,25 +265,12 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
             }
         }
 
-        int bes_width2 = 0;
-        int max_limit2 = 480;
-        Camera.Size best_size2 = null;
-
-        for (Camera.Size size : sizes) {
-            Log.d("SrsCamera", "Size width:" + size.width + " height:" + size.height);
-            if (size.height > bes_width2 && size.height <= max_limit2) {
-                if (size.width / size.height == rat) {
-                    bes_width2 = size.width;
-                    best_size2 = size;
-                }
-            }
-        }
 
         Camera.Size ps = mPublisher.getmCameraView().getPreferedPreviews();
 
         //Toast.makeText(VideoBroadcaster.this, String.valueOf(best_size2.height) + " X " + String.valueOf(best_size2.width), Toast.LENGTH_LONG).show();
 
-        mPublisher.setOutputResolution(best_size2.height, best_size2.width);
+        mPublisher.setOutputResolution(best_size.height, best_size.width);
 
         mPublisher.setPreviewResolution(best_size.width, best_size.height);
 
@@ -441,17 +428,28 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     @Override
     public void onNetworkWeak() {
 
-        Toast toast = new Toast(getApplicationContext());
+        Toast toast = Toast.makeText(VideoBroadcaster.this , null , Toast.LENGTH_LONG);
         toast.setText("Slow Internet Detected, Exiting broadcast...");
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
 
+
+        String et = String.valueOf((SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000);
+
+
+        editor.putString("offline", et);
+        editor.putString("liveId", liveId);
+        editor.apply();
+
+
+        finish();
+
 //        Toast.makeText(getApplicationContext(), "Slow Internet Detected, Exiting broadcast...", Toast.LENGTH_LONG).setGravity(Gravity.CENTER_VERTICAL, 0, 0).show();
 
 
 
-        progress.setVisibility(View.VISIBLE);
+        /*progress.setVisibility(View.VISIBLE);
 
         bean b = (bean) getApplicationContext();
 
@@ -491,7 +489,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
             public void onFailure(Call<endLiveBean> call, Throwable t) {
 
             }
-        });
+        });*/
 
 
 

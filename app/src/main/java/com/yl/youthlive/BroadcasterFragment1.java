@@ -571,80 +571,106 @@ public class BroadcasterFragment1 extends Fragment {
 
                 switch (intent.getAction()) {
                     case "commentData": {
-                        Log.d("data", intent.getStringExtra("data"));
 
-                        String json = intent.getStringExtra("data");
+                        try {
+                            Log.d("data", intent.getStringExtra("data"));
 
-                        Gson gson = new Gson();
+                            String json = intent.getStringExtra("data");
 
-                        Comment item = gson.fromJson(json, Comment.class);
+                            Gson gson = new Gson();
 
-                        commentsAdapter.addComment(item);
+                            Comment item = gson.fromJson(json, Comment.class);
 
-                        if (loading) {
-                            commentGrid.scrollToPosition(0);
-                            loading = true;
-                            newMessage.setVisibility(View.GONE);
-                        } else {
-                            Log.d("lloogg", "new message");
+                            commentsAdapter.addComment(item);
 
-                            newMessage.setVisibility(View.VISIBLE);
+                            if (loading) {
+                                commentGrid.scrollToPosition(0);
+                                loading = true;
+                                newMessage.setVisibility(View.GONE);
+                            } else {
+                                Log.d("lloogg", "new message");
+
+                                newMessage.setVisibility(View.VISIBLE);
+                            }
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
                         }
+
+
 
                         break;
                     }
                     case "like": {
-                        Log.d("data", intent.getStringExtra("data"));
 
-                        String json = intent.getStringExtra("data");
+                        try {
+                            Log.d("data", intent.getStringExtra("data"));
 
-                        int count1 = Integer.parseInt(json);
+                            String json = intent.getStringExtra("data");
 
-                        if (count1 > count) {
-                            for (int i = 0; i < count1 - count; i++) {
-                                bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+                            int count1 = Integer.parseInt(json);
+
+                            if (count1 > count) {
+                                for (int i = 0; i < count1 - count; i++) {
+                                    bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+                                }
+
+
+                                likeCount.setText(json);
+
+                                count = count1;
                             }
-
-
-                            likeCount.setText(json);
-
-                            count = count1;
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
                         }
+
+
 
                         break;
                     }
                     case "view": {
-                        Log.d("data", intent.getStringExtra("data"));
 
-                        String json = intent.getStringExtra("data");
+                        try {
+                            Log.d("data", intent.getStringExtra("data"));
 
-                        Gson gson = new Gson();
+                            String json = intent.getStringExtra("data");
 
-                        com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
+                            Gson gson = new Gson();
 
-                        final String uid = item.getUserId().replace("\"", "");
+                            com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
 
-                        final bean b = (bean) getActivity().getApplicationContext();
+                            final String uid = item.getUserId().replace("\"", "");
 
-                        String id = item.getUserId();
-                        if (!uid.equals(b.userId)) {
-                            viewsAdapter.addView(item);
-                            viewersGrid.smoothScrollToPosition(0);
+                            final bean b = (bean) getActivity().getApplicationContext();
+
+                            String id = item.getUserId();
+                            if (!uid.equals(b.userId)) {
+                                viewsAdapter.addView(item);
+                                viewersGrid.smoothScrollToPosition(0);
+                            }
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
                         }
+
 
                         break;
                     }
                     case "gift": {
-                        Log.d("data", intent.getStringExtra("data"));
 
-                        String json = intent.getStringExtra("data");
-
-                        Gson gson = new Gson();
-
-                        com.yl.youthlive.getIpdatedPOJO.Gift item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.Gift.class);
 
 
                         try {
+
+                            Log.d("data", intent.getStringExtra("data"));
+
+                            String json = intent.getStringExtra("data");
+
+                            Gson gson = new Gson();
+
+                            com.yl.youthlive.getIpdatedPOJO.Gift item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.Gift.class);
+
 
                             String giftName = item.getGiftName().replace("\"", "");
 
@@ -680,11 +706,14 @@ public class BroadcasterFragment1 extends Fragment {
                         break;
                     }
                     case "status": {
-                        Log.d("ddata", intent.getStringExtra("data"));
-
-                        String json = intent.getStringExtra("data");
 
                         try {
+
+                            Log.d("ddata", intent.getStringExtra("data"));
+
+                            String json = intent.getStringExtra("data");
+
+
                             JSONObject obj = new JSONObject(json);
 
                             connId = obj.getString("connId");
@@ -712,18 +741,21 @@ public class BroadcasterFragment1 extends Fragment {
                             }
 
 
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             Log.d("ddata", e.toString());
                             e.printStackTrace();
                         }
                         break;
                     }
                     case "status_player": {
-                        Log.d("uurrii", intent.getStringExtra("data"));
-
-                        String json = intent.getStringExtra("data");
 
                         try {
+
+                            Log.d("uurrii", intent.getStringExtra("data"));
+
+                            String json = intent.getStringExtra("data");
+
+
                             JSONObject obj = new JSONObject(json);
 
                             connId = obj.getString("connId");
@@ -751,18 +783,20 @@ public class BroadcasterFragment1 extends Fragment {
                             }
 
 
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             Log.d("uurrii", e.toString());
                             e.printStackTrace();
                         }
                         break;
                     }
                     case "request_player": {
-                        Log.d("ddata", intent.getStringExtra("data"));
-
-                        String json = intent.getStringExtra("data");
 
                         try {
+                            Log.d("ddata", intent.getStringExtra("data"));
+
+                            String json = intent.getStringExtra("data");
+
+
                             JSONObject object = new JSONObject(json);
 
                             connId = object.getString("conId");
@@ -918,17 +952,20 @@ public class BroadcasterFragment1 extends Fragment {
                             });
 
 
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         break;
                     }
                     case "connection_end": {
-                        Log.d("uurrii", intent.getStringExtra("data"));
-
-                        String json = intent.getStringExtra("data");
 
                         try {
+
+                            Log.d("uurrii", intent.getStringExtra("data"));
+
+                            String json = intent.getStringExtra("data");
+
+
                             JSONObject obj = new JSONObject(json);
 
 
@@ -941,7 +978,7 @@ public class BroadcasterFragment1 extends Fragment {
                             broadcaster.endThumbPlayer1();
 
 
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             Log.d("uurrii", e.toString());
                             e.printStackTrace();
                         }
@@ -951,21 +988,27 @@ public class BroadcasterFragment1 extends Fragment {
                     }
                     case "exit": {
 
-                        Log.d("data", intent.getStringExtra("data"));
+                        try {
+                            Log.d("data", intent.getStringExtra("data"));
 
-                        String json = intent.getStringExtra("data");
+                            String json = intent.getStringExtra("data");
 
-                        Gson gson = new Gson();
+                            Gson gson = new Gson();
 
-                        com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
+                            com.yl.youthlive.getIpdatedPOJO.View item = gson.fromJson(json, com.yl.youthlive.getIpdatedPOJO.View.class);
 
-                        final String uid = item.getUserId().replace("\"", "");
+                            final String uid = item.getUserId().replace("\"", "");
 
-                        final bean b = (bean) getActivity().getApplicationContext();
+                            final bean b = (bean) getActivity().getApplicationContext();
 
-                        String id = item.getUserId();
-                        if (!uid.equals(b.userId)) {
-                            viewsAdapter.removeView(item);
+                            String id = item.getUserId();
+                            if (!uid.equals(b.userId)) {
+                                viewsAdapter.removeView(item);
+                            }
+
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
                         }
 
                         break;
@@ -3449,7 +3492,7 @@ public class BroadcasterFragment1 extends Fragment {
                     if (randomBoolean()) {
                         final int r = new Random().nextInt(dummyList.size());
 
-                        final bean b = (bean) getActivity().getApplicationContext();
+                        final bean b = (bean) broadcaster.getApplicationContext();
 
                         final Retrofit retrofit = new Retrofit.Builder()
                                 .baseUrl(b.BASE_URL)
