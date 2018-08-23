@@ -3502,8 +3502,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-
-                        SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm", Context.MODE_PRIVATE);
+                        SharedPreferences fcmPref = Objects.requireNonNull(getActivity()).getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
                         String keey = fcmPref.getString("token", "");
 
