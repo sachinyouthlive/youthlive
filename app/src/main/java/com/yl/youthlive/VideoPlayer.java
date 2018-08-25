@@ -545,13 +545,10 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         remoteRender = findViewById(R.id.remote_video_view);
         remoteRenderLayout = findViewById(R.id.remote_video_layout);
 
-        remoteRender.setZOrderMediaOverlay(true);
-
         remoteRenderLayout.setPosition(0, 0, 100, 100);
         remoteRender.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
         remoteRender.setMirror(false);
         remoteRender.requestLayout();
-
 
 
         localRender = findViewById(R.id.local_video_view);
