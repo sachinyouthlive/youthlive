@@ -1,17 +1,21 @@
 package com.yl.youthlive;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -31,7 +35,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.flashphoner.fpwcsapi.Flashphoner;
+import com.flashphoner.fpwcsapi.bean.Connection;
+import com.flashphoner.fpwcsapi.bean.Data;
+import com.flashphoner.fpwcsapi.bean.StreamStatus;
+import com.flashphoner.fpwcsapi.handler.CameraSwitchHandler;
+import com.flashphoner.fpwcsapi.layout.PercentFrameLayout;
+import com.flashphoner.fpwcsapi.session.Session;
+import com.flashphoner.fpwcsapi.session.SessionEvent;
+import com.flashphoner.fpwcsapi.session.SessionOptions;
+import com.flashphoner.fpwcsapi.session.Stream;
+import com.flashphoner.fpwcsapi.session.StreamOptions;
+import com.flashphoner.fpwcsapi.session.StreamStatusEvent;
 import com.github.faucamp.simplertmp.RtmpHandler;
+import com.github.faucamp.simplertmp.packets.Video;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -62,8 +79,13 @@ import net.ossrs.yasea.SrsEncodeHandler;
 import net.ossrs.yasea.SrsPublisher;
 import net.ossrs.yasea.SrsRecordHandler;
 
+import org.webrtc.RendererCommon;
+import org.webrtc.SurfaceViewRenderer;
+
 import java.io.IOException;
 import java.net.SocketException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -78,7 +100,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 //import com.streamaxia.player.StreamaxiaPlayer;
 //import com.streamaxia.player.listener.StreamaxiaPlayerState;
 
-public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.RtmpListener, SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener{
+public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.RtmpListener, SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener {
 
     //CameraPreview cameraPreview;
     //private StreamaxiaPublisher mPublisher;
@@ -101,9 +123,6 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     //ImageButton start;
 
 
-    PlayerView thumbPlayerView1;
-    SimpleExoPlayer thumbPlayer1;
-
     RelativeLayout thumbContainer1;
 
 
@@ -125,14 +144,14 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     SharedPreferences.Editor editor;
 
 
-    private SrsPublisher mPublisher;
-    SrsCameraView cameraPreview;
+    //private SrsPublisher mPublisher;
+    //SrsCameraView cameraPreview;
 
 
-    BroadcastReceiver headsetPlug;
+    //BroadcastReceiver headsetPlug;
 
 
-    TextView earphones;
+    //TextView earphones;
 
     int flag = 0;
 
@@ -140,10 +159,29 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     View thumbLoading;
 
+
+    private Session session;
+
+    private Stream publishStream;
+
+    private SurfaceViewRenderer localRender;
+
+    private PercentFrameLayout localRenderLayout;
+
+
+    private Stream playStream;
+
+    private SurfaceViewRenderer remoteRender;
+
+    private PercentFrameLayout remoteRenderLayout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_broadcaster);
+
+        Flashphoner.init(this);
 
         pref = getSharedPreferences("offline", Context.MODE_PRIVATE);
         editor = pref.edit();
@@ -152,7 +190,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
         thumbLoading = findViewById(R.id.thumb_loading);
-        earphones = findViewById(R.id.earphones);
+
         thumbProgress1 = findViewById(R.id.progressBar13);
 
         DoubleBounce doubleBounce = new DoubleBounce();
@@ -160,31 +198,6 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
 //        Log.d("offline" , String.valueOf(db.queries().getAll().size()));
-
-        headsetPlug = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-
-                if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
-                    boolean connectedHeadphones = (intent.getIntExtra("state", 0) == 1);
-
-                    /*if (connectedHeadphones) {
-
-                        earphones.setVisibility(View.GONE);
-
-                    } else {
-
-                        earphones.setVisibility(View.VISIBLE);
-
-                    }*/
-
-
-                }
-
-
-            }
-        };
 
         chronometer = findViewById(R.id.chronometer);
         thumbcountdown = findViewById(R.id.thumb_countdown);
@@ -195,15 +208,36 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         thumbContainer1 = findViewById(R.id.thumb_container1);
 
 
-        cameraPreview = findViewById(R.id.preview);
+        localRender = findViewById(R.id.local_video_view);
+
+
+        localRenderLayout = findViewById(R.id.local_video_layout);
+
+
+        localRender.setZOrderMediaOverlay(true);
+
+
+        localRenderLayout.setPosition(0, 0, 100, 100);
+        localRender.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
+        localRender.setMirror(true);
+        localRender.requestLayout();
+
+        remoteRender = findViewById(R.id.remote_video_view);
+        remoteRenderLayout = findViewById(R.id.remote_video_layout);
+
+        remoteRender.setZOrderOnTop(true);
+
+        remoteRenderLayout.setPosition(0, 0, 100, 100);
+        remoteRender.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
+        remoteRender.setMirror(false);
+        remoteRender.requestLayout();
+
+
         progress = findViewById(R.id.progressBar5);
 
         popup = findViewById(R.id.finish_popup);
         end = popup.findViewById(R.id.end);
         cancel = popup.findViewById(R.id.cancel);
-
-
-        thumbPlayerView1 = findViewById(R.id.video_frame);
 
 
         pager = findViewById(R.id.pager);
@@ -212,12 +246,14 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         stateText = findViewById(R.id.textView3);
         //start = findViewById(R.id.imageButton2);
 
+/*
         mPublisher = new SrsPublisher(cameraPreview);
 
 
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
+
 
 
 
@@ -275,6 +311,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         mPublisher.setPreviewResolution(best_size.width, best_size.height);
 
         mPublisher.setVideoHDMode();
+*/
 
 
 
@@ -413,10 +450,6 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
             }
         });
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.intent.action.HEADSET_PLUG");
-        registerReceiver(headsetPlug, intentFilter);
-
 
     }
 
@@ -428,7 +461,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     @Override
     public void onNetworkWeak() {
 
-        Toast toast = Toast.makeText(VideoBroadcaster.this , null , Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(VideoBroadcaster.this, null, Toast.LENGTH_LONG);
         toast.setText("Slow Internet Detected, Exiting broadcast...");
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
@@ -492,7 +525,6 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         });*/
 
 
-
         //mPublisher.setVideoSmoothMode();
     }
 
@@ -548,9 +580,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         public Fragment getItem(int position) {
             if (position == 0) {
                 return new BroadcasterFragment1();
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }
@@ -561,7 +591,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         }
     }
 
-    @Override
+    /*@Override
     protected void onResume() {
         if (mPublisher != null)
         {
@@ -573,14 +603,13 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
         super.onResume();
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     protected void onPause() {
 
-        if (mPublisher != null)
+        if (session != null)
         {
-            cameraPreview.stopCamera();
             //mPublisher.stopPublish();
             //Toast.makeText(getApplicationContext(), "Camera Released", Toast.LENGTH_SHORT).show();
 
@@ -589,7 +618,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
         super.onPause();
 
-    }
+    }*/
 
     @Override
     protected void onStop() {
@@ -613,23 +642,22 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
         Log.d("offline", "destroy");
 
-        if (headsetPlug != null) {
-            unregisterReceiver(headsetPlug);
-            headsetPlug = null;
-        }
+/*
 
         try {
             thumbPlayer1.stop();
         } catch (Exception e) {
             e.printStackTrace();
         }
+*/
 
         try {
-            if (mPublisher != null) {
-                mPublisher.stopPublish();
-                //mPublisher.stopRecord();
+
+            if (session != null) {
+                session.disconnect();
                 chronometer.stop();
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -708,7 +736,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     public void onRtmpSocketException(SocketException e) {
         handleException(e);
 
-        Toast.makeText(getApplicationContext() , "No Internet Connection" , Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
 
         if (!isEnded) {
 
@@ -719,7 +747,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
             editor.putString("liveId", liveId);
             editor.apply();
 
-            setResult(Activity.RESULT_OK , getIntent());
+            setResult(Activity.RESULT_OK, getIntent());
             finish();
 
         }
@@ -781,25 +809,133 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     public void switchTorch() {
         if (torchStatus) {
-            cameraPreview.stopTorch();
+
             torchStatus = false;
         } else {
-            cameraPreview.startTorch();
+            //cameraPreview.startTorch();
             torchStatus = true;
         }
     }
 
 
-    public void startPublish(String liveId) {
-        //mPublisher.startPublish("rtmp://ec2-52-15-208-193.us-east-2.compute.amazonaws.com:1935/connection/" + liveId);
-        mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
-        //mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
-        //mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
+    public void startPublish(final String liveId) {
+
+        URI u = null;
+        try {
+            u = new URI("ws://ec2-13-127-186-216.ap-south-1.compute.amazonaws.com:8080");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        String url = u.getScheme() + "://" + u.getHost() + ":" + u.getPort();
+
+        SessionOptions sessionOptions = new SessionOptions(url);
+        sessionOptions.setLocalRenderer(localRender);
+        sessionOptions.setRemoteRenderer(remoteRender);
+
+
+        /**
+         * Session for connection to WCS server is created with method createSession().
+         */
+        session = Flashphoner.createSession(sessionOptions);
+
+        /**
+         * Callback functions for session status events are added to make appropriate changes in controls of the interface and publish stream when connection is established.
+         */
+        session.on(new SessionEvent() {
+            @Override
+            public void onAppData(Data data) {
+
+            }
+
+            @Override
+            public void onConnected(final Connection connection) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        /**
+                         * The options for the stream to publish are set.
+                         * The stream name is passed when StreamOptions object is created.
+                         */
+                        StreamOptions streamOptions = new StreamOptions(liveId);
+
+                        /**
+                         * Stream is created with method Session.createStream().
+                         */
+                        publishStream = session.createStream(streamOptions);
+
+                        /**
+                         * Callback function for stream status change is added to play the stream when it is published.
+                         */
+                        publishStream.on(new StreamStatusEvent() {
+                            @Override
+                            public void onStreamStatus(final Stream stream, final StreamStatus streamStatus) {
+
+                                Log.d("ssttaattuuss", String.valueOf(streamStatus));
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (StreamStatus.PUBLISHING.equals(streamStatus)) {
+
+                                        } else {
+                                            Log.e("Streamer", "Can not publish stream " + stream.getName() + " " + streamStatus);
+                                        }
+
+                                    }
+                                });
+                            }
+
+                        });
+
+                        ActivityCompat.requestPermissions(VideoBroadcaster.this,
+                                new String[]{android.Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA},
+                                PUBLISH_REQUEST_CODE);
+                    }
+                });
+            }
+
+            @Override
+            public void onRegistered(Connection connection) {
+
+            }
+
+            @Override
+            public void onDisconnection(final Connection connection) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                    }
+                });
+            }
+        });
+
+
+        /**
+         * Connection to WCS server is established with method Session.connect().
+         */
+        session.connect(new Connection());
+
+
     }
 
 
     public void switchCamera() {
-        mPublisher.switchCameraFace((mPublisher.getCamraId() + 1) % Camera.getNumberOfCameras());
+
+        publishStream.switchCamera(new CameraSwitchHandler() {
+            @Override
+            public void onCameraSwitchDone(boolean b) {
+
+            }
+
+            @Override
+            public void onCameraSwitchError(String s) {
+
+            }
+        });
+
+        //mPublisher.switchCameraFace((mPublisher.getCamraId() + 1) % Camera.getNumberOfCameras());
         //mPublisher.switchCamera();
     }
 
@@ -826,7 +962,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         thumbLoading.setVisibility(View.VISIBLE);
 
 
-        new CountDownTimer(8000, 1000) {
+        new CountDownTimer(3000, 1000) {
 
 
             @Override
@@ -845,7 +981,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
                 Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + url);
 
 
-                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                /*BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
                 TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
                 TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
@@ -889,7 +1025,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
                             thumbLoading.setVisibility(View.GONE);
                         }
 
-                        /*if (playbackState == 4) {
+                        *//*if (playbackState == 4) {
                             progress.setVisibility(View.VISIBLE);
 
                             final bean b = (bean) getApplicationContext();
@@ -921,7 +1057,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
                         }
-*/
+*//*
                     }
 
                     @Override
@@ -967,6 +1103,73 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
                 thumbPlayerView1.setVisibility(View.VISIBLE);
+*/
+
+                //thumbPlayerView1.setVisibility(View.VISIBLE);
+
+                StreamOptions streamOptions = new StreamOptions(url);
+
+                /**
+                 * Stream is created with method Session.createStream().
+                 */
+                playStream = session.createStream(streamOptions);
+
+                /**
+                 * Callback function for stream status change is added to display the status.
+                 */
+                playStream.on(new StreamStatusEvent() {
+                    @Override
+                    public void onStreamStatus(final Stream stream, final StreamStatus streamStatus) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                Log.d("ssttaattuuss", String.valueOf(streamStatus));
+
+                                if (!StreamStatus.PLAYING.equals(streamStatus)) {
+                                    progress.setVisibility(View.VISIBLE);
+
+                                    final bean b = (bean) getApplicationContext();
+
+                                    final Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl(b.BASE_URL)
+                                            .addConverterFactory(ScalarsConverterFactory.create())
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+
+                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                                    Call<String> call = cr.endConnection(connId);
+
+                                    call.enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse(Call<String> call, Response<String> response) {
+
+
+                                            progress.setVisibility(View.GONE);
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<String> call, Throwable t) {
+                                            progress.setVisibility(View.GONE);
+                                        }
+                                    });
+
+                                } else if (StreamStatus.PLAYING.equals(streamStatus)) {
+                                    thumbLoading.setVisibility(View.GONE);
+                                }
+
+                            }
+                        });
+                    }
+                });
+
+                /*
+                 * Method Stream.play() is called to start playback of the stream.
+                 */
+                playStream.play();
+
 
                 thumbcountdown.setVisibility(View.GONE);
 
@@ -980,7 +1183,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     public void startCountDown() {
 
-        new CountDownTimer(8000, 1000) {
+        new CountDownTimer(3000, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -1035,7 +1238,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
                 } else {
 
-                    Toast.makeText(VideoBroadcaster.this, "Error gounf live", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VideoBroadcaster.this, "Error going live", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -1053,27 +1256,59 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     public void endThumbPlayer1() {
         try {
-            thumbPlayer1.stop();
+            playStream.stop();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-        thumbPlayerView1.setVisibility(View.GONE);
+        //thumbPlayerView1.setVisibility(View.GONE);
         thumbContainer1.setVisibility(View.GONE);
 
+        localRender.setVisibility(View.GONE);
+        localRender.setVisibility(View.VISIBLE);
+
+        
 
     }
 
     public void handleException(Exception e) {
         try {
 
+            session.disconnect();
+
             //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            mPublisher.stopPublish();
+            //mPublisher.stopPublish();
             //mPublisher.stopRecord();
         } catch (Exception e1) {
             e1.printStackTrace();
         }
     }
+
+    private static final int PUBLISH_REQUEST_CODE = 100;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PUBLISH_REQUEST_CODE: {
+                if (grantResults.length == 0 ||
+                        grantResults[0] != PackageManager.PERMISSION_GRANTED ||
+                        grantResults[1] != PackageManager.PERMISSION_GRANTED) {
+
+                    session.disconnect();
+
+                } else {
+                    /**
+                     * Method Stream.publish() is called to publish stream.
+                     */
+                    publishStream.publish();
+
+                }
+            }
+        }
+    }
+
 
 }

@@ -101,7 +101,8 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
     TextView stateText;
 
 
-    SrsCameraView thumbCamera1, thumbCamera2;
+    //SrsCameraView thumbCamera1;
+    SrsCameraView thumbCamera2;
 
 
     String loadingpic;
@@ -119,7 +120,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
     ProgressBar loadingProgress;
 
-    PlayerView thumbSurface1, thumbSurface2;
+    //PlayerView thumbSurface1, thumbSurface2;
     SimpleExoPlayer thumbPlayer1, thumbPlayer2;
 
     View loadingPopup;
@@ -272,12 +273,12 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
         player_camera_layout1 = view.findViewById(R.id.thumb_camera_layout1);
 
-        thumbCamera1 = view.findViewById(R.id.thumb_camera1);
+        //thumbCamera1 = view.findViewById(R.id.thumb_camera1);
         thumbCamera2 = view.findViewById(R.id.thumb_camera2);
 
 
-        thumbSurface1 = view.findViewById(R.id.thumb_frame1);
-        thumbSurface2 = view.findViewById(R.id.thumb_frame2);
+       //thumbSurface1 = view.findViewById(R.id.thumb_frame1);
+        //thumbSurface2 = view.findViewById(R.id.thumb_frame2);
 
         pager = view.findViewById(R.id.pager);
 
@@ -997,7 +998,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
     SrsPublisher mPublisher;
 
-    public void startThumbCamera1(final String connId) {
+    /*public void startThumbCamera1(final String connId) {
 
 
         progress.setVisibility(View.VISIBLE);
@@ -1107,7 +1108,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
                 }));
                 mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayerFragment.this));
-                /*mPublisher.getmCameraView().open_camera();
+                *//*mPublisher.getmCameraView().open_camera();
 
 
                 DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -1133,15 +1134,15 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
                     mPublisher.setOutputResolution(480, 640);
                 }
 
-*/
+*//*
 
                 mPublisher = new SrsPublisher(thumbCamera1);
-/*
+*//*
 
         mPublisher.setEncoderHandler(new EncoderjHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordEventHandler(new RecordHandler(this));
-*/
+*//*
 
 
                 mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayerFragment.this));
@@ -1196,9 +1197,9 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
 
     }
+*/
 
-
-    public void startThumbCamera1FromPlayer(final String connId) {
+    /*public void startThumbCamera1FromPlayer(final String connId) {
 
         player_camera_layout1.setVisibility(View.VISIBLE);
 
@@ -1224,7 +1225,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
                 isThumbCamera1 = true;
 
-                /*progress.setVisibility(View.VISIBLE);
+                *//*progress.setVisibility(View.VISIBLE);
 
                 Log.d("rreess" , connId);
 
@@ -1256,7 +1257,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
                         Log.d("rreess" , t.toString());
                         t.printStackTrace();
                     }
-                });*/
+                });*//*
             }
 
             @Override
@@ -1320,7 +1321,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
         //mPublisher.getmCameraView().open_camera();
 
-        /*DisplayMetrics displayMetrics = new DisplayMetrics();
+        *//*DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager wm = (WindowManager)
                 getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(displayMetrics);
@@ -1342,7 +1343,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
             mPublisher.setPreviewResolution(640, 480);
             mPublisher.setOutputResolution(480, 640);
         }
-*/
+*//*
         thumbCamera1.startCamera();
 
         //mPublisher.setCameraFacing(1);
@@ -1378,9 +1379,9 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
 
     }
+*/
 
-
-    public void startThumbPlayer1(String connId) {
+    /*public void startThumbPlayer1(String connId) {
 
 
         Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + connId);
@@ -1475,8 +1476,8 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
 
     }
-
-    public void endThumbCamera1() {
+*/
+   /* public void endThumbCamera1() {
 
         try {
 
@@ -1495,7 +1496,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
 
 
     }
-
+*/
     public void endThumbPlayer1() {
 
         try {
@@ -1506,7 +1507,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
         }
 
 
-        thumbSurface1.setVisibility(View.GONE);
+        //thumbSurface1.setVisibility(View.GONE);
 
     }
 
@@ -1522,9 +1523,9 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
             mainPlayer.setPlayWhenReady(true);
         }*/
 
-        if (mPublisher != null) {
+        /*if (mPublisher != null) {
             thumbCamera1.startCamera();
-        }
+        }*/
 
         /*if (thumbPlayer1 != null)
         {
@@ -1541,9 +1542,7 @@ public class VideoPlayerFragment extends Fragment implements PLMediaPlayer.OnCom
         mainPlayerView.pause();
 
 
-        if (mPublisher != null) {
-            thumbCamera1.stopCamera();
-        }
+
 
 /*
         if (mainPlayer != null)

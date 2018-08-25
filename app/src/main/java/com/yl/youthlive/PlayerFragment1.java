@@ -840,7 +840,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                                     isConnection = true;
 
-                                    //player.startThumbCamera1(connId);
+                                    player.startThumbCamera1(connId);
                                     dialog.dismiss();
                                 }
                             });
@@ -872,31 +872,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                                                 isConnection = false;
                                                 //cameraLayout1.setVisibility(View.VISIBLE);
-
-/*
-                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
-                            goCoderBroadcastConfig.setPortNumber(1935);
-                            goCoderBroadcastConfig.setApplicationName("live");
-                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
-                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
-                            // Set the bitrate to 4000 Kbps
-                            goCoderBroadcastConfig.setVideoBitRate(1200);
-
-                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
-
-                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
-
-                            //if (configValidationError != null) {
-                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDes`cription(), Toast.LENGTH_LONG).show();
-                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
-                            // Stop the broadcast that is currently running
-                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
-                            //} else {
-                            // Start streaming
-                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
-                            //}
-
-*/
 
 
                                                 reject1.setVisibility(View.GONE);
@@ -977,7 +952,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                                 Log.d("ddata", uri);
 
 
-                                new CountDownTimer(8000, 1000) {
+                                new CountDownTimer(3000, 1000) {
 
 
                                     @Override
@@ -991,7 +966,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                                         isConnection = true;
 
-                                        //player.startThumbPlayer1(uri);
+                                        player.startThumbPlayer1(uri);
                                         thumbCameraContainer1.setVisibility(View.VISIBLE);
 
                                     }
@@ -1047,11 +1022,11 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 
                         if (uid.equals(b.userId)) {
-                            //player.endThumbCamera1();
+                            player.endThumbCamera1();
                             thumbCameraContainer1.setVisibility(View.GONE);
                             isConnection = false;
                         } else {
-                            //player.endThumbPlayer1();
+                            player.endThumbPlayer1();
                             thumbCameraContainer1.setVisibility(View.GONE);
                             isConnection = false;
 
@@ -1114,7 +1089,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                                 isConnection = true;
 
-                                //player.startThumbCamera1FromPlayer(connId);
+                                player.startThumbCamera1FromPlayer(connId);
 
 
                             } else {
@@ -1130,7 +1105,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                             if (mode.equals("2")) {
 
 
-                                new CountDownTimer(8000, 1000) {
+                                new CountDownTimer(3000, 1000) {
 
 
                                     @Override
@@ -1144,7 +1119,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                                         isConnection = true;
 
-                                        //player.startThumbPlayer1(uri);
+                                        player.startThumbPlayer1(uri);
                                         thumbCameraContainer1.setVisibility(View.VISIBLE);
 
                                     }
@@ -1911,7 +1886,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     if (response.body().getData().getIsConnection().equals("true")) {
                         reject1.setVisibility(View.GONE);
 
-                        //player.startThumbPlayer1(response.body().getData().getConnid());
+                        player.startThumbPlayer1(response.body().getData().getConnid());
                         thumbCameraContainer1.setVisibility(View.VISIBLE);
 
                         isConnection = true;

@@ -95,12 +95,12 @@ dependencies {
     //implementation 'com.github.tcking:giraffeplayer2:0.1.19-full'
 
     /*compile 'com.github.tcking:ijkplayer-arm64:0.8.8-full'
-                    //support arm64
-                    compile 'com.github.tcking:ijkplayer-armv5:0.8.8-full'
-                    //support armv5
-                    compile 'com.github.tcking:ijkplayer-x86:0.8.8-full'
-                    //support x86
-                    compile 'com.github.tcking:ijkplayer-x86_64:0.8.8-full'*/
+                        //support arm64
+                        compile 'com.github.tcking:ijkplayer-armv5:0.8.8-full'
+                        //support armv5
+                        compile 'com.github.tcking:ijkplayer-x86:0.8.8-full'
+                        //support x86
+                        compile 'com.github.tcking:ijkplayer-x86_64:0.8.8-full'*/
 
     //support x86_64
 
@@ -139,6 +139,7 @@ dependencies {
     implementation 'com.qiniu.pili:pili-android-qos:0.8.20'
     implementation 'com.github.castorflex.verticalviewpager:library:19.0.1'
     implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation project(':wcs-android-sdk-1.0.1.311f80c5d38613dbef341fac077a3c699d5657d6-debug')
 }
 apply plugin: 'com.google.gms.google-services'
 configurations.all {
