@@ -51,8 +51,12 @@ import com.bumptech.glide.Glide;
 
 import com.flashphoner.fpwcsapi.Flashphoner;
 import com.flashphoner.fpwcsapi.bean.Connection;
+import com.flashphoner.fpwcsapi.bean.CustomObject;
 import com.flashphoner.fpwcsapi.bean.Data;
 import com.flashphoner.fpwcsapi.bean.StreamStatus;
+import com.flashphoner.fpwcsapi.constraints.AudioConstraints;
+import com.flashphoner.fpwcsapi.constraints.Constraints;
+import com.flashphoner.fpwcsapi.constraints.VideoConstraints;
 import com.flashphoner.fpwcsapi.layout.PercentFrameLayout;
 import com.flashphoner.fpwcsapi.session.Session;
 import com.flashphoner.fpwcsapi.session.SessionEvent;
@@ -109,6 +113,7 @@ import net.ossrs.yasea.SrsEncodeHandler;
 import net.ossrs.yasea.SrsPublisher;
 import net.ossrs.yasea.SrsRecordHandler;
 
+import org.webrtc.PeerConnection;
 import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 
@@ -562,7 +567,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         localRenderLayout.setPosition(0, 0, 100, 100);
         localRender.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
-        localRender.setMirror(true);
+        localRender.setMirror(false);
         localRender.requestLayout();
 
 
@@ -571,13 +576,13 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         thumbRenderLayout.setPosition(0, 0, 100, 100);
         thumbRender.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
-        thumbRender.setMirror(true);
+        thumbRender.setMirror(false);
         thumbRender.requestLayout();
 
 
         URI u = null;
         try {
-            u = new URI("ws://ec2-13-127-186-216.ap-south-1.compute.amazonaws.com:8080");
+            u = new URI("ws://ec2-35-154-79-248.ap-south-1.compute.amazonaws.com:8080");
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -614,6 +619,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
                          * The stream name is passed when StreamOptions object is created.
                          */
                         StreamOptions streamOptions = new StreamOptions(liveId);
+
 
                         /**
                          * Stream is created with method Session.createStream().
@@ -1179,7 +1185,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         URI u = null;
         try {
-            u = new URI("ws://ec2-13-127-186-216.ap-south-1.compute.amazonaws.com:8080");
+            u = new URI("ws://ec2-35-154-79-248.ap-south-1.compute.amazonaws.com:8080");
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
