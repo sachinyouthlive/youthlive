@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -207,6 +208,8 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
     ProgressBar thumbProgress1;
 
+    BroadcastReceiver headsetPlug;
+
     private int mDisplayAspectRatio = PLVideoTextureView.ASPECT_RATIO_PAVED_PARENT;
 
 
@@ -217,6 +220,38 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         Flashphoner.init(this);
+
+
+
+
+        headsetPlug = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+
+                if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
+                    boolean connectedHeadphones = (intent.getIntExtra("state", 0) == 1);
+
+                    if (connectedHeadphones) {
+
+                        Flashphoner.getAudioManager().setUseSpeakerPhone(false);
+
+                    } else {
+
+                        Flashphoner.getAudioManager().setUseSpeakerPhone(true);
+
+                    }
+
+
+                }
+
+
+            }
+        };
+
+
+
+
 
         liveId = getIntent().getStringExtra("uri");
         loadingpic = getIntent().getStringExtra("pic");
@@ -638,14 +673,22 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
                                         Log.d("ssttaattuuss", String.valueOf(streamStatus));
 
-                                        if (!StreamStatus.PLAYING.equals(streamStatus)) {
-                                            onEror(loadingpic);
-                                            Log.e(TAG, "Can not play stream " + stream.getName() + " " + streamStatus);
+                                        //Log.d("ssttaattuuss", String.valueOf(streamStatus));
 
-                                        } else if (StreamStatus.PLAYING.equals(streamStatus)) {
+                                        if (StreamStatus.PLAYING.equals(streamStatus)) {
                                             loadingPopup.setVisibility(View.GONE);
                                             loading.setVisibility(View.GONE);
+                                            Log.d("ssttaattuuss", "playing " + stream.getName() + " " + streamStatus);
+                                            //mStatusView.setText(streamStatus.toString());
+                                        } else if (StreamStatus.NOT_ENOUGH_BANDWIDTH.equals(streamStatus)) {
+                                            Log.d("ssttaattuuss", "Not enough bandwidth stream " + stream.getName() + ", consider using lower video resolution or bitrate. " +
+                                                    "Bandwidth " + (Math.round(stream.getNetworkBandwidth() / 1000)) + " " +
+                                                    "bitrate " + (Math.round(stream.getRemoteBitrate() / 1000)));
+                                        } else if (StreamStatus.FAILED.equals(streamStatus)){
+                                            onEror(loadingpic);
+                                            //mStatusView.setText(streamStatus.toString());
                                         }
+
 
                                     }
                                 });
@@ -687,6 +730,12 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         FragAdapter adapter = new FragAdapter(getSupportFragmentManager());
 
         pager.setAdapter(adapter);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.HEADSET_PLUG");
+        registerReceiver(headsetPlug, intentFilter);
+
+
     }
 
 
@@ -695,6 +744,11 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         super.onDestroy();
         if (session != null) {
             session.disconnect();
+        }
+
+        if (headsetPlug != null) {
+            unregisterReceiver(headsetPlug);
+            headsetPlug = null;
         }
 
     }
@@ -1213,7 +1267,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
                         Log.d("ssttaattuuss", String.valueOf(streamStatus));
 
-                        if (!StreamStatus.PLAYING.equals(streamStatus)) {
+                        if (StreamStatus.FAILED.equals(streamStatus)) {
 
                             endThumbPlayer1();
 

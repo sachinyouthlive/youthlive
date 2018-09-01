@@ -1,2 +1,0 @@
-configurations.maybeCreate("default")
-artifacts.add("default", file('wcs-android-sdk-1.0.1.311f80c5d38613dbef341fac077a3c699d5657d6-debug.aar'))

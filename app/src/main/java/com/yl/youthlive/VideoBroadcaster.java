@@ -24,6 +24,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -79,6 +81,7 @@ import net.ossrs.yasea.SrsEncodeHandler;
 import net.ossrs.yasea.SrsPublisher;
 import net.ossrs.yasea.SrsRecordHandler;
 
+import org.webrtc.PeerConnection;
 import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 
@@ -148,7 +151,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     //SrsCameraView cameraPreview;
 
 
-    //BroadcastReceiver headsetPlug;
+    BroadcastReceiver headsetPlug;
 
 
     //TextView earphones;
@@ -183,6 +186,8 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
         Flashphoner.init(this);
 
+
+
         pref = getSharedPreferences("offline", Context.MODE_PRIVATE);
         editor = pref.edit();
 
@@ -198,6 +203,31 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
 //        Log.d("offline" , String.valueOf(db.queries().getAll().size()));
+
+        headsetPlug = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+
+                if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
+                    boolean connectedHeadphones = (intent.getIntExtra("state", 0) == 1);
+
+                    if (connectedHeadphones) {
+
+                        Flashphoner.getAudioManager().setUseSpeakerPhone(false);
+
+                    } else {
+
+                        Flashphoner.getAudioManager().setUseSpeakerPhone(true);
+
+                    }
+
+
+                }
+
+
+            }
+        };
 
         chronometer = findViewById(R.id.chronometer);
         thumbcountdown = findViewById(R.id.thumb_countdown);
@@ -450,6 +480,10 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
             }
         });
 
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.HEADSET_PLUG");
+        registerReceiver(headsetPlug, intentFilter);
+
 
     }
 
@@ -642,14 +676,12 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
         Log.d("offline", "destroy");
 
-/*
-
-        try {
-            thumbPlayer1.stop();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (headsetPlug != null) {
+            unregisterReceiver(headsetPlug);
+            headsetPlug = null;
         }
-*/
+
+
 
         try {
 
@@ -839,6 +871,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
          */
         session = Flashphoner.createSession(sessionOptions);
 
+
         /**
          * Callback functions for session status events are added to make appropriate changes in controls of the interface and publish stream when connection is established.
          */
@@ -915,6 +948,8 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         /**
          * Connection to WCS server is established with method Session.connect().
          */
+
+
         session.connect(new Connection());
 
 
@@ -1126,7 +1161,18 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
                                 Log.d("ssttaattuuss", String.valueOf(streamStatus));
 
-                                if (!StreamStatus.PLAYING.equals(streamStatus)) {
+                                if (StreamStatus.PLAYING.equals(streamStatus)) {
+
+                                    thumbLoading.setVisibility(View.GONE);
+
+
+                                } else if (StreamStatus.NOT_ENOUGH_BANDWIDTH.equals(streamStatus)) {
+                                    Log.d("ssttaattuuss", "Not enough bandwidth stream " + stream.getName() + ", consider using lower video resolution or bitrate. " +
+                                            "Bandwidth " + (Math.round(stream.getNetworkBandwidth() / 1000)) + " " +
+                                            "bitrate " + (Math.round(stream.getRemoteBitrate() / 1000)));
+                                }
+                                else if (StreamStatus.FAILED.equals(streamStatus))
+                                {
                                     progress.setVisibility(View.VISIBLE);
 
                                     final bean b = (bean) getApplicationContext();
@@ -1156,8 +1202,6 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
                                         }
                                     });
 
-                                } else if (StreamStatus.PLAYING.equals(streamStatus)) {
-                                    thumbLoading.setVisibility(View.GONE);
                                 }
 
                             }
@@ -1266,10 +1310,9 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
         //thumbPlayerView1.setVisibility(View.GONE);
         thumbContainer1.setVisibility(View.GONE);
 
-        localRender.setVisibility(View.GONE);
-        localRender.setVisibility(View.VISIBLE);
+        //localRender.release();
+        //localRender.requestLayout();
 
-        
 
     }
 
