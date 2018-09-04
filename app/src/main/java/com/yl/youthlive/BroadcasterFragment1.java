@@ -26,8 +26,12 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -143,7 +147,7 @@ public class BroadcasterFragment1 extends Fragment {
 
 
     ProgressBar progress;
-    String liveId;
+    static String liveId;
 
     VideoBroadcaster broadcaster;
 
@@ -180,18 +184,18 @@ public class BroadcasterFragment1 extends Fragment {
     ImageButton end;
     RecyclerView viewersGrid;
     LinearLayoutManager viewersManager;
-    ViewsAdapter viewsAdapter;
+    static ViewsAdapter viewsAdapter;
     List<com.yl.youthlive.getIpdatedPOJO.View> viewsList;
 
     RelativeLayout playerFrame1;
 
-    TextView reject1;
+    static TextView reject1;
 
     String connId;
 
-    String thumbPic1;
+    static String thumbPic1;
 
-    boolean isConnection = false;
+    static boolean isConnection = false;
 
     View giftLayout;
     ImageView giftImage;
@@ -211,10 +215,17 @@ public class BroadcasterFragment1 extends Fragment {
 
     List<Datum> dummyList;
 
+
+    static List<guestBean> guestList;
+    ImageView notificationDot;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.broadcaster_fragment_layout1, container, false);
+
+        guestList = new ArrayList<>();
 
         broadcaster = (VideoBroadcaster) getActivity();
 
@@ -228,6 +239,8 @@ public class BroadcasterFragment1 extends Fragment {
 
         bubbleView = (BubbleView) view.findViewById(R.id.bubble);
         playerFrame1 = view.findViewById(R.id.view3);
+
+        notificationDot = view.findViewById(R.id.imageView22);
 
         giftImage = view.findViewById(R.id.imageView18);
         giftText = view.findViewById(R.id.textView50);
@@ -592,11 +605,9 @@ public class BroadcasterFragment1 extends Fragment {
 
                                 newMessage.setVisibility(View.VISIBLE);
                             }
-                        }catch (Exception e)
-                        {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-
 
 
                         break;
@@ -620,11 +631,9 @@ public class BroadcasterFragment1 extends Fragment {
 
                                 count = count1;
                             }
-                        }catch (Exception e)
-                        {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-
 
 
                         break;
@@ -649,8 +658,7 @@ public class BroadcasterFragment1 extends Fragment {
                                 viewsAdapter.addView(item);
                                 viewersGrid.smoothScrollToPosition(0);
                             }
-                        }catch (Exception e)
-                        {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -658,7 +666,6 @@ public class BroadcasterFragment1 extends Fragment {
                         break;
                     }
                     case "gift": {
-
 
 
                         try {
@@ -802,9 +809,26 @@ public class BroadcasterFragment1 extends Fragment {
                             connId = object.getString("conId");
 
                             final String uid = object.getString("uid");
+                            final String name = object.getString("name");
+                            final String pic = object.getString("pic");
 
 
-                            final Dialog dialog = new Dialog(broadcaster);
+                            guestBean guestBean = new guestBean();
+                            guestBean.setId(uid);
+                            guestBean.setName(name);
+                            guestBean.setPic(pic);
+                            guestBean.setConnid(connId);
+
+
+                            guestList.add(guestBean);
+
+
+                            notificationDot.setVisibility(View.VISIBLE);
+
+
+
+
+                            /*final Dialog dialog = new Dialog(broadcaster);
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setCancelable(false);
                             dialog.setContentView(R.layout.new_connection_dialog);
@@ -837,7 +861,7 @@ public class BroadcasterFragment1 extends Fragment {
                                         @Override
                                         public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
 
-                                            /*try {
+                                            *//*try {
 
 
 
@@ -852,7 +876,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                                             } catch (Exception e) {
                                                 e.printStackTrace();
-                                            }*/
+                                            }*//*
 
                                             reject1.setVisibility(View.VISIBLE);
 
@@ -903,30 +927,6 @@ public class BroadcasterFragment1 extends Fragment {
                                                 isConnection = false;
                                                 //cameraLayout1.setVisibility(View.VISIBLE);
 
-/*
-                            goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
-                            goCoderBroadcastConfig.setPortNumber(1935);
-                            goCoderBroadcastConfig.setApplicationName("live");
-                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
-                            goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
-                            // Set the bitrate to 4000 Kbps
-                            goCoderBroadcastConfig.setVideoBitRate(1200);
-
-                            //Toast.makeText(MyApp.getContext(), goCoderBroadcastConfig.getConnectionURL().toString(), Toast.LENGTH_SHORT).show();
-
-                            WZStreamingError configValidationError = goCoderBroadcastConfig.validateForBroadcast();
-
-                            //if (configValidationError != null) {
-                            //Toast.makeText(LiveScreen.this, configValidationError.getErrorDescription(), Toast.LENGTH_LONG).show();
-                            //} else if (goCoderBroadcaster.getStatus().isRunning()) {
-                            // Stop the broadcast that is currently running
-                            //    goCoderBroadcaster.endBroadcast(PlayerActivity.this);
-                            //} else {
-                            // Start streaming
-                            goCoderBroadcaster.startBroadcast(goCoderBroadcastConfig, player_firstNew.this);
-                            //}
-
-*/
 
 
                                                 //reject1.setVisibility(View.GONE);
@@ -950,7 +950,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                                 }
                             });
-
+*/
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -1006,8 +1006,7 @@ public class BroadcasterFragment1 extends Fragment {
                                 viewsAdapter.removeView(item);
                             }
 
-                        }catch (Exception e)
-                        {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -1732,31 +1731,33 @@ public class BroadcasterFragment1 extends Fragment {
                 final Dialog dialog = new Dialog(broadcaster);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setCancelable(true);
-                dialog.setContentView(R.layout.live_users_list_popup);
+                dialog.setContentView(R.layout.connection_popup);
                 dialog.show();
 
-                RecyclerView dialogGrid = dialog.findViewById(R.id.grid);
 
-                ProgressBar dialogBar = dialog.findViewById(R.id.progressBar12);
+                ImageButton close = dialog.findViewById(R.id.imageButton11);
+                TabLayout tabs = dialog.findViewById(R.id.tabLayout);
+                ViewPager pager = dialog.findViewById(R.id.pager);
+                ProgressBar progress = dialog.findViewById(R.id.progressBar2);
 
-                ImageButton dialogClose = dialog.findViewById(R.id.imageButton9);
-
-                GridLayoutManager dialogManager = new GridLayoutManager(broadcaster, 1);
-
-                List<com.yl.youthlive.getIpdatedPOJO.View> l2 = viewsAdapter.getList();
-
-                DialogAdapter dialogAdapter = new DialogAdapter(broadcaster, l2, dialogBar, dialog);
-
-                dialogGrid.setAdapter(dialogAdapter);
-                dialogGrid.setLayoutManager(dialogManager);
-
-
-                dialogClose.setOnClickListener(new View.OnClickListener() {
+                close.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View view) {
                         dialog.dismiss();
                     }
                 });
+
+                tabs.addTab(tabs.newTab().setText("REQUESTS"));
+                tabs.addTab(tabs.newTab().setText("ALL USERS"));
+
+                PopupPagerAdapter adapter = new PopupPagerAdapter(getChildFragmentManager(), dialog, progress);
+
+                pager.setAdapter(adapter);
+
+                tabs.setupWithViewPager(pager);
+
+                tabs.getTabAt(0).setText("REQUESTS");
+                tabs.getTabAt(1).setText("ALL USERS");
 
 
             }
@@ -1767,7 +1768,113 @@ public class BroadcasterFragment1 extends Fragment {
     }
 
 
-    class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder> {
+    class PopupPagerAdapter extends FragmentStatePagerAdapter {
+
+        Dialog dialog;
+        ProgressBar progress;
+
+        public PopupPagerAdapter(FragmentManager fm, Dialog dialog, ProgressBar progress) {
+            super(fm);
+            this.dialog = dialog;
+            this.progress = progress;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+
+                requestsFragment fragment = new requestsFragment();
+                fragment.setData(dialog, progress, broadcaster);
+                return fragment;
+
+            } else {
+                allUsersFragment fragment = new allUsersFragment();
+                fragment.setData(dialog, progress, broadcaster);
+                return fragment;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+    }
+
+
+    public static class requestsFragment extends Fragment {
+
+        Dialog dialog;
+        ProgressBar progress;
+        VideoBroadcaster broadcaster;
+        RecyclerView grid;
+        DialogAdapter2 adapter;
+
+
+        public void setData(Dialog dialog, ProgressBar progress, VideoBroadcaster broadcaster) {
+            this.dialog = dialog;
+            this.progress = progress;
+            this.broadcaster = broadcaster;
+        }
+
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.popup_fragment_layout, container, false);
+
+            grid = view.findViewById(R.id.grid);
+            GridLayoutManager dialogManager = new GridLayoutManager(getContext(), 1);
+
+            List<com.yl.youthlive.getIpdatedPOJO.View> l2 = viewsAdapter.getList();
+
+            DialogAdapter2 dialogAdapter = new DialogAdapter2(broadcaster, guestList, progress, dialog);
+
+            grid.setAdapter(dialogAdapter);
+            grid.setLayoutManager(dialogManager);
+
+
+            return view;
+        }
+    }
+
+
+    public static class allUsersFragment extends Fragment {
+
+        Dialog dialog;
+        ProgressBar progress;
+        DialogAdapter adapter;
+        RecyclerView grid;
+        VideoBroadcaster broadcaster;
+
+
+        public void setData(Dialog dialog, ProgressBar progress, VideoBroadcaster broadcaster) {
+            this.dialog = dialog;
+            this.progress = progress;
+            this.broadcaster = broadcaster;
+        }
+
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.popup_fragment_layout, container, false);
+
+            grid = view.findViewById(R.id.grid);
+            GridLayoutManager dialogManager = new GridLayoutManager(getContext(), 1);
+
+            List<com.yl.youthlive.getIpdatedPOJO.View> l2 = viewsAdapter.getList();
+
+            DialogAdapter dialogAdapter = new DialogAdapter(broadcaster, l2, progress, dialog);
+
+            grid.setAdapter(dialogAdapter);
+            grid.setLayoutManager(dialogManager);
+
+            return view;
+        }
+    }
+
+
+    static class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder> {
 
         Context context;
         List<com.yl.youthlive.getIpdatedPOJO.View> list = new ArrayList<>();
@@ -1915,6 +2022,183 @@ public class BroadcasterFragment1 extends Fragment {
                 image = itemView.findViewById(R.id.view8);
                 name = itemView.findViewById(R.id.textView36);
                 join = itemView.findViewById(R.id.button9);
+
+
+            }
+        }
+    }
+
+
+    static class DialogAdapter2 extends RecyclerView.Adapter<DialogAdapter2.ViewHolder> {
+
+        Context context;
+        List<guestBean> list = new ArrayList<>();
+        ProgressBar dialogProgress;
+        Dialog dialog;
+
+
+        public DialogAdapter2(Context context, List<guestBean> list, ProgressBar dialogProgress, Dialog dialog) {
+            this.context = context;
+            this.list = list;
+            this.dialogProgress = dialogProgress;
+            this.dialog = dialog;
+        }
+
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.guest_list_model2, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+            final guestBean item = list.get(position);
+
+            final String uid = item.getId().replace("\"", "");
+            final String imm = item.getPic().replace("\"", "");
+            final String un = item.getName().replace("\"", "");
+
+            final bean b = (bean) context.getApplicationContext();
+
+            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+            ImageLoader loader = ImageLoader.getInstance();
+
+            loader.displayImage(b.BASE_URL + imm, holder.image, options);
+
+            holder.name.setText(un);
+
+
+            holder.accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    dialogProgress.setVisibility(View.VISIBLE);
+
+                    final bean b = (bean) context.getApplicationContext();
+
+                    final Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.BASE_URL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(item.getConnid(), liveId + uid, "2", uid);
+                    call1.enqueue(new Callback<acceptRejectBean>() {
+                        @Override
+                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+
+                            try {
+
+
+                                isConnection = false;
+                                //cameraLayout1.setVisibility(View.VISIBLE);
+
+
+                                reject1.setVisibility(View.GONE);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            reject1.setVisibility(View.VISIBLE);
+
+                            isConnection = true;
+
+
+                            dialog.dismiss();
+
+                            dialogProgress.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                            dialogProgress.setVisibility(View.GONE);
+                            t.printStackTrace();
+                        }
+                    });
+
+
+                }
+            });
+
+
+            holder.deny.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    dialogProgress.setVisibility(View.VISIBLE);
+
+                    final bean b = (bean) context.getApplicationContext();
+
+                    final Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.BASE_URL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(item.getConnid(), liveId + uid, "1", uid);
+                    call1.enqueue(new Callback<acceptRejectBean>() {
+                        @Override
+                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+
+                            try {
+
+
+                                isConnection = false;
+                                //cameraLayout1.setVisibility(View.VISIBLE);
+
+
+                                //reject1.setVisibility(View.GONE);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            dialog.dismiss();
+
+                            dialogProgress.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                            dialogProgress.setVisibility(View.GONE);
+                            t.printStackTrace();
+                        }
+                    });
+
+
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            CircleImageView image;
+            TextView name;
+            Button accept, deny;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+
+
+                image = itemView.findViewById(R.id.view8);
+                name = itemView.findViewById(R.id.textView36);
+                accept = itemView.findViewById(R.id.button9);
+                deny = itemView.findViewById(R.id.button13);
 
 
             }
@@ -2575,8 +2859,8 @@ public class BroadcasterFragment1 extends Fragment {
                     @Override
                     public void onFailure(Call<goLiveBean> call, Throwable t) {
                         progress.setVisibility(View.GONE);
-                        Toast.makeText(getContext() , t.toString() , Toast.LENGTH_SHORT).show();
-                        Log.d("errorr" , t.toString());
+                        Toast.makeText(getContext(), t.toString(), Toast.LENGTH_SHORT).show();
+                        Log.d("errorr", t.toString());
                         //Toast.makeText(getContext() , "Error in going Live" , Toast.LENGTH_SHORT).show();
                         //getActivity().finish();
                     }
@@ -2611,8 +2895,7 @@ public class BroadcasterFragment1 extends Fragment {
         try {
             stopProjection();
             stopProjection2();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -3128,8 +3411,7 @@ public class BroadcasterFragment1 extends Fragment {
             liveUsers.setText(String.valueOf(list.size() - 1));
         }
 
-        public void noti()
-        {
+        public void noti() {
 
             Collections.sort(list, new Comparator<com.yl.youthlive.getIpdatedPOJO.View>() {
                 @Override

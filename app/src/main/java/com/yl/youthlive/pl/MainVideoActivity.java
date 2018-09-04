@@ -1,38 +1,13 @@
 package com.yl.youthlive.pl;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.pili.pldroid.player.AVOptions;
-import com.pili.pldroid.player.PLMediaPlayer;
-import com.pili.pldroid.player.widget.PLVideoTextureView;
 import com.yl.youthlive.R;
-import com.yl.youthlive.pl.utils.Utils;
-import com.yl.youthlive.pl.widget.MediaController;
-
-import java.util.ArrayList;
-
-import fr.castorflex.android.verticalviewpager.VerticalViewPager;
-import rx.Subscription;
-import rx.subscriptions.Subscriptions;
 
 public class MainVideoActivity extends AppCompatActivity {
 
-    public static final String TAG = "MainActivity";
+    /*public static final String TAG = "MainActivity";
     private static final int MESSAGE_ID_RECONNECTING = 0x01;
     public ProgressBar progressBar;
     //private static final String DEFAULT_TEST_URL = "http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8";
@@ -142,12 +117,12 @@ public class MainVideoActivity extends AppCompatActivity {
             finish();
         }
     };
-
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
-        mViewPager = (VerticalViewPager) findViewById(R.id.view_pager);
+        /*mViewPager = (VerticalViewPager) findViewById(R.id.view_pager);
         mRoomContainer = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.view_room_container, null);
         mFragmentContainer = (FrameLayout) mRoomContainer.findViewById(R.id.fragment_container);
         mVideoView = (PLVideoTextureView) mRoomContainer.findViewById(R.id.texture_view);
@@ -192,9 +167,9 @@ public class MainVideoActivity extends AppCompatActivity {
                 }
             }
         });
-        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setAdapter(mPagerAdapter);*/
     }
-
+/*
     private void generateUrls() {
         for (int i = 0; i < 10; i++) {
             mVideoUrls.add(DEFAULT_TEST_URL);
@@ -219,10 +194,10 @@ public class MainVideoActivity extends AppCompatActivity {
         options.setInteger(AVOptions.KEY_START_ON_PREPARED, 0);
     }
 
-    /**
+    *//**
      * @param viewGroup
      * @param currentItem
-     */
+     *//*
     private void loadVideoAndChatRoom(ViewGroup viewGroup, int currentItem) {
 //        mSubscription = AppObservable.bindActivity(this, ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).
         //The chat room's fragment is only loaded once and reused later.
@@ -309,5 +284,5 @@ public class MainVideoActivity extends AppCompatActivity {
         public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             container.removeView(container.findViewById(position));
         }
-    }
+    }*/
 }

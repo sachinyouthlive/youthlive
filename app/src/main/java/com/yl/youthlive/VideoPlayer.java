@@ -31,33 +31,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-
-import com.bumptech.glide.Glide;
-
 import com.flashphoner.fpwcsapi.Flashphoner;
 import com.flashphoner.fpwcsapi.bean.Connection;
-import com.flashphoner.fpwcsapi.bean.CustomObject;
 import com.flashphoner.fpwcsapi.bean.Data;
 import com.flashphoner.fpwcsapi.bean.StreamStatus;
-import com.flashphoner.fpwcsapi.constraints.AudioConstraints;
-import com.flashphoner.fpwcsapi.constraints.Constraints;
-import com.flashphoner.fpwcsapi.constraints.VideoConstraints;
 import com.flashphoner.fpwcsapi.layout.PercentFrameLayout;
 import com.flashphoner.fpwcsapi.session.Session;
 import com.flashphoner.fpwcsapi.session.SessionEvent;
@@ -65,56 +49,13 @@ import com.flashphoner.fpwcsapi.session.SessionOptions;
 import com.flashphoner.fpwcsapi.session.Stream;
 import com.flashphoner.fpwcsapi.session.StreamOptions;
 import com.flashphoner.fpwcsapi.session.StreamStatusEvent;
-import com.github.faucamp.simplertmp.RtmpHandler;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.PlaybackParameters;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.audio.AudioAttributes;
-import com.google.android.exoplayer2.audio.AudioRendererEventListener;
-import com.google.android.exoplayer2.decoder.DecoderCounters;
-import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultAllocator;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.video.VideoListener;
-import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
-
-import com.pili.pldroid.player.AVOptions;
-import com.pili.pldroid.player.PLMediaPlayer;
-import com.pili.pldroid.player.widget.PLVideoTextureView;
-import com.pili.pldroid.player.widget.PLVideoView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
-import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
-import com.yl.youthlive.pl.widget.MediaController;
-
-
-import net.ossrs.yasea.SrsCameraView;
-import net.ossrs.yasea.SrsEncodeHandler;
-import net.ossrs.yasea.SrsPublisher;
-import net.ossrs.yasea.SrsRecordHandler;
-
-import org.webrtc.PeerConnection;
 import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 
@@ -122,8 +63,6 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
 
 import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
@@ -133,7 +72,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener, RtmpHandler.RtmpListener, PLMediaPlayer.OnErrorListener, PLMediaPlayer.OnCompletionListener {
+public class VideoPlayer extends AppCompatActivity {
 
     String liveId;
 
@@ -150,9 +89,6 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
 
     TextView stateText;
-
-
-    SrsCameraView thumbCamera2;
 
 
     String loadingpic;
@@ -209,8 +145,6 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     ProgressBar thumbProgress1;
 
     BroadcastReceiver headsetPlug;
-
-    private int mDisplayAspectRatio = PLVideoTextureView.ASPECT_RATIO_PAVED_PARENT;
 
 
     @Override
@@ -311,7 +245,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         player_camera_layout1 = findViewById(R.id.thumb_camera_layout1);
 
 
-        thumbCamera2 = findViewById(R.id.thumb_camera2);
+        //thumbCamera2 = findViewById(R.id.thumb_camera2);
 
 
         thumbRender = findViewById(R.id.thumb_renderer);
@@ -754,131 +688,10 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     }
 
     @Override
-    public void onNetworkWeak() {
-
-
-    }
-
-    @Override
-    public void onNetworkResume() {
-        Log.d(TAG, "network resumes");
-    }
-
-    @Override
-    public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
-        Log.d(TAG, "illegal argument: " + e.toString());
-    }
-
-
-    @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 
-    @Override
-    public void onRecordPause() {
-
-    }
-
-    @Override
-    public void onRecordResume() {
-
-    }
-
-    @Override
-    public void onRecordStarted(String s) {
-
-    }
-
-    @Override
-    public void onRecordFinished(String s) {
-
-    }
-
-    @Override
-    public void onRecordIllegalArgumentException(IllegalArgumentException e) {
-
-    }
-
-    @Override
-    public void onRecordIOException(IOException e) {
-
-    }
-
-    @Override
-    public void onRtmpConnecting(String s) {
-
-    }
-
-    @Override
-    public void onRtmpConnected(String s) {
-
-    }
-
-    @Override
-    public void onRtmpVideoStreaming() {
-
-    }
-
-    @Override
-    public void onRtmpAudioStreaming() {
-
-    }
-
-    @Override
-    public void onRtmpStopped() {
-
-    }
-
-    @Override
-    public void onRtmpDisconnected() {
-
-    }
-
-    @Override
-    public void onRtmpVideoFpsChanged(double v) {
-
-    }
-
-    @Override
-    public void onRtmpVideoBitrateChanged(double v) {
-
-    }
-
-    @Override
-    public void onRtmpAudioBitrateChanged(double v) {
-
-    }
-
-    @Override
-    public void onRtmpSocketException(SocketException e) {
-
-    }
-
-    @Override
-    public void onRtmpIOException(IOException e) {
-
-    }
-
-    @Override
-    public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-
-    }
-
-    @Override
-    public void onRtmpIllegalStateException(IllegalStateException e) {
-
-    }
-
-    @Override
-    public boolean onError(PLMediaPlayer plMediaPlayer, int i) {
-        return false;
-    }
-
-    @Override
-    public void onCompletion(PLMediaPlayer plMediaPlayer) {
-
-    }
 
 /*
     @Override
@@ -944,146 +757,14 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
                 player_camera_layout1.setVisibility(View.VISIBLE);
 
 
+                localRender.setVisibility(View.VISIBLE);
+
                 thumbCountdown.setVisibility(View.VISIBLE);
 
 
                 VideoPlayer.this.connId = connId;
 
                 final bean b = (bean) getApplicationContext();
-
-                /*mPublisher = new SrsPublisher(thumbCamera1);
-
-                mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
-                mPublisher.setRtmpHandler(new RtmpHandler(new RtmpHandler.RtmpListener() {
-                    @Override
-                    public void onRtmpConnecting(String s) {
-
-                        Log.d("rreess", s);
-
-                    }
-
-                    @Override
-                    public void onRtmpConnected(String s) {
-
-                    }
-
-                    @Override
-                    public void onRtmpVideoStreaming() {
-                    }
-
-                    @Override
-                    public void onRtmpAudioStreaming() {
-
-                    }
-
-                    @Override
-                    public void onRtmpStopped() {
-                        Log.d("rreess", "stopped");
-
-                    }
-
-                    @Override
-                    public void onRtmpDisconnected() {
-                        Log.d("rreess", "disconnected");
-                    }
-
-                    @Override
-                    public void onRtmpVideoFpsChanged(double v) {
-
-                    }
-
-                    @Override
-                    public void onRtmpVideoBitrateChanged(double v) {
-
-                    }
-
-                    @Override
-                    public void onRtmpAudioBitrateChanged(double v) {
-
-                    }
-
-                    @Override
-                    public void onRtmpSocketException(SocketException e) {
-
-                    }
-
-                    @Override
-                    public void onRtmpIOException(IOException e) {
-                        Log.d("rreess", e.toString());
-                    }
-
-                    @Override
-                    public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-                        Log.d("rreess", e.toString());
-                    }
-
-                    @Override
-                    public void onRtmpIllegalStateException(IllegalStateException e) {
-                        Log.d("rreess", e.toString());
-                    }
-
-
-                }));
-                mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
-                *//*mPublisher.getmCameraView().open_camera();
-
-
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                WindowManager wm = (WindowManager)
-                        getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-                wm.getDefaultDisplay().getMetrics(displayMetrics);
-                int screenWidth = displayMetrics.widthPixels;
-                int screenHeight = displayMetrics.heightPixels;
-
-
-                Camera.Size best_size= mPublisher.getmCameraView().get_best_size2(screenWidth , screenHeight);
-
-                if(best_size!=null)
-                {
-                    Log.d("asdasd","************ Best size is "+best_size.width+" Height: "+best_size.height+" ********************");
-                    mPublisher.setPreviewResolution(best_size.width, best_size.height);
-                    mPublisher.setOutputResolution(best_size.height, best_size.width);
-                }
-                else
-                {
-                    Log.d("asdasd","************ Best size is NULL ********************");
-                    mPublisher.setPreviewResolution(640, 480);
-                    mPublisher.setOutputResolution(480, 640);
-                }
-
-*//*
-
-                mPublisher = new SrsPublisher(thumbCamera1);
-*//*
-
-        mPublisher.setEncoderHandler(new EncoderjHandler(this));
-        mPublisher.setRtmpHandler(new RtmpHandler(this));
-        mPublisher.setRecordEventHandler(new RecordHandler(this));
-*//*
-
-
-                mPublisher.setEncodeHandler(new SrsEncodeHandler(VideoPlayer.this));
-                mPublisher.setRtmpHandler(new RtmpHandler(VideoPlayer.this));
-                mPublisher.setRecordHandler(new SrsRecordHandler(VideoPlayer.this));
-
-
-                thumbCamera1.startCamera();
-
-
-                //mPublisher.setCameraFacing(1);
-
-                mPublisher.setScreenOrientation(Configuration.ORIENTATION_PORTRAIT);
-
-                mPublisher.setVideoBitRate(200 * 1024);
-
-
-                mPublisher.setOutputResolution(144 * 3, 192 * 3);
-                mPublisher.setPreviewResolution(192 * 3, 144 * 3);
-
-                mPublisher.startPublish("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + liveId + b.userId);
-
-*/
-
 
                 StreamOptions streamOptions = new StreamOptions(liveId + b.userId);
 
@@ -1157,6 +838,8 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
     public void startThumbCamera1FromPlayer(final String connId) {
 
         player_camera_layout1.setVisibility(View.VISIBLE);
+
+        localRender.setVisibility(View.VISIBLE);
 
         //thumbCamera1.setVisibility(View.VISIBLE);
         thumbCountdown.setVisibility(View.VISIBLE);
@@ -1233,7 +916,7 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
         Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + connId);
 
         thumbRenderLayout.setVisibility(View.VISIBLE);
-        //thumbRender.setVisibility(View.VISIBLE);
+        thumbRender.setVisibility(View.VISIBLE);
 
         thumbRenderLayout.getParent().requestTransparentRegion(remoteRender);
 
@@ -1388,6 +1071,10 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
             //mPublisher.stopRecord();
 
+            localRender.release();
+            localRender.setVisibility(View.GONE);
+
+
             //mPublisher = null;
             isThumbCamera1 = false;
             player_camera_layout1.setVisibility(View.GONE);
@@ -1404,18 +1091,15 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
 
         try {
             thumbStream.stop();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        thumbRender.release();
+        thumbRender.setVisibility(View.GONE);
 
         thumbRenderLayout.setVisibility(View.GONE);
-        //thumbRender.setVisibility(View.GONE);
-
-        thumbRenderLayout.getParent().requestTransparentRegion(remoteRender);
-
-        //remoteRender.bringToFront();
-
 
 
 
@@ -1502,26 +1186,6 @@ public class VideoPlayer extends AppCompatActivity implements SrsEncodeHandler.S
             }
         });
 
-    }
-
-    private AVOptions options2;
-
-    private void initAVOptions() {
-        options2 = new AVOptions();
-        // the unit of timeout is ms
-        options2.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000);
-        options2.setInteger(AVOptions.KEY_GET_AV_FRAME_TIMEOUT, 10 * 1000);
-        // Some optimization with buffering mechanism when be set to 1
-        options2.setInteger(AVOptions.KEY_LIVE_STREAMING, 1);
-        //options2.setInteger(AVOptions.KEY_DELAY_OPTIMIZATION, 1);
-        // 1 -> hw codec enable, 0 -> disable [recommended]
-        int codec = 0;
-        options2.setInteger(AVOptions.KEY_MEDIACODEC, codec);
-        options2.setInteger(AVOptions.KEY_DELAY_OPTIMIZATION, 1);
-        options2.setInteger(AVOptions.KEY_CACHE_BUFFER_DURATION, 1000);
-        options2.setInteger(AVOptions.KEY_MAX_CACHE_BUFFER_DURATION, 3000);
-        // whether start play automatically after prepared, default value is 1
-        options2.setInteger(AVOptions.KEY_START_ON_PREPARED, 0);
     }
 
 

@@ -49,39 +49,9 @@ import com.flashphoner.fpwcsapi.session.SessionOptions;
 import com.flashphoner.fpwcsapi.session.Stream;
 import com.flashphoner.fpwcsapi.session.StreamOptions;
 import com.flashphoner.fpwcsapi.session.StreamStatusEvent;
-import com.github.faucamp.simplertmp.RtmpHandler;
-import com.github.faucamp.simplertmp.packets.Video;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.PlaybackParameters;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultAllocator;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.seu.magicfilter.utils.MagicFilterType;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
-
-import net.ossrs.yasea.SrsCameraView;
-import net.ossrs.yasea.SrsEncodeHandler;
-import net.ossrs.yasea.SrsPublisher;
-import net.ossrs.yasea.SrsRecordHandler;
-
-import org.webrtc.PeerConnection;
 import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 
@@ -103,7 +73,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 //import com.streamaxia.player.StreamaxiaPlayer;
 //import com.streamaxia.player.listener.StreamaxiaPlayerState;
 
-public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.RtmpListener, SrsEncodeHandler.SrsEncodeListener, SrsRecordHandler.SrsRecordListener {
+public class VideoBroadcaster extends AppCompatActivity {
 
     //CameraPreview cameraPreview;
     //private StreamaxiaPublisher mPublisher;
@@ -492,116 +462,6 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
     }
 
-    @Override
-    public void onNetworkWeak() {
-
-        Toast toast = Toast.makeText(VideoBroadcaster.this, null, Toast.LENGTH_LONG);
-        toast.setText("Slow Internet Detected, Exiting broadcast...");
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.show();
-
-
-        String et = String.valueOf((SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000);
-
-
-        editor.putString("offline", et);
-        editor.putString("liveId", liveId);
-        editor.apply();
-
-
-        finish();
-
-//        Toast.makeText(getApplicationContext(), "Slow Internet Detected, Exiting broadcast...", Toast.LENGTH_LONG).setGravity(Gravity.CENTER_VERTICAL, 0, 0).show();
-
-
-
-        /*progress.setVisibility(View.VISIBLE);
-
-        bean b = (bean) getApplicationContext();
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<endLiveBean> call = cr.endLive(b.userId, liveId);
-
-        call.enqueue(new Callback<endLiveBean>() {
-            @Override
-            public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
-
-
-                if (response.body().getStatus().equals("1")) {
-
-                    isEnded = true;
-
-                    Intent intent = new Intent(VideoBroadcaster.this, LiveEndedBroadcaster.class);
-                    intent.putExtra("liveTime", response.body().getData().getLiveTime());
-                    intent.putExtra("views", response.body().getData().getViewers());
-                    startActivity(intent);
-                    finish();
-
-                }
-
-                progress.setVisibility(View.GONE);
-
-            }
-
-            @Override
-            public void onFailure(Call<endLiveBean> call, Throwable t) {
-
-            }
-        });*/
-
-
-        //mPublisher.setVideoSmoothMode();
-    }
-
-    @Override
-    public void onNetworkResume() {
-        //mPublisher.setVideoHDMode();
-        //Toast.makeText(getApplicationContext(), "resume" , Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
-        handleException(e);
-    }
-
-    @Override
-    public void onRecordPause() {
-
-    }
-
-    @Override
-    public void onRecordResume() {
-
-    }
-
-    @Override
-    public void onRecordStarted(String s) {
-
-    }
-
-    @Override
-    public void onRecordFinished(String s) {
-
-    }
-
-    @Override
-    public void onRecordIllegalArgumentException(IllegalArgumentException e) {
-
-    }
-
-    @Override
-    public void onRecordIOException(IOException e) {
-
-    }
 
 
     public class FragAdapter extends FragmentStatePagerAdapter {
@@ -697,147 +557,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
         super.onDestroy();
 
-
     }
-
-    /*@Override
-    public void onNetworkWeak() {
-
-        Toast.makeText(VideoBroadcaster.this , "Network Weak" , Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    public void onNetworkResume() {
-
-    }
-
-    @Override
-    public void onEncodeIllegalArgumentException(IllegalArgumentException e) {
-
-    }*/
-
-    @Override
-    public void onRtmpConnecting(String s) {
-        //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRtmpConnected(String s) {
-        //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-        // conect api
-
-    }
-
-    @Override
-    public void onRtmpVideoStreaming() {
-
-    }
-
-    @Override
-    public void onRtmpAudioStreaming() {
-
-    }
-
-    @Override
-    public void onRtmpStopped() {
-
-    }
-
-    @Override
-    public void onRtmpDisconnected() {
-
-    }
-
-    @Override
-    public void onRtmpVideoFpsChanged(double v) {
-
-    }
-
-    @Override
-    public void onRtmpVideoBitrateChanged(double v) {
-
-    }
-
-    @Override
-    public void onRtmpAudioBitrateChanged(double v) {
-
-    }
-
-    @Override
-    public void onRtmpSocketException(SocketException e) {
-        handleException(e);
-
-        Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-
-        if (!isEnded) {
-
-            String et = String.valueOf((SystemClock.elapsedRealtime() - chronometer.getBase()) / 1000);
-
-
-            editor.putString("offline", et);
-            editor.putString("liveId", liveId);
-            editor.apply();
-
-            setResult(Activity.RESULT_OK, getIntent());
-            finish();
-
-        }
-
-    }
-
-    @Override
-    public void onRtmpIOException(IOException e) {
-        handleException(e);
-    }
-
-    @Override
-    public void onRtmpIllegalArgumentException(IllegalArgumentException e) {
-        handleException(e);
-    }
-
-    @Override
-    public void onRtmpIllegalStateException(IllegalStateException e) {
-        handleException(e);
-    }
-
-    /*@Override
-    public void onRtmpAuthenticationg(String s) {
-
-    }*/
-
-/*
-    @Override
-    public void onRecordPause() {
-
-    }
-
-    @Override
-    public void onRecordResume() {
-
-    }
-
-    @Override
-    public void onRecordStarted(String s) {
-
-    }
-
-    @Override
-    public void onRecordFinished(String s) {
-
-    }
-
-    @Override
-    public void onRecordIllegalArgumentException(IllegalArgumentException e) {
-
-    }
-
-    @Override
-    public void onRecordIOException(IOException e) {
-
-    }
-*/
-
 
     public void switchTorch() {
         if (torchStatus) {
@@ -993,6 +713,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     public void startThumbPlayer1(final String url, String thumbPic, final String connId) {
 
         thumbContainer1.setVisibility(View.VISIBLE);
+        remoteRender.setVisibility(View.VISIBLE);
         thumbcountdown.setVisibility(View.VISIBLE);
         thumbLoading.setVisibility(View.VISIBLE);
 
@@ -1301,6 +1022,7 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
     public void endThumbPlayer1() {
         try {
             playStream.stop();
+            playStream = null;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1308,6 +1030,9 @@ public class VideoBroadcaster extends AppCompatActivity implements RtmpHandler.R
 
 
         //thumbPlayerView1.setVisibility(View.GONE);
+
+        remoteRender.release();
+        remoteRender.setVisibility(View.GONE);
         thumbContainer1.setVisibility(View.GONE);
 
         //localRender.release();

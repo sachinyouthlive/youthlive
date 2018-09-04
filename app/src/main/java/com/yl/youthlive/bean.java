@@ -2,6 +2,7 @@ package com.yl.youthlive;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,6 +50,7 @@ public class bean extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
         mInstance = this;
         context = getApplicationContext();
         Log.e(TAG, "  myapp stater");
