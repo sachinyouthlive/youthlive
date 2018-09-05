@@ -1,1 +1,1 @@
-include ':app', ':wcs-android-sdk-1.0.1.50'
+include ':app' , ':wcs-android-sdk-1.0.1.50'

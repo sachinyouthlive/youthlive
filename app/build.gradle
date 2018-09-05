@@ -58,12 +58,12 @@ dependencies {
     implementation 'com.sackcentury:shinebutton:0.1.9'
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
-    implementation 'com.android.volley:volley:1.0.0'
+    implementation 'com.android.volley:volley:1.1.0'
 
     implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit:retrofit:1.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.facebook.android:facebook-android-sdk:4.31.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
 
@@ -107,7 +107,7 @@ dependencies {
     //implementation 'com.github.nisrulz:screenshott:2.0.0'
 
     //implementation 'com.github.tarek360:instacapture:2.0.0'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.2.31'
+    //implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.2.31'
     implementation 'com.koushikdutta.ion:ion:2.+'
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
     implementation 'com.jakewharton:butterknife:8.5.1'
@@ -141,7 +141,7 @@ dependencies {
     implementation 'io.reactivex:rxandroid:1.2.1'
     implementation project(':wcs-android-sdk-1.0.1.50')
 }
-apply plugin: 'com.google.gms.google-services'
+
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         def requested = details.requested
@@ -152,3 +152,4 @@ configurations.all {
         }
     }
 }
+apply plugin: 'com.google.gms.google-services'
