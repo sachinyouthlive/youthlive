@@ -217,7 +217,7 @@ public class BroadcasterFragment1 extends Fragment {
 
 
     static List<guestBean> guestList;
-    ImageView notificationDot;
+    static ImageView notificationDot;
 
 
     @Nullable
@@ -784,7 +784,7 @@ public class BroadcasterFragment1 extends Fragment {
                             } else {
 
                                 isConnection = false;
-                                Toast.makeText(broadcaster, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(broadcaster, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
 
 
                             }
@@ -1731,13 +1731,13 @@ public class BroadcasterFragment1 extends Fragment {
                 final Dialog dialog = new Dialog(broadcaster);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setCancelable(true);
-                dialog.setContentView(R.layout.connection_popup);
+                dialog.setContentView(R.layout.con_popup);
                 dialog.show();
 
 
                 ImageButton close = dialog.findViewById(R.id.imageButton11);
-                TabLayout tabs = dialog.findViewById(R.id.tabLayout);
-                ViewPager pager = dialog.findViewById(R.id.pager);
+
+                RecyclerView grid = dialog.findViewById(R.id.grid);
                 ProgressBar progress = dialog.findViewById(R.id.progressBar2);
 
                 close.setOnClickListener(new View.OnClickListener() {
@@ -1747,18 +1747,14 @@ public class BroadcasterFragment1 extends Fragment {
                     }
                 });
 
-                tabs.addTab(tabs.newTab().setText("REQUESTS"));
-                tabs.addTab(tabs.newTab().setText("ALL USERS"));
+                GridLayoutManager dialogManager = new GridLayoutManager(getContext(), 1);
 
-                PopupPagerAdapter adapter = new PopupPagerAdapter(getChildFragmentManager(), dialog, progress);
+                DialogAdapter2 dialogAdapter = new DialogAdapter2(broadcaster, guestList, progress, dialog);
 
-                pager.setAdapter(adapter);
+                grid.setAdapter(dialogAdapter);
+                grid.setLayoutManager(dialogManager);
 
-                tabs.setupWithViewPager(pager);
-
-                tabs.getTabAt(0).setText("REQUESTS");
-                tabs.getTabAt(1).setText("ALL USERS");
-
+                notificationDot.setVisibility(View.GONE);
 
             }
         });
@@ -1783,14 +1779,12 @@ public class BroadcasterFragment1 extends Fragment {
         public Fragment getItem(int position) {
             if (position == 0) {
 
-                requestsFragment fragment = new requestsFragment();
-                fragment.setData(dialog, progress, broadcaster);
-                return fragment;
+                //fragment.setData(dialog, progress, broadcaster);
+                return new requestsFragment();
 
             } else {
-                allUsersFragment fragment = new allUsersFragment();
-                fragment.setData(dialog, progress, broadcaster);
-                return fragment;
+                //fragment.setData(dialog, progress, broadcaster);
+                return new allUsersFragment();
             }
         }
 
@@ -1821,6 +1815,8 @@ public class BroadcasterFragment1 extends Fragment {
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.popup_fragment_layout, container, false);
+
+            notificationDot.setVisibility(View.GONE);
 
             grid = view.findViewById(R.id.grid);
             GridLayoutManager dialogManager = new GridLayoutManager(getContext(), 1);
@@ -2045,6 +2041,13 @@ public class BroadcasterFragment1 extends Fragment {
         }
 
 
+        public void removeItem(int position)
+        {
+            //list.remove(position);
+            guestList.remove(position);
+            notifyItemRemoved(position);
+        }
+
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -2054,7 +2057,7 @@ public class BroadcasterFragment1 extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
             final guestBean item = list.get(position);
 
@@ -2115,6 +2118,8 @@ public class BroadcasterFragment1 extends Fragment {
                             dialog.dismiss();
 
                             dialogProgress.setVisibility(View.GONE);
+
+                            removeItem(position);
                         }
 
                         @Override
@@ -2166,6 +2171,8 @@ public class BroadcasterFragment1 extends Fragment {
                             dialog.dismiss();
 
                             dialogProgress.setVisibility(View.GONE);
+
+                            removeItem(position);
                         }
 
                         @Override
@@ -3408,7 +3415,7 @@ public class BroadcasterFragment1 extends Fragment {
             list.add(0, item);
             //notifyItemInserted(0);
             noti();
-            liveUsers.setText(String.valueOf(list.size() - 1));
+            liveUsers.setText(String.valueOf(list.size()));
         }
 
         public void noti() {

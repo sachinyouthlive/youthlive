@@ -1166,7 +1166,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
-                    isConnection = true;
+                    //isConnection = true;
 
                     Log.d("ddata", intent.getStringExtra("data"));
 

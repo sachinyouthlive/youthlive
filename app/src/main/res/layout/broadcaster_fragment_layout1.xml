@@ -428,6 +428,7 @@
         android:id="@+id/imageView22"
         android:layout_width="10dp"
         android:layout_height="10dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/connect"
         app:layout_constraintTop_toTopOf="@+id/connect"
         app:srcCompat="@drawable/notification_dot" />
