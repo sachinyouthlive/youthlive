@@ -35,6 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
+                android:typeface="monospace"
                 android:text="GoLive Records"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
@@ -75,11 +76,12 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
                 android:scaleType="centerCrop"
-                android:src="@drawable/yl" />
+                android:src="@drawable/mainlogo" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:typeface="monospace"
                 android:layout_gravity="center_vertical"
                 android:text="No Broadcast on this day"
                 android:textSize="15sp" />

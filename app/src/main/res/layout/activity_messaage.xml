@@ -24,6 +24,7 @@
         <TextView
             android:id="@+id/line"
             android:layout_width="match_parent"
+            android:typeface="monospace"
             android:layout_height="1dp"
             android:background="#cdcdcd" />
 

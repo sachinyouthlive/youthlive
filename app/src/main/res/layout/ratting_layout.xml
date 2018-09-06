@@ -26,6 +26,7 @@
                 android:layout_marginStart="45dp"
                 android:layout_marginTop="2dp"
                 android:text="Ratting"
+                android:typeface="monospace"
                 android:textColor="#FFF"
                 android:textSize="16sp" />
 

@@ -233,11 +233,12 @@
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".pl.MainVideoActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".VerticalFragmentVodActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".VideoChatTest"></activity>
+        <activity android:name=".VideoChatTest" />
+        <activity android:name=".Login2"></activity>
     </application>
 
 </manifest>

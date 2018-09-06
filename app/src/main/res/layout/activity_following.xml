@@ -38,6 +38,7 @@
         android:id="@+id/nofollowingmsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:typeface="monospace"
         android:layout_centerInParent="true"
         android:text="Not following anyone"
         android:textColor="@android:color/darker_gray"

@@ -36,6 +36,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="Check in monthly"
+                android:typeface="monospace"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -59,6 +60,7 @@
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:id="@+id/badge"
+                android:typeface="monospace"
                 android:padding="10dp"
                 android:visibility="visible"
                 android:textSize="14sp"
@@ -90,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:background="#d3d3d3"
+                android:typeface="monospace"
                 android:drawableStart="@drawable/clock_black"
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
@@ -116,6 +119,7 @@
                     android:drawableEnd="@drawable/videoblack"
                     android:gravity="center_vertical"
                     android:text="GoLive Time"
+                    android:typeface="monospace"
                     android:textSize="14sp" />
 
                 <ProgressBar
@@ -134,6 +138,7 @@
                     android:layout_alignBaseline="@+id/total_broadcast_header"
                     android:layout_toRightOf="@+id/total_broadcast_header"
                     android:gravity="center_vertical"
+                    android:typeface="monospace"
                     android:padding="2dp"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp"

@@ -24,6 +24,7 @@ public class bean extends Application {
     private static Context context;
     private static bean mInstance;
     public String BASE_URL = "http://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com/softcode/";
+    //public String BASE_URL = "http://youthlive.in/softcode/";
     public String userId = "";
     protected String userAgent;
     String userName = "";
@@ -55,6 +56,8 @@ public class bean extends Application {
         context = getApplicationContext();
         Log.e(TAG, "  myapp stater");
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
+
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "calibri.ttf");
 
     }
 

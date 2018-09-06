@@ -45,7 +45,7 @@ public class SplashActivity extends AppCompatActivity {
         progress = findViewById(R.id.progress);
 
         bg = findViewById(R.id.splashbg);
-        bindLogo();
+        //bindLogo();
 
         //  Glide.with(this).load(R.drawable.splashyl).into(bg);
 

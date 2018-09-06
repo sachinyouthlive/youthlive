@@ -30,6 +30,7 @@
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
                 android:gravity="center"
+                android:typeface="monospace"
                 android:paddingBottom="1dp"
                 android:textColor="@android:color/white"
                 android:textSize="10sp" />

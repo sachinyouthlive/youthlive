@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="?attr/actionBarSize"></android.support.v7.widget.RecyclerView>
+            android:paddingBottom="?attr/actionBarSize"/>
 
 
         <ProgressBar
@@ -49,12 +49,13 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
                 android:scaleType="centerCrop"
-                android:src="@drawable/yl" />
+                android:src="@drawable/mainlogo" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:typeface="monospace"
                 android:text="Haven't done any purchase"
                 android:textSize="15sp" />
         </LinearLayout>

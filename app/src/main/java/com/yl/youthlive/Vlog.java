@@ -1,6 +1,8 @@
 package com.yl.youthlive;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
@@ -37,8 +40,20 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
         tabs = (TabLayout) view.findViewById(R.id.tabs);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
-        tabs.addTab(tabs.newTab().setText("HOT"));
-        tabs.addTab(tabs.newTab().setText("POPULAR"));
+        TextView tv = (TextView)inflater.inflate(R.layout.custom_tab,null);
+        tv.setTypeface(Typeface.MONOSPACE);
+        tv.setTextColor(Color.WHITE);
+        tv.setText("HOT");
+
+
+        TextView tv1 = (TextView)inflater.inflate(R.layout.custom_tab,null);
+        tv1.setTypeface(Typeface.MONOSPACE);
+        tv1.setTextColor(Color.WHITE);
+        tv1.setText("POPULAR");
+
+
+        tabs.addTab(tabs.newTab().setCustomView(tv));
+        tabs.addTab(tabs.newTab().setCustomView(tv1));
 
         /*FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getChildFragmentManager(), FragmentPagerItems.with(getContext())
@@ -52,8 +67,9 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
 
         tabs.setupWithViewPager(viewPager);
 
-        tabs.getTabAt(0).setText("HOT");
-        tabs.getTabAt(1).setText("POPULAR");
+
+        tabs.getTabAt(0).setCustomView(tv);
+        tabs.getTabAt(1).setCustomView(tv1);
 
 
         ((HomeActivity) Objects.requireNonNull(getActivity())).setFragmentRefreshListener(new HomeActivity.FragmentRefreshListener() {

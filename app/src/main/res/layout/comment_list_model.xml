@@ -39,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:gravity="start"
+                android:typeface="monospace"
                 android:paddingTop="1dp"
                 android:text="username"
                 android:textColor="@color/black"
@@ -55,6 +56,7 @@
                 android:paddingEnd="15dp"
                 android:paddingTop="2dp"
                 android:text="asdasd"
+                android:typeface="monospace"
                 android:textColor="@color/greyfont"
                 android:textSize="13sp"
 
@@ -71,6 +73,7 @@
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
+                android:typeface="monospace"
                 android:gravity="top"
                 android:text="1212121212"
                 android:textColor="@color/grey_light"

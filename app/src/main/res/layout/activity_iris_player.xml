@@ -70,6 +70,7 @@
                             android:layout_height="wrap_content"
                             android:paddingEnd="10dp"
                             android:paddingStart="5dp"
+                            android:typeface="monospace"
                             android:textColor="#000000"
                             android:textSize="14sp" />
 
@@ -79,6 +80,7 @@
                             android:layout_height="wrap_content"
                             android:paddingBottom="5dp"
                             android:paddingEnd="10dp"
+                            android:typeface="monospace"
                             android:paddingStart="5dp"
                             android:textColor="#000000"
                             android:textSize="10sp"
@@ -127,6 +129,7 @@
                             android:layout_gravity="center_vertical"
                             android:drawablePadding="5dp"
                             android:gravity="center"
+                            android:typeface="monospace"
                             android:paddingEnd="10dp"
                             android:paddingStart="5dp"
                             android:textColor="#000000" />
@@ -323,6 +326,7 @@
                             android:layout_marginStart="10dp"
                             android:background="@drawable/comment_sendback"
                             android:cursorVisible="true"
+                            android:typeface="monospace"
                             android:gravity="center_vertical|start"
                             android:hint="Add a comment"
                             android:padding="10dp" />
@@ -351,6 +355,7 @@
                         android:paddingEnd="10dp"
                         android:paddingStart="10dp"
                         android:paddingTop="5dp"
+                        android:typeface="monospace"
                         android:text="Send Gifts"
                         android:textColor="#ffffff" />
 
@@ -368,6 +373,7 @@
                             android:drawableStart="@drawable/coffee"
                             android:gravity="center_vertical"
                             android:padding="5dp"
+                            android:typeface="monospace"
                             android:text="2300"
                             android:textColor="#ffffff" />
 
@@ -380,6 +386,7 @@
                             android:drawableStart="@drawable/diamond"
                             android:gravity="center_vertical"
                             android:padding="5dp"
+                            android:typeface="monospace"
                             android:text="2300"
                             android:textColor="#ffffff" />
 
@@ -393,6 +400,7 @@
                             android:drawableStart="@drawable/dollar"
                             android:gravity="center_vertical"
                             android:padding="5dp"
+                            android:typeface="monospace"
                             android:text="2300"
                             android:textColor="#ffffff" />
 
@@ -414,6 +422,7 @@
                         android:background="@drawable/gift_back"
                         android:minHeight="0dp"
                         android:minWidth="0dp"
+                        android:typeface="monospace"
                         android:padding="10dp"
                         android:text="SEND"
                         android:textColor="#ffffff"
@@ -523,6 +532,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
+                        android:typeface="monospace"
                         android:layout_marginBottom="4dp"
                         android:textColor="#ffffff" />
 
@@ -570,6 +580,7 @@
             android:id="@+id/gift_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:typeface="monospace"
             android:layout_gravity="center_horizontal"
             android:padding="10dp"
             android:textColor="#ffffff" />

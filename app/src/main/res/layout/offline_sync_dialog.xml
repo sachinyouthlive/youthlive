@@ -13,6 +13,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:typeface="monospace"
         android:text="Please wait while syncing previous live"
         android:textAlignment="center"
         android:textColor="#000000"

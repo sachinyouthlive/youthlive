@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,10 +26,12 @@ import android.widget.TextView;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.SkuDetails;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.google.gson.TypeAdapterFactory;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.buydiamondPOJO.Data;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,6 +106,9 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
                 finish();
             }
         });
+
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(0)).setTypeface(typeFace);
 
     }
 

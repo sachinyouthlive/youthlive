@@ -61,6 +61,7 @@
             android:drawableStart="@drawable/user"
             android:gravity="center_vertical"
             android:hint="Username"
+            android:typeface="monospace"
             android:inputType="textPersonName"
             android:padding="10dp"
             android:paddingStart="15dp"
@@ -91,6 +92,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/colorPrimary"
                     android:checked="true"
+                    android:typeface="monospace"
                     android:padding="10dp"
                     android:text="Male"
                     android:textColor="#FFF"
@@ -103,6 +105,7 @@
                     android:backgroundTint="@color/colorPrimary"
                     android:text="Female"
                     android:textColor="#FFF"
+                    android:typeface="monospace"
                     android:textSize="18sp" />
             </RadioGroup>
         </LinearLayout>
@@ -113,6 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="30dp"
+            android:typeface="monospace"
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/white_stroke"
@@ -142,6 +146,7 @@
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/user"
             android:gravity="center_vertical"
+            android:typeface="monospace"
             android:hint="Status"
             android:padding="10dp"
             android:paddingStart="15sp"
@@ -155,6 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
             android:layout_marginStart="30dp"
+            android:typeface="monospace"
             android:layout_marginTop="18dp"
             android:background="@drawable/red_stroke"
             android:text="DONE"

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yl.youthlive.Fragments.AddressFragment">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,6 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:typeface="monospace"
                 android:paddingStart="20dp"
                 android:text="Graphic"
                 android:textSize="19sp"
@@ -30,6 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:typeface="monospace"
                 android:text="Address"
                 android:textColor="#000" />
         </LinearLayout>
@@ -45,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:typeface="monospace"
                 android:paddingStart="20dp"
                 android:text="Youthliveid"
                 android:textSize="19sp"
@@ -55,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="93"
+                android:typeface="monospace"
                 android:textColor="#000" />
         </LinearLayout>
 
@@ -68,6 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:typeface="monospace"
                 android:paddingStart="20dp"
                 android:text="Status"
                 android:textSize="19sp"
@@ -77,6 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:typeface="monospace"
                 android:text="Don't Mind"
                 android:textColor="#000" />
         </LinearLayout>

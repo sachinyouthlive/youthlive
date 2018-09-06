@@ -39,6 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:typeface="monospace"
         android:text="Not Friend with anyone"
         android:textColor="@android:color/darker_gray"
         android:textSize="14sp"

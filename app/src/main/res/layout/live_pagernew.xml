@@ -63,6 +63,7 @@
             android:id="@+id/gift_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:typeface="monospace"
             android:layout_gravity="center_horizontal"
             android:padding="10dp"
             android:textColor="#ffffff" />
@@ -105,6 +106,7 @@
                 android:layout_height="wrap_content"
                 android:paddingEnd="10dp"
                 android:paddingStart="5dp"
+                android:typeface="monospace"
                 android:textColor="#000000"
                 android:textSize="14sp" />
 
@@ -115,6 +117,7 @@
                 android:paddingBottom="5dp"
                 android:paddingEnd="10dp"
                 android:paddingStart="5dp"
+                android:typeface="monospace"
                 android:textColor="#000000"
                 android:textSize="10sp"
                 android:visibility="visible" />
@@ -160,6 +163,7 @@
             android:layout_gravity="center_vertical"
             android:drawablePadding="5dp"
             android:gravity="center"
+            android:typeface="monospace"
             android:paddingEnd="10dp"
             android:paddingStart="5dp"
 
@@ -192,6 +196,7 @@
             android:layout_gravity="center_vertical"
             android:drawablePadding="5dp"
             android:gravity="center"
+            android:typeface="monospace"
             android:paddingEnd="10dp"
             android:paddingStart="5dp"
             android:textColor="#000000" />
@@ -310,6 +315,7 @@
         android:id="@+id/like_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:typeface="monospace"
         android:layout_gravity="bottom"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -374,6 +380,8 @@
             android:id="@+id/texxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:typeface="monospace"
+
             android:visibility="gone" />
 
 
@@ -424,6 +432,7 @@
                 android:layout_gravity="center_vertical|start"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
+                android:typeface="monospace"
                 android:background="@drawable/comment_sendback"
                 android:cursorVisible="true"
                 android:gravity="center_vertical|start"

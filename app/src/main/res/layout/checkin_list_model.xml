@@ -8,7 +8,6 @@
     android:backgroundTint="#FFC"
     android:orientation="vertical"
     app:cardCornerRadius="8dp"
-
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
 
@@ -32,6 +31,7 @@
                     android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:layout_weight="1"
+                    android:typeface="monospace"
                     android:gravity="center"
                     android:scaleType="centerCrop"
                     android:text="Live Time"
@@ -42,6 +42,7 @@
                     android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:layout_weight="1"
+                    android:typeface="monospace"
                     android:gravity="center"
                     android:text="Coins Earned"
                     android:textSize="15sp" />
@@ -56,6 +57,7 @@
                     android:layout_height="75dp"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:typeface="monospace"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     tools:text="1134" />
@@ -66,6 +68,7 @@
                     android:layout_width="0dp"
                     android:layout_height="75dp"
                     android:layout_weight="1"
+                    android:typeface="monospace"
                     android:gravity="center"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -115,6 +118,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="5dp"
                 android:layout_marginStart="10dp"
+                android:typeface="monospace"
                 android:drawablePadding="5dp"
                 android:gravity="center"
                 android:padding="5dp"
@@ -131,6 +135,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="5dp"
                 android:layout_marginEnd="10dp"
+                android:typeface="monospace"
                 android:drawablePadding="5dp"
                 android:gravity="center"
                 android:padding="5dp"

@@ -81,6 +81,7 @@
                             android:layout_height="wrap_content"
                             android:paddingEnd="10dp"
                             android:paddingStart="5dp"
+                            android:typeface="monospace"
                             android:textColor="#000000"
                             android:textSize="14sp" />
 
@@ -91,6 +92,7 @@
                             android:paddingBottom="5dp"
                             android:paddingEnd="10dp"
                             android:paddingStart="5dp"
+                            android:typeface="monospace"
                             android:textColor="#000000"
                             android:textSize="10sp"
                             android:visibility="visible" />
@@ -140,7 +142,7 @@
                             android:gravity="center"
                             android:paddingEnd="10dp"
                             android:paddingStart="5dp"
-
+                            android:typeface="monospace"
                             android:textColor="#000000" />
                     </LinearLayout>
 
@@ -165,6 +167,7 @@
                             android:layout_gravity="center_vertical"
                             android:drawablePadding="5dp"
                             android:gravity="center"
+                            android:typeface="monospace"
                             android:paddingEnd="10dp"
                             android:paddingStart="5dp"
                             android:textColor="#000000" />
@@ -269,6 +272,7 @@
                             android:layout_marginStart="10dp"
                             android:background="@drawable/comment_sendback"
                             android:cursorVisible="true"
+                            android:typeface="monospace"
                             android:gravity="center_vertical|start"
                             android:hint="Add a comment"
                             android:padding="10dp" />
@@ -380,6 +384,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
+                        android:typeface="monospace"
                         android:layout_marginBottom="4dp"
                         android:textColor="#ffffff" />
 
@@ -426,6 +431,7 @@
         <TextView
             android:id="@+id/gift_title"
             android:layout_width="wrap_content"
+            android:typeface="monospace"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:padding="10dp"

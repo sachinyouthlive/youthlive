@@ -32,6 +32,7 @@
             android:layout_marginStart="30dp"
             android:background="@drawable/white"
             android:gravity="center"
+            android:typeface="monospace"
             android:hint="enter Your OTP"
             android:inputType="number"
             android:padding="10dp"
@@ -44,6 +45,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginStart="30dp"
             android:layout_marginTop="18dp"
+            android:typeface="monospace"
             android:background="@drawable/red_stroke"
             android:text="login"
             android:textColor="#fff" />

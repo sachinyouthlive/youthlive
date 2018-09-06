@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:layout_alignParentEnd="true"
     android:background="#FFFFFF"
-    tools:context="com.yl.youthlive.Fragments.SlideRightFragment"
     tools:ignore="Overdraw">
 
     <LinearLayout
@@ -26,6 +25,7 @@
                 android:background="@drawable/button_backgraound"
                 android:gravity="center"
                 android:text="Live"
+                android:typeface="monospace"
                 android:textAllCaps="true"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -41,6 +41,7 @@
                 android:layout_height="40dp"
                 android:background="@drawable/button_backgraound"
                 android:gravity="center"
+                android:typeface="monospace"
                 android:text="vlog"
                 android:textAllCaps="true"
                 android:textSize="20sp" />
@@ -61,7 +62,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </RelativeLayout>

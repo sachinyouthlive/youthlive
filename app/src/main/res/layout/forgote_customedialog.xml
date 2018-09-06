@@ -18,6 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Forgot Password"
+                android:typeface="monospace"
                 android:textColor="#000"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -34,6 +35,7 @@
                 android:gravity="center"
                 android:text="@string/forgotepassword"
                 android:textColor="#000"
+                android:typeface="monospace"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -51,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/forgotback"
                 android:gravity="center"
+                android:typeface="monospace"
                 android:hint="Enter your Number"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -77,6 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ok"
+                    android:typeface="monospace"
                     android:textAllCaps="true" />
             </LinearLayout>
 
@@ -96,6 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="cancel"
+                    android:typeface="monospace"
                     android:textAllCaps="true" />
             </LinearLayout>
 

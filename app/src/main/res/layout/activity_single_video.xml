@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yl.youthlive.SingleVideoActivity">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,6 +46,7 @@
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         android:text="asdasdasd"
+                        android:typeface="monospace"
                         android:textColor="#ffffff"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -57,6 +58,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10dp"
+                    android:typeface="monospace"
                     android:drawablePadding="5dp"
                     android:drawableStart="@drawable/clock"
                     android:gravity="center_vertical"
@@ -103,6 +105,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginStart="12dp"
                 android:drawablePadding="5dp"
+                android:typeface="monospace"
                 android:drawableStart="@drawable/eeyyee"
                 android:gravity="center_vertical"
                 android:padding="5dp"
@@ -118,6 +121,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginStart="5dp"
                 android:drawablePadding="5dp"
+                android:typeface="monospace"
                 android:drawableStart="@drawable/share"
                 android:gravity="center_vertical"
                 android:padding="5dp"
@@ -132,6 +136,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginEnd="5dp"
                 android:layout_marginStart="5dp"
+                android:typeface="monospace"
                 android:drawablePadding="5dp"
                 android:drawableStart="@drawable/like"
                 android:gravity="center_vertical"
@@ -147,6 +152,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="5dp"
                 android:drawablePadding="5dp"
+                android:typeface="monospace"
                 android:drawableStart="@drawable/comment"
                 android:gravity="center_vertical"
                 android:padding="5dp"
@@ -208,6 +214,7 @@
                 android:layout_gravity="center_vertical|start"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
+                android:typeface="monospace"
                 android:background="@drawable/comment_sendback"
                 android:cursorVisible="true"
                 android:gravity="center_vertical|start"

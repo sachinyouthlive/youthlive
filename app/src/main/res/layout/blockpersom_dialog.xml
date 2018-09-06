@@ -22,6 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Block"
+                android:typeface="monospace"
                 android:textColor="#000"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -56,6 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Anurag"
+                    android:typeface="monospace"
                     android:textColor="#000"
                     android:textSize="18sp" />
 
@@ -64,6 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Hey I am here"
+                    android:typeface="monospace"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -94,6 +97,7 @@
                 android:layout_height="wrap_content"
                 android:text="Don't get messages and call from Amit in messanger"
                 android:textColor="#000"
+                android:typeface="monospace"
                 android:textSize="16sp" />
         </LinearLayout>
 

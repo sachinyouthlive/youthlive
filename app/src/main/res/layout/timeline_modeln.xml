@@ -62,6 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:typeface="monospace"
                 android:layout_marginStart="8dp"
                 android:textColor="@color/colortext_card"
                 android:textSize="@dimen/dimen_14sp" />
@@ -77,6 +78,7 @@
             android:gravity="center_vertical"
             android:padding="5dp"
             android:textColor="@color/colortext_card"
+            android:typeface="monospace"
             android:textSize="10sp"
             tools:ignore="RelativeOverlap"
             tools:text="12:23:88" />
@@ -91,6 +93,7 @@
             android:drawableStart="@drawable/heart"
             android:gravity="center_vertical"
             android:padding="5dp"
+            android:typeface="monospace"
             android:text="30"
             android:textColor="@color/colortext_card"
             android:textSize="@dimen/dimen_10dp" />

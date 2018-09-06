@@ -55,12 +55,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="Aditya Kumar"
+                        android:typeface="monospace"
                         android:textColor="@color/colorAccent"
                         android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:typeface="monospace"
                         android:layout_gravity="center_horizontal"
                         android:text="ID: 1234" />
 
@@ -77,6 +79,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:typeface="monospace"
                         android:drawableStart="@drawable/feedback"
                         android:gravity="center_vertical"
                         android:padding="10dp"
@@ -92,6 +95,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:typeface="monospace"
                         android:drawableStart="@drawable/feedback"
                         android:gravity="center_vertical"
                         android:padding="10dp"
@@ -107,6 +111,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:typeface="monospace"
                         android:drawableStart="@drawable/feedback"
                         android:gravity="center_vertical"
                         android:padding="10dp"
@@ -123,6 +128,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:typeface="monospace"
                         android:drawableStart="@drawable/feedback"
                         android:gravity="center_vertical"
                         android:padding="10dp"
@@ -138,6 +144,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:typeface="monospace"
                         android:drawableStart="@drawable/feedback"
                         android:gravity="center_vertical"
                         android:padding="10dp"
@@ -153,6 +160,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:typeface="monospace"
                         android:drawableStart="@drawable/feedback"
                         android:gravity="center_vertical"
                         android:padding="10dp"

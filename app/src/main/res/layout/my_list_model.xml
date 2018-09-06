@@ -60,6 +60,7 @@
                 android:layout_alignBaseline="@+id/cross"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="bottom"
+                android:typeface="monospace"
                 android:layout_marginBottom="5dp"
                 android:layout_marginEnd="10dp"
                 android:drawablePadding="5dp"

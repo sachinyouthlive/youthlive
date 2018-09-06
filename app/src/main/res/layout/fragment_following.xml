@@ -28,6 +28,7 @@
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="40dp"
+                android:typeface="monospace"
                 android:gravity="center"
                 android:text="Live"
                 android:textAllCaps="true"
@@ -45,6 +46,7 @@
                 android:layout_height="40dp"
                 android:gravity="center"
                 android:text="vlog"
+                android:typeface="monospace"
                 android:textAllCaps="true"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -66,7 +68,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/notification_adapter"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </RelativeLayout>

@@ -50,6 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Priya roy"
+                    android:typeface="monospace"
                     android:textColor="#000000"
                     android:textSize="18sp" />
 
@@ -58,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Don't Mind it.."
+                    android:typeface="monospace"
                     android:textColor="#000000" />
 
                 <LinearLayout
@@ -73,6 +75,7 @@
                         android:layout_height="wrap_content"
                         android:padding="5dp"
                         android:text="Live"
+                        android:typeface="monospace"
                         android:textAllCaps="true"
                         android:textColor="#000000"
                         android:textSize="16sp" />
@@ -91,6 +94,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:typeface="monospace"
                     android:text="5 min ago"
                     android:textColor="#000" />
             </LinearLayout>

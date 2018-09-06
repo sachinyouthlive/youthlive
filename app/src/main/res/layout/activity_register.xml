@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="20dp"
+            android:typeface="monospace"
             android:layout_marginEnd="30dp"
             android:layout_marginStart="30dp"
             android:layout_marginTop="150dp"
@@ -60,6 +61,7 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/red_stroke"
             android:text="Sign up"
+            android:typeface="monospace"
             android:textColor="#fff" />
 
         <LinearLayout
@@ -82,6 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
+                android:typeface="monospace"
                 android:gravity="center"
                 android:text="Or Connect with us"
                 android:textColor="#FFF"

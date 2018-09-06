@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
+            android:typeface="monospace"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:text="Beans" />
@@ -27,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:typeface="monospace"
             android:background="@drawable/wallet_back"
             android:hint="Enter Quantity"
             android:inputType="number"
@@ -40,6 +42,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
+            android:typeface="monospace"
             android:background="@drawable/red_back"
             android:gravity="center"
             android:text="Submit"

@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
@@ -148,6 +149,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
 
         name = (TextView) findViewById(R.id.name);
         logout = (TextView) findViewById(R.id.logout);
@@ -320,7 +323,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         channel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toolbar.setTitle("Channel");
+                toolbar.setTitle("Channels");
 
 
                 FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
@@ -594,7 +597,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 edit.remove("user");
                 edit.remove("pass");
                 edit.apply();
-
                 Intent i = new Intent(getApplicationContext(), Login.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
@@ -604,6 +606,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         });
 
         toolbar.setTitle("Live Users");
+
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(1)).setTypeface(typeFace);
+
+
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Live frag1 = new Live();

@@ -17,7 +17,6 @@
                 android:id="@+id/backpress"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-
                 android:src="@drawable/back_icon" />
 
             <TextView
@@ -26,6 +25,7 @@
                 android:layout_marginStart="45dp"
                 android:layout_marginTop="2dp"
                 android:text="Message"
+                android:typeface="monospace"
                 android:textColor="#FFF"
                 android:textSize="16sp" />
 

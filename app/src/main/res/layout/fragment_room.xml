@@ -16,11 +16,13 @@
 
         <TextView
             android:id="@+id/live_scroll_watermark"
-            style="@style/watermark_style" />
+            style="@style/watermark_style"
+            android:typeface="monospace"/>
 
         <TextView
             android:id="@+id/live_scroll_watermark_time"
             style="@style/watermark_style"
+            android:typeface="monospace"
             android:layout_below="@+id/live_scroll_watermark"
             android:layout_marginTop="0.0dip"
             android:padding="0.0dip" />
@@ -54,11 +56,13 @@
         <TextView
             android:id="@+id/live_watermark"
             style="@style/watermark_style"
+            android:typeface="monospace"
             android:layout_below="@+id/users_container" />
 
         <TextView
             android:id="@+id/live_watermark_time"
             style="@style/watermark_style"
+            android:typeface="monospace"
             android:layout_below="@+id/live_watermark"
             android:layout_marginTop="0.0dip"
             android:padding="0.0dip" />
@@ -70,6 +74,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/live_watermark"
             android:layout_marginRight="@dimen/dimens_dip_10"
+            android:typeface="monospace"
             android:layout_marginTop="@dimen/dimens_dip_20"
             android:background="@color/payeco_textColorWhite"
             android:paddingLeft="10.0dip"

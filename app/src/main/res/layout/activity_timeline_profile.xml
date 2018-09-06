@@ -72,6 +72,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_margin="10dp"
+                            android:typeface="monospace"
                             android:background="@drawable/follow_back"
                             android:drawablePadding="10dp"
                             android:drawableStart="@drawable/message"
@@ -91,6 +92,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="end"
+                            android:typeface="monospace"
                             android:layout_margin="10dp"
                             android:background="@drawable/follow_back"
                             android:drawablePadding="10dp"
@@ -132,6 +134,7 @@
                                 android:gravity="center_vertical"
                                 android:textColor="#ffffff"
                                 android:textSize="20sp"
+                                android:typeface="monospace"
                                 tools:text="221" />
 
                             <TextView
@@ -140,6 +143,7 @@
                                 android:layout_gravity="center_horizontal"
                                 android:paddingBottom="10dp"
                                 android:text="Friends"
+                                android:typeface="monospace"
                                 android:textColor="#ffffff" />
 
                         </LinearLayout>
@@ -148,7 +152,8 @@
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:background="@android:color/darker_gray"
-                            android:padding="2dp" />
+                            android:padding="2dp"
+                            android:typeface="monospace"/>
 
                         <LinearLayout
                             android:id="@+id/followings_click"
@@ -165,6 +170,7 @@
                                 android:layout_gravity="center_horizontal"
                                 android:gravity="center_vertical"
                                 android:textColor="#ffffff"
+                                android:typeface="monospace"
                                 android:textSize="20sp"
                                 tools:text="234" />
 
@@ -174,6 +180,7 @@
                                 android:layout_gravity="center_horizontal"
                                 android:paddingBottom="10dp"
                                 android:text="Followings"
+                                android:typeface="monospace"
                                 android:textColor="#ffffff" />
 
                         </LinearLayout>
@@ -200,6 +207,7 @@
                                 android:gravity="center_vertical"
                                 android:textColor="#ffffff"
                                 android:textSize="20sp"
+                                android:typeface="monospace"
                                 tools:text="167" />
 
                             <TextView
@@ -208,6 +216,7 @@
                                 android:layout_gravity="center_horizontal"
                                 android:paddingBottom="10dp"
                                 android:text="Fans"
+                                android:typeface="monospace"
                                 android:textColor="#ffffff" />
 
                         </LinearLayout>

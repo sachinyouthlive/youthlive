@@ -34,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
+                android:typeface="monospace"
                 android:layout_gravity="bottom"
                 android:drawablePadding="5dp"
                 android:drawableStart="@drawable/heart"
@@ -73,6 +74,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:maxLines="2"
+                        android:typeface="monospace"
                         android:padding="2dp"
                         tools:text="Name gfhgfhg ghfghf hgghfgh fhfh jhhjgjh jghjgjh hfghfh hjhjhjgjg hjghjghj gjjhgjhghjgj hjghjghjghjghj hjghjghjghjhjghj hhfhj hjhjfjh "
                         android:textColor="#fff" />

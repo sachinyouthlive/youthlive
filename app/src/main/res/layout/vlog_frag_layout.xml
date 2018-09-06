@@ -9,6 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnWidth="100dp"
-        android:numColumns="auto_fit"></GridView>
+        android:numColumns="auto_fit"/>
 
 </LinearLayout>

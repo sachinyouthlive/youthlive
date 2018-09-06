@@ -28,6 +28,7 @@
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/ic_diamond"
         android:gravity="center"
+        android:typeface="monospace"
         android:minHeight="0dp"
         android:minWidth="0dp"
         android:paddingBottom="8dp"
@@ -44,6 +45,7 @@
     <TextView
         android:id="@+id/textView48"
         android:layout_width="wrap_content"
+        android:typeface="monospace"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColor="#000000"

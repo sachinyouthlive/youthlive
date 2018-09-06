@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/dimen_2dp"
+                android:typeface="monospace"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:text="1"
@@ -49,6 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:typeface="monospace"
                 android:gravity="center"
                 android:textColor="#666666"
                 android:textSize="@dimen/dimen_16sp"
@@ -82,6 +84,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/image"
                 android:textColor="#4c4c4c"
+                android:typeface="monospace"
                 android:textSize="18sp"
                 tools:text="User Name" />
 
@@ -107,6 +110,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="3dp"
+                    android:typeface="monospace"
                     android:text="Coins"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp" />

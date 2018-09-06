@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="18dp"
             android:layout_marginStart="18dp"
+            android:typeface="monospace"
             android:layout_marginTop="110dp"
             android:hint="Add a relevent title for your boardcast"
             android:textColorHint="#fff" />
@@ -57,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
+            android:typeface="monospace"
             android:gravity="center"
             android:text="# Tag your LIVE"
             android:textColor="#fff" />
@@ -68,6 +70,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="100dp"
             android:gravity="center"
+            android:typeface="monospace"
             android:padding="10dp"
             android:text="Share"
             android:textColor="#fff" />
@@ -146,6 +149,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:gravity="center"
+            android:typeface="monospace"
             android:padding="10dp"
             android:text="Lorem Ipsum is simply dummy text of the printing
   and typesetting industry."
@@ -158,6 +162,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginStart="30dp"
             android:layout_marginTop="18dp"
+            android:typeface="monospace"
             android:background="@drawable/pink_button"
             android:text="GO LIVE"
             android:textColor="#fff"
