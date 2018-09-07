@@ -16,6 +16,7 @@
         android:layout_gravity="center_horizontal"
         android:background="@color/colorPrimary"
         app:tabIndicatorHeight="4dp"
+        android:elevation="2dp"
         app:tabSelectedTextColor="#ffffff"
         app:tabTextColor="#e2e2e2" />
 

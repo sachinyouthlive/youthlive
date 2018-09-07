@@ -728,140 +728,18 @@ public class VideoBroadcaster extends AppCompatActivity {
                 thumbCount.setText(String.valueOf(millisUntilFinished / 1000));
 
 
+
+                /*if (millisUntilFinished / 1000 == 2)
+                {
+
+                }
+*/
+
             }
 
             @Override
             public void onFinish() {
 
-
-                Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + url);
-
-
-                /*BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-                TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-                TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-
-//Create the player
-                thumbPlayer1 = ExoPlayerFactory.newSimpleInstance(VideoBroadcaster.this, trackSelector, new DefaultLoadControl(
-                        new DefaultAllocator(true, 1000),
-                        1000,  // min buffer 0.5s
-                        2000, //max buffer 3s
-                        1000, // playback 1s
-                        1000,   //playback after rebuffer 1s
-                        1,
-                        true
-                ));
-
-                thumbPlayerView1.setPlayer(thumbPlayer1);
-
-                thumbPlayerView1.setUseController(false);
-
-                thumbPlayer1.addListener(new Player.EventListener() {
-                    @Override
-                    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
-
-                    }
-
-                    @Override
-                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-                    }
-
-                    @Override
-                    public void onLoadingChanged(boolean isLoading) {
-
-                    }
-
-                    @Override
-                    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
-                        Log.d("ddata", String.valueOf(playbackState));
-
-                        if (playWhenReady) {
-                            thumbLoading.setVisibility(View.GONE);
-                        }
-
-                        *//*if (playbackState == 4) {
-                            progress.setVisibility(View.VISIBLE);
-
-                            final bean b = (bean) getApplicationContext();
-
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                            Call<String> call = cr.endConnection(connId);
-
-                            call.enqueue(new Callback<String>() {
-                                @Override
-                                public void onResponse(Call<String> call, Response<String> response) {
-
-
-                                    progress.setVisibility(View.GONE);
-
-                                }
-
-                                @Override
-                                public void onFailure(Call<String> call, Throwable t) {
-                                    progress.setVisibility(View.GONE);
-                                }
-                            });
-
-
-                        }
-*//*
-                    }
-
-                    @Override
-                    public void onRepeatModeChanged(int repeatMode) {
-
-                    }
-
-                    @Override
-                    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
-                    }
-
-                    @Override
-                    public void onPlayerError(ExoPlaybackException error) {
-
-
-                    }
-
-                    @Override
-                    public void onPositionDiscontinuity(int reason) {
-
-                    }
-
-                    @Override
-                    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-                    }
-
-                    @Override
-                    public void onSeekProcessed() {
-
-                    }
-                });
-
-                RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
-// This is the MediaSource representing the media to be played.
-                final MediaSource videoSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
-                        .createMediaSource(uri);
-
-                thumbPlayer1.prepare(videoSource);
-
-                thumbPlayer1.setPlayWhenReady(true);
-
-
-                thumbPlayerView1.setVisibility(View.VISIBLE);
-*/
-
-                //thumbPlayerView1.setVisibility(View.VISIBLE);
 
                 StreamOptions streamOptions = new StreamOptions(url);
 
