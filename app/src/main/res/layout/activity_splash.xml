@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@color/colorPrimaryDark"
+        android:src="@drawable/image11"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -38,6 +38,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:elevation="5dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/white_30dp"
         android:orientation="horizontal"
@@ -51,7 +52,6 @@
             android:id="@+id/splashbg"
             android:layout_width="60dp"
             android:layout_height="60dp"
-
             android:src="@drawable/mainlogo" />
 
 

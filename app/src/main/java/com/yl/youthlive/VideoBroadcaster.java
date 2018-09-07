@@ -219,7 +219,7 @@ public class VideoBroadcaster extends AppCompatActivity {
 
         localRenderLayout.setPosition(0, 0, 100, 100);
         localRender.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
-        localRender.setMirror(false);
+        localRender.setMirror(true);
         localRender.requestLayout();
 
         remoteRender = findViewById(R.id.remote_video_view);
@@ -574,7 +574,7 @@ public class VideoBroadcaster extends AppCompatActivity {
 
         URI u = null;
         try {
-            u = new URI("ws://ec2-35-154-79-248.ap-south-1.compute.amazonaws.com:8080");
+            u = new URI("ws://13.232.31.52:8080");
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
