@@ -34,7 +34,7 @@
         android:ems="10"
         android:hint="Enter OTP"
         android:typeface="monospace"
-        android:inputType="textPersonName"
+        android:inputType="number"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
         android:textSize="16sp"

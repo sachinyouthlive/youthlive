@@ -2,6 +2,7 @@ package com.yl.youthlive.Activitys;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.yl.youthlive.Adapter.diamondPHAdapter;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -69,6 +71,9 @@ public class Diamond_purchase_history_Activity extends AppCompatActivity impleme
         adapter = new diamondPHAdapter(getContext(), list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(manager);
+
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(0)).setTypeface(typeFace);
 
 
     }

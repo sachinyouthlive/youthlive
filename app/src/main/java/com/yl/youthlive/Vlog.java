@@ -40,20 +40,9 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
         tabs = (TabLayout) view.findViewById(R.id.tabs);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
-        TextView tv = (TextView)inflater.inflate(R.layout.custom_tab,null);
-        tv.setTypeface(Typeface.MONOSPACE);
-        tv.setTextColor(Color.WHITE);
-        tv.setText("HOT");
 
-
-        TextView tv1 = (TextView)inflater.inflate(R.layout.custom_tab,null);
-        tv1.setTypeface(Typeface.MONOSPACE);
-        tv1.setTextColor(Color.WHITE);
-        tv1.setText("POPULAR");
-
-
-        tabs.addTab(tabs.newTab().setCustomView(tv));
-        tabs.addTab(tabs.newTab().setCustomView(tv1));
+        tabs.addTab(tabs.newTab().setText("HOT"));
+        tabs.addTab(tabs.newTab().setText("POPULAR"));
 
         /*FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getChildFragmentManager(), FragmentPagerItems.with(getContext())
@@ -68,9 +57,10 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
         tabs.setupWithViewPager(viewPager);
 
 
-        tabs.getTabAt(0).setCustomView(tv);
-        tabs.getTabAt(1).setCustomView(tv1);
+        tabs.getTabAt(0).setText("HOT");
+        tabs.getTabAt(1).setText("POPULAR");
 
+        setCustomFont();
 
         ((HomeActivity) Objects.requireNonNull(getActivity())).setFragmentRefreshListener(new HomeActivity.FragmentRefreshListener() {
             @Override
@@ -84,8 +74,33 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
             }
         });
 
+
+
         return view;
     }
+
+
+    public void setCustomFont() {
+
+        ViewGroup vg = (ViewGroup) tabs.getChildAt(0);
+        int tabsCount = vg.getChildCount();
+
+        for (int j = 0; j < tabsCount; j++) {
+            ViewGroup vgTab = (ViewGroup) vg.getChildAt(j);
+
+            int tabChildsCount = vgTab.getChildCount();
+
+            for (int i = 0; i < tabChildsCount; i++) {
+                View tabViewChild = vgTab.getChildAt(i);
+                if (tabViewChild instanceof TextView) {
+                    //Put your font in assests folder
+                    //assign name of the font here (Must be case sensitive)
+                    ((TextView) tabViewChild).setTypeface(Typeface.MONOSPACE);
+                }
+            }
+        }
+    }
+
 
     ////////////////////internet connectivity check///////////////
     private void checkConnection() {

@@ -2,6 +2,7 @@ package com.yl.youthlive.Activitys;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.yl.youthlive.Adapter.MassageAdapter;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -57,6 +59,10 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
 
         toolbar.setTitle("My Messages");
 
+
+
+
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +77,13 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
         holder = new MassageAdapter(this, list);
         recyclerView.setAdapter(holder);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(1)).setTypeface(typeFace);
+
+
+
     }
 
     @Override

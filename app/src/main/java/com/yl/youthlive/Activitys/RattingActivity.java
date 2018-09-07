@@ -2,6 +2,7 @@ package com.yl.youthlive.Activitys;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -13,7 +14,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.yl.youthlive.R;
 import com.yl.youthlive.Rating1;
@@ -71,6 +74,32 @@ public class RattingActivity extends AppCompatActivity implements ConnectivityRe
 
         toolbar.setTitle("Ranking");
 
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(1)).setTypeface(typeFace);
+
+        setCustomFont();
+
+    }
+
+    public void setCustomFont() {
+
+        ViewGroup vg = (ViewGroup) layout.getChildAt(0);
+        int tabsCount = vg.getChildCount();
+
+        for (int j = 0; j < tabsCount; j++) {
+            ViewGroup vgTab = (ViewGroup) vg.getChildAt(j);
+
+            int tabChildsCount = vgTab.getChildCount();
+
+            for (int i = 0; i < tabChildsCount; i++) {
+                View tabViewChild = vgTab.getChildAt(i);
+                if (tabViewChild instanceof TextView) {
+                    //Put your font in assests folder
+                    //assign name of the font here (Must be case sensitive)
+                    ((TextView) tabViewChild).setTypeface(Typeface.MONOSPACE);
+                }
+            }
+        }
     }
 
     @Override

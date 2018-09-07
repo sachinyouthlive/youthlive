@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 public class Terms extends AppCompatActivity {
     Toolbar toolbar;
@@ -72,5 +74,10 @@ public class Terms extends AppCompatActivity {
             }
         });
         webView.loadUrl("http://youthlive.in/youthlive_privacyabout/privacy_policy.htm");
+
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(1)).setTypeface(typeFace);
+
+
     }
 }

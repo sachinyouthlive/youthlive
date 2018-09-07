@@ -1,6 +1,7 @@
 package com.yl.youthlive;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class WalletNew extends AppCompatActivity {
 
@@ -52,7 +55,33 @@ public class WalletNew extends AppCompatActivity {
         tabs.getTabAt(0).setText("DIAMONDS");
         tabs.getTabAt(1).setText("COINS");
 
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(0)).setTypeface(typeFace);
 
+        setCustomFont();
+
+    }
+
+
+    public void setCustomFont() {
+
+        ViewGroup vg = (ViewGroup) tabs.getChildAt(0);
+        int tabsCount = vg.getChildCount();
+
+        for (int j = 0; j < tabsCount; j++) {
+            ViewGroup vgTab = (ViewGroup) vg.getChildAt(j);
+
+            int tabChildsCount = vgTab.getChildCount();
+
+            for (int i = 0; i < tabChildsCount; i++) {
+                View tabViewChild = vgTab.getChildAt(i);
+                if (tabViewChild instanceof TextView) {
+                    //Put your font in assests folder
+                    //assign name of the font here (Must be case sensitive)
+                    ((TextView) tabViewChild).setTypeface(Typeface.MONOSPACE);
+                }
+            }
+        }
     }
 
 

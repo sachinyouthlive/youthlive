@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 public class Content extends AppCompatActivity {
 
@@ -41,6 +43,10 @@ public class Content extends AppCompatActivity {
         String title = getIntent().getStringExtra("title");
 
         toolbar.setTitle(title);
+
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(1)).setTypeface(typeFace);
+
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

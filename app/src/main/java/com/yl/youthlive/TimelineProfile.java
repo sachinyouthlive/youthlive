@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -353,6 +354,7 @@ public class TimelineProfile extends AppCompatActivity {
         });
 
 
+
         //   loadfollowstatus();
         //    followingstatus();
 
@@ -525,6 +527,10 @@ public class TimelineProfile extends AppCompatActivity {
                         fans.setText(String.valueOf(response.body().getData().getFans()));
                         followings.setText(String.valueOf(response.body().getData().getFollowings()));
                         friends.setText(String.valueOf(response.body().getData().getFriends()));
+
+                        Typeface typeFace = Typeface.MONOSPACE;
+                        ((TextView)toolbar.getChildAt(2)).setTypeface(typeFace);
+
 
                         FragStatePAgerAdapter adapter = new FragStatePAgerAdapter(fm, response.body().getData());
                         pager.setAdapter(adapter);

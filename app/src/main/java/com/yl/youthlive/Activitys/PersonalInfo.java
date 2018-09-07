@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -224,6 +225,8 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         //   tabs.addTab(tabs.newTab().setText("Career"));
 
 
+
+
     }
 
     @Override
@@ -347,6 +350,11 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                     loader.displayImage(response.body().getData().getUserImage(), profileimg);
 
                     toolbar.setTitle(response.body().getData().getUserName());
+
+
+                    Typeface typeFace = Typeface.MONOSPACE;
+                    ((TextView)toolbar.getChildAt(2)).setTypeface(typeFace);
+
 
                     fans.setText(String.valueOf(response.body().getData().getFans()));
                     followings.setText(String.valueOf(response.body().getData().getFollowings()));

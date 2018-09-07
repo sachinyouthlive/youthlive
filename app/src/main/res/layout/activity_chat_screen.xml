@@ -46,6 +46,7 @@
         <ImageButton
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:visibility="gone"
             android:layout_marginStart="10dp"
             android:background="@drawable/emoji" />
 

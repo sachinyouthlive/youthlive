@@ -1,6 +1,7 @@
 package com.yl.youthlive;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.sendMessagePOJO.sendMessageBean;
@@ -122,6 +124,11 @@ public class ChatScreen extends AppCompatActivity {
 
             }
         });
+
+
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(1)).setTypeface(typeFace);
+
 
 
     }

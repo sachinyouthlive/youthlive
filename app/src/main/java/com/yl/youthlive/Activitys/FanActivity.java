@@ -2,6 +2,7 @@ package com.yl.youthlive.Activitys;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -75,6 +76,9 @@ public class FanActivity extends AppCompatActivity implements ConnectivityReceiv
         recyclerfan.setAdapter(recAdapter);
         recyclerfan.setHasFixedSize(true);
         nofanmsg = findViewById(R.id.nofanmsg);
+
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(1)).setTypeface(typeFace);
 
 
     }

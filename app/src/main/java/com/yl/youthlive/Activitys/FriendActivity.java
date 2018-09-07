@@ -2,6 +2,7 @@ package com.yl.youthlive.Activitys;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -79,6 +80,9 @@ public class FriendActivity extends AppCompatActivity implements ConnectivityRec
         recycler_following.setAdapter(recAdapter);
         recycler_following.setHasFixedSize(true);
         nofriendmsg = findViewById(R.id.nofriendmsg);
+
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(1)).setTypeface(typeFace);
 
 
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -129,6 +130,11 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
             }
         });
 
+        toolbar.setTitle("My VLOGs");
+
+        Typeface typeFace = Typeface.MONOSPACE;
+        ((TextView)toolbar.getChildAt(1)).setTypeface(typeFace);
+
 
     }
 
@@ -240,6 +246,10 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
 
                     toolbar.setTitle(response.body().getData().getUserName());
                     toolbar.setSubtitle(Html.fromHtml("Youth Live ID: <b>" + response.body().getData().getYouthLiveId() + "</b>"));
+
+                    Typeface typeFace = Typeface.MONOSPACE;
+                    ((TextView)toolbar.getChildAt(3)).setTypeface(typeFace);
+
 
                     fans.setText(String.valueOf(response.body().getData().getFans()));
                     followings.setText(String.valueOf(response.body().getData().getFollowings()));
