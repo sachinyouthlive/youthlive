@@ -238,7 +238,19 @@
             android:name=".VerticalFragmentVodActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".VideoChatTest" />
-        <activity android:name=".Login2"></activity>
+        <activity android:name=".Login2"/>
+        <activity
+            android:name="io.github.memfis19.annca.internal.ui.camera.Camera1Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeFullscreen" />
+        <activity
+            android:name="io.github.memfis19.annca.internal.ui.camera2.Camera2Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeFullscreen" />
+        <activity
+            android:name="io.github.memfis19.annca.internal.ui.preview.PreviewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeFullscreen" />
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment"
+    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -50,7 +51,7 @@
                         android:layout_marginRight="@dimen/dimen_10dp"
                         android:layout_marginTop="@dimen/dimen_10dp"
                         android:contentDescription="camera"
-                        android:src="@drawable/editblack" />
+                        android:src="@drawable/account_edit" />
 
                     <me.relex.circleindicator.CircleIndicator
                         android:id="@+id/indicator"
@@ -84,6 +85,7 @@
                         android:id="@+id/youth_id"
                         android:layout_width="wrap_content"
                         android:typeface="monospace"
+                        android:textColor="@color/colorAccent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal" />
 
@@ -101,7 +103,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd" />
+                        android:background="#424242" />
 
                     <TextView
                         android:id="@+id/personal_info"
@@ -113,12 +115,13 @@
                         android:drawableStart="@drawable/ic_businessman"
                         android:gravity="center_vertical"
                         android:padding="14dp"
+                        android:textColor="@color/colorAccent"
                         android:text="Personal Info" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd" />
+                        android:background="#424242" />
 
                     <TextView
                         android:id="@+id/followingAct"
@@ -128,6 +131,7 @@
                         android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
                         android:drawableStart="@drawable/ic_followers"
+                        android:textColor="@color/colorAccent"
                         android:gravity="center_vertical"
                         android:padding="14dp"
                         android:text="My Followings" />
@@ -136,7 +140,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd" />
+                        android:background="#424242" />
 
                     <TextView
                         android:id="@+id/vlogActivity"
@@ -147,6 +151,7 @@
                         android:drawableStart="@drawable/ic_tv"
                         android:typeface="monospace"
                         android:gravity="center_vertical"
+                        android:textColor="@color/colorAccent"
                         android:padding="14dp"
                         android:text="My Vlog" />
 
@@ -154,7 +159,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd" />
+                        android:background="#424242" />
 
                     <TextView
                         android:id="@+id/messagechatee"
@@ -163,6 +168,7 @@
                         android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
                         android:drawableStart="@drawable/ic_marketing"
+                        android:textColor="@color/colorAccent"
                         android:typeface="monospace"
                         android:gravity="center_vertical"
                         android:padding="14dp"
@@ -172,7 +178,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd" />
+                        android:background="#424242" />
 
                     <TextView
                         android:id="@+id/wallet"
@@ -182,6 +188,7 @@
                         android:drawablePadding="10dp"
                         android:drawableStart="@drawable/ic_money"
                         android:gravity="center_vertical"
+                        android:textColor="@color/colorAccent"
                         android:typeface="monospace"
                         android:padding="14dp"
                         android:text="Wallet" />
@@ -190,7 +197,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd" />
+                        android:background="#424242" />
 
                     <TextView
                         android:id="@+id/mycheckin"
@@ -198,6 +205,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
+                        android:textColor="@color/colorAccent"
                         android:drawableStart="@drawable/ic_calendar"
                         android:gravity="center_vertical"
                         android:typeface="monospace"
@@ -207,7 +215,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd" />
+                        android:background="#424242" />
 
                     <TextView
                         android:id="@+id/ratting_act"
@@ -216,6 +224,7 @@
                         android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
                         android:drawableStart="@drawable/ic_promotion"
+                        android:textColor="@color/colorAccent"
                         android:typeface="monospace"
                         android:gravity="center_vertical"
                         android:padding="14dp"
@@ -224,7 +233,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd" />
+                        android:background="#424242" />
 
                     <TextView
                         android:id="@+id/beggage"
@@ -236,13 +245,14 @@
                         android:gravity="center_vertical"
                         android:padding="14dp"
                         android:typeface="monospace"
+                        android:textColor="@color/colorAccent"
                         android:text="Baggage"
                         android:visibility="gone" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd"
+                        android:background="#424242"
                         android:visibility="gone" />
 
                     <TextView
@@ -252,6 +262,7 @@
                         android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
                         android:drawableStart="@drawable/success"
+                        android:textColor="@color/colorAccent"
                         android:gravity="center_vertical"
                         android:typeface="monospace"
                         android:padding="14dp"
@@ -261,7 +272,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd"
+                        android:background="#424242"
                         android:visibility="gone" />
 
                     <TextView
@@ -273,6 +284,7 @@
                         android:typeface="monospace"
                         android:drawableStart="@drawable/blocking"
                         android:gravity="center_vertical"
+                        android:textColor="@color/colorAccent"
                         android:padding="14dp"
                         android:text="Blocked List"
                         android:visibility="gone" />
@@ -280,7 +292,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd"
+                        android:background="#424242"
                         android:visibility="gone" />
 
                     <TextView
@@ -290,6 +302,7 @@
                         android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
                         android:typeface="monospace"
+                        android:textColor="@color/colorAccent"
                         android:drawableStart="@drawable/ic_info"
                         android:gravity="center_vertical"
                         android:padding="14dp"
@@ -299,7 +312,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#cdcdcd" />
+                        android:background="#424242" />
 
                     <TextView
                         android:id="@+id/policy"
@@ -308,6 +321,7 @@
                         android:background="@drawable/ripple_effect_trasprntcornrless"
                         android:drawablePadding="10dp"
                         android:drawableStart="@drawable/ic_keyhole"
+                        android:textColor="@color/colorAccent"
                         android:typeface="monospace"
                         android:gravity="center_vertical"
                         android:padding="14dp"

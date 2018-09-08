@@ -20,6 +20,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/dark_shade"
+        />
+
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"
@@ -64,7 +70,7 @@
             android:paddingTop="4dp"
             android:gravity="center"
             android:text="YOUTH LIVE"
-            android:textColor="#808080"
+            android:textColor="@color/colorAccent"
             android:typeface="monospace"
             android:textSize="24sp"
             />

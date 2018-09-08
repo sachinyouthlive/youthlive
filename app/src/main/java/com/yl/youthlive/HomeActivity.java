@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -69,6 +71,8 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 
+import io.github.memfis19.annca.Annca;
+import io.github.memfis19.annca.internal.configuration.AnncaConfiguration;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -82,7 +86,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener , PlayerFragment1.endListener {
+public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PlayerFragment1.endListener {
 
 
     public final int MEDIA_TYPE_VIDEO = 2;
@@ -123,9 +127,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     public String fragTag;
 
 
-
-    ImageView live , vlog , golive , channel , profile;
-
+    ImageView live, vlog, golive, channel, profile;
 
 
     @SuppressLint("SetTextI18n")
@@ -140,16 +142,15 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
         edit = pref.edit();
 
-        offlinePref = getSharedPreferences("offline" , Context.MODE_PRIVATE);
+        offlinePref = getSharedPreferences("offline", Context.MODE_PRIVATE);
         offlineEdit = offlinePref.edit();
 
         feedBack = (TextView) findViewById(R.id.feedback);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorAccent));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
 
 
         name = (TextView) findViewById(R.id.name);
@@ -162,8 +163,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-
 
 
         live = findViewById(R.id.imageView);
@@ -240,14 +239,11 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         }*/
 
 
-
-
         live.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 toolbar.setTitle("Live Users");
-
 
 
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -262,7 +258,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                 ft.commit();
 
-                live.setImageTintList(ColorStateList.valueOf(Color.parseColor("#c62828")));
+                live.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ffffff")));
                 vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
                 channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
                 profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
@@ -288,7 +284,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 ft2.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                 ft2.commit();
                 live.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
-                vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#c62828")));
+                vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ffffff")));
                 channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
                 profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
 
@@ -338,7 +334,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 ft3.commit();
                 live.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
                 vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
-                channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#c62828")));
+                channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ffffff")));
                 profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
 
             }
@@ -365,7 +361,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 live.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
                 vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
                 channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
-                profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#c62828")));
+                profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ffffff")));
 
 
             }
@@ -608,7 +604,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         toolbar.setTitle("Live Users");
 
         Typeface typeFace = Typeface.MONOSPACE;
-        ((TextView)toolbar.getChildAt(1)).setTypeface(typeFace);
+        ((TextView) toolbar.getChildAt(1)).setTypeface(typeFace);
 
 
         FragmentManager fm = getSupportFragmentManager();
@@ -619,7 +615,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         //ft.addToBackStack(null);
         ft.commit();
 
-        live.setImageTintList(ColorStateList.valueOf(Color.RED));
+        live.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ffffff")));
         vlog.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
         channel.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
         profile.setImageTintList(ColorStateList.valueOf(Color.parseColor("#ababab")));
@@ -683,13 +679,31 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
                 startActivityForResult(intent, CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE);*/
 
-                Log.d("jg", "video");
+                AnncaConfiguration.Builder videoLimited = new AnncaConfiguration.Builder(HomeActivity.this, REQUEST_VIDEO_CAPTURE);
+                videoLimited.setMediaAction(AnncaConfiguration.MEDIA_ACTION_VIDEO);
+                videoLimited.setMediaQuality(AnncaConfiguration.MEDIA_QUALITY_AUTO);
+                videoLimited.setVideoFileSize(2 * 1024 * 1024);
+                videoLimited.setMinimumVideoDuration(15 * 1000);
+                videoLimited.setVideoDuration(15 * 1000);
+                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return false;
+                }
+                new Annca(videoLimited.build()).launchCamera();
+
+                /*Log.d("jg", "video");
 
                 Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                 takeVideoIntent.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, 0);
                 if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
-                }
+                }*/
 
                 break;
             default:
@@ -704,14 +718,14 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         //dialog =ProgressDialog.show(Activity.this, "", "loading...",false,true);
         try {
             if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
-                Uri videoUri = data.getData();
-                uploadVideo(videoUri);
+                String filePath = data.getStringExtra(AnncaConfiguration.Arguments.FILE_PATH);
+                uploadVideo(filePath);
             } else if (requestCode == CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE) {
                 if (resultCode == RESULT_OK) {
                     realUri = Uri.parse(fileUri.getPath());
                     //imgPostServices();
 
-                    uploadVideo(realUri);
+                    //uploadVideo(realUri);
 
                 } else if (resultCode == RESULT_CANCELED) {
                     Toast.makeText(HomeActivity.this, "User cancelled the video capture.", Toast.LENGTH_LONG).show();
@@ -720,23 +734,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                     Toast.makeText(HomeActivity.this, "Video capture failed.", Toast.LENGTH_LONG).show();
 
                 }
-            } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                //    ivProfileEditProfile.setImageBitmap(photo);
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                String path = MediaStore.Images.Media.insertImage(HomeActivity.this.getContentResolver(), photo, "Title", null);
-                realUri = Uri.parse(path);
-
-                try {
-                    realUri = Uri.parse(getPath(HomeActivity.this, realUri));
-                    //  ivProfileEditProfile.setImageURI(data.getData());
-                    //imgPostServices();
-                    uploadVideo(realUri);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                //   Toast.makeText(RegisterRider.this, ""+realUri, Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_OK && requestCode == GALLEY_REQUEST_CODE_CUSTOMER) {
                 if (data.getData() != null) {
                     try {
@@ -748,7 +745,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                         bitmap = Bitmap.createScaledBitmap(bitmap, 400, 400, false);
                         //imgPostServices();
 
-                        uploadVideo(realUri);
+                        //uploadVideo(realUri);
 
                         //Log.d(TAG, "Image path :- " + realUri);
                         //   ivProfileEditProfile.setImageBitmap(bitmap);
@@ -845,12 +842,12 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         return multipartTypedOutput;
     }
 
-    public void uploadVideo(Uri uri) {
+    public void uploadVideo(String uri) {
         videoProgress.setVisibility(View.VISIBLE);
         MultipartBody.Part body = null;
-        String mCurrentPhotoPath = getPath(HomeActivity.this, uri);
+        //String mCurrentPhotoPath = getPath(HomeActivity.this, uri);
 
-        File file = new File(mCurrentPhotoPath);
+        File file = new File(uri);
 
 
         RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);

@@ -10,7 +10,7 @@
     </style>
 
     <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="color">@android:color/white</item>
+        <item name="color">@color/colorAccent</item>
     </style>
 
     <style name="FacebookLoginButton">
@@ -99,6 +99,10 @@
     <style name="fill_wrap">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ThemeFullscreen" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
     </style>
 
 </resources>

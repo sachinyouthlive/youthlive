@@ -3791,11 +3791,6 @@ public class BroadcasterFragment1 extends Fragment {
 
                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                        SharedPreferences fcmPref = Objects.requireNonNull(getActivity()).getSharedPreferences("fcm", Context.MODE_PRIVATE);
-
-                        String keey = fcmPref.getString("token", "");
-
-                        Log.d("keeey", keey);
 
                         Call<getUpdatedBean> call = cr.getDummyUpdatedData(dummyList.get(r).getUserId(), liveId, "dummy");
 

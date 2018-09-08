@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
     tools:ignore="Overdraw">
 
@@ -16,9 +16,10 @@
         android:layout_gravity="center_horizontal"
         android:background="@color/colorPrimary"
         app:tabIndicatorHeight="4dp"
+        app:tabIndicatorColor="@color/colorAccent"
         android:elevation="2dp"
-        app:tabSelectedTextColor="#ffffff"
-        app:tabTextColor="#e2e2e2" />
+        app:tabSelectedTextColor="@color/colorAccent"
+        app:tabTextColor="#cdcdcd" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

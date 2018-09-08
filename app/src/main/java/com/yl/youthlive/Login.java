@@ -158,7 +158,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                                             String keey = fcmPref.getString("token", "");
 
 
-                                            Call<socialBean> call = cr.socialSignIn(id, email , keey);
+                                            Call<socialBean> call = cr.socialSignIn(id, email, keey);
 
                                             call.enqueue(new Callback<socialBean>() {
                                                 @Override
@@ -179,8 +179,8 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                                                         edit.putString("type", "social");
                                                         edit.putString("user", email);
                                                         edit.putString("pass", id);
-                                                        edit.putString("userType" , response.body().getData().getType());
-                                                        edit.putString("yid" , response.body().getData().getYouthLiveId());
+                                                        edit.putString("userType", response.body().getData().getType());
+                                                        edit.putString("yid", response.body().getData().getYouthLiveId());
                                                         edit.apply();
 
                                                         //    Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -342,6 +342,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
         googleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 signIn();
 
             }
@@ -584,7 +585,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
             String keey = fcmPref.getString("token", "");
 
 
-            Call<socialBean> call = cr.socialSignIn(account.getId(), account.getEmail() , keey);
+            Call<socialBean> call = cr.socialSignIn(account.getId(), account.getEmail(), keey);
 
             call.enqueue(new Callback<socialBean>() {
                 @Override
@@ -606,8 +607,8 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                         edit.putString("type", "social");
                         edit.putString("user", account.getEmail());
                         edit.putString("pass", account.getId());
-                        edit.putString("userType" , response.body().getData().getType());
-                        edit.putString("yid" , response.body().getData().getYouthLiveId());
+                        edit.putString("userType", response.body().getData().getType());
+                        edit.putString("yid", response.body().getData().getYouthLiveId());
                         edit.commit();
 
                         //   Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();

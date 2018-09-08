@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#E53935</color>
-    <color name="colorPrimaryDark">#D32F2F</color>
-    <color name="colorAccent">#0097A7</color>
+    <color name="colorPrimary">#282828</color>
+    <color name="colorPrimaryDark">#131313</color>
+    <color name="colorAccent">#ffffff</color>
     <color name="white">#ffffff</color>
     <color name="comment">#D3D3D3</color>
     <color name="textcolor">#000000</color>
@@ -12,7 +12,7 @@
     <color name="colortext_card">#ffd0d0</color>
 
     <color name="txt_color">#000000</color>
-    <color name="grey">#424242</color>
+    <color name="grey">#f2f2f2</color>
     <color name="grey_light">#9E9E9E</color>
 
     <color name="green_light">#388E3C</color>
