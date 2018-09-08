@@ -1,10 +1,13 @@
 package com.yl.youthlive;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.yl.youthlive.vlogListPOJO.Datum;
 
@@ -17,16 +20,28 @@ public class VerticalFragmentVodActivity extends AppCompatActivity {
     CustomViewPager pager;
 
     int pos;
-
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vertical_fragment_vod2);
-
+        toolbar = findViewById(R.id.toolbar);
         bean b = (bean) getApplicationContext();
 
         list2 = b.vlist;
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setNavigationIcon(R.drawable.arrow);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // b.mylist.remove(b.mylist.size() - 1);
+
+                finish();
+            }
+        });
 
         pos = Integer.parseInt(getIntent().getStringExtra("position"));
 

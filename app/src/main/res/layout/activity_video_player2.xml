@@ -43,10 +43,14 @@
                 <com.google.android.exoplayer2.ui.PlayerView
                     android:id="@+id/player_view"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dimen_20dp"
                     android:background="@color/black"
                     android:focusable="true"
-                    app:use_controller="false" />
+                    app:controller_layout_id="@layout/exo_playback_control_view"
+                    app:resize_mode="fixed_width"
+                    app:show_timeout="0"
+                    app:use_controller="true" />
 
                 <ProgressBar
                     android:id="@+id/progress_bar"
