@@ -31,13 +31,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,8 +45,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
@@ -58,11 +56,9 @@ import com.google.android.gms.common.api.Status;
 import com.yl.youthlive.Activitys.SearchActivity;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.addVideoPOJO.addVideoBean;
-import com.yl.youthlive.endLivePOJO.endLiveBean;
 import com.yl.youthlive.feedBackPOJO.feedBackBean;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -81,7 +77,6 @@ import retrofit.mime.TypedFile;
 import retrofit.mime.TypedString;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -1071,8 +1066,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         else
         {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("Are you sure, You want to Exit?");
-            alertDialogBuilder.setPositiveButton("Yes",
+            alertDialogBuilder.setTitle(Html.fromHtml("<font color='#282828'>Are you sure, You want to Exit?</font>"));
+            alertDialogBuilder.setPositiveButton(Html.fromHtml("<font color='#282828'>Yes</font>"),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
@@ -1080,7 +1075,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                         }
                     });
 
-            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setNegativeButton(Html.fromHtml("<font color='#282828'>No</font>"), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
