@@ -401,14 +401,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ImageButton
+    <TextView
         android:id="@+id/connect"
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/circle"
-        android:padding="8dp"
+        android:textColor="@color/colorPrimary"
+        android:background="@drawable/call_back"
+        android:text="CALL"
+        android:typeface="monospace"
+        android:gravity="center"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
         android:scaleType="centerInside"
         android:src="@drawable/networking"
         android:visibility="visible"

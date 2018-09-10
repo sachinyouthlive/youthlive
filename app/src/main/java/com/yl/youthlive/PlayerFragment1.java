@@ -110,7 +110,9 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
     private int current_page = 1;
 
-    ImageButton emoji, message, send, gift, connect, crop;
+    ImageButton emoji, message, send, gift, crop;
+
+    TextView connect;
 
     EmojiconEditText comment;
 

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -83,7 +84,7 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    Intent intent = new Intent(SplashActivity.this, Login.class);
+                    Intent intent = new Intent(SplashActivity.this, Spalsh2.class);
                     startActivity(intent);
                     finish();
 
@@ -146,7 +147,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 } else {
                     //  Toast.makeText(SplashActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SplashActivity.this, Login.class);
+                    Intent intent = new Intent(SplashActivity.this, Spalsh2.class);
                     startActivity(intent);
                     finish();
 
@@ -160,7 +161,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<login2Bean> call, Throwable t) {
                 //  progress.setVisibility(View.GONE);
-                Intent intent = new Intent(SplashActivity.this, Login.class);
+                Intent intent = new Intent(SplashActivity.this, Spalsh2.class);
                 startActivity(intent);
                 finish();
             }
@@ -254,7 +255,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<socialBean> call, Throwable t) {
                 //   progress.setVisibility(View.GONE);
-                Intent intent = new Intent(SplashActivity.this, Login.class);
+                Intent intent = new Intent(SplashActivity.this, Spalsh2.class);
                 startActivity(intent);
                 finish();
 

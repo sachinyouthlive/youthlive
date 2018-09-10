@@ -3,6 +3,7 @@ package com.yl.youthlive;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -30,6 +31,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
@@ -204,7 +206,7 @@ public class BroadcasterFragment1 extends Fragment {
     TextView giftUser;
 
 
-    ImageButton connection;
+    TextView connection;
 
 
     TextView ylId;
@@ -3183,7 +3185,7 @@ public class BroadcasterFragment1 extends Fragment {
                         //fos = new FileOutputStream(STORE_DIRECTORY + "/myscreen_" + IMAGES_PRODUCED + ".png");
 
 
-                        File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "thumb" + String.valueOf(new Random(100)) + ".jpg");
+                        final File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "thumb" + String.valueOf(new Random(100)) + ".jpg");
 
                         OutputStream os = null;
                         try {
@@ -3226,6 +3228,10 @@ public class BroadcasterFragment1 extends Fragment {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
 
+                                Uri imageUriLcl = FileProvider.getUriForFile(getActivity(), getActivity().getApplicationContext().getPackageName() + ".provider", file2);
+
+                                ContentResolver contentResolver = getActivity().getContentResolver();
+                                contentResolver.delete(imageUriLcl, null, null);
 
                                 //Toast.makeText(broadcaster , "Success" , Toast.LENGTH_SHORT).show();
 
