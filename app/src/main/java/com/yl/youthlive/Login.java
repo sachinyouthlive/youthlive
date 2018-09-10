@@ -65,7 +65,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class Login extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
-    public static final String mypreference = "mypref";
+    // public static final String mypreference = "mypref";
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     Button create, login;
     CallbackManager mCallbackManager;

@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 
 public class SharePreferenceUtils {
 
-    private static String PREFERENCE_NAME = "buyonline";
+    private static String PREFERENCE_NAME = "yl";
     private static SharePreferenceUtils sharePreferenceUtils;
     private SharedPreferences sharedPreferences;
 
@@ -22,7 +22,6 @@ public class SharePreferenceUtils {
         return sharePreferenceUtils;
     }
 
-    // login response user_id 1234
     public void saveString(String key, String Val) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, Val);
