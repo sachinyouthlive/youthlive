@@ -1,13 +1,11 @@
 package com.yl.youthlive;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,9 +23,6 @@ import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.yl.youthlive.Activitys.UserInformation;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -243,8 +238,13 @@ public class Spalsh2 extends AppCompatActivity {
                     b.userId = response.body().getData().getUserId();
                     b.userName = response.body().getData().getUserName();
 
+                    sharePreferenceUtils.putString("userId", response.body().getData().getUserId());
+                    sharePreferenceUtils.putString("userName", response.body().getData().getUserName());
+
+
                     try {
                         b.userImage = response.body().getData().getUserImage();
+                        sharePreferenceUtils.putString("userImage", response.body().getData().getUserImage());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -272,8 +272,11 @@ public class Spalsh2 extends AppCompatActivity {
                     b.userId = response.body().getData().getUserId();
                     b.userName = response.body().getData().getUserName();
 
+                    sharePreferenceUtils.putString("userId", response.body().getData().getUserId());
+                    sharePreferenceUtils.putString("userName", response.body().getData().getUserName());
                     try {
                         b.userImage = response.body().getData().getUserImage();
+                        sharePreferenceUtils.putString("userImage", response.body().getData().getUserImage());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

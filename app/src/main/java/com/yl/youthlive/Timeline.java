@@ -112,9 +112,9 @@ public class Timeline extends Fragment implements ConnectivityReceiver.Connectiv
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<timelineBean> call = cr.getTimeline(b.userId);
+        Call<timelineBean> call = cr.getTimeline(SharePreferenceUtils.getInstance().getString("userId"));
 
-        Log.d("userId", b.userId);
+        Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<timelineBean>() {
             @Override

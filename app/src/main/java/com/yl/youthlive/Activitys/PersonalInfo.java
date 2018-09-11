@@ -27,6 +27,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.Address;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.followPOJO.followBean;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
@@ -83,7 +84,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         useridd = getIntent().getStringExtra("userId");
 
         if (useridd.equals("")) {
-            useridd = b.userId;
+            useridd = SharePreferenceUtils.getInstance().getString("userId");
         }
         ///////////////
         b.mylist.add(useridd);
@@ -94,7 +95,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         friendClick = findViewById(R.id.friends_click);
 
 
-        if (Objects.equals(userid, b.userId)) {
+        if (Objects.equals(userid, SharePreferenceUtils.getInstance().getString("userId"))) {
             follow.setVisibility(View.GONE);
         } else {
             follow.setVisibility(View.VISIBLE);
@@ -154,7 +155,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<followBean> call = cr.follow(b.userId, userid);
+                Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), userid);
 
                 call.enqueue(new Callback<followBean>() {
                     @Override
@@ -396,7 +397,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<followBean> call = cr.followcheck(b.userId, userids);
+        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
 
         call.enqueue(new Callback<followBean>() {
             @Override

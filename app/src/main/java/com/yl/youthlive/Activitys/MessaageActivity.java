@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.yl.youthlive.Adapter.MassageAdapter;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.allMessagePOJO.Datum;
 import com.yl.youthlive.allMessagePOJO.allMessageBean;
 import com.yl.youthlive.bean;
@@ -170,7 +171,7 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<allMessageBean> call = cr.allMessageList(b.userId);
+        Call<allMessageBean> call = cr.allMessageList(SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<allMessageBean>() {
             @Override

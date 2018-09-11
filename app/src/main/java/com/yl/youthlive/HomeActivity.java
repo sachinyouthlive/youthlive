@@ -432,7 +432,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                            Call<feedBackBean> call = cr.feedback(b.userId, com);
+                            Call<feedBackBean> call = cr.feedback(SharePreferenceUtils.getInstance().getString("userId"), com);
 
                             call.enqueue(new Callback<feedBackBean>() {
                                 @Override
@@ -881,7 +881,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-        Call<addVideoBean> call = cr.addVideo(b.userId, "", "", body, body2);
+        Call<addVideoBean> call = cr.addVideo(SharePreferenceUtils.getInstance().getString("userId"), "", "", body, body2);
 
         call.enqueue(new Callback<addVideoBean>() {
             @Override

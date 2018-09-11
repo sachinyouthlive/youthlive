@@ -22,6 +22,7 @@ import com.yl.youthlive.Activitys.MessaageActivity;
 import com.yl.youthlive.Activitys.SearchActivity;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.TimelineProfile;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.followPOJO.followBean;
@@ -97,7 +98,7 @@ public class Search_adapter extends RecyclerView.Adapter<Search_adapter.searchad
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<followBean> call = cr.followcheck(b.userId, item.getUserId());
+        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
 
         call.enqueue(new Callback<followBean>() {
             @Override
@@ -174,7 +175,7 @@ public class Search_adapter extends RecyclerView.Adapter<Search_adapter.searchad
                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                            Call<sendMessageBean> call = cr.sendMessage(b.userId, item.getUserId(), comm);
+                            Call<sendMessageBean> call = cr.sendMessage(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId(), comm);
 
                             call.enqueue(new Callback<sendMessageBean>() {
                                 @Override
@@ -227,7 +228,7 @@ public class Search_adapter extends RecyclerView.Adapter<Search_adapter.searchad
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<followBean> call = cr.follow(b.userId, item.getUserId());
+                Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
 
                 call.enqueue(new Callback<followBean>() {
                     @Override

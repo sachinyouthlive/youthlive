@@ -185,7 +185,7 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
-                Call<singleVideoBean> call = cr.likeVideo(b.userId, videoId);
+                Call<singleVideoBean> call = cr.likeVideo(SharePreferenceUtils.getInstance().getString("userId"), videoId);
                 call.enqueue(new Callback<singleVideoBean>() {
                     @Override
                     public void onResponse(Call<singleVideoBean> call, Response<singleVideoBean> response) {
@@ -226,7 +226,7 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
                                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                Call<shareBean> call = cr.share(b.userId, videoId);
+                                Call<shareBean> call = cr.share(SharePreferenceUtils.getInstance().getString("userId"), videoId);
 
                                 call.enqueue(new Callback<shareBean>() {
                                     @Override
@@ -289,7 +289,7 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<commentBean> call = cr.comment(b.userId, videoId, mess);
+                    Call<commentBean> call = cr.comment(SharePreferenceUtils.getInstance().getString("userId"), videoId, mess);
 
                     call.enqueue(new Callback<commentBean>() {
                         @Override
@@ -362,7 +362,7 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<followBean> call = cr.follow(b.userId, getArguments().getString("userId"));
+                Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), getArguments().getString("userId"));
 
                 call.enqueue(new Callback<followBean>() {
                     @Override
@@ -474,7 +474,7 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<singleVideoBean> call = cr.getsingleVideo(b.userId, videoId);
+                Call<singleVideoBean> call = cr.getsingleVideo(SharePreferenceUtils.getInstance().getString("userId"), videoId);
 
                 call.enqueue(new Callback<singleVideoBean>() {
                     @Override
@@ -637,7 +637,7 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
         }
         final bean b = (bean) getApplicationContext();
         String uid = getArguments().getString("userId");
-        if (b.userId.equals(uid)) {
+        if (SharePreferenceUtils.getInstance().getString("userId").equals(uid)) {
 
             follow.setVisibility(View.GONE);
         } else {
@@ -661,7 +661,7 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<singleVideoBean> call = cr.getsingleVideo(b.userId, videoId);
+        Call<singleVideoBean> call = cr.getsingleVideo(SharePreferenceUtils.getInstance().getString("userId"), videoId);
 
         call.enqueue(new Callback<singleVideoBean>() {
             @Override
@@ -741,7 +741,7 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
                 try {
                     bean b = (bean) getApplicationContext();
 
-                    if (b.userId.equals(response.body().getData().getTimelineId())) {
+                    if (SharePreferenceUtils.getInstance().getString("userId").equals(response.body().getData().getTimelineId())) {
                         name.setText("Your Profile");
                     } else {
                         name.setText(response.body().getData().getTimelineName());
@@ -823,7 +823,7 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<followBean> call = cr.followcheck(b.userId, userids);
+        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
 
         call.enqueue(new Callback<followBean>() {
             @Override

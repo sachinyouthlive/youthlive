@@ -102,7 +102,7 @@ public class ChatScreen extends AppCompatActivity {
                             .build();
 
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
-                    Call<sendMessageBean> call = cr.sendMessage(b.userId, id, comm);
+                    Call<sendMessageBean> call = cr.sendMessage(SharePreferenceUtils.getInstance().getString("userId"), id, comm);
 
                     call.enqueue(new Callback<sendMessageBean>() {
                         @Override
@@ -155,8 +155,8 @@ public class ChatScreen extends AppCompatActivity {
                 .build();
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
-        //  Toast.makeText(b, "" + chat + " frnd id" + id + " usrid" + b.userId, Toast.LENGTH_SHORT).show();
-        Call<singleMessageBean> call = cr.singleChatList(b.userId, id, chat);
+        //  Toast.makeText(b, "" + chat + " frnd id" + id + " usrid" + SharePreferenceUtils.getInstance().getString("userId"), Toast.LENGTH_SHORT).show();
+        Call<singleMessageBean> call = cr.singleChatList(SharePreferenceUtils.getInstance().getString("userId"), id, chat);
 
         call.enqueue(new Callback<singleMessageBean>() {
             @Override
@@ -200,7 +200,7 @@ public class ChatScreen extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<singleMessageBean> call = cr.singleChatList(b.userId, id, chat);
+                Call<singleMessageBean> call = cr.singleChatList(SharePreferenceUtils.getInstance().getString("userId"), id, chat);
 
                 call.enqueue(new Callback<singleMessageBean>() {
                     @Override

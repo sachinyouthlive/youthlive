@@ -82,9 +82,9 @@ public class MyVLOGs extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<vlogListBean> call = cr.getVlog(b.userId);
+        Call<vlogListBean> call = cr.getVlog(SharePreferenceUtils.getInstance().getString("userId"));
 
-        Log.d("userId", b.userId);
+        Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<vlogListBean>() {
             @Override
@@ -178,7 +178,7 @@ public class MyVLOGs extends Fragment {
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<deleteVLOGBean> call = cr.removeVideo(b.userId, item.getVideoId());
+                    Call<deleteVLOGBean> call = cr.removeVideo(SharePreferenceUtils.getInstance().getString("userId"), item.getVideoId());
 
                     call.enqueue(new Callback<deleteVLOGBean>() {
                         @Override

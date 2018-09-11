@@ -85,9 +85,9 @@ public class Diamonds extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<walletBean> call = cr.getWalletData(b.userId);
+        Call<walletBean> call = cr.getWalletData(SharePreferenceUtils.getInstance().getString("userId"));
 
-        Log.d("userId", b.userId);
+        Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<walletBean>() {
             @Override

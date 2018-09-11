@@ -87,7 +87,7 @@ public class TimelineProfile extends AppCompatActivity {
 
         useridd = getIntent().getStringExtra("userId");
         if (useridd.equals("")) {
-            useridd = b.userId;
+            useridd = SharePreferenceUtils.getInstance().getString("userId");
         }
         ///////////////
         b.mylist.add(useridd);
@@ -163,7 +163,7 @@ public class TimelineProfile extends AppCompatActivity {
 
                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                            Call<sendMessageBean> call = cr.sendMessage(b.userId, userid, comm);
+                            Call<sendMessageBean> call = cr.sendMessage(SharePreferenceUtils.getInstance().getString("userId"), userid, comm);
 
                             call.enqueue(new Callback<sendMessageBean>() {
                                 @Override
@@ -199,7 +199,7 @@ public class TimelineProfile extends AppCompatActivity {
         });
 
 
-        if (Objects.equals(userid, b.userId)) {
+        if (Objects.equals(userid, SharePreferenceUtils.getInstance().getString("userId"))) {
             follow.setVisibility(View.GONE);
         } else {
             follow.setVisibility(View.VISIBLE);
@@ -223,7 +223,7 @@ public class TimelineProfile extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<followBean> call = cr.follow(b.userId, userid);
+                Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), userid);
 
                 call.enqueue(new Callback<followBean>() {
                     @Override
@@ -287,7 +287,7 @@ public class TimelineProfile extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<followBean> call = cr.follow(b.userId , userid);
+                Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId") , userid);
 
                 call.enqueue(new Callback<followBean>() {
                     @Override
@@ -372,7 +372,7 @@ public class TimelineProfile extends AppCompatActivity {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<followBean> call = cr.followcheck(b.userId, userids);
+        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
 
         call.enqueue(new Callback<followBean>() {
             @Override
@@ -428,7 +428,7 @@ public class TimelineProfile extends AppCompatActivity {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<followBean> call = cr.followcheck(b.userId, userids);
+        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
 
         call.enqueue(new Callback<followBean>() {
             @Override
@@ -503,9 +503,9 @@ public class TimelineProfile extends AppCompatActivity {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<timelineProfileBean> call = cr.getProfile2(b.userId, userid);
+        Call<timelineProfileBean> call = cr.getProfile2(SharePreferenceUtils.getInstance().getString("userId"), userid);
 
-        Log.d("userId", b.userId);
+        Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
         Log.d("friendId", userid);
 
         call.enqueue(new retrofit2.Callback<timelineProfileBean>() {
@@ -536,7 +536,7 @@ public class TimelineProfile extends AppCompatActivity {
                         pager.setAdapter(adapter);
 
 
-                        if (response.body().getData().getUserId().equals(b.userId)) {
+                        if (response.body().getData().getUserId().equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                             follow.setVisibility(View.GONE);
                             messgae.setVisibility(View.GONE);
                         } else {
@@ -545,7 +545,7 @@ public class TimelineProfile extends AppCompatActivity {
                         }
 
                         if (Objects.equals(response.body().getData().getFriendStatus().getFollow(), "true")) {
-                            if (!b.userId.equals(userid)) {
+                            if (!SharePreferenceUtils.getInstance().getString("userId").equals(userid)) {
                                 messgae.setVisibility(View.VISIBLE);
                             }
                         } else {

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.checkinPOJO.CheckinPOJO;
 import com.yl.youthlive.checkinPOJO.Information;
@@ -83,9 +84,9 @@ public class CheckInDetailActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<CheckinPOJO> call = cr.getcheckin(b.userId, day, String.valueOf(monthFinal));
+        Call<CheckinPOJO> call = cr.getcheckin(SharePreferenceUtils.getInstance().getString("userId"), day, String.valueOf(monthFinal));
 
-        Log.d("userId", b.userId);
+        Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<CheckinPOJO>() {
             @Override

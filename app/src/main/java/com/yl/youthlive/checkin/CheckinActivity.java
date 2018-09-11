@@ -14,9 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.yl.youthlive.Content;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.TotalbroadcastPOJO;
 import com.yl.youthlive.bean;
 
@@ -163,9 +163,9 @@ public class CheckinActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<TotalbroadcastPOJO> call = cr.totalbroadcast(b.userId, month);
+        Call<TotalbroadcastPOJO> call = cr.totalbroadcast(SharePreferenceUtils.getInstance().getString("userId"), month);
 
-        Log.d("userId", b.userId);
+        Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<TotalbroadcastPOJO>() {
             @Override

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.yl.youthlive.Adapter.following_adapter;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.followListPOJO.Datum;
 import com.yl.youthlive.followListPOJO.followListBean;
@@ -51,7 +52,7 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
         userId = getIntent().getStringExtra("userId");
         if (userId == null) {
             final bean b = (bean) getApplicationContext();
-            userId = b.userId;
+            userId = SharePreferenceUtils.getInstance().getString("userId");
         }
         list = new ArrayList<>();
 

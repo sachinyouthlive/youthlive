@@ -24,6 +24,7 @@ import com.yl.youthlive.Activitys.FanActivity;
 import com.yl.youthlive.Activitys.MessaageActivity;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.TimelineProfile;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.fan_listPOJO.Datum;
@@ -129,7 +130,7 @@ public class fan_adapter extends RecyclerView.Adapter<fan_adapter.fanadapter> {
                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                            Call<sendMessageBean> call = cr.sendMessage(b.userId, item.getUserId(), comm);
+                            Call<sendMessageBean> call = cr.sendMessage(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId(), comm);
 
                             call.enqueue(new Callback<sendMessageBean>() {
                                 @Override
@@ -179,7 +180,7 @@ public class fan_adapter extends RecyclerView.Adapter<fan_adapter.fanadapter> {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<followBean> call = cr.followcheck(b.userId, item.getUserId());
+        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
 
         call.enqueue(new Callback<followBean>() {
             @Override
@@ -187,7 +188,7 @@ public class fan_adapter extends RecyclerView.Adapter<fan_adapter.fanadapter> {
 
                 try {
 
-                    if (!item.getUserId().equals(b.userId)) {
+                    if (!item.getUserId().equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                         // Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         if (response.body().getMessage().equals("Following")) {
                             holder.unfollow.setText("UNFOLLOW");
@@ -250,7 +251,7 @@ public class fan_adapter extends RecyclerView.Adapter<fan_adapter.fanadapter> {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<followBean> call = cr.follow(b.userId, item.getUserId());
+                Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
 
                 call.enqueue(new Callback<followBean>() {
                     @Override

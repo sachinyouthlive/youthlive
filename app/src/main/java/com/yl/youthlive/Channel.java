@@ -23,7 +23,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
-import com.yl.youthlive.wowzaAPIPOJO.wowzaAPIBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +106,7 @@ public class Channel extends Fragment implements ConnectivityReceiver.Connectivi
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<List<liveBean>> call = cr.getLives2(b.userId);
+        Call<List<liveBean>> call = cr.getLives2(SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<List<liveBean>>() {
             @Override

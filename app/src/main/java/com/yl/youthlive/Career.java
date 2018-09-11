@@ -255,7 +255,7 @@ public class Career extends Fragment {
 
                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                            Call<deleteCareerBean> call = cr.deleteCareer(b.userId, item.getCareerId());
+                            Call<deleteCareerBean> call = cr.deleteCareer(SharePreferenceUtils.getInstance().getString("userId"), item.getCareerId());
 
                             call.enqueue(new Callback<deleteCareerBean>() {
                                 @Override
@@ -312,7 +312,7 @@ public class Career extends Fragment {
 
                                             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                            Call<editCareerBean> call = cr.editCareer(b.userId, p, t, f, tt, item.getCareerId());
+                                            Call<editCareerBean> call = cr.editCareer(SharePreferenceUtils.getInstance().getString("userId"), p, t, f, tt, item.getCareerId());
 
                                             call.enqueue(new Callback<editCareerBean>() {
                                                 @Override

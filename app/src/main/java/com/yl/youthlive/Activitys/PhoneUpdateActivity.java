@@ -20,6 +20,7 @@ import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.Login;
 import com.yl.youthlive.PhoneupdateminiPOJO;
 import com.yl.youthlive.R;
+import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.updatephonePOJO.UpdatephonePOJO;
 
@@ -87,7 +88,7 @@ public class PhoneUpdateActivity extends AppCompatActivity {
 
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                    Call<PhoneupdateminiPOJO> call = cr.updatePhonemini(b.userId, pho);
+                    Call<PhoneupdateminiPOJO> call = cr.updatePhonemini(SharePreferenceUtils.getInstance().getString("userId"), pho);
 
                     call.enqueue(new Callback<PhoneupdateminiPOJO>() {
                         @Override
