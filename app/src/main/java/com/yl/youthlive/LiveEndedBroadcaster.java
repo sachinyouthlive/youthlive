@@ -70,7 +70,12 @@ public class LiveEndedBroadcaster extends AppCompatActivity {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                Blurry.with(LiveEndedBroadcaster.this).from(loadedImage).into(image);
+                try {
+                    Blurry.with(LiveEndedBroadcaster.this).from(loadedImage).into(image);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
             }
 

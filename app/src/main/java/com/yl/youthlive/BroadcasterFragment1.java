@@ -3192,7 +3192,7 @@ public class BroadcasterFragment1 extends Fragment {
                         Log.e(TAG, "captured image: " + IMAGES_PRODUCED);
 
 
-                        final String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "Title", null);
+                        //final String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "Title", null);
 
 
                         //Toast.makeText(broadcaster , path , Toast.LENGTH_SHORT).show();
@@ -3220,10 +3220,7 @@ public class BroadcasterFragment1 extends Fragment {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
 
-                                Uri imageUriLcl = FileProvider.getUriForFile(getActivity(), getActivity().getApplicationContext().getPackageName() + ".provider", file2);
-
-                                ContentResolver contentResolver = getActivity().getContentResolver();
-                                contentResolver.delete(imageUriLcl, null, null);
+                                Log.d("asdasdasdss" , String.valueOf(file2.delete()));
 
                                 //Toast.makeText(broadcaster , "Success" , Toast.LENGTH_SHORT).show();
 

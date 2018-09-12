@@ -238,7 +238,7 @@ public class Signin extends AppCompatActivity {
         });
 
 
-        mAuth = FirebaseAuth.getInstance();
+        /*mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -268,7 +268,8 @@ public class Signin extends AppCompatActivity {
                     // ...
                 }
             }
-        };
+        };*/
+
 
 
     }
