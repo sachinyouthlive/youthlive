@@ -10,6 +10,7 @@ import android.util.Log;
 import com.yl.youthlive.HomeActivity;
 import com.yl.youthlive.Login;
 import com.yl.youthlive.Signin;
+import com.yl.youthlive.Spalsh2;
 
 import java.util.HashMap;
 
@@ -182,7 +183,7 @@ public class SessionManager {
         editor.commit();
 
         // After logout redirect user to Loing Activity
-        Intent i = new Intent(context, Login.class);
+        Intent i = new Intent(context, Spalsh2.class);
         // Closing all the Activities
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         // Add new Flag to start new Activity

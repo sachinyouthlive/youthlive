@@ -43,11 +43,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.yl.youthlive.HomeActivity;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.Signin;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
+import com.yl.youthlive.login2POJO.login2Bean;
 import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
 
 import org.json.JSONException;
@@ -349,11 +352,65 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
 
                     if (Objects.equals(response.body().getStatus(), "1")) {
 
-                        Toast.makeText(UserInformation.this, "Profile Updated, Continue to login", Toast.LENGTH_SHORT).show();
+                        progress.setVisibility(View.VISIBLE);
 
+                        SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
+
+                        String keey = fcmPref.getString("token", "");
+
+
+                        Call<login2Bean> call1 = cr.signIn(response.body().getData().getPhone(), response.body().getData().getPassword(), keey);
+
+
+                        call1.enqueue(new Callback<login2Bean>() {
+                            @Override
+                            public void onResponse(Call<login2Bean> call, retrofit2.Response<login2Bean> response) {
+
+
+                                if (Objects.equals(response.body().getStatus(), "1")) {
+                                    Toast.makeText(UserInformation.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                    SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                                    SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
+
+                                    try {
+                                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    SharePreferenceUtils.getInstance().putString("type", "phone");
+                                    SharePreferenceUtils.getInstance().putString("user", response.body().getData().getPhone());
+                                    SharePreferenceUtils.getInstance().putString("pass", response.body().getData().getPassword());
+                                    SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
+                                    SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
+
+
+                                    Intent Inbt = new Intent(UserInformation.this, HomeActivity.class);
+                                    Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(Inbt);
+
+                                } else {
+                                    Toast.makeText(UserInformation.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+
+
+                                progress.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onFailure(Call<login2Bean> call, Throwable t) {
+                                progress.setVisibility(View.GONE);
+                            }
+                        });
+
+
+                        /*Toast.makeText(UserInformation.this, "Profile Updated, Continue to login", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(UserInformation.this, Signin.class);
                         startActivity(intent);
-                        finish();
+                        finish();*/
+
 
                     } else {
                         Toast.makeText(UserInformation.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -363,88 +420,13 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
 
                 @Override
                 public void onFailure(Call<loginResponseBean> call, Throwable t) {
-
+                    progress.setVisibility(View.GONE);
                 }
             });
 
         }
 
 
-    }
-
-    private void filldata() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UserInfo, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    String status = jObj.getString("status");
-                    if (!status.equals("0")) {
-                        JSONObject obj2 = jObj.getJSONObject("data");
-                        userid1 = obj2.getString("userId");
-                        Username = obj2.getString("userName");
-                        Birthdate = obj2.getString("birthday");
-                        pImage = obj2.getString("image");
-                        gender = obj2.getString("gender");
-                        BioData = obj2.getString("bio");
-                        Toast.makeText(UserInformation.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(UserInformation.this, Signin.class);
-                        startActivity(i);
-                    } else {
-                        str = jObj.getString("message");
-                        Toast.makeText(UserInformation.this, str, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(UserInformation.this, error.toString(), Toast.LENGTH_SHORT).show();
-                //hidepDialog();
-            }
-
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("userName", Username);
-                params.put("gender", "male");
-                params.put("birthday", Birthdate);
-                params.put("bio", BioData);
-                params.put("userId", userid1);
-                params.put("image", encodedImage);
-               /* String imageurl = "http://nationproducts.in/youthlive/upload/user/" + pImage;
-                if (!pImage.equals(null)) {
-                    Picasso.with(UserInformation.this)
-                            .load(imageurl).noFade()
-                            .into(userimage);
-                } else if (pImage.equals(null)) {
-                    Picasso.with(UserInformation.this)
-                            .load(R.drawable.face).noFade();
-                }*/
-                return params;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-
-    }
-
-    public void Displayalart(final String code) {
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (code.equals("input_error")) {
-                    user_name.setText("");
-                    BirthDay.setText("");
-                    Biodata.setText("");
-                }
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
     }
 
     protected Dialog onCreateDialog(int id) {

@@ -128,89 +128,7 @@ public class Signin extends AppCompatActivity {
                                             String image = "https://graph.facebook.com/" + id + "/picture?type=large";
 
 
-                                            progress.setVisibility(View.VISIBLE);
-
-                                            final bean b = (bean) getApplicationContext();
-
-                                            final Retrofit retrofit = new Retrofit.Builder()
-                                                    .baseUrl(b.BASE_URL)
-                                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                                    .addConverterFactory(GsonConverterFactory.create())
-                                                    .build();
-
-                                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                                            SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
-
-                                            String keey = fcmPref.getString("token", "");
-
-                                            Call<socialBean> call = cr.socialSignIn(id, email , keey);
-
-                                            call.enqueue(new Callback<socialBean>() {
-                                                @Override
-                                                public void onResponse(Call<socialBean> call, retrofit2.Response<socialBean> response) {
-
-                                                    if (response.body().getData().getUserName().length() > 0) {
-
-                                                        b.userId = response.body().getData().getUserId();
-                                                        b.userName = response.body().getData().getUserName();
-
-                                                        try {
-                                                            b.userImage = response.body().getData().getUserImage();
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-
-
-                                                        edit.putString("type", "social");
-                                                        edit.putString("user", email);
-                                                        edit.putString("pass", id);
-                                                        edit.putString("userType" , response.body().getData().getType());
-                                                        edit.putString("yid" , response.body().getData().getYouthLiveId());
-                                                        edit.apply();
-
-                                                        Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(Signin.this, HomeActivity.class);
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                        startActivity(intent);
-
-                                                    } else {
-
-                                                        b.userId = response.body().getData().getUserId();
-                                                        b.userName = response.body().getData().getUserName();
-
-                                                        try {
-                                                            b.userImage = response.body().getData().getUserImage();
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-
-
-                                                        edit.putString("type", "social");
-                                                        edit.putString("user", email);
-                                                        edit.putString("pass", id);
-                                                        edit.commit();
-
-                                                        Toast.makeText(Signin.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(Signin.this, UserInformation.class);
-                                                        intent.putExtra("userId", response.body().getData().getUserId());
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                        startActivity(intent);
-
-
-                                                    }
-
-
-                                                    progress.setVisibility(View.GONE);
-
-
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call<socialBean> call, Throwable t) {
-                                                    progress.setVisibility(View.GONE);
-                                                }
-                                            });
+                                            socialLogin(email, id);
 
 
                                             //new FacebookloginAsyncTask().execute(email);
@@ -338,7 +256,7 @@ public class Signin extends AppCompatActivity {
                         String id = user.getUid();
                         String email = user.getEmail();
 
-                        handleSignInResult(id, email);
+                        socialLogin(email, id);
 
                         //nameTextView.setText("HI " + user.getDisplayName().toString());
                         //emailTextView.setText(user.getEmail().toString());
@@ -413,7 +331,7 @@ public class Signin extends AppCompatActivity {
                 String keey = fcmPref.getString("token", "");
 
 
-                Call<login2Bean> call = cr.signIn(phone, password , keey);
+                Call<login2Bean> call = cr.signIn(phone, password, keey);
 
 
                 call.enqueue(new Callback<login2Bean>() {
@@ -424,21 +342,22 @@ public class Signin extends AppCompatActivity {
                         if (Objects.equals(response.body().getStatus(), "1")) {
                             Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
-                            b.userId = response.body().getData().getUserId();
-                            b.userName = response.body().getData().getUserName();
+                            SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                            SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
 
                             try {
-                                b.userImage = response.body().getData().getUserImage();
+                                SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
-                            edit.putString("type", "phone");
-                            edit.putString("user", phone);
-                            edit.putString("pass", password);
-                            edit.putString("userType" , response.body().getData().getType());
-                            edit.putString("yid" , response.body().getData().getYouthLiveId());
-                            edit.commit();
+                            SharePreferenceUtils.getInstance().putString("type", "phone");
+                            SharePreferenceUtils.getInstance().putString("user", phone);
+                            SharePreferenceUtils.getInstance().putString("pass", password);
+                            SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
+                            SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
+
 
                             Intent Inbt = new Intent(Signin.this, HomeActivity.class);
                             Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -467,65 +386,6 @@ public class Signin extends AppCompatActivity {
         }
     }
 
-
-    private void userloginn() {
-
-        User_number = phone_number.getText().toString().trim();
-        User_passwords = password_login.getText().toString().trim();
-        if (User_number.equals("") || User_passwords.equals("")) {
-            builder.setTitle("Somethimg went wrong..");
-            builder.setMessage("Please fill all the fields...");
-            Displayalart("input_error");
-        } else {
-            showpDialog();
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, BASEELOGIN_URL, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject jObj = new JSONObject(response);
-                        String status = jObj.getString("status");
-                        if (!status.equals(0)) {
-                            JSONObject obj2 = jObj.getJSONObject("data");
-                            userId = obj2.getString("userId");
-                            // str = jObj.getString("message");
-                            Phonenumber = obj2.getString("phone");
-                            User_passwords = obj2.getString("password");
-                            Intent Inbt = new Intent(Signin.this, HomeActivity.class);
-                            startActivity(Inbt);
-                            SharedPreferences sharedpreferences = Signin.this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedpreferences.edit();
-                            editor.putString("userid", userId);
-                            editor.apply();
-                            session.createLoginSession(Signin.this, userId);
-
-                        } else {
-                            str = jObj.getString("message");
-                            Toast.makeText(Signin.this, str, Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    hidepDialog();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(Signin.this, error.toString(), Toast.LENGTH_SHORT).show();
-                }
-
-            }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("phone", User_number);
-                    params.put("password", pass1);
-                    return params;
-                }
-            };
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(stringRequest);
-        }
-    }
 
     private void forgotPassword() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://ec2-13-58-47-70.us-east-2.compute.amazonaws.com/softcode/api/sign_up.php", new Response.Listener<String>() {
@@ -626,29 +486,6 @@ public class Signin extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    public void Displayalart(final String code) {
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (code.equals("input_error")) {
-                    phone_number.setText("");
-                    password_login.setText("");
-                }
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private void showpDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
-
-    private void hidepDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
 
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
@@ -690,7 +527,7 @@ public class Signin extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         //Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
 
-                        handleSignInResult(acct.getId(), acct.getEmail());
+                        socialLogin(acct.getEmail(), acct.getId());
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -705,12 +542,11 @@ public class Signin extends AppCompatActivity {
     }
 
 
-    private void handleSignInResult(final String id, final String email) {
-        //final GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-        // Signed in successfully, show authenticated UI.
+    public void socialLogin(final String email, final String pid) {
         progress.setVisibility(View.VISIBLE);
 
         final bean b = (bean) getApplicationContext();
+
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(b.BASE_URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -719,12 +555,13 @@ public class Signin extends AppCompatActivity {
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
+
         SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
         String keey = fcmPref.getString("token", "");
 
 
-        Call<socialBean> call = cr.socialSignIn(id, email , keey);
+        Call<socialBean> call = cr.socialSignIn(pid, email, keey);
 
         call.enqueue(new Callback<socialBean>() {
             @Override
@@ -732,24 +569,29 @@ public class Signin extends AppCompatActivity {
 
                 if (response.body().getData().getUserName().length() > 0) {
 
-                    b.userId = response.body().getData().getUserId();
-                    b.userName = response.body().getData().getUserName();
+                    SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                    SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
 
                     try {
-                        b.userImage = response.body().getData().getUserImage();
+                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
 
-                    edit.putString("type", "social");
-                    edit.putString("user", email);
-                    edit.putString("pass", id);
-                    edit.putString("userType" , response.body().getData().getType());
-                    edit.putString("yid" , response.body().getData().getYouthLiveId());
-                    edit.commit();
+                    SharePreferenceUtils.getInstance().putString("type", "social");
+                    SharePreferenceUtils.getInstance().putString("user", email);
+                    SharePreferenceUtils.getInstance().putString("pass", pid);
+                    if (response.body() != null) {
+                        SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
+                    }
+                    if (response.body() != null) {
+                        SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
+                    }
 
-                    Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                    //    Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Signin.this, HomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -767,11 +609,9 @@ public class Signin extends AppCompatActivity {
                     }
 
 
-                    edit.putString("type", "social");
-                    edit.putString("user", email);
-                    edit.putString("pass", id);
-                    edit.putString("userType" , response.body().getData().getType());
-                    edit.commit();
+                    SharePreferenceUtils.getInstance().putString("type", "social");
+                    SharePreferenceUtils.getInstance().putString("user", email);
+                    SharePreferenceUtils.getInstance().putString("pass", pid);
 
                     Toast.makeText(Signin.this, "Please update your info", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Signin.this, UserInformation.class);
@@ -779,8 +619,13 @@ public class Signin extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 
+
                 }
+
+
                 progress.setVisibility(View.GONE);
+
+
             }
 
             @Override
@@ -788,6 +633,8 @@ public class Signin extends AppCompatActivity {
                 progress.setVisibility(View.GONE);
             }
         });
+
+
     }
 
 }

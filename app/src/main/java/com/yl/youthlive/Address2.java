@@ -258,7 +258,7 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
 
                                                 dialog.dismiss();
 
-                                                Intent i = new Intent(getContext(), Login.class);
+                                                Intent i = new Intent(getContext(), Spalsh2.class);
                                                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 startActivity(i);
                                                 getActivity().finish();
@@ -481,7 +481,7 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
                             edit.remove("user");
                             edit.remove("pass");
                             edit.apply();
-                            Intent i = new Intent(getContext(), Login.class);
+                            Intent i = new Intent(getContext(), Spalsh2.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(i);
                             getActivity().finish();

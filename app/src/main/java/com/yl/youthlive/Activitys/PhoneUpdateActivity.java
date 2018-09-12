@@ -21,6 +21,7 @@ import com.yl.youthlive.Login;
 import com.yl.youthlive.PhoneupdateminiPOJO;
 import com.yl.youthlive.R;
 import com.yl.youthlive.SharePreferenceUtils;
+import com.yl.youthlive.Spalsh2;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.updatephonePOJO.UpdatephonePOJO;
 
@@ -112,7 +113,7 @@ public class PhoneUpdateActivity extends AppCompatActivity {
 
                             Toast.makeText(getContext(), "Mobile Number Updated, Login with Updated Mobile Number", Toast.LENGTH_LONG).show();
 
-                            Intent i = new Intent(getContext(), Login.class);
+                            Intent i = new Intent(getContext(), Spalsh2.class);
                             startActivity(i);
                             finishAffinity();
                             //     } else {

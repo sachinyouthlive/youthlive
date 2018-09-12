@@ -27,6 +27,7 @@ import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.share.Share;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -62,7 +63,6 @@ public class Spalsh2 extends AppCompatActivity {
     ImageView facebook, google;
     TextView privacy, terms;
     ProgressBar progress;
-    SharePreferenceUtils sharePreferenceUtils;
     SharedPreferences fcmPref;
     SharedPreferences.Editor fcmEdit;
     CallbackManager mCallbackManager;
@@ -183,8 +183,6 @@ public class Spalsh2 extends AppCompatActivity {
         }
 
 
-        sharePreferenceUtils = SharePreferenceUtils.getInstance();
-
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -283,24 +281,26 @@ public class Spalsh2 extends AppCompatActivity {
 
                 if (response.body().getData().getUserName().length() > 0) {
 
-                    b.userId = response.body().getData().getUserId();
-                    b.userName = response.body().getData().getUserName();
+                    SharePreferenceUtils.getInstance().putString("userId" , response.body().getData().getUserId());
+                    SharePreferenceUtils.getInstance().putString("userName" , response.body().getData().getUserName());
+
+
 
                     try {
-                        b.userImage = response.body().getData().getUserImage();
+                        SharePreferenceUtils.getInstance().putString("userImage" , response.body().getData().getUserImage());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
 
-                    sharePreferenceUtils.putString("type", "social");
-                    sharePreferenceUtils.putString("user", email);
-                    sharePreferenceUtils.putString("pass", pid);
+                    SharePreferenceUtils.getInstance().putString("type", "social");
+                    SharePreferenceUtils.getInstance().putString("user", email);
+                    SharePreferenceUtils.getInstance().putString("pass", pid);
                     if (response.body() != null) {
-                        sharePreferenceUtils.putString("userType", response.body().getData().getType());
+                        SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
                     }
                     if (response.body() != null) {
-                        sharePreferenceUtils.putString("yid", response.body().getData().getYouthLiveId());
+                        SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
                     }
 
 
@@ -322,9 +322,9 @@ public class Spalsh2 extends AppCompatActivity {
                     }
 
 
-                    sharePreferenceUtils.putString("type", "social");
-                    sharePreferenceUtils.putString("user", email);
-                    sharePreferenceUtils.putString("pass", pid);
+                    SharePreferenceUtils.getInstance().putString("type", "social");
+                    SharePreferenceUtils.getInstance().putString("user", email);
+                    SharePreferenceUtils.getInstance().putString("pass", pid);
 
                     Toast.makeText(Spalsh2.this, "Please update your info", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Spalsh2.this, UserInformation.class);

@@ -131,72 +131,7 @@ public class Register extends AppCompatActivity {
                                             //   String profilePicUrl = json.getJSONObject("picture").getJSONObject("data").getString("url");
                                             String image = "https://graph.facebook.com/" + id + "/picture?type=large";
 
-
-                                            progress.setVisibility(View.VISIBLE);
-
-                                            final bean b = (bean) getApplicationContext();
-
-                                            final Retrofit retrofit = new Retrofit.Builder()
-                                                    .baseUrl(b.BASE_URL)
-                                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                                    .addConverterFactory(GsonConverterFactory.create())
-                                                    .build();
-
-                                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                                            SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
-
-                                            String keey = fcmPref.getString("token", "");
-
-
-                                            Call<socialBean> call = cr.socialSignIn(id, email , keey);
-
-                                            call.enqueue(new Callback<socialBean>() {
-                                                @Override
-                                                public void onResponse(Call<socialBean> call, retrofit2.Response<socialBean> response) {
-
-                                                    if (response.body().getData().getUserName().length() > 0) {
-
-                                                        edit.putString("type", "social");
-                                                        edit.putString("user", email);
-                                                        edit.putString("pass", id);
-                                                        edit.putString("userType" , response.body().getData().getType());
-                                                        edit.putString("yid" , response.body().getData().getYouthLiveId());
-                                                        edit.apply();
-
-                                                        //  Toast.makeText(Register.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(Register.this, HomeActivity.class);
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                        startActivity(intent);
-
-
-                                                    } else {
-
-                                                        edit.putString("type", "social");
-                                                        edit.putString("user", email);
-                                                        edit.putString("pass", id);
-                                                        edit.commit();
-
-                                                        Toast.makeText(Register.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(Register.this, UserInformation.class);
-                                                        intent.putExtra("userId", response.body().getData().getUserId());
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                        startActivity(intent);
-
-
-                                                    }
-
-
-                                                    progress.setVisibility(View.GONE);
-
-
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call<socialBean> call, Throwable t) {
-                                                    progress.setVisibility(View.GONE);
-                                                }
-                                            });
+                                            socialLogin(email , id);
 
 
                                             //new FacebookloginAsyncTask().execute(email);
@@ -628,6 +563,101 @@ public class Register extends AppCompatActivity {
             Log.w("asdas", "signInResult:failed code=" + e.getStatusCode());
 
         }
+    }
+
+    public void socialLogin(final String email, final String pid) {
+        progress.setVisibility(View.VISIBLE);
+
+        final bean b = (bean) getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+        SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
+
+        String keey = fcmPref.getString("token", "");
+
+
+        Call<socialBean> call = cr.socialSignIn(pid, email, keey);
+
+        call.enqueue(new Callback<socialBean>() {
+            @Override
+            public void onResponse(Call<socialBean> call, retrofit2.Response<socialBean> response) {
+
+                if (response.body().getData().getUserName().length() > 0) {
+
+                    SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                    SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
+
+                    try {
+                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                    SharePreferenceUtils.getInstance().putString("type", "social");
+                    SharePreferenceUtils.getInstance().putString("user", email);
+                    SharePreferenceUtils.getInstance().putString("pass", pid);
+                    if (response.body() != null) {
+                        SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
+                    }
+                    if (response.body() != null) {
+                        SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
+                    }
+
+
+                    //    Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Register.this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+
+
+                } else {
+
+                    b.userId = response.body().getData().getUserId();
+                    b.userName = response.body().getData().getUserName();
+
+                    try {
+                        b.userImage = response.body().getData().getUserImage();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                    SharePreferenceUtils.getInstance().putString("type", "social");
+                    SharePreferenceUtils.getInstance().putString("user", email);
+                    SharePreferenceUtils.getInstance().putString("pass", pid);
+
+                    Toast.makeText(Register.this, "Please update your info", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Register.this, UserInformation.class);
+                    intent.putExtra("userId", response.body().getData().getUserId());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+
+
+                }
+
+
+                progress.setVisibility(View.GONE);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<socialBean> call, Throwable t) {
+                progress.setVisibility(View.GONE);
+            }
+        });
+
+
     }
 
 }

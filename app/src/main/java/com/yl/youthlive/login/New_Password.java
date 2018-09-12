@@ -15,6 +15,7 @@ import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.Login;
 import com.yl.youthlive.NetworkUtility;
 import com.yl.youthlive.R;
+import com.yl.youthlive.Spalsh2;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.newpasswordPOJO.NewPassword;
 
@@ -116,7 +117,7 @@ public class New_Password extends AppCompatActivity {
 
                             // response.body().getInformation().getOtp()
                             // start home activity
-                            Intent intent = new Intent(New_Password.this, Login.class);
+                            Intent intent = new Intent(New_Password.this, Spalsh2.class);
                             Toast.makeText(New_Password.this, "Password Updated Successfully, Now Login with new Credentials", Toast.LENGTH_LONG).show();
                             startActivity(intent);
                             finishAffinity();

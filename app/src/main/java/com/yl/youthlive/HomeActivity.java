@@ -588,7 +588,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 edit.remove("user");
                 edit.remove("pass");
                 edit.apply();
-                Intent i = new Intent(getApplicationContext(), Login.class);
+                Intent i = new Intent(getApplicationContext(), Spalsh2.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 finish();
@@ -632,7 +632,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                             edit.remove("user");
                             edit.remove("pass");
                             edit.apply();
-                            Intent i = new Intent(getApplicationContext(), Login.class);
+                            Intent i = new Intent(getApplicationContext(), Spalsh2.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(i);
                             overridePendingTransition(0, 0);

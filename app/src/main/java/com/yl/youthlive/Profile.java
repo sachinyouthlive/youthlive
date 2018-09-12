@@ -260,7 +260,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         //userID = user.get(SessionManager.USER_ID);
         //  bean b = (bean) getApplicationContext();
         userID = SharePreferenceUtils.getInstance().getString("userId");
-        Toast.makeText(getActivity(), "" + SharePreferenceUtils.getInstance().getString("userId"), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity(), "" + SharePreferenceUtils.getInstance().getString("userId"), Toast.LENGTH_LONG).show();
         profileimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
