@@ -1,36 +1,22 @@
 package com.yl.youthlive;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.graphics.Region;
-import android.hardware.Camera;
-import android.media.audiofx.Visualizer;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -38,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.flashphoner.fpwcsapi.Flashphoner;
 import com.flashphoner.fpwcsapi.bean.Connection;
 import com.flashphoner.fpwcsapi.bean.Data;
@@ -56,11 +43,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.yl.youthlive.INTERFACE.AllAPIs;
+
 import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 
-import java.io.IOException;
-import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -745,7 +731,7 @@ public class VideoPlayer extends AppCompatActivity {
 
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-        Call<String> call1 = cr.acceptReject2(connId, liveId + b.userId, "2", b.userId);
+        Call<String> call1 = cr.acceptReject2(connId, liveId + SharePreferenceUtils.getInstance().getString("userId"), "2", SharePreferenceUtils.getInstance().getString("userId"));
         call1.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -766,7 +752,7 @@ public class VideoPlayer extends AppCompatActivity {
 
                 final bean b = (bean) getApplicationContext();
 
-                StreamOptions streamOptions = new StreamOptions(liveId + b.userId);
+                StreamOptions streamOptions = new StreamOptions(liveId + SharePreferenceUtils.getInstance().getString("userId"));
 
                 /**
                  * Stream is created with method Session.createStream().
@@ -850,7 +836,7 @@ public class VideoPlayer extends AppCompatActivity {
         final bean b = (bean) getApplicationContext();
 
 
-        StreamOptions streamOptions = new StreamOptions(liveId + b.userId);
+        StreamOptions streamOptions = new StreamOptions(liveId + SharePreferenceUtils.getInstance().getString("userId"));
 
         /**
          * Stream is created with method Session.createStream().
@@ -1166,7 +1152,7 @@ public class VideoPlayer extends AppCompatActivity {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<String> call = cr.exitPlayer(b.userId, liveId);
+        Call<String> call = cr.exitPlayer(SharePreferenceUtils.getInstance().getString("userId"), liveId);
 
         call.enqueue(new Callback<String>() {
             @Override

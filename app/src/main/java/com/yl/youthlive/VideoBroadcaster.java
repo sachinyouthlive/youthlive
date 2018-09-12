@@ -1,7 +1,6 @@
 package com.yl.youthlive;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +8,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
@@ -21,13 +18,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ProgressBar;
@@ -52,14 +45,12 @@ import com.flashphoner.fpwcsapi.session.StreamStatusEvent;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
+
 import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 
-import java.io.IOException;
-import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -417,7 +408,7 @@ public class VideoBroadcaster extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<endLiveBean> call = cr.endLive(b.userId, liveId);
+                Call<endLiveBean> call = cr.endLive(SharePreferenceUtils.getInstance().getString("userId"), liveId);
 
                 call.enqueue(new Callback<endLiveBean>() {
                     @Override

@@ -147,7 +147,7 @@ public class LiveEndedPlayer extends AppCompatActivity {
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<followBean> call = cr.follow(b.userId, id);
+                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), id);
 
                 call.enqueue(new retrofit2.Callback<followBean>() {
                     @Override

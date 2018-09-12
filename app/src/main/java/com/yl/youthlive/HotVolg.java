@@ -10,11 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.vlogListPOJO.vlogListBean;
-import com.yl.youthlive.vlogsearchListPOJO.vlogsearchListBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +28,9 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class HotVolg extends Fragment {
 
     RecyclerView recyclerView;
-    GridLayoutManager manager, manager2;
+    GridLayoutManager manager;
     HotAdapter adapter;
-    HotAdapterSearch adapterSearch;
     List<com.yl.youthlive.vlogListPOJO.Datum> list;
-    List<com.yl.youthlive.vlogsearchListPOJO.Datum> list2;
     ProgressBar progress;
 
     @Nullable
@@ -43,7 +39,7 @@ public class HotVolg extends Fragment {
 
         View view = inflater.inflate(R.layout.hot, container, false);
 
-        progress = (ProgressBar) view.findViewById(R.id.progress);
+        progress = view.findViewById(R.id.progress);
 
         list = new ArrayList<>();
 
@@ -74,9 +70,9 @@ public class HotVolg extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<vlogListBean> call = cr.getVlogList(b.userId);
+        Call<vlogListBean> call = cr.getVlogList(SharePreferenceUtils.getInstance().getString("userId"));
 
-        Log.d("userId", b.userId);
+        Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<vlogListBean>() {
             @Override
@@ -97,45 +93,6 @@ public class HotVolg extends Fragment {
 
             @Override
             public void onFailure(Call<vlogListBean> call, Throwable t) {
-                progress.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    public void loadDataSearch() {
-        progress.setVisibility(View.VISIBLE);
-        final bean b = (bean) getContext().getApplicationContext();
-        final Retrofit retrofitsearch = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final AllAPIs cr = retrofitsearch.create(AllAPIs.class);
-        Call<vlogsearchListBean> call = cr.getVlogSearchList((b.userId), "sachin");
-
-        Toast.makeText(getActivity(), b.userId + "loaddatasearch", Toast.LENGTH_SHORT).show();
-
-        Log.d("userId", b.userId);
-
-        call.enqueue(new Callback<vlogsearchListBean>() {
-            @Override
-            public void onResponse(Call<vlogsearchListBean> call, Response<vlogsearchListBean> response) {
-
-                try {
-                    adapterSearch.setGridData(response.body().getData());
-                    Log.e("log hotvolg", response.body().getData().toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-                progress.setVisibility(View.GONE);
-
-
-            }
-
-            @Override
-            public void onFailure(Call<vlogsearchListBean> call, Throwable t) {
                 progress.setVisibility(View.GONE);
             }
         });

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.yl.youthlive.Adapter.diamondPHAdapter;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.diamondpurchasehistoryPOJO.DiamondpurchaselistPOJO;
 import com.yl.youthlive.diamondpurchasehistoryPOJO.Information;
@@ -97,9 +98,9 @@ public class Diamond_purchase_history_Activity extends AppCompatActivity impleme
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<DiamondpurchaselistPOJO> call = cr.getdiamondpurchasehistory(Integer.valueOf(b.userId));
+        Call<DiamondpurchaselistPOJO> call = cr.getdiamondpurchasehistory(Integer.valueOf(SharePreferenceUtils.getInstance().getString("userId")));
 
-        Log.d("userId", b.userId);
+        Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<DiamondpurchaselistPOJO>() {
             @Override

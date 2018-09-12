@@ -1,6 +1,5 @@
 package com.yl.youthlive;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -59,10 +58,8 @@ import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import com.yasic.bubbleview.BubbleView;
 import com.yl.youthlive.INTERFACE.AllAPIs;
-import com.yl.youthlive.Response.AddPostImageResponse;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 import com.yl.youthlive.endLivePOJO.Data;
 import com.yl.youthlive.followPOJO.followBean;
@@ -80,7 +77,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -311,7 +307,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                        Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
+                        Call<liveCommentBean> call = cr.commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                         call.enqueue(new Callback<liveCommentBean>() {
                             @Override
@@ -375,7 +371,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<String> call = cr.exitPlayer(b.userId , liveId);
+                Call<String> call = cr.exitPlayer(SharePreferenceUtils.getInstance().getString("userId"), liveId);
 
                 call.enqueue(new Callback<String>() {
                     @Override
@@ -436,7 +432,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<liveLikeBean> call = cr.likeLive(b.userId, liveId);
+                retrofit2.Call<liveLikeBean> call = cr.likeLive(SharePreferenceUtils.getInstance().getString("userId"), liveId);
 
                 call.enqueue(new retrofit2.Callback<liveLikeBean>() {
                     @Override
@@ -819,7 +815,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                         String uid = object.getString("uid");
 
-                        if (uid.equals(b.userId)) {
+                        if (uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                             final Dialog dialog = new Dialog(player);
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setCancelable(false);
@@ -864,7 +860,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
-                                    Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1", b.userId);
+                                    Call<acceptRejectBean> call1 = cr.acceptReject(connId, liveId, "1", SharePreferenceUtils.getInstance().getString("userId"));
                                     call1.enqueue(new Callback<acceptRejectBean>() {
                                         @Override
                                         public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -950,7 +946,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         if (mode.equals("2")) {
 
 
-                            if (!uid.equals(b.userId)) {
+                            if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                                 Log.d("ddata", uri);
 
 
@@ -1023,7 +1019,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         String uid = obj.getString("userId");
 
 
-                        if (uid.equals(b.userId)) {
+                        if (uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                             player.endThumbCamera1();
                             thumbCameraContainer1.setVisibility(View.GONE);
                             isConnection = false;
@@ -1081,7 +1077,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         String uid = obj.getString("uid");
 
 
-                        if (uid.equals(b.userId)) {
+                        if (uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                             if (mode.equals("2")) {
 
 
@@ -1223,7 +1219,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         final bean b = (bean) homeActivity.getApplicationContext();
 
                         String id = item.getUserId();
-                        if (!uid.equals(b.userId)) {
+                        if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                             viewsAdapter.removeView(item);
                         }
                     }catch (Exception e)
@@ -1258,7 +1254,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
+                    Call<liveCommentBean> call = cr.commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                     call.enqueue(new Callback<liveCommentBean>() {
                         @Override
@@ -1360,7 +1356,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<requestConnectionBean> call = cr.requestConnectionFromPlayer(liveId, timelineId, b.userId);
+                    Call<requestConnectionBean> call = cr.requestConnectionFromPlayer(liveId, timelineId, SharePreferenceUtils.getInstance().getString("userId"));
 
                     call.enqueue(new Callback<requestConnectionBean>() {
                         @Override
@@ -1425,7 +1421,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<followBean> call = cr.followLiveUser(b.userId, timelineId, liveId);
+                retrofit2.Call<followBean> call = cr.followLiveUser(SharePreferenceUtils.getInstance().getString("userId"), timelineId, liveId);
 
                 call.enqueue(new retrofit2.Callback<followBean>() {
                     @Override
@@ -1461,352 +1457,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         return view;
     }
 
-
-    public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
-
-
-        List<Comment> list = new ArrayList<>();
-        Context context;
-
-
-        Integer gifts[] = new Integer[]
-                {
-                        R.drawable.g52,
-                        R.drawable.g20,
-                        R.drawable.g32,
-                        R.drawable.g1500,
-                        R.drawable.g72,
-                        R.drawable.g112,
-                        R.drawable.g152,
-                        R.drawable.g172,
-                        R.drawable.g180,
-                        R.drawable.g192,
-                        R.drawable.g212,
-                        R.drawable.g240,
-                        R.drawable.g252,
-                        R.drawable.g280,
-                        R.drawable.g300,
-                        R.drawable.g312,
-                        R.drawable.g352,
-                        R.drawable.g380,
-                        R.drawable.g452,
-                        R.drawable.g500,
-                        R.drawable.g612,
-                        R.drawable.g700,
-                        R.drawable.g800,
-                        R.drawable.g900,
-                        R.drawable.g1000,
-                        R.drawable.g1100,
-                        R.drawable.g1200
-                };
-
-
-        public CommentsAdapter(Context context, List<Comment> list) {
-            this.context = context;
-            this.list = list;
-        }
-
-        public void setGridData(List<Comment> list) {
-            this.list = list;
-            notifyDataSetChanged();
-        }
-
-
-        public void addComment(Comment item) {
-            list.add(0, item);
-            notifyItemInserted(0);
-        }
-
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.chat_model, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-
-            holder.setIsRecyclable(false);
-
-            final Comment item = list.get(position);
-
-            if (position == 0) {
-
-                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.gradient_white_top, 0, 0);
-
-            } else if (position == list.size() - 1) {
-                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.gradient_white);
-            } else {
-                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            }
-
-            final String uid = item.getUserId().replace("\"", "");
-
-
-            final bean b = (bean) context.getApplicationContext();
-
-
-            String type = item.getType().replace("\"", "");
-
-            //Log.d("ttyyppee" , type);
-
-            if (type.equals("basic")) {
-
-                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
-
-                ImageLoader loader = ImageLoader.getInstance();
-
-                String im = item.getUserImage().replace("\"", "");
-
-                loader.displayImage(im, holder.index, options);
-
-
-                String com = item.getComment().replace("\"", "");
-
-                String us = item.getUserName().replace("\"", "");
-
-                holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
-
-
-                holder.container.setBackground(context.getResources().getDrawable(R.drawable.gray_round2));
-
-                holder.index.setVisibility(View.VISIBLE);
-
-                //holder.index.setVisibility(View.GONE);
-                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
-                    holder.add.setVisibility(View.GONE);
-                } else {
-                    holder.add.setVisibility(View.VISIBLE);
-                }
-
-                if (Objects.equals(uid, b.userId)) {
-                    holder.add.setVisibility(View.GONE);
-                } else {
-                    holder.add.setVisibility(View.VISIBLE);
-                }
-
-                holder.add.setVisibility(View.GONE);
-
-            } else if (type.equals("follow")) {
-
-                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
-
-                ImageLoader loader = ImageLoader.getInstance();
-
-                String im = item.getUserImage().replace("\"", "");
-
-                loader.displayImage(im, holder.index, options);
-
-
-                String us = item.getUserName().replace("\"", "");
-
-                holder.name.setText("YL: " + us + " became a fan. Won't miss the next live");
-
-                holder.add.setVisibility(View.GONE);
-
-                holder.container.setBackground(context.getResources().getDrawable(R.drawable.red_round2));
-
-                holder.index.setVisibility(View.GONE);
-                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
-                    holder.add.setVisibility(View.GONE);
-                } else {
-                    holder.add.setVisibility(View.VISIBLE);
-                }
-
-                holder.add.setVisibility(View.GONE);
-
-            } else if (type.equals("gift")) {
-
-                String us = item.getUserId().replace("\"", "");
-                String gid = item.getComment().replace("\"", "");
-                holder.name.setText(us + " has sent a  ");
-
-
-                Drawable drawable = context.getResources().getDrawable(gifts[Integer.parseInt(gid) - 1]);
-
-                drawable.setBounds(0, 0, 50, 50);
-
-                int selectionCursor = holder.name.getSelectionStart();
-                //holder.name.getText().insert(selectionCursor, ".");
-                selectionCursor = holder.name.getText().length();
-
-                SpannableStringBuilder builder = new SpannableStringBuilder(holder.name.getText());
-                builder.setSpan(new ImageSpan(drawable), selectionCursor - ".".length(), selectionCursor, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                holder.name.setText(builder);
-
-                holder.add.setVisibility(View.GONE);
-
-                holder.container.setBackground(context.getResources().getDrawable(R.drawable.blue_round2));
-
-                holder.index.setVisibility(View.GONE);
-            }
-
-
-            //holder.user.setText(us);
-
-/*
-            holder.index.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    */
-/*Intent intent = new Intent(context, TimelineProfile.class);
-                    intent.putExtra("userId", uid);
-                    startActivity(intent);*//*
-
-
-                }
-            });
-
-*/
-
-            holder.index.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-
-                    bean b = (bean) context.getApplicationContext();
-
-                    if (!uid.equals(b.userId)) {
-                        final Dialog dialog = new Dialog(context);
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setContentView(R.layout.follow_dialog);
-                        dialog.setCancelable(true);
-                        dialog.show();
-
-
-                        CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
-                        TextView name = (TextView) dialog.findViewById(R.id.name);
-                        Button follo = (Button) dialog.findViewById(R.id.follow);
-                        final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
-
-
-                        ImageLoader loader1 = ImageLoader.getInstance();
-
-                        loader1.displayImage(b.userImage, image);
-
-                        name.setText(b.userName);
-
-                        follo.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                bar.setVisibility(View.VISIBLE);
-
-                                final bean b = (bean) context.getApplicationContext();
-
-                                final Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl(b.BASE_URL)
-                                        .addConverterFactory(ScalarsConverterFactory.create())
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build();
-
-                                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                                retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
-
-                                call.enqueue(new retrofit2.Callback<followBean>() {
-                                    @Override
-                                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
-
-                                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-
-                                        bar.setVisibility(View.GONE);
-
-                                        dialog.dismiss();
-
-                                    }
-
-                                    @Override
-                                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
-
-                                        bar.setVisibility(View.GONE);
-
-                                    }
-                                });
-
-                            }
-                        });
-                    }
-
-
-
-
-
-
-                    /*progress.setVisibility(View.VISIBLE);
-
-                    final bean b = (bean) context.getApplicationContext();
-
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
-
-                    call.enqueue(new retrofit2.Callback<followBean>() {
-                        @Override
-                        public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
-
-                            if (response.body().getStatus().equals("1")) {
-                                Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                holder.add.setVisibility(View.GONE);
-                            }
-
-
-                            progress.setVisibility(View.GONE);
-
-                        }
-
-                        @Override
-                        public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
-
-                            progress.setVisibility(View.GONE);
-
-                        }
-                    });
-*/
-
-                }
-            });
-
-
-        }
-
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            TextView name;
-            CircleImageView index;
-            ImageButton add;
-            LinearLayout container;
-
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-
-                index = (CircleImageView) itemView.findViewById(R.id.index);
-                name = (TextView) itemView.findViewById(R.id.name);
-                container = itemView.findViewById(R.id.container);
-                add = (ImageButton) itemView.findViewById(R.id.add);
-
-            }
-        }
-    }
-
-
     public void schedule(String liveId) {
         final bean b = (bean) getActivity().getApplicationContext();
 
@@ -1825,7 +1475,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
         Log.d("keeey", keey);
 
-        Call<getUpdatedBean> call = cr.getPlayerUpdatedData(b.userId, liveId, keey);
+        Call<getUpdatedBean> call = cr.getPlayerUpdatedData(SharePreferenceUtils.getInstance().getString("userId"), liveId, keey);
 
 
         call.enqueue(new Callback<getUpdatedBean>() {
@@ -1841,7 +1491,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     timelineId = response.body().getData().getTimelineId();
 
 
-
                     commentsAdapter.setGridData(response.body().getData().getComments());
 
 
@@ -1849,7 +1498,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                         final String uid = response.body().getData().getViews().get(i).getUserId().replace("\"", "");
 
-                        if (!uid.equals(b.userId)) {
+                        if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                             viewsAdapter.addView(response.body().getData().getViews().get(i));
                             //viewersGrid.smoothScrollToPosition(0);
                         }
@@ -1870,7 +1519,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     timelineName.setText(response.body().getData().getTimelineName());
 
-                    player.setData(timelineId , response.body().getData().getTimelineName());
+                    player.setData(timelineId, response.body().getData().getTimelineName());
 
                     image = response.body().getData().getTimelineProfileImage();
 
@@ -1992,6 +1641,350 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         });
 
 
+    }
+
+    public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
+
+
+        List<Comment> list = new ArrayList<>();
+        Context context;
+
+
+        Integer gifts[] = new Integer[]
+                {
+                        R.drawable.g52,
+                        R.drawable.g20,
+                        R.drawable.g32,
+                        R.drawable.g1500,
+                        R.drawable.g72,
+                        R.drawable.g112,
+                        R.drawable.g152,
+                        R.drawable.g172,
+                        R.drawable.g180,
+                        R.drawable.g192,
+                        R.drawable.g212,
+                        R.drawable.g240,
+                        R.drawable.g252,
+                        R.drawable.g280,
+                        R.drawable.g300,
+                        R.drawable.g312,
+                        R.drawable.g352,
+                        R.drawable.g380,
+                        R.drawable.g452,
+                        R.drawable.g500,
+                        R.drawable.g612,
+                        R.drawable.g700,
+                        R.drawable.g800,
+                        R.drawable.g900,
+                        R.drawable.g1000,
+                        R.drawable.g1100,
+                        R.drawable.g1200
+                };
+
+
+        public CommentsAdapter(Context context, List<Comment> list) {
+            this.context = context;
+            this.list = list;
+        }
+
+        public void setGridData(List<Comment> list) {
+            this.list = list;
+            notifyDataSetChanged();
+        }
+
+
+        public void addComment(Comment item) {
+            list.add(0, item);
+            notifyItemInserted(0);
+        }
+
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.chat_model, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, int position) {
+
+            holder.setIsRecyclable(false);
+
+            final Comment item = list.get(position);
+
+            if (position == 0) {
+
+                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.gradient_white_top, 0, 0);
+
+            } else if (position == list.size() - 1) {
+                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, R.drawable.gradient_white);
+            } else {
+                holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
+
+            final String uid = item.getUserId().replace("\"", "");
+
+
+            final bean b = (bean) context.getApplicationContext();
+
+
+            String type = item.getType().replace("\"", "");
+
+            //Log.d("ttyyppee" , type);
+
+            if (type.equals("basic")) {
+
+                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+                ImageLoader loader = ImageLoader.getInstance();
+
+                String im = item.getUserImage().replace("\"", "");
+
+                loader.displayImage(im, holder.index, options);
+
+
+                String com = item.getComment().replace("\"", "");
+
+                String us = item.getUserName().replace("\"", "");
+
+                holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
+
+
+                holder.container.setBackground(context.getResources().getDrawable(R.drawable.gray_round2));
+
+                holder.index.setVisibility(View.VISIBLE);
+
+                //holder.index.setVisibility(View.GONE);
+                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
+                    holder.add.setVisibility(View.GONE);
+                } else {
+                    holder.add.setVisibility(View.VISIBLE);
+                }
+
+                if (Objects.equals(uid, SharePreferenceUtils.getInstance().getString("userId"))) {
+                    holder.add.setVisibility(View.GONE);
+                } else {
+                    holder.add.setVisibility(View.VISIBLE);
+                }
+
+                holder.add.setVisibility(View.GONE);
+
+            } else if (type.equals("follow")) {
+
+                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+                ImageLoader loader = ImageLoader.getInstance();
+
+                String im = item.getUserImage().replace("\"", "");
+
+                loader.displayImage(im, holder.index, options);
+
+
+                String us = item.getUserName().replace("\"", "");
+
+                holder.name.setText("YL: " + us + " became a fan. Won't miss the next live");
+
+                holder.add.setVisibility(View.GONE);
+
+                holder.container.setBackground(context.getResources().getDrawable(R.drawable.red_round2));
+
+                holder.index.setVisibility(View.GONE);
+                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
+                    holder.add.setVisibility(View.GONE);
+                } else {
+                    holder.add.setVisibility(View.VISIBLE);
+                }
+
+                holder.add.setVisibility(View.GONE);
+
+            } else if (type.equals("gift")) {
+
+                String us = item.getUserId().replace("\"", "");
+                String gid = item.getComment().replace("\"", "");
+                holder.name.setText(us + " has sent a  ");
+
+
+                Drawable drawable = context.getResources().getDrawable(gifts[Integer.parseInt(gid) - 1]);
+
+                drawable.setBounds(0, 0, 50, 50);
+
+                int selectionCursor = holder.name.getSelectionStart();
+                //holder.name.getText().insert(selectionCursor, ".");
+                selectionCursor = holder.name.getText().length();
+
+                SpannableStringBuilder builder = new SpannableStringBuilder(holder.name.getText());
+                builder.setSpan(new ImageSpan(drawable), selectionCursor - ".".length(), selectionCursor, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                holder.name.setText(builder);
+
+                holder.add.setVisibility(View.GONE);
+
+                holder.container.setBackground(context.getResources().getDrawable(R.drawable.blue_round2));
+
+                holder.index.setVisibility(View.GONE);
+            }
+
+
+            //holder.user.setText(us);
+
+/*
+            holder.index.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    */
+/*Intent intent = new Intent(context, TimelineProfile.class);
+                    intent.putExtra("userId", uid);
+                    startActivity(intent);*//*
+
+
+                }
+            });
+
+*/
+
+            holder.index.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    bean b = (bean) context.getApplicationContext();
+
+                    if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
+                        final Dialog dialog = new Dialog(context);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.follow_dialog);
+                        dialog.setCancelable(true);
+                        dialog.show();
+
+
+                        CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
+                        TextView name = (TextView) dialog.findViewById(R.id.name);
+                        Button follo = (Button) dialog.findViewById(R.id.follow);
+                        final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
+
+
+                        ImageLoader loader1 = ImageLoader.getInstance();
+
+                        loader1.displayImage(b.userImage, image);
+
+                        name.setText(b.userName);
+
+                        follo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                bar.setVisibility(View.VISIBLE);
+
+                                final bean b = (bean) context.getApplicationContext();
+
+                                final Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl(b.BASE_URL)
+                                        .addConverterFactory(ScalarsConverterFactory.create())
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+
+                                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
+
+                                call.enqueue(new retrofit2.Callback<followBean>() {
+                                    @Override
+                                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+
+                                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                        bar.setVisibility(View.GONE);
+
+                                        dialog.dismiss();
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+
+                                        bar.setVisibility(View.GONE);
+
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+
+
+
+
+
+
+                    /*progress.setVisibility(View.VISIBLE);
+
+                    final bean b = (bean) context.getApplicationContext();
+
+                    final Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.BASE_URL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                    retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
+
+                    call.enqueue(new retrofit2.Callback<followBean>() {
+                        @Override
+                        public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+
+                            if (response.body().getStatus().equals("1")) {
+                                Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                holder.add.setVisibility(View.GONE);
+                            }
+
+
+                            progress.setVisibility(View.GONE);
+
+                        }
+
+                        @Override
+                        public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+
+                            progress.setVisibility(View.GONE);
+
+                        }
+                    });
+*/
+
+                }
+            });
+
+
+        }
+
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView name;
+            CircleImageView index;
+            ImageButton add;
+            LinearLayout container;
+
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+
+                index = (CircleImageView) itemView.findViewById(R.id.index);
+                name = (TextView) itemView.findViewById(R.id.name);
+                container = itemView.findViewById(R.id.container);
+                add = (ImageButton) itemView.findViewById(R.id.add);
+
+            }
+        }
     }
 
 
@@ -2280,7 +2273,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         return Uri.parse(path);
     }
 
-
     class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder> {
 
         Context context;
@@ -2342,7 +2334,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 public void onClick(View view) {
 
 
-                    if (!uid.equals(b.userId)) {
+                    if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                         final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.follow_dialog);
@@ -2379,7 +2371,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
+                                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                 call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
@@ -2574,7 +2566,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    retrofit2.Call<sendGiftBean> call = cr.sendGift(b.userId, liveId, timelineId, String.valueOf(position + 1), "1", diamonds[position]);
+                    retrofit2.Call<sendGiftBean> call = cr.sendGift(SharePreferenceUtils.getInstance().getString("userId"), liveId, timelineId, String.valueOf(position + 1), "1", diamonds[position]);
 
 
                     call.enqueue(new retrofit2.Callback<sendGiftBean>() {

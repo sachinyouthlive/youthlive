@@ -27,13 +27,11 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -78,7 +76,6 @@ import com.yl.youthlive.goLivePOJO.goLiveBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
@@ -330,7 +327,7 @@ public class BroadcasterFragment1 extends Fragment {
                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                        Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
+                        Call<liveCommentBean> call = cr.commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                         call.enqueue(new Callback<liveCommentBean>() {
                             @Override
@@ -419,7 +416,7 @@ public class BroadcasterFragment1 extends Fragment {
         if (userType.equals("user")) {
             progress.setVisibility(View.VISIBLE);
 
-            Call<goLiveBean> call3 = cr.goLive(b.userId, b.userId, "");
+            Call<goLiveBean> call3 = cr.goLive(SharePreferenceUtils.getInstance().getString("userId"), SharePreferenceUtils.getInstance().getString("userId"), "");
 
             call3.enqueue(new Callback<goLiveBean>() {
                 @Override
@@ -432,7 +429,7 @@ public class BroadcasterFragment1 extends Fragment {
                         broadcaster.setLiveId(liveId);
 
                         Log.d("lliivvee", liveId);
-                        Log.d("lliivvee", b.userId);
+                        Log.d("lliivvee", SharePreferenceUtils.getInstance().getString("userId"));
 
                         broadcaster.startPublish(liveId);
 
@@ -656,7 +653,7 @@ public class BroadcasterFragment1 extends Fragment {
                             final bean b = (bean) getActivity().getApplicationContext();
 
                             String id = item.getUserId();
-                            if (!uid.equals(b.userId)) {
+                            if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                                 viewsAdapter.addView(item);
                                 viewersGrid.smoothScrollToPosition(0);
                             }
@@ -1004,7 +1001,7 @@ public class BroadcasterFragment1 extends Fragment {
                             final bean b = (bean) getActivity().getApplicationContext();
 
                             String id = item.getUserId();
-                            if (!uid.equals(b.userId)) {
+                            if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                                 viewsAdapter.removeView(item);
                             }
 
@@ -1132,7 +1129,7 @@ public class BroadcasterFragment1 extends Fragment {
                     final bean b = (bean) getActivity().getApplicationContext();
 
                     String id = item.getUserId();
-                    if (!uid.equals(b.userId)) {
+                    if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                         viewsAdapter.addView(item);
                     }
 
@@ -1513,7 +1510,7 @@ public class BroadcasterFragment1 extends Fragment {
                             goCoderBroadcastConfig.setHostAddress("ec2-13-58-47-70.us-east-2.compute.amazonaws.com");
                             goCoderBroadcastConfig.setPortNumber(1935);
                             goCoderBroadcastConfig.setApplicationName("live");
-                            goCoderBroadcastConfig.setStreamName(b.userId + "-" + liveId);
+                            goCoderBroadcastConfig.setStreamName(SharePreferenceUtils.getInstance().getString("userId") + "-" + liveId);
                             goCoderBroadcastConfig = new WZBroadcastConfig(WZMediaConfig.FRAME_SIZE_640x480);
                             // Set the bitrate to 4000 Kbps
                             goCoderBroadcastConfig.setVideoBitRate(1200);
@@ -1599,7 +1596,7 @@ public class BroadcasterFragment1 extends Fragment {
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
+                    Call<liveCommentBean> call = cr.commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                     call.enqueue(new Callback<liveCommentBean>() {
                         @Override
@@ -1871,159 +1868,175 @@ public class BroadcasterFragment1 extends Fragment {
         }
     }
 
+    public void schedule(String liveId) {
+        final bean b = (bean) getActivity().getApplicationContext();
 
-    static class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder> {
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        Context context;
-        List<com.yl.youthlive.getIpdatedPOJO.View> list = new ArrayList<>();
-        ProgressBar dialogProgress;
-        Dialog dialog;
-
-
-        public DialogAdapter(Context context, List<com.yl.youthlive.getIpdatedPOJO.View> list, ProgressBar dialogProgress, Dialog dialog) {
-            this.context = context;
-            this.list = list;
-            this.dialogProgress = dialogProgress;
-            this.dialog = dialog;
-        }
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.guest_list_model, parent, false);
-            return new ViewHolder(view);
-        }
+        SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        String keey = fcmPref.getString("token", "");
 
-            final com.yl.youthlive.getIpdatedPOJO.View item = list.get(position);
+        Log.d("keeey", keey);
 
-            final String uid = item.getUserId().replace("\"", "");
-            final String imm = item.getUserImage().replace("\"", "");
-            final String un = item.getUserName().replace("\"", "");
+        Call<getUpdatedBean> call = cr.getUpdatedData(SharePreferenceUtils.getInstance().getString("userId"), liveId, keey);
 
-            final bean b = (bean) context.getApplicationContext();
+        Log.d("asdasd", SharePreferenceUtils.getInstance().getString("userId"));
 
-            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+        call.enqueue(new Callback<getUpdatedBean>() {
+            @Override
+            public void onResponse(Call<getUpdatedBean> call, retrofit2.Response<getUpdatedBean> response) {
 
-            ImageLoader loader = ImageLoader.getInstance();
-
-            loader.displayImage(b.BASE_URL + imm, holder.image, options);
-
-            holder.name.setText(un);
+                try {
 
 
-            holder.join.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                    //bubbleChecker.run();
 
 
-                    if (!isConnection) {
-
-                        String t = item.getType().replace("\"", "");
-
-                        if (t.equals("d")) {
-
-                            Toast.makeText(context, "Your request has been sent to the user", Toast.LENGTH_SHORT).show();
-
-                            new CountDownTimer(3000, 1000) {
-
-                                @Override
-                                public void onTick(long millisUntilFinished) {
+                    ylId.setText(response.body().getData().getYouthliveId());
 
 
-                                }
-
-                                @Override
-                                public void onFinish() {
-
-                                    isConnection = false;
-                                    Toast.makeText(context, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
-
-                                }
-                            }.start();
+                    commentsAdapter.setGridData(response.body().getData().getComments());
 
 
-                            dialog.dismiss();
+                    for (int i = 0; i < response.body().getData().getViews().size(); i++) {
 
+                        final String uid = response.body().getData().getViews().get(i).getUserId().replace("\"", "");
 
-                        } else {
-                            dialogProgress.setVisibility(View.VISIBLE);
-
-                            final bean b = (bean) context.getApplicationContext();
-
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                            Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
-
-                            call.enqueue(new Callback<requestConnectionBean>() {
-                                @Override
-                                public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
-                                    Toast.makeText(context, "Your request has been sent to the user", Toast.LENGTH_SHORT).show();
-                                    String im = item.getUserImage().replace("\"", "");
-                                    thumbPic1 = im;
-
-                                    isConnection = true;
-
-                                    dialog.dismiss();
-
-
-                                    dialogProgress.setVisibility(View.GONE);
-                                }
-
-                                @Override
-                                public void onFailure(Call<requestConnectionBean> call, Throwable t) {
-                                    thumbPic1 = item.getUserImage();
-                                    isConnection = false;
-                                    dialogProgress.setVisibility(View.GONE);
-                                    Log.d("asdasdasdas", t.toString());
-                                }
-                            });
+                        if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
+                            viewsAdapter.addView(response.body().getData().getViews().get(i));
                         }
 
 
-                    } else {
-                        Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
                     }
 
+
+                    int count1 = Integer.parseInt(response.body().getData().getLikesCount());
+
+                    likeCount.setText(String.valueOf(count1));
+
+                    totalBeans.setText(response.body().getData().getBeans() + " Coins");
+
+
+                    liveUsers.setText(response.body().getData().getViewsCount());
+
+                    timelineName.setText(response.body().getData().getTimelineName());
+
+
+                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
+
+                    ImageLoader loader = ImageLoader.getInstance();
+
+                    loader.displayImage(response.body().getData().getTimelineProfileImage(), timelineProfile, options);
+
+
+                    liveUsers.setText(response.body().getData().getViewsCount());
+
+
+//                    level.setText(response.body().getData().getLevel());
+
+
+//                    viewCount.setText(response.body().getData().getViewsCount());
+
+//                    username.setText(response.body().getData().getTimelineName());
+
+                    /*if (response.body().getData().getGift().size() > 0) {
+                        try {
+
+                            giftName = response.body().getData().getGift().get(0).getGiftId();
+
+                            showGift(Integer.parseInt(response.body().getData().getGift().get(0).getGiftId()), response.body().getData().getGift().get(0).getGiftName());
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }*/
+
+
+                    /*if (count1 > count) {
+                        for (int i = 0; i < count1 - count; i++)
+
+                            bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+
+                        likeCount.setText(response.body().getData().getLikesCount());
+
+                        count = count1;
+                    }*/
+
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("commentData"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("like"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("view"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("gift"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("status"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("connection_end"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("request_player"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("status_player"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("exit"));
+
+
+/*
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
+                            new IntentFilter("commentData"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
+                            new IntentFilter("like"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
+                            new IntentFilter("view"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
+                            new IntentFilter("gift"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
+                            new IntentFilter("status"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionReceiver,
+                            new IntentFilter("connection_end"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver,
+                            new IntentFilter("request_player"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(playerStatusReceiver,
+                            new IntentFilter("status_player"));
+
+*/
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d("asdasd", e.toString());
                 }
-            });
-
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            CircleImageView image;
-            TextView name;
-            Button join;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-
-
-                image = itemView.findViewById(R.id.view8);
-                name = itemView.findViewById(R.id.textView36);
-                join = itemView.findViewById(R.id.button9);
 
 
             }
-        }
+
+            @Override
+            public void onFailure(Call<getUpdatedBean> call, Throwable t) {
+
+                Log.d("asdasd", t.toString());
+
+            }
+        });
+
+
     }
 
 
@@ -2214,6 +2227,310 @@ public class BroadcasterFragment1 extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+
+
+            sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
+
+            if (sMediaProjection != null) {
+                File externalFilesDir = broadcaster.getExternalFilesDir(null);
+                if (externalFilesDir != null) {
+                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/youthive/";
+                    File storeDirectory = new File(STORE_DIRECTORY);
+                    if (!storeDirectory.exists()) {
+                        boolean success = storeDirectory.mkdirs();
+                        if (!success) {
+                            Log.e(TAG, "failed to create file storage directory.");
+                            return;
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
+                    return;
+                }
+
+                // display metrics
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+                mDensity = metrics.densityDpi;
+                mDisplay = broadcaster.getWindowManager().getDefaultDisplay();
+
+                // create virtual display depending on device width / height
+                createVirtualDisplay();
+
+                // register orientation change callback
+                mOrientationChangeCallback = new OrientationChangeCallback(getContext());
+                if (mOrientationChangeCallback.canDetectOrientation()) {
+                    mOrientationChangeCallback.enable();
+                }
+
+                // register media projection stop callback
+                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
+            }
+
+
+        } else if (requestCode == REQUEST_CODE2) {
+
+            if (resultCode == Activity.RESULT_OK) {
+
+
+                progress.setVisibility(View.VISIBLE);
+                final bean b = (bean) getActivity().getApplicationContext();
+
+                final Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(b.BASE_URL)
+                        .addConverterFactory(ScalarsConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+                Call<goLiveBean> call3 = cr.goLive(SharePreferenceUtils.getInstance().getString("userId"), SharePreferenceUtils.getInstance().getString("userId"), "");
+
+                call3.enqueue(new Callback<goLiveBean>() {
+                    @Override
+                    public void onResponse(Call<goLiveBean> call, retrofit2.Response<goLiveBean> response) {
+
+                        if (Objects.equals(response.body().getStatus(), "1")) {
+                            //Toast.makeText(LiveScreen.this, "You are now live", Toast.LENGTH_SHORT).show();
+                            liveId = response.body().getData().getLiveId();
+
+                            broadcaster.setLiveId(liveId);
+
+                            Log.d("lliivvee", liveId);
+                            Log.d("lliivvee", SharePreferenceUtils.getInstance().getString("userId"));
+
+                            broadcaster.startPublish(liveId);
+
+
+                            broadcaster.startCountDown();
+                            schedule(liveId);
+
+
+                            repeatHandler = new Handler();
+
+                            mStatusChecker = new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        repeat(resultCode, data);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        // 100% guarantee that this always happens, even if
+                                        // your update method throws an exception
+                                        mHandler.postDelayed(mStatusChecker, 60000);
+                                    }
+                                }
+                            };
+
+
+                            mStatusChecker.run();
+
+
+                            //actions.setVisibility(View.VISIBLE);
+
+                            //mCallback.startStreaming(liveId);
+
+                            //schedule(liveId);
+
+                        } else {
+                            //Toast.makeText(getContext(), "Error going on live", Toast.LENGTH_SHORT).show();
+                            //lvscreen.finish();
+                        }
+
+                        progress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<goLiveBean> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), t.toString(), Toast.LENGTH_SHORT).show();
+                        Log.d("errorr", t.toString());
+                        //Toast.makeText(getContext() , "Error in going Live" , Toast.LENGTH_SHORT).show();
+                        //getActivity().finish();
+                    }
+
+                });
+
+
+            } else {
+                Toast.makeText(broadcaster, "This permission is required to go live", Toast.LENGTH_SHORT).show();
+                broadcaster.finish();
+            }
+
+
+        }
+    }
+
+    static class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder> {
+
+        Context context;
+        List<com.yl.youthlive.getIpdatedPOJO.View> list = new ArrayList<>();
+        ProgressBar dialogProgress;
+        Dialog dialog;
+
+
+        public DialogAdapter(Context context, List<com.yl.youthlive.getIpdatedPOJO.View> list, ProgressBar dialogProgress, Dialog dialog) {
+            this.context = context;
+            this.list = list;
+            this.dialogProgress = dialogProgress;
+            this.dialog = dialog;
+        }
+
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.guest_list_model, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+            final com.yl.youthlive.getIpdatedPOJO.View item = list.get(position);
+
+            final String uid = item.getUserId().replace("\"", "");
+            final String imm = item.getUserImage().replace("\"", "");
+            final String un = item.getUserName().replace("\"", "");
+
+            final bean b = (bean) context.getApplicationContext();
+
+            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+            ImageLoader loader = ImageLoader.getInstance();
+
+            loader.displayImage(b.BASE_URL + imm, holder.image, options);
+
+            holder.name.setText(un);
+
+
+            holder.join.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if (!isConnection) {
+
+                        String t = item.getType().replace("\"", "");
+
+                        if (t.equals("d")) {
+
+                            Toast.makeText(context, "Your request has been sent to the user", Toast.LENGTH_SHORT).show();
+
+                            new CountDownTimer(3000, 1000) {
+
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+
+
+                                }
+
+                                @Override
+                                public void onFinish() {
+
+                                    isConnection = false;
+                                    Toast.makeText(context, "Your Guest Live request has been rejected", Toast.LENGTH_SHORT).show();
+
+                                }
+                            }.start();
+
+
+                            dialog.dismiss();
+
+
+                        } else {
+                            dialogProgress.setVisibility(View.VISIBLE);
+
+                            final bean b = (bean) context.getApplicationContext();
+
+                            final Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.BASE_URL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+
+                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                            Call<requestConnectionBean> call = cr.requestConnection(liveId, SharePreferenceUtils.getInstance().getString("userId"), uid);
+
+                            call.enqueue(new Callback<requestConnectionBean>() {
+                                @Override
+                                public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+                                    Toast.makeText(context, "Your request has been sent to the user", Toast.LENGTH_SHORT).show();
+                                    String im = item.getUserImage().replace("\"", "");
+                                    thumbPic1 = im;
+
+                                    isConnection = true;
+
+                                    dialog.dismiss();
+
+
+                                    dialogProgress.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+                                    thumbPic1 = item.getUserImage();
+                                    isConnection = false;
+                                    dialogProgress.setVisibility(View.GONE);
+                                    Log.d("asdasdasdas", t.toString());
+                                }
+                            });
+                        }
+
+
+                    } else {
+                        Toast.makeText(context, "You don't have any more room left", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            CircleImageView image;
+            TextView name;
+            Button join;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+
+
+                image = itemView.findViewById(R.id.view8);
+                name = itemView.findViewById(R.id.textView36);
+                join = itemView.findViewById(R.id.button9);
+
+
+            }
+        }
+    }
+
+
+    private void startProjection() {
+        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+    }
 
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
@@ -2319,7 +2636,7 @@ public class BroadcasterFragment1 extends Fragment {
 
                 holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
 
-                if (Objects.equals(uid, b.userId)) {
+                if (Objects.equals(uid, SharePreferenceUtils.getInstance().getString("userId"))) {
                     holder.add.setVisibility(View.GONE);
                 } else {
                     holder.add.setVisibility(View.VISIBLE);
@@ -2412,7 +2729,7 @@ public class BroadcasterFragment1 extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    if (!uid.equals(b.userId)) {
+                    if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                         final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.connect_dialog);
@@ -2450,7 +2767,7 @@ public class BroadcasterFragment1 extends Fragment {
                                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
+                                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                 call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
@@ -2495,7 +2812,7 @@ public class BroadcasterFragment1 extends Fragment {
                                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                    Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
+                                    Call<requestConnectionBean> call = cr.requestConnection(liveId, SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                     call.enqueue(new Callback<requestConnectionBean>() {
                                         @Override
@@ -2559,330 +2876,6 @@ public class BroadcasterFragment1 extends Fragment {
                 add = (ImageButton) itemView.findViewById(R.id.add);
 
             }
-        }
-    }
-
-
-    public void schedule(String liveId) {
-        final bean b = (bean) getActivity().getApplicationContext();
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm", Context.MODE_PRIVATE);
-
-        String keey = fcmPref.getString("token", "");
-
-        Log.d("keeey", keey);
-
-        Call<getUpdatedBean> call = cr.getUpdatedData(b.userId, liveId, keey);
-
-        Log.d("asdasd", b.userId);
-
-        call.enqueue(new Callback<getUpdatedBean>() {
-            @Override
-            public void onResponse(Call<getUpdatedBean> call, retrofit2.Response<getUpdatedBean> response) {
-
-                try {
-
-
-                    //bubbleChecker.run();
-
-
-                    ylId.setText(response.body().getData().getYouthliveId());
-
-
-                    commentsAdapter.setGridData(response.body().getData().getComments());
-
-
-                    for (int i = 0; i < response.body().getData().getViews().size(); i++) {
-
-                        final String uid = response.body().getData().getViews().get(i).getUserId().replace("\"", "");
-
-                        if (!uid.equals(b.userId)) {
-                            viewsAdapter.addView(response.body().getData().getViews().get(i));
-                        }
-
-
-                    }
-
-
-                    int count1 = Integer.parseInt(response.body().getData().getLikesCount());
-
-                    likeCount.setText(String.valueOf(count1));
-
-                    totalBeans.setText(response.body().getData().getBeans() + " Coins");
-
-
-                    liveUsers.setText(response.body().getData().getViewsCount());
-
-                    timelineName.setText(response.body().getData().getTimelineName());
-
-
-                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
-
-                    ImageLoader loader = ImageLoader.getInstance();
-
-                    loader.displayImage(response.body().getData().getTimelineProfileImage(), timelineProfile, options);
-
-
-                    liveUsers.setText(response.body().getData().getViewsCount());
-
-
-//                    level.setText(response.body().getData().getLevel());
-
-
-//                    viewCount.setText(response.body().getData().getViewsCount());
-
-//                    username.setText(response.body().getData().getTimelineName());
-
-                    /*if (response.body().getData().getGift().size() > 0) {
-                        try {
-
-                            giftName = response.body().getData().getGift().get(0).getGiftId();
-
-                            showGift(Integer.parseInt(response.body().getData().getGift().get(0).getGiftId()), response.body().getData().getGift().get(0).getGiftName());
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }*/
-
-
-                    /*if (count1 > count) {
-                        for (int i = 0; i < count1 - count; i++)
-
-                            bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
-
-                        likeCount.setText(response.body().getData().getLikesCount());
-
-                        count = count1;
-                    }*/
-
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
-                            new IntentFilter("commentData"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
-                            new IntentFilter("like"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
-                            new IntentFilter("view"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
-                            new IntentFilter("gift"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
-                            new IntentFilter("status"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
-                            new IntentFilter("connection_end"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
-                            new IntentFilter("request_player"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
-                            new IntentFilter("status_player"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
-                            new IntentFilter("exit"));
-
-
-/*
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
-                            new IntentFilter("commentData"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
-                            new IntentFilter("like"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
-                            new IntentFilter("view"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
-                            new IntentFilter("gift"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
-                            new IntentFilter("status"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(connectionReceiver,
-                            new IntentFilter("connection_end"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(requestReceiver,
-                            new IntentFilter("request_player"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(playerStatusReceiver,
-                            new IntentFilter("status_player"));
-
-*/
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d("asdasd", e.toString());
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(Call<getUpdatedBean> call, Throwable t) {
-
-                Log.d("asdasd", t.toString());
-
-            }
-        });
-
-
-    }
-
-
-    private void startProjection() {
-        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
-    }
-
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE) {
-
-
-            sMediaProjection = mProjectionManager.getMediaProjection(resultCode, data);
-
-            if (sMediaProjection != null) {
-                File externalFilesDir = broadcaster.getExternalFilesDir(null);
-                if (externalFilesDir != null) {
-                    STORE_DIRECTORY = externalFilesDir.getAbsolutePath() + "/youthive/";
-                    File storeDirectory = new File(STORE_DIRECTORY);
-                    if (!storeDirectory.exists()) {
-                        boolean success = storeDirectory.mkdirs();
-                        if (!success) {
-                            Log.e(TAG, "failed to create file storage directory.");
-                            return;
-                        }
-                    }
-                } else {
-                    Log.e(TAG, "failed to create file storage directory, getExternalFilesDir is null.");
-                    return;
-                }
-
-                // display metrics
-                DisplayMetrics metrics = getResources().getDisplayMetrics();
-                mDensity = metrics.densityDpi;
-                mDisplay = broadcaster.getWindowManager().getDefaultDisplay();
-
-                // create virtual display depending on device width / height
-                createVirtualDisplay();
-
-                // register orientation change callback
-                mOrientationChangeCallback = new OrientationChangeCallback(getContext());
-                if (mOrientationChangeCallback.canDetectOrientation()) {
-                    mOrientationChangeCallback.enable();
-                }
-
-                // register media projection stop callback
-                sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
-            }
-
-
-        } else if (requestCode == REQUEST_CODE2) {
-
-            if (resultCode == Activity.RESULT_OK) {
-
-
-                progress.setVisibility(View.VISIBLE);
-                final bean b = (bean) getActivity().getApplicationContext();
-
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                Call<goLiveBean> call3 = cr.goLive(b.userId, b.userId, "");
-
-                call3.enqueue(new Callback<goLiveBean>() {
-                    @Override
-                    public void onResponse(Call<goLiveBean> call, retrofit2.Response<goLiveBean> response) {
-
-                        if (Objects.equals(response.body().getStatus(), "1")) {
-                            //Toast.makeText(LiveScreen.this, "You are now live", Toast.LENGTH_SHORT).show();
-                            liveId = response.body().getData().getLiveId();
-
-                            broadcaster.setLiveId(liveId);
-
-                            Log.d("lliivvee", liveId);
-                            Log.d("lliivvee", b.userId);
-
-                            broadcaster.startPublish(liveId);
-
-
-                            broadcaster.startCountDown();
-                            schedule(liveId);
-
-
-                            repeatHandler = new Handler();
-
-                            mStatusChecker = new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        repeat(resultCode, data);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        // 100% guarantee that this always happens, even if
-                                        // your update method throws an exception
-                                        mHandler.postDelayed(mStatusChecker, 60000);
-                                    }
-                                }
-                            };
-
-
-                            mStatusChecker.run();
-
-
-                            //actions.setVisibility(View.VISIBLE);
-
-                            //mCallback.startStreaming(liveId);
-
-                            //schedule(liveId);
-
-                        } else {
-                            //Toast.makeText(getContext(), "Error going on live", Toast.LENGTH_SHORT).show();
-                            //lvscreen.finish();
-                        }
-
-                        progress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(Call<goLiveBean> call, Throwable t) {
-                        progress.setVisibility(View.GONE);
-                        Toast.makeText(getContext(), t.toString(), Toast.LENGTH_SHORT).show();
-                        Log.d("errorr", t.toString());
-                        //Toast.makeText(getContext() , "Error in going Live" , Toast.LENGTH_SHORT).show();
-                        //getActivity().finish();
-                    }
-
-                });
-
-
-            } else {
-                Toast.makeText(broadcaster, "This permission is required to go live", Toast.LENGTH_SHORT).show();
-                broadcaster.finish();
-            }
-
-
         }
     }
 
@@ -3156,7 +3149,6 @@ public class BroadcasterFragment1 extends Fragment {
         }
     }
 
-
     private class ImageAvailableListener2 implements ImageReader.OnImageAvailableListener {
         @Override
         public void onImageAvailable(ImageReader reader) {
@@ -3222,7 +3214,7 @@ public class BroadcasterFragment1 extends Fragment {
                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                        Call<String> call = cr.addScreenshot(b.userId, liveId, body2);
+                        Call<String> call = cr.addScreenshot(SharePreferenceUtils.getInstance().getString("userId"), liveId, body2);
 
                         call.enqueue(new Callback<String>() {
                             @Override
@@ -3489,7 +3481,7 @@ public class BroadcasterFragment1 extends Fragment {
                 public void onClick(View view) {
 
 
-                    if (!uid.equals(b.userId)) {
+                    if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                         final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.connect_dialog);
@@ -3528,7 +3520,7 @@ public class BroadcasterFragment1 extends Fragment {
                                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
+                                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                 call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
@@ -3601,7 +3593,7 @@ public class BroadcasterFragment1 extends Fragment {
                                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                        Call<requestConnectionBean> call = cr.requestConnection(liveId, b.userId, uid);
+                                        Call<requestConnectionBean> call = cr.requestConnection(liveId, SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                         call.enqueue(new Callback<requestConnectionBean>() {
                                             @Override

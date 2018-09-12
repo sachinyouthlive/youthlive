@@ -184,7 +184,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<List<liveBean>> call = cr.getLives2(b.userId);
+        Call<List<liveBean>> call = cr.getLives2(SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<List<liveBean>>() {
             @Override

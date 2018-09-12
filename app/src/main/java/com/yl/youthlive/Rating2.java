@@ -85,7 +85,7 @@ public class Rating2 extends Fragment {
         AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<RankingBean> call = cr.ranking(b.userId, "daily");
+        Call<RankingBean> call = cr.ranking(SharePreferenceUtils.getInstance().getString("userId"), "daily");
 
         call.enqueue(new Callback<RankingBean>() {
             @Override
@@ -185,14 +185,14 @@ public class Rating2 extends Fragment {
             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-            Call<followBean> call = cr.followcheck(b.userId, item.getUserId());
+            Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
 
             call.enqueue(new Callback<followBean>() {
                 @Override
                 public void onResponse(Call<followBean> call, Response<followBean> response) {
 
                     try {
-                        if (!item.getUserId().equals(b.userId)) {
+                        if (!item.getUserId().equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                             if (response.body().getMessage().equals("Following")) {
                                 holder.follow.setBackgroundResource(R.drawable.ic_checked);
                             }
@@ -244,12 +244,12 @@ public class Rating2 extends Fragment {
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<followBean> call = cr.follow(b.userId, item.getUserId());
+                    Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
 
                     call.enqueue(new Callback<followBean>() {
                         @Override
                         public void onResponse(Call<followBean> call, Response<followBean> response) {
-                            if (!item.getUserId().equals(b.userId)) {
+                            if (!item.getUserId().equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                                 if (response.body().getMessage().equals("Follow Success")) {
                                     holder.follow.setBackgroundResource(R.drawable.ic_checked);
                                 }

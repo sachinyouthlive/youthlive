@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.yl.youthlive.Adapter.friend_adapter;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
+import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.friendListPOJO.Datum;
 import com.yl.youthlive.friendListPOJO.FriendListPOJO;
@@ -51,7 +52,7 @@ public class FriendActivity extends AppCompatActivity implements ConnectivityRec
         userId = getIntent().getStringExtra("userId");
         if (userId == null) {
             final bean b = (bean) getApplicationContext();
-            userId = b.userId;
+            userId = SharePreferenceUtils.getInstance().getString("userId");
         }
         list = new ArrayList<>();
 

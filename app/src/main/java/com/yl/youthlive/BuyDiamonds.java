@@ -26,12 +26,10 @@ import android.widget.TextView;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.SkuDetails;
 import com.anjlab.android.iab.v3.TransactionDetails;
-import com.google.gson.TypeAdapterFactory;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.buydiamondPOJO.Data;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -241,9 +239,9 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<Data> call = cr.postdiamondpurchase(Integer.valueOf(b.userId), productId, orderId, fullorderinfo);
+        Call<Data> call = cr.postdiamondpurchase(Integer.valueOf(SharePreferenceUtils.getInstance().getString("userId")), productId, orderId, fullorderinfo);
 
-        Log.d("userId", b.userId);
+        Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<Data>() {
             @Override

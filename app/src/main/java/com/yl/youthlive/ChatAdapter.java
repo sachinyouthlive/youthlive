@@ -73,7 +73,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         bean b = (bean) context.getApplicationContext();
 
-        if (Objects.equals(item.getSenderId(), b.userId)) {
+        if (Objects.equals(item.getSenderId(), SharePreferenceUtils.getInstance().getString("userId"))) {
 
             holder.container.setGravity(Gravity.END);
             holder.bubble.setBackgroundResource(R.drawable.bubble_me);

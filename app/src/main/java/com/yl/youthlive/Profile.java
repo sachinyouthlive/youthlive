@@ -60,7 +60,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class Profile extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
@@ -259,16 +258,16 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         // session = new SessionManager(getActivity());
         //  user = session.getUserDetails();
         //userID = user.get(SessionManager.USER_ID);
-        bean b = (bean) getApplicationContext();
-        userID = b.userId;
-
+        //  bean b = (bean) getApplicationContext();
+        userID = SharePreferenceUtils.getInstance().getString("userId");
+        Toast.makeText(getActivity(), "" + SharePreferenceUtils.getInstance().getString("userId"), Toast.LENGTH_LONG).show();
         profileimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PersonalInfo.class);
                 bean b = (bean) getContext().getApplicationContext();
 
-                intent.putExtra("userId", b.userId);
+                intent.putExtra("userId", SharePreferenceUtils.getInstance().getString("userId"));
                 intent.putExtra("ythlive", shareyouth);
                 intent.putExtra("uname", shareName);
                 intent.putExtra("uimage", shareProfile);

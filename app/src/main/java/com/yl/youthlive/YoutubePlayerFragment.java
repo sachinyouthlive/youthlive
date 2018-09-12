@@ -59,7 +59,6 @@ import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -384,7 +383,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
                         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                        Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
+                        Call<liveCommentBean> call = cr.commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                         call.enqueue(new Callback<liveCommentBean>() {
                             @Override
@@ -477,7 +476,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<liveLikeBean> call = cr.likeLive(b.userId, liveId);
+                retrofit2.Call<liveLikeBean> call = cr.likeLive(SharePreferenceUtils.getInstance().getString("userId"), liveId);
 
                 call.enqueue(new retrofit2.Callback<liveLikeBean>() {
                     @Override
@@ -858,7 +857,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<liveCommentBean> call = cr.commentLive(b.userId, liveId, mess, "basic");
+                    Call<liveCommentBean> call = cr.commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                     call.enqueue(new Callback<liveCommentBean>() {
                         @Override
@@ -982,7 +981,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<followBean> call = cr.followLiveUser(b.userId, timelineId, liveId);
+                retrofit2.Call<followBean> call = cr.followLiveUser(SharePreferenceUtils.getInstance().getString("userId"), timelineId, liveId);
 
                 call.enqueue(new retrofit2.Callback<followBean>() {
                     @Override
@@ -1124,6 +1123,160 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
         return id;
     }
 
+    public void schedule(String liveId) {
+        final bean b = (bean) getActivity().getApplicationContext();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+        SharedPreferences fcmPref = getContext().getSharedPreferences("fcm", Context.MODE_PRIVATE);
+
+        String keey = fcmPref.getString("token", "");
+
+        Log.d("keeey", keey);
+
+        Call<getUpdatedBean> call = cr.getPlayerUpdatedData(SharePreferenceUtils.getInstance().getString("userId"), liveId, keey);
+
+
+        call.enqueue(new Callback<getUpdatedBean>() {
+            @Override
+            public void onResponse(Call<getUpdatedBean> call, retrofit2.Response<getUpdatedBean> response) {
+
+                try {
+
+                    bubbleChecker.run();
+
+                    ylId.setText(response.body().getData().getYouthliveId());
+
+                    timelineId = response.body().getData().getTimelineId();
+
+
+                    commentsAdapter.setGridData(response.body().getData().getComments());
+
+
+                    for (int i = 0; i < response.body().getData().getViews().size(); i++) {
+
+                        final String uid = response.body().getData().getViews().get(i).getUserId().replace("\"", "");
+
+                        if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
+                            viewsAdapter.addView(response.body().getData().getViews().get(i));
+                        }
+
+
+                    }
+
+                    //viewsAdapter.setGridData(response.body().getData().getViews());
+
+                    int count1 = Integer.parseInt(response.body().getData().getLikesCount());
+
+                    likeCount.setText(String.valueOf(count1));
+
+                    totalBeans.setText(response.body().getData().getBeans2() + " Coins");
+
+
+                    liveUsers.setText(String.valueOf(Integer.parseInt(response.body().getData().getViewsCount()) + 300));
+
+
+                    timelineName.setText(response.body().getData().getTimelineName());
+
+                    image = response.body().getData().getTimelineProfileImage();
+
+                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
+
+                    ImageLoader loader = ImageLoader.getInstance();
+
+                    loader.displayImage(response.body().getData().getTimelineProfileImage(), timelineProfile, options);
+
+
+                    if (response.body().getData().getFollow().equals("true")) {
+
+                        timeLineFollow.setVisibility(View.GONE);
+
+                    } else {
+                        timeLineFollow.setVisibility(View.VISIBLE);
+                    }
+
+
+//                    level.setText(response.body().getData().getLevel());
+
+
+//                    viewCount.setText(response.body().getData().getViewsCount());
+
+//                    username.setText(response.body().getData().getTimelineName());
+
+                    /*if (response.body().getData().getGift().size() > 0) {
+                        try {
+
+                            giftName = response.body().getData().getGift().get(0).getGiftId();
+
+                            showGift(Integer.parseInt(response.body().getData().getGift().get(0).getGiftId()), response.body().getData().getGift().get(0).getGiftName());
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }*/
+
+
+                    /*if (count1 > count) {
+                        for (int i = 0; i < count1 - count; i++)
+
+                            bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
+
+                        likeCount.setText(response.body().getData().getLikesCount());
+
+                        count = count1;
+                    }*/
+
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
+                            new IntentFilter("commentData"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
+                            new IntentFilter("like"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
+                            new IntentFilter("view"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
+                            new IntentFilter("gift"));
+
+                    //                 LocalBroadcastManager.getInstance(YoutubePlayer.this).registerReceiver(endReceiver,
+                    //                       new IntentFilter("live_end"));
+                    /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
+                            new IntentFilter("view"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
+                            new IntentFilter("like"));
+
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
+                            new IntentFilter("gift"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
+                            new IntentFilter("status"));
+*/
+                } catch (Exception e) {
+                    // e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<getUpdatedBean> call, Throwable t) {
+
+                // Log.d("asdasd", t.toString());
+
+            }
+        });
+
+
+    }
 
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
@@ -1244,7 +1397,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
                     holder.add.setVisibility(View.VISIBLE);
                 }
 
-                if (Objects.equals(uid, b.userId)) {
+                if (Objects.equals(uid, SharePreferenceUtils.getInstance().getString("userId"))) {
                     holder.add.setVisibility(View.GONE);
                 } else {
                     holder.add.setVisibility(View.VISIBLE);
@@ -1332,7 +1485,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
                     bean b = (bean) context.getApplicationContext();
 
-                    if (!uid.equals(b.userId)) {
+                    if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                         final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.follow_dialog);
@@ -1369,7 +1522,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
                                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
+                                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                 call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
@@ -1467,166 +1620,6 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
             }
         }
-    }
-
-
-    public void schedule(String liveId) {
-        final bean b = (bean) getActivity().getApplicationContext();
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        SharedPreferences fcmPref = getContext().getSharedPreferences("fcm", Context.MODE_PRIVATE);
-
-        String keey = fcmPref.getString("token", "");
-
-        Log.d("keeey", keey);
-
-        Call<getUpdatedBean> call = cr.getPlayerUpdatedData(b.userId, liveId, keey);
-
-
-        call.enqueue(new Callback<getUpdatedBean>() {
-            @Override
-            public void onResponse(Call<getUpdatedBean> call, retrofit2.Response<getUpdatedBean> response) {
-
-                try {
-
-                    bubbleChecker.run();
-
-                    ylId.setText(response.body().getData().getYouthliveId());
-
-                    timelineId = response.body().getData().getTimelineId();
-
-
-                    commentsAdapter.setGridData(response.body().getData().getComments());
-
-
-                    for (int i = 0; i < response.body().getData().getViews().size(); i++) {
-
-                        final String uid = response.body().getData().getViews().get(i).getUserId().replace("\"", "");
-
-                        if (!uid.equals(b.userId)) {
-                            viewsAdapter.addView(response.body().getData().getViews().get(i));
-                        }
-
-
-                    }
-
-                    //viewsAdapter.setGridData(response.body().getData().getViews());
-
-                    int count1 = Integer.parseInt(response.body().getData().getLikesCount());
-
-                    likeCount.setText(String.valueOf(count1));
-
-                    totalBeans.setText(response.body().getData().getBeans2() + " Coins");
-
-
-                    liveUsers.setText(String.valueOf(Integer.parseInt(response.body().getData().getViewsCount()) + 300));
-
-
-                    timelineName.setText(response.body().getData().getTimelineName());
-
-                    image = response.body().getData().getTimelineProfileImage();
-
-                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
-
-                    ImageLoader loader = ImageLoader.getInstance();
-
-                    loader.displayImage(response.body().getData().getTimelineProfileImage(), timelineProfile, options);
-
-
-
-
-
-
-                    if (response.body().getData().getFollow().equals("true")) {
-
-                        timeLineFollow.setVisibility(View.GONE);
-
-                    } else {
-                        timeLineFollow.setVisibility(View.VISIBLE);
-                    }
-
-
-//                    level.setText(response.body().getData().getLevel());
-
-
-//                    viewCount.setText(response.body().getData().getViewsCount());
-
-//                    username.setText(response.body().getData().getTimelineName());
-
-                    /*if (response.body().getData().getGift().size() > 0) {
-                        try {
-
-                            giftName = response.body().getData().getGift().get(0).getGiftId();
-
-                            showGift(Integer.parseInt(response.body().getData().getGift().get(0).getGiftId()), response.body().getData().getGift().get(0).getGiftName());
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }*/
-
-
-                    /*if (count1 > count) {
-                        for (int i = 0; i < count1 - count; i++)
-
-                            bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
-
-                        likeCount.setText(response.body().getData().getLikesCount());
-
-                        count = count1;
-                    }*/
-
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
-                            new IntentFilter("commentData"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
-                            new IntentFilter("like"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
-                            new IntentFilter("view"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
-                            new IntentFilter("gift"));
-
-                    //                 LocalBroadcastManager.getInstance(YoutubePlayer.this).registerReceiver(endReceiver,
-                    //                       new IntentFilter("live_end"));
-                    /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
-                            new IntentFilter("view"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
-                            new IntentFilter("like"));
-
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(giftReceiver,
-                            new IntentFilter("gift"));
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(statusReceiver,
-                            new IntentFilter("status"));
-*/
-                } catch (Exception e) {
-                    // e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(Call<getUpdatedBean> call, Throwable t) {
-
-                // Log.d("asdasd", t.toString());
-
-            }
-        });
-
-
     }
 
 
@@ -1919,7 +1912,6 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
         return Uri.parse(path);
     }
 
-
     class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder> {
 
         Context context;
@@ -1981,7 +1973,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
                 public void onClick(View view) {
 
 
-                    if (!uid.equals(b.userId)) {
+                    if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                         final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.follow_dialog);
@@ -2018,7 +2010,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
                                 final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                retrofit2.Call<followBean> call = cr.follow(b.userId, uid);
+                                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                 call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
@@ -2225,7 +2217,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    retrofit2.Call<sendGiftBean> call = cr.sendGift(b.userId, liveId, timelineId, String.valueOf(position + 1), "1", diamonds[position]);
+                    retrofit2.Call<sendGiftBean> call = cr.sendGift(SharePreferenceUtils.getInstance().getString("userId"), liveId, timelineId, String.valueOf(position + 1), "1", diamonds[position]);
 
 
                     call.enqueue(new retrofit2.Callback<sendGiftBean>() {
