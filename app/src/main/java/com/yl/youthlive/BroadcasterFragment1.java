@@ -3,7 +3,6 @@ package com.yl.youthlive;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -30,7 +29,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -410,13 +408,13 @@ public class BroadcasterFragment1 extends Fragment {
             }
         });
 
-        userType = pref.getString("userType", "");
-
+        userType = SharePreferenceUtils.getInstance().getString("userType");
+        Log.d("userType", userType);
 
         if (userType.equals("user")) {
             progress.setVisibility(View.VISIBLE);
 
-            Call<goLiveBean> call3 = cr.goLive(SharePreferenceUtils.getInstance().getString("userId"), SharePreferenceUtils.getInstance().getString("userId"), "");
+            Call<goLiveBean> call3 = cr.goLive("548", SharePreferenceUtils.getInstance().getString("userId"), "");
 
             call3.enqueue(new Callback<goLiveBean>() {
                 @Override
