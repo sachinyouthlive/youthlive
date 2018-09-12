@@ -14,11 +14,6 @@ import com.yl.youthlive.vlogListPOJO.Datum;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * Created by TBX on 11/8/2017.
- */
-
 public class bean extends Application {
 
     public static ArrayList<String> mylist;
@@ -32,15 +27,11 @@ public class bean extends Application {
     String userImage = "";
     String liveId = "";
 
-    boolean frag = false;
-
     private String TAG = "myApp";
     List<Datum> vlist = new ArrayList<>();
-
     public bean() {
         mylist = new ArrayList<String>();
     }
-
     public static Context getContext() {
         return context;
     }

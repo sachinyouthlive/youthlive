@@ -94,7 +94,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
         Bundle b = getArguments();
         bean b1 = (bean) getContext().getApplicationContext();
 
-        if (!Objects.equals(userId, b1.userId)) {
+        if (!Objects.equals(userId, SharePreferenceUtils.getInstance().getString("userId"))) {
             editer.setVisibility(View.GONE);
             phone.setText("(Mobile Number Private)");
         } else {

@@ -45,13 +45,14 @@
 
     <Button
         android:id="@+id/golive"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="122dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         android:background="@drawable/accent_round2"
         android:text="GO LIVE"
+        android:textStyle="bold"
         android:textColor="@color/colorPrimary"
         android:typeface="monospace"
         app:layout_constraintBottom_toBottomOf="parent"

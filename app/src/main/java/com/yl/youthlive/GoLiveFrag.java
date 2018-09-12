@@ -25,7 +25,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
@@ -82,7 +81,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
 
         ImageLoader loader = ImageLoader.getInstance();
 
-        loader.loadImage(b.userImage, new ImageLoadingListener() {
+        loader.loadImage(SharePreferenceUtils.getInstance().getString("userImage"), new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 

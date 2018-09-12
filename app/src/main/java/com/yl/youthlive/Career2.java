@@ -73,7 +73,7 @@ public class Career2 extends Fragment {
 
         bean b1 = (bean) getContext().getApplicationContext();
 
-        if (!Objects.equals(userId, b1.userId)) {
+        if (!Objects.equals(userId, SharePreferenceUtils.getInstance().getString("userId"))) {
             add.setVisibility(View.GONE);
         } else {
             add.setVisibility(View.VISIBLE);

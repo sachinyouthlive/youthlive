@@ -2404,7 +2404,13 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
     protected void onPause() {
         super.onPause();
 
-        seeCount = player.getCurrentTimeMillis();
+        try {
+
+            seeCount = player.getCurrentTimeMillis();
+        } catch (Exception e) {
+
+
+        }
 
     }
 }

@@ -283,9 +283,9 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MyVlog.class);
 
-                bean b = (bean) getContext().getApplicationContext();
+                //bean b = (bean) getContext().getApplicationContext();
 
-                intent.putExtra("userId", b.userId);
+                intent.putExtra("userId", SharePreferenceUtils.getInstance().getString("userId"));
                 intent.putExtra("ythlive", shareyouth);
                 intent.putExtra("uname", shareName);
                 intent.putExtra("uimage", shareProfile);
@@ -303,7 +303,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
                 bean b = (bean) getContext().getApplicationContext();
 
-                intent.putExtra("userId", b.userId);
+                intent.putExtra("userId", SharePreferenceUtils.getInstance().getString("userId"));
                 intent.putExtra("ythlive", shareyouth);
                 intent.putExtra("uname", shareName);
                 intent.putExtra("uimage", shareProfile);
@@ -436,6 +436,10 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             }
         });
 
+        if (!SharePreferenceUtils.getInstance().getString("userId").isEmpty()) {
+            loadData(SharePreferenceUtils.getInstance().getString("userId"));
+        }
+
 
         return view;
 
@@ -447,11 +451,10 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
         // register connection status listener
         bean.getInstance().setConnectivityListener(this);
-        bean b = (bean) getContext().getApplicationContext();
-        if (!b.userId.isEmpty()) {
-            loadData(b.userId);
+      /*  if (!SharePreferenceUtils.getInstance().getString("userId").isEmpty()) {
+            loadData(SharePreferenceUtils.getInstance().getString("userId"));
         }
-
+*/
     }
 
 
@@ -619,7 +622,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-            Call<updateProfileBean> call = cr.updateProfile(b.userId, body);
+            Call<updateProfileBean> call = cr.updateProfile(SharePreferenceUtils.getInstance().getString("userId"), body);
 
             call.enqueue(new retrofit2.Callback<updateProfileBean>() {
                 @Override
@@ -628,7 +631,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                     b.userImage = response.body().getData().getUserImage();
 
                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    loadData(b.userId);
+                    loadData(SharePreferenceUtils.getInstance().getString("userId"));
 
 
                     progress.setVisibility(View.GONE);
@@ -668,7 +671,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-            Call<loginResponseBean> call = cr.addCover(b.userId, "", body);
+            Call<loginResponseBean> call = cr.addCover(SharePreferenceUtils.getInstance().getString("userId"), "", body);
 
             call.enqueue(new retrofit2.Callback<loginResponseBean>() {
                 @Override
@@ -677,7 +680,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                     b.userImage = response.body().getData().getUserImage();
 
                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    loadData(b.userId);
+                    loadData(SharePreferenceUtils.getInstance().getString("userId"));
 
 
                     progress.setVisibility(View.GONE);
