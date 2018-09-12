@@ -124,21 +124,22 @@ public class SplashActivity extends AppCompatActivity {
                 if (Objects.equals(response.body().getStatus(), "1")) {
                     Toast.makeText(SplashActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
-                    b.userId = response.body().getData().getUserId();
-                    b.userName = response.body().getData().getUserName();
+                    SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                    SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
 
                     try {
-                        b.userImage = response.body().getData().getUserImage();
+                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    edit.putString("type", "phone");
-                    edit.putString("user", phone);
-                    edit.putString("pass", pass);
-                    edit.putString("userType" , response.body().getData().getType());
-                    edit.putString("yid" , response.body().getData().getYouthLiveId());
-                    edit.commit();
+                    SharePreferenceUtils.getInstance().putString("type", "phone");
+                    SharePreferenceUtils.getInstance().putString("user", phone);
+                    SharePreferenceUtils.getInstance().putString("pass", pass);
+                    SharePreferenceUtils.getInstance().putString("userType" , response.body().getData().getType());
+                    SharePreferenceUtils.getInstance().putString("yid" , response.body().getData().getYouthLiveId());
+
 
                     Intent Inbt = new Intent(SplashActivity.this, HomeActivity.class);
                     Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -196,22 +197,23 @@ public class SplashActivity extends AppCompatActivity {
 
                 if (response.body().getData().getUserName().length() > 0) {
 
-                    b.userId = response.body().getData().getUserId();
-                    b.userName = response.body().getData().getUserName();
+                    SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                    SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
 
                     try {
-                        b.userImage = response.body().getData().getUserImage();
+                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
 
-                    edit.putString("type", "social");
-                    edit.putString("user", email);
-                    edit.putString("pass", pid);
-                    edit.putString("userType" , response.body().getData().getType());
-                    edit.putString("yid" , response.body().getData().getYouthLiveId());
-                    edit.commit();
+                    SharePreferenceUtils.getInstance().putString("type", "social");
+                    SharePreferenceUtils.getInstance().putString("user", email);
+                    SharePreferenceUtils.getInstance().putString("pass", pid);
+                    SharePreferenceUtils.getInstance().putString("userType" , response.body().getData().getType());
+                    SharePreferenceUtils.getInstance().putString("yid" , response.body().getData().getYouthLiveId());
+
 
                     Toast.makeText(SplashActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
@@ -222,20 +224,21 @@ public class SplashActivity extends AppCompatActivity {
 
                 } else {
 
-                    b.userId = response.body().getData().getUserId();
-                    b.userName = response.body().getData().getUserName();
+                    SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                    SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
 
                     try {
-                        b.userImage = response.body().getData().getUserImage();
+                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
 
-                    edit.putString("type", "social");
-                    edit.putString("user", email);
-                    edit.putString("pass", pid);
-                    edit.commit();
+                    SharePreferenceUtils.getInstance().putString("type", "social");
+                    SharePreferenceUtils.getInstance().putString("user", email);
+                    SharePreferenceUtils.getInstance().putString("pass", pid);
+
 
                     Toast.makeText(SplashActivity.this, "Please update your info", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SplashActivity.this, UserInformation.class);

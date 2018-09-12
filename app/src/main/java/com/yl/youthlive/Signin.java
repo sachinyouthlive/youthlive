@@ -599,11 +599,12 @@ public class Signin extends AppCompatActivity {
 
                 } else {
 
-                    b.userId = response.body().getData().getUserId();
-                    b.userName = response.body().getData().getUserName();
+                    SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                    SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
 
                     try {
-                        b.userImage = response.body().getData().getUserImage();
+                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
