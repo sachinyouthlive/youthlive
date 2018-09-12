@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "69401682332-1heegvkeaou77mplr0u5adksl1r0omp0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yl.youthlive",
+            "certificate_hash": "dec6accb9a1555f08b2fe07b4a794cee2d748883"
+          }
+        },
+        {
           "client_id": "69401682332-jl9sqt92ngdbrnbfb7h8gu2ng95pg8v5.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -48,7 +56,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "69401682332-jl9sqt92ngdbrnbfb7h8gu2ng95pg8v5.apps.googleusercontent.com",
+              "client_id": "69401682332-pocdm9lldb3sss701mvqrnk0tuavup2p.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

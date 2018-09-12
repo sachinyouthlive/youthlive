@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.google.firebase.FirebaseApp;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
@@ -55,6 +56,13 @@ public class bean extends Application {
         mInstance = this;
         context = getApplicationContext();
         Log.e(TAG, "  myapp stater");
+
+        try {
+            FirebaseApp.initializeApp(this);
+        }
+        catch (Exception e) {
+        }
+
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
 
         FontsOverride.setDefaultFont(this, "MONOSPACE", "calibri.ttf");

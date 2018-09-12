@@ -9,13 +9,13 @@ android {
             storePassword 'youthlive@123'
         }
     }
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.yl.youthlive"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 26
         versionName "1.25"
         multiDexEnabled true
@@ -33,15 +33,14 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:design:28.0.0-rc02'
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:cardview-v7:28.0.0-rc02'
+    implementation 'com.android.support:support-v4:28.0.0-rc02'
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'yasic.library.BubbleView:bubbleview:0.0.4'
@@ -57,9 +56,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation 'com.hannesdorfmann.smoothprogressbar:library:1.0.0'
-    implementation 'com.google.firebase:firebase-auth:12.0.0'
-    implementation 'com.google.firebase:firebase-messaging:12.0.0'
-    implementation 'com.google.android.gms:play-services-auth:12.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.3'
+    implementation 'com.google.firebase:firebase-auth:16.0.3'
+    implementation 'com.google.firebase:firebase-messaging:17.3.1'
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
     implementation 'com.github.ybq:Android-SpinKit:1.1.0'
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
     implementation 'me.relex:circleindicator:1.2.2@aar'
@@ -84,16 +84,17 @@ dependencies {
     implementation 'io.reactivex:rxandroid:1.2.1'
     implementation project(':wcs-android-sdk-1.0.1.50')
     implementation 'io.github.memfis19:annca:0.3.7'
+    implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
 }
+apply plugin: 'com.google.gms.google-services'
 
-configurations.all {
+/*configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         def requested = details.requested
         if (requested.group == 'com.android.support') {
             if (!requested.name.startsWith("multidex")) {
-                details.useVersion '27.1.1'
+                details.useVersion '28.0.0'
             }
         }
     }
-}
-apply plugin: 'com.google.gms.google-services'
+}*/
