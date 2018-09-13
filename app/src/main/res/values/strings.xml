@@ -152,7 +152,7 @@
     <string name="wcs_url">ws://ec2-35-154-79-248.ap-south-1.compute.amazonaws.com:8080</string>
     <string name="mute_audio">Mute Audio</string>
     <string name="mute_video">Mute Video</string>
-    <string name="default_web_client_id">69401682332-pocdm9lldb3sss701mvqrnk0tuavup2p.apps.googleusercontent.com</string>
-
+    <!--<string name="default_web_client_id">69401682332-pocdm9lldb3sss701mvqrnk0tuavup2p.apps.googleusercontent.com</string>
+-->
 
 </resources>

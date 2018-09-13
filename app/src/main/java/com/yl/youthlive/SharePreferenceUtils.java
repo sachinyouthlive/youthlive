@@ -6,12 +6,12 @@ import android.content.SharedPreferences;
 
 public class SharePreferenceUtils {
 
-    private static String PREFERENCE_NAME = "pref";
     private static SharePreferenceUtils sharePreferenceUtils;
     private SharedPreferences sharedPreferences;
 
     private SharePreferenceUtils(Context context) {
         //PREFERENCE_NAME = PREFERENCE_NAME + context.getPackageName();
+        String PREFERENCE_NAME = "pref";
         this.sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
     }
 
