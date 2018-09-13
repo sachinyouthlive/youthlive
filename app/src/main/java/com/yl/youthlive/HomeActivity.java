@@ -31,7 +31,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -1065,9 +1064,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         else
         {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle(Html.fromHtml("<font color='#282828'>Are you sure, You want to Exit?</font>"));
-            alertDialogBuilder.setPositiveButton(Html.fromHtml("<font color='#282828'>Yes</font>"),
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialog);
+            alertDialogBuilder.setTitle("Are you sure, You want to Exit");
+            alertDialogBuilder.setPositiveButton("Yes",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
@@ -1075,7 +1074,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                         }
                     });
 
-            alertDialogBuilder.setNegativeButton(Html.fromHtml("<font color='#282828'>No</font>"), new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 

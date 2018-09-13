@@ -121,6 +121,12 @@
         android:layout_marginTop="8dp"
         android:typeface="monospace"
         android:text="follow"
+        android:background="@drawable/back_button_round"
+        android:paddingBottom="8dp"
+        android:paddingEnd="28dp"
+        android:paddingStart="28dp"
+        android:paddingTop="8dp"
+        android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view7" />
