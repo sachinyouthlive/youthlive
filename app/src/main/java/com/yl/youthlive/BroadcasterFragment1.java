@@ -414,7 +414,7 @@ public class BroadcasterFragment1 extends Fragment {
         if (userType.equals("user")) {
             progress.setVisibility(View.VISIBLE);
 
-            Call<goLiveBean> call3 = cr.goLive("548", SharePreferenceUtils.getInstance().getString("userId"), "");
+            Call<goLiveBean> call3 = cr.goLive(SharePreferenceUtils.getInstance().getString("userId"), SharePreferenceUtils.getInstance().getString("userId"), "");
 
             call3.enqueue(new Callback<goLiveBean>() {
                 @Override

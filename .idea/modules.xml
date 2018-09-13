@@ -4,9 +4,11 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/wcs-android-sdk-1.0.1.50/wcs-android-sdk-1.0.1.50.iml" filepath="$PROJECT_DIR$/wcs-android-sdk-1.0.1.50/wcs-android-sdk-1.0.1.50.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wcs-android-sdk-1.0.1.50/wcs-android-sdk-1.0.1.50.iml" filepath="$PROJECT_DIR$/wcs-android-sdk-1.0.1.50/wcs-android-sdk-1.0.1.50.iml" />
       <module fileurl="file://$PROJECT_DIR$/youthliveS21.iml" filepath="$PROJECT_DIR$/youthliveS21.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/youthliveS29.iml" filepath="$PROJECT_DIR$/.idea/youthliveS29.iml" />
       <module fileurl="file://$PROJECT_DIR$/youthliveS30.iml" filepath="$PROJECT_DIR$/youthliveS30.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youthliveS31.iml" filepath="$PROJECT_DIR$/youthliveS31.iml" />
     </modules>
   </component>
 </project>
