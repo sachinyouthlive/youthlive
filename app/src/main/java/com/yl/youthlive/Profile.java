@@ -560,7 +560,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                         coverPager.setAdapter(pageAdapter);
                         indicator.setViewPager(coverPager);
 
-                        b.userImage = response.body().getData().getUserImage();
+                        SharePreferenceUtils.getInstance().putString("userImage", "response.body().getData().getUserImage()");
 
                         ImageLoader loader = ImageLoader.getInstance();
                         loader.displayImage(response.body().getData().getUserImage(), profileimage);
@@ -628,7 +628,10 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 @Override
                 public void onResponse(Call<updateProfileBean> call, retrofit2.Response<updateProfileBean> response) {
 
-                    b.userImage = response.body().getData().getUserImage();
+                    //b.userImage = response.body().getData().getUserImage();
+                    SharePreferenceUtils.getInstance().putString("userImage", "response.body().getData().getUserImage()");
+
+
 
                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     loadData(SharePreferenceUtils.getInstance().getString("userId"));
@@ -677,7 +680,8 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 @Override
                 public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
 
-                    b.userImage = response.body().getData().getUserImage();
+                    //b.userImage = response.body().getData().getUserImage();
+                    SharePreferenceUtils.getInstance().putString("userImage", "response.body().getData().getUserImage()");
 
                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     loadData(SharePreferenceUtils.getInstance().getString("userId"));

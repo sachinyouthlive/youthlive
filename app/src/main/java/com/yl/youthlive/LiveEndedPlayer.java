@@ -19,6 +19,9 @@ import com.yl.youthlive.followPOJO.followBean;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.blurry.Blurry;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -34,7 +37,6 @@ public class LiveEndedPlayer extends AppCompatActivity {
 
     Button follow, back;
 
-
     ProgressBar progress;
 
 
@@ -48,8 +50,6 @@ public class LiveEndedPlayer extends AppCompatActivity {
         id = getIntent().getStringExtra("id");
         views = getIntent().getStringExtra("views");
         time = getIntent().getStringExtra("time");
-
-
         background = findViewById(R.id.imageView8);
         profile = findViewById(R.id.view7);
         liveTime = findViewById(R.id.textView19);
@@ -58,6 +58,11 @@ public class LiveEndedPlayer extends AppCompatActivity {
         follow = findViewById(R.id.button5);
         back = findViewById(R.id.button6);
         progress = findViewById(R.id.progressBar7);
+        if (id != null && !id.isEmpty()) {
+            followcheck(id);
+        } else {
+            follow.setVisibility(View.GONE);
+        }
 
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
@@ -129,7 +134,6 @@ public class LiveEndedPlayer extends AppCompatActivity {
             }
         });
 
-
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,6 +202,60 @@ public class LiveEndedPlayer extends AppCompatActivity {
         }
 
         return String.valueOf(number);
+    }
+
+
+    private void followcheck(final String uid) {
+
+
+        // loading follow unfollow data check
+        final bean b = (bean) getApplicationContext();
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(b.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), uid);
+
+        call.enqueue(new Callback<followBean>() {
+            @Override
+            public void onResponse(Call<followBean> call, Response<followBean> response) {
+
+                try {
+
+                    if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
+                        // Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        if (response.body().getMessage().equals("Following")) {
+                            follow.setVisibility(View.GONE);
+
+                        }
+                        if (response.body().getMessage().equals("Not Following")) {
+                            follow.setVisibility(View.VISIBLE);
+
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Toast.makeText(TimelineProfile.this , "Some Error Occurred, Please try again follow" , Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<followBean> call, Throwable t) {
+
+                //    con.progress.setVisibility(View.GONE);
+
+            }
+        });
+
+        //
+
     }
 
     @Override

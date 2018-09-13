@@ -571,7 +571,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
         bean b = (bean) getApplicationContext();
 
-        name.setText("Hi, " + b.userName);
+        name.setText("Hi, " + SharePreferenceUtils.getInstance().getString("userName"));
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

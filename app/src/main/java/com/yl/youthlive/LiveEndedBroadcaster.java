@@ -51,12 +51,10 @@ public class LiveEndedBroadcaster extends AppCompatActivity {
         viewers.setText(views);
 
 
-        bean b = (bean) getApplicationContext();
-
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
         ImageLoader loader = ImageLoader.getInstance();
 
-        loader.loadImage(b.userImage, options, new ImageLoadingListener() {
+        loader.loadImage(SharePreferenceUtils.getInstance().getString("userImage"), options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
 
