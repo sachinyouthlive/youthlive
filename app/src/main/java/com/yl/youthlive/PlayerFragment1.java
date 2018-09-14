@@ -414,7 +414,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             }
         });*/
 
-        final bean b = (bean) getContext().getApplicationContext();
 
         heart.setOnClickListener(new View.OnClickListener() {
             @Override

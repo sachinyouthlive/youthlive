@@ -1501,9 +1501,9 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
                         ImageLoader loader1 = ImageLoader.getInstance();
 
-                        loader1.displayImage(b.userImage, image);
+                        loader1.displayImage(SharePreferenceUtils.getInstance().getString("userImage"), image);
 
-                        name.setText(b.userName);
+                        name.setText(SharePreferenceUtils.getInstance().getString("userName"));
 
                         follo.setOnClickListener(new View.OnClickListener() {
                             @Override
