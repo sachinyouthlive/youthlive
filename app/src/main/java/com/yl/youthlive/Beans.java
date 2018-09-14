@@ -64,7 +64,7 @@ public class Beans extends Fragment {
                 messageView.setTextSize(16);
 
 
-                messageView.setTextColor(getResources().getColor(R.color.grey));
+                messageView.setTextColor(getResources().getColor(R.color.black));
 
            /*     try {
                     AlertDialog.Builder builder;
