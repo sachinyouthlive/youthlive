@@ -48,7 +48,7 @@
     <string name="failed_request">Please try again...</string>
 
     <string name="otp_has_send">OTP has send to you phone number. </string>
-    <string name="otp">OTP</string>
+    <string name="otp">Enter OTP Received</string>
     <string name="resend_otp">Resend OTP</string>
     <string name="otp_not_match">OTP is incorrect</string>
     <string name="create_new_password">Create New Password </string>

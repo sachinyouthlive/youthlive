@@ -119,4 +119,9 @@
         <item name="android:colorAccent">#1b5e20</item>
     </style>
 
+    <style name="DatePickerTheme" parent="Theme.AppCompat.DayNight.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>

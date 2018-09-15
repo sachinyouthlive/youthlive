@@ -36,34 +36,21 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.yl.youthlive.HomeActivity;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
 import com.yl.youthlive.SharePreferenceUtils;
-import com.yl.youthlive.Signin;
 import com.yl.youthlive.bean;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 import com.yl.youthlive.login2POJO.login2Bean;
 import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -284,7 +271,7 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                new DatePickerDialog(UserInformation.this, date, myCalendar
+                new DatePickerDialog(UserInformation.this, R.style.DatePickerTheme, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -300,8 +287,11 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
                 radioButton = (RadioButton) findViewById(selectedId);
 
                 gender = radioButton.getText().toString();
-
-                updateDetails();
+                if (user_name.getText().length() < 1) {
+                    Toast.makeText(UserInformation.this, "Please enter Username", Toast.LENGTH_LONG).show();
+                } else {
+                    updateDetails();
+                }
 
 
             }

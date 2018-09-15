@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:contentDescription="back"
         android:scaleType="centerCrop"
-        android:src="@drawable/image" />
+        android:src="@drawable/image11" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:typeface="monospace"
             android:background="@drawable/white"
             android:gravity="center"
-            android:hint="enter Your OTP"
+            android:hint="Enter Your OTP"
             android:inputType="number"
             android:padding="10dp"
             android:textColor="#6b6a6a" />

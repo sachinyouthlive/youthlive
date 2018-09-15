@@ -51,7 +51,6 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
         checkConnection();
         userId = getIntent().getStringExtra("userId");
         if (userId == null) {
-            final bean b = (bean) getApplicationContext();
             userId = SharePreferenceUtils.getInstance().getString("userId");
         }
         list = new ArrayList<>();

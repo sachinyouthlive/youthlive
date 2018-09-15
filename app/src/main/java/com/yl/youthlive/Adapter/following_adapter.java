@@ -112,10 +112,12 @@ public class following_adapter extends RecyclerView.Adapter<following_adapter.fo
 
                         //  Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         if (response.body().getMessage().equals("Following")) {
+                            holder.unfollow.setVisibility(View.VISIBLE);
                             holder.unfollow.setText("UNFOLLOW");
 
                         }
                         if (response.body().getMessage().equals("Not Following")) {
+                            holder.unfollow.setVisibility(View.VISIBLE);
                             holder.unfollow.setText("FOLLOW");
 
                         }

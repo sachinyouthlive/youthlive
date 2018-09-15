@@ -163,6 +163,7 @@
                         android:background="@drawable/follow_back3"
                         android:drawablePadding="3dp"
                         android:gravity="center_vertical"
+                        android:visibility="gone"
                         android:minHeight="0dp"
                         android:paddingBottom="2dp"
                         android:paddingEnd="5dp"

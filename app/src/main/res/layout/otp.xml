@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:contentDescription="back"
         android:scaleType="centerCrop"
-        android:src="@drawable/image" />
+        android:src="@drawable/image11" />
 
     <ImageView
         android:layout_width="match_parent"

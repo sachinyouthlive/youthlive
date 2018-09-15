@@ -116,8 +116,6 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
     private boolean playWhenReady;
     private int currentWindow;
     private long playbackPosition;
-    //SimpleExoPlayer mainPlayer;
-    private String TAG = "BetterSample";
 
     @Nullable
     @Override
@@ -834,12 +832,14 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
 
                     // Toast.makeText(TimelineProfile.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
                     if (response.body().getMessage().equals("Following")) {
+                        follow.setVisibility(View.VISIBLE);
                         follow.setText("UNFOLLOW");
                         follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus_white, 0, 0, 0);
                         //Toast.makeText(getContext(), "Following " + getArguments().getString("timelineName"), Toast.LENGTH_SHORT).show();
 
                     }
                     if (response.body().getMessage().equals("Not Following")) {
+                        follow.setVisibility(View.VISIBLE);
                         follow.setText("FOLLOW");
                         follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_white, 0, 0, 0);
                         // Toast.makeText(getContext(), "Unfollowed " + getArguments().getString("timelineName"), Toast.LENGTH_SHORT).show();
