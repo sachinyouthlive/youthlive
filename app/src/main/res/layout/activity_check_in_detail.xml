@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
     tools:context=".checkin.CheckInDetailActivity">
 
@@ -44,6 +45,11 @@
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#424242"/>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -82,6 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:typeface="monospace"
+                android:textColor="#cdcdcd"
                 android:layout_gravity="center_vertical"
                 android:text="No Broadcast on this day"
                 android:textSize="15sp" />

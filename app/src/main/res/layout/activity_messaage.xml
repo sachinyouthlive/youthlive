@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
 
@@ -14,7 +15,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:elevation="2dp"
             android:background="@color/colorPrimary" />
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/messagerecycler"
@@ -26,7 +29,8 @@
             android:layout_width="match_parent"
             android:typeface="monospace"
             android:layout_height="1dp"
-            android:background="#cdcdcd" />
+            android:visibility="gone"
+            android:background="#aaaaaa" />
 
 
     </LinearLayout>

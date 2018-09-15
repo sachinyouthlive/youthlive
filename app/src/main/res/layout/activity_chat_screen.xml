@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="com.yl.youthlive.ChatScreen">
 
     <LinearLayout
@@ -16,6 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#424242"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/grid"
@@ -37,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:background="#ffffff"
+        android:background="#424242"
         android:elevation="8dp"
         android:gravity="center"
         android:orientation="horizontal">
@@ -64,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/send"
-                app:backgroundTint="#ffffff" />
+                app:backgroundTint="@color/colorPrimaryDark" />
 
             <EditText
                 android:id="@+id/comment"
@@ -76,6 +82,8 @@
                 android:layout_marginStart="10dp"
                 android:background="@drawable/comment_sendback"
                 android:cursorVisible="true"
+                android:textColor="#ffffff"
+                android:textColorHint="#cdcdcd"
                 android:gravity="center_vertical|start"
                 android:hint="Add a comment"
                 android:padding="10dp" />

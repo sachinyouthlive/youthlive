@@ -197,6 +197,16 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
             holder.buy.setText(item.currency + " " + item.priceValue);
 
 
+            if (position == list.size() - 1)
+            {
+                holder.line.setVisibility(View.GONE);
+            }
+            else
+            {
+                holder.line.setVisibility(View.VISIBLE);
+            }
+
+
             holder.buy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -218,11 +228,13 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
 
             TextView quantity;
             Button buy;
+            TextView line;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 quantity = itemView.findViewById(R.id.textView17);
                 buy = itemView.findViewById(R.id.button4);
+                line = itemView.findViewById(R.id.line);
 
             }
         }

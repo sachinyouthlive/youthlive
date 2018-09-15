@@ -54,7 +54,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             if ((Integer.parseInt(dayNumber)) < iDay) {
                 holder.shadeImg.setBackgroundResource(R.drawable.dark_shade);
             }
-            if (dayNumber == String.valueOf(iDay)) {
+            if (dayNumber.equals(String.valueOf(iDay))) {
 
                 holder.myTextView.setText("Today");
                 holder.myTextView.setBackgroundColor(Color.parseColor("#FFCA18"));
