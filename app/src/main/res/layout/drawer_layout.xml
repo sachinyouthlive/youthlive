@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#424242"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
@@ -34,6 +34,7 @@
             android:drawableStart="@drawable/bell"
             android:gravity="center_vertical"
             android:padding="10dp"
+            android:textColor="#cdcdcd"
             android:typeface="monospace"
             android:text="Notifications" />
 
@@ -50,7 +51,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#cdcdcd" />
+        android:background="@color/colorPrimary" />
 
 
     <TextView
@@ -60,6 +61,7 @@
         android:drawablePadding="10dp"
         android:typeface="monospace"
         android:drawableStart="@drawable/feedback"
+        android:textColor="#cdcdcd"
         android:gravity="center_vertical"
         android:padding="10dp"
         android:text="Feedback" />
@@ -68,7 +70,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#cdcdcd" />
+        android:background="@color/colorPrimary" />
 
     <TextView
         android:id="@+id/logout"
@@ -76,6 +78,7 @@
         android:layout_height="wrap_content"
         android:drawablePadding="10dp"
         android:typeface="monospace"
+        android:textColor="#cdcdcd"
         android:drawableStart="@drawable/logout"
         android:gravity="center_vertical"
         android:padding="10dp"

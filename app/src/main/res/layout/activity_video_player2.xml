@@ -5,13 +5,15 @@
     android:id="@+id/room_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:keepScreenOn="true"
     android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorbackground"
+        android:paddingBottom="50dp"
+        android:clipToPadding="false"
+        android:background="@color/colorPrimary"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -104,7 +106,7 @@
                         android:layout_toRightOf="@+id/profile"
                         android:gravity="center_vertical"
                         android:maxLength="18"
-                        android:textColor="@color/darkfont"
+                        android:textColor="@color/colorAccent"
                         android:textSize="15sp"
                         tools:text="Sachin kumar Pandey" />
 
@@ -165,6 +167,7 @@
                         android:paddingBottom="2dp"
                         android:paddingEnd="5dp"
                         android:paddingTop="2dp"
+                        android:paddingStart="5dp"
                         android:typeface="monospace"
                         android:textColor="@android:color/white"
                         android:textSize="13sp"
@@ -187,7 +190,7 @@
                         android:drawableStart="@drawable/share"
                         android:paddingBottom="@dimen/dimen_10dp"
                         android:text="Share"
-                        android:textColor="@color/darkfont"
+                        android:textColor="@color/colorAccent"
                         android:textSize="14sp" />
 
                     <TextView
@@ -199,12 +202,12 @@
                         android:typeface="monospace"
                         android:layout_gravity="bottom"
                         android:layout_marginStart="@dimen/dimen_30dp"
-
+                        android:gravity="center"
                         android:layout_marginTop="40dp"
                         android:drawablePadding="@dimen/dimen_4dp"
                         android:drawableStart="@drawable/black_heart"
                         android:paddingRight="4dp"
-                        android:textColor="@color/darkfont"
+                        android:textColor="@color/colorAccent"
                         android:textSize="14sp"
                         tools:text="44" />
 
@@ -269,7 +272,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-                    android:background="@color/colorforeground"
                     android:gravity="center"
                     android:typeface="monospace"
                     android:padding="@dimen/dimen_10dp"
@@ -277,14 +279,6 @@
                     android:textColor="@color/grey_light"
                     android:textSize="14sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="1dp"
-                    android:background="@color/colorbackground"
-                    android:gravity="center"
-                    android:typeface="monospace"
-                    android:textSize="14sp" />
 
 
                 <ProgressBar
@@ -304,8 +298,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
-        android:background="@drawable/background_border2"
-        android:elevation="@dimen/dimen_2dp"
+        android:background="#424242"
+        android:elevation="2dp"
         android:orientation="horizontal"
         android:padding="8dp">
 
@@ -317,10 +311,11 @@
             android:layout_gravity="center_vertical|start"
             android:layout_marginEnd="6dp"
             android:layout_weight="1"
+            android:textColor="#ffffff"
+            android:textColorHint="#cdcdcd"
             android:typeface="monospace"
             android:background="@drawable/comment_sendback"
             android:cursorVisible="true"
-            android:elevation="@dimen/dimen_2dp"
             android:gravity="center_vertical"
             android:hint=" Add a comment"
             android:inputType="text"
@@ -334,6 +329,6 @@
             android:contentDescription="send comment"
             android:padding="1dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/sendarrow" />
+            android:src="@drawable/send" />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
