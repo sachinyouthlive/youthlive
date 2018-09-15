@@ -217,6 +217,7 @@ public class PersonalInfo extends AppCompatActivity implements ConnectivityRecei
                 // b.mylist.remove(b.mylist.size() - 1);
 
                 finish();
+
             }
         });
 

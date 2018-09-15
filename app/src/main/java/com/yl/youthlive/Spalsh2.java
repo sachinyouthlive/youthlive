@@ -414,6 +414,9 @@ public class Spalsh2 extends AppCompatActivity {
                             String email = user.getEmail();
                             String pid = user.getUid();
 
+Log.d("googlee" , email);
+Log.d("googlee" , pid);
+
                             socialLogin(email , pid);
 
                         } else {

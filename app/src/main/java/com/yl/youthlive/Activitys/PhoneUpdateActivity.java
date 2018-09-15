@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.Login;
 import com.yl.youthlive.PhoneupdateminiPOJO;
@@ -101,15 +103,23 @@ public class PhoneUpdateActivity extends AppCompatActivity {
                             //       dialog.dismiss();
                             //        signOut();
                             //    }
+                            try {
 
-                            Log.d("sachin", "response");
+                                FirebaseAuth.getInstance().signOut();
 
-                            //   LoginManager.getInstance().logOut();
+                            }catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
 
-                            edit.remove("type");
-                            edit.remove("user");
-                            edit.remove("pass");
-                            edit.apply();
+                            try {
+                                LoginManager.getInstance().logOut();
+                            }catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+
+                            SharePreferenceUtils.getInstance().deletePref();
 
                             Toast.makeText(getContext(), "Mobile Number Updated, Login with Updated Mobile Number", Toast.LENGTH_LONG).show();
 

@@ -46,12 +46,15 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.facebook.share.Share;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.yl.youthlive.Activitys.SearchActivity;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.addVideoPOJO.addVideoBean;
@@ -577,16 +580,24 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onClick(View view) {
 
-                if (mGoogleApiClient.isConnected()) {
-                    signOut();
+
+                try {
+
+                    FirebaseAuth.getInstance().signOut();
+
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
                 }
 
-                LoginManager.getInstance().logOut();
+                try {
+                    LoginManager.getInstance().logOut();
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
 
-                edit.remove("type");
-                edit.remove("user");
-                edit.remove("pass");
-                edit.apply();
+                SharePreferenceUtils.getInstance().deletePref();
                 Intent i = new Intent(getApplicationContext(), Spalsh2.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);

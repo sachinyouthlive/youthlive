@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.Activitys.FanActivity;
 import com.yl.youthlive.Activitys.MessaageActivity;
@@ -71,8 +72,9 @@ public class fan_adapter extends RecyclerView.Adapter<fan_adapter.fanadapter> {
         final Datum item = list.get(position);
 
         if (!item.getUserImage().isEmpty()) {
+            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
             ImageLoader loader = ImageLoader.getInstance();
-            loader.displayImage(item.getUserImage(), holder.image);
+            loader.displayImage(item.getUserImage(), holder.image , options);
 
         }
 

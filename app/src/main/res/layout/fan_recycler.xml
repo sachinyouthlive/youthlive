@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    app:cardBackgroundColor="#ffffff"
+    app:cardBackgroundColor="#424242"
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
@@ -42,7 +42,7 @@
                 android:layout_gravity="start"
                 android:layout_marginStart="93dp"
                 android:layout_marginTop="10dp"
-                android:textColor="#000000"
+                android:textColor="#ffffff"
                 android:textSize="16sp"
                 tools:text="User Name" />
 
@@ -81,7 +81,7 @@
                 android:typeface="monospace"
                 android:text="MESSAGE"
                 android:textAllCaps="true"
-                android:textColor="#000000"
+                android:textColor="#ffffff"
                 android:textSize="11sp" />
 
             <Button
@@ -95,7 +95,7 @@
                 android:background="@drawable/border_following"
                 android:gravity="center"
                 android:textAllCaps="true"
-                android:textColor="#000000"
+                android:textColor="#ffffff"
                 android:textSize="11sp"
                 tools:text="UNFOLLOW" />
 

@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yl.youthlive.Activitys.FriendActivity;
 import com.yl.youthlive.Activitys.MessaageActivity;
@@ -70,9 +71,9 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.friendad
         final Datum item = list.get(position);
 
         if (!item.getUserImage().isEmpty()) {
+            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
             ImageLoader loader = ImageLoader.getInstance();
-            loader.displayImage(item.getUserImage(), holder.image);
-
+            loader.displayImage(item.getUserImage(), holder.image , options);
         }
 
         holder.name.setText(item.getUserName());
