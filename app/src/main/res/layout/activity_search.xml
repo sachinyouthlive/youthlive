@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="com.yl.youthlive.Activitys.SearchActivity">
 
 
@@ -39,7 +40,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:typeface="monospace"
-                    android:background="@drawable/round_edittxt"
+                    android:background="@color/colorPrimary"
                     android:hint="Search username/ID"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
@@ -49,8 +50,8 @@
 
                 <ImageView
                     android:id="@+id/searchbtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="4dp"
                     android:layout_marginStart="4dp"
@@ -61,12 +62,17 @@
         </android.support.v7.widget.Toolbar>
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#424242"/>
+
+        <TextView
             android:id="@+id/umayknw_txt"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:background="#d8d8d8"
+            android:background="@color/colorPrimary"
             android:drawablePadding="4dp"
             android:typeface="monospace"
             android:drawableStart="@drawable/account_edit"
@@ -79,6 +85,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_search"
             android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
             android:layout_height="match_parent" />
 
 
