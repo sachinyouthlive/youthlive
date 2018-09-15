@@ -300,7 +300,7 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:background="#424242"
-        android:elevation="2dp"
+        android:elevation="4dp"
         android:orientation="horizontal"
         android:padding="8dp">
 

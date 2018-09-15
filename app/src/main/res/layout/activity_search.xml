@@ -78,7 +78,7 @@
             android:drawableStart="@drawable/account_edit"
             android:gravity="center_vertical"
             android:padding="8dp"
-            android:text="People you may know"
+            android:text="People you may like"
             android:textColor="@android:color/white"
             android:textSize="14dp" />
 

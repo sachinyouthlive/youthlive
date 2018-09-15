@@ -107,10 +107,12 @@ public class Search_adapter extends RecyclerView.Adapter<Search_adapter.searchad
                 try {
                     // Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     if (response.body().getMessage().equals("Following")) {
+                        holder.unfollow.setVisibility(View.VISIBLE);
                         holder.unfollow.setText("UNFOLLOW");
 
                     }
                     if (response.body().getMessage().equals("Not Following")) {
+                        holder.unfollow.setVisibility(View.VISIBLE);
                         holder.unfollow.setText("FOLLOW");
 
                     }
@@ -237,8 +239,11 @@ public class Search_adapter extends RecyclerView.Adapter<Search_adapter.searchad
                         // Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
                         con.progress.setVisibility(View.GONE);
-
-                        con.loadData();
+                        if (con.flag) {
+                            con.loadData();
+                        } else {
+                            con.loadData_umaylike();
+                        }
 
                     }
 

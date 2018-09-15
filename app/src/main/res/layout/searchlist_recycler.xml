@@ -91,6 +91,7 @@
                 android:background="@drawable/border_following"
                 android:gravity="center"
                 android:textAllCaps="true"
+                android:visibility="gone"
                 android:textColor="#ffffff"
                 android:typeface="monospace"
                 android:textSize="11sp"

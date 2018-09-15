@@ -49,6 +49,7 @@ public class SearchActivity extends AppCompatActivity implements ConnectivityRec
     EditText searchtext;
     ImageView searchbtn;
     TextView umayknow_txt;
+    public static boolean flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,8 +205,10 @@ public class SearchActivity extends AppCompatActivity implements ConnectivityRec
             @Override
             public void onResponse(Call<SearchListPOJO> call, Response<SearchListPOJO> response) {
                 umayknow_txt.setVisibility(View.GONE);
+                flag = true;
                 if (response.body().getData().isEmpty()) {
                     emptylistmsg.setVisibility(View.VISIBLE);
+
                 }
 
                 recAdapter.setGridData(response.body().getData());
@@ -238,13 +241,14 @@ public class SearchActivity extends AppCompatActivity implements ConnectivityRec
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
         String search = "sachin";
-        Call<SearchListPOJO> call = cr.getSearchList(search);
+        Call<SearchListPOJO> call = cr.getumaylikeList(search);
 
         call.enqueue(new Callback<SearchListPOJO>() {
             @Override
             public void onResponse(Call<SearchListPOJO> call, Response<SearchListPOJO> response) {
                 umayknow_txt.setVisibility(View.VISIBLE);
                 if (response.body().getData().isEmpty()) {
+                    flag = false;
                     emptylistmsg.setVisibility(View.VISIBLE);
                 }
 

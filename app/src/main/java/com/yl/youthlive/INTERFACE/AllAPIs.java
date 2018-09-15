@@ -708,6 +708,12 @@ public interface AllAPIs {
     );
 
     @Multipart
+    @POST("api/umaylike.php")
+    Call<SearchListPOJO> getumaylikeList(
+            @Part("search") String search
+    );
+
+    @Multipart
     @POST("api/add_live_comment.php")
     Call<liveCommentBean> commentLive(
             @Part("userId") String userId,
