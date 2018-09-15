@@ -3,6 +3,7 @@ package com.yl.youthlive.checkin;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -92,6 +93,9 @@ public class CheckinActivity extends AppCompatActivity {
         //INITIALIZE VIEWS
         launchMonthSpinner = findViewById(R.id.spinner);
 
+
+        launchMonthSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+
         fillMonths();
 
         launchMonthSpinner.setSelection(iMonth);
@@ -132,7 +136,8 @@ public class CheckinActivity extends AppCompatActivity {
     FILL YEARS IN OUR SPINNER
      */
     private void fillMonths() {
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1);
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinner_layout);
+        adapter.setDropDownViewResource(R.layout.spinner_layout2);
 
         adapter.add("JANUARY");
         adapter.add("FEBRUARY");

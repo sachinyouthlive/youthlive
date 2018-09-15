@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f2f2f2">
+    android:background="@color/colorPrimary">
 
     <TextView
         android:id="@+id/textView6"
@@ -17,7 +17,7 @@
         android:typeface="monospace"
         android:gravity="center"
         android:text="0"
-        android:textColor="#000000"
+        android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,6 +31,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:typeface="monospace"
+        android:textColor="#cdcdcd"
         android:layout_marginTop="8dp"
         android:text="Account Balance"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,6 +49,7 @@
         android:drawableStart="@drawable/ic_history_black_24dp"
         android:gravity="center"
         android:text="History"
+        android:textColor="#cdcdcd"
         android:background="@drawable/ripple_effect_transparentbg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -59,6 +61,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:typeface="monospace"
+        android:textColor="#cdcdcd"
         android:text="Add Diamonds"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -94,6 +97,7 @@
         android:paddingStart="10dp"
         android:paddingTop="18dp"
         android:text="Google Pay"
+        android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollIndicators="none"
-    android:background="#f2f2f2">
+    android:background="@color/colorPrimary">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,6 +24,7 @@
             android:drawableStart="@drawable/ic_dollar"
             android:gravity="center"
             android:text="0"
+            android:textColor="@color/colorAccent"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,6 +61,7 @@
             android:gravity="center_vertical"
             android:paddingBottom="13dp"
             android:paddingEnd="10dp"
+            android:textColor="@color/colorAccent"
             android:paddingStart="10dp"
             android:paddingTop="13dp"
             android:text="Exchange Diamonds"
@@ -89,6 +91,7 @@
             android:layout_marginStart="20dp"
             android:typeface="monospace"
             android:layout_marginTop="16dp"
+            android:textColor="#cdcdcd"
             android:text="Add Coins"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView15" />
@@ -101,6 +104,7 @@
             android:layout_marginTop="50dp"
             android:text="What's Coins?"
             android:typeface="monospace"
+            android:textColor="#cdcdcd"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -114,19 +118,21 @@
             android:layout_height="17dp"
             android:layout_marginStart="16dp"
             android:typeface="monospace"
+            android:textColor="#cdcdcd"
             android:layout_marginTop="16dp"
-            android:text="1.   Coins can be exchanged to Diamonds."
+            android:text="1.\tCoins can be exchanged to Diamonds."
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView38" />
 
         <TextView
             android:id="@+id/textView41"
             android:layout_width="wrap_content"
+            android:textColor="#cdcdcd"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:typeface="monospace"
-            android:text="2.   Coins can be exchanged to Rewards."
+            android:text="2.\tCoins can be exchanged to Rewards."
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView39" />
 
@@ -138,6 +144,7 @@
             android:layout_marginTop="32dp"
             android:typeface="monospace"
             android:text="Rewards Rules"
+            android:textColor="#cdcdcd"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -150,6 +157,7 @@
             android:layout_marginStart="16dp"
             android:typeface="monospace"
             android:layout_marginTop="18dp"
+            android:textColor="#cdcdcd"
             android:text="1."
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView42" />
@@ -159,6 +167,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:textColor="#cdcdcd"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:typeface="monospace"
@@ -172,6 +181,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:textColor="#cdcdcd"
             android:layout_marginTop="12dp"
             android:typeface="monospace"
             android:text="2."
@@ -183,6 +193,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:typeface="monospace"
+            android:textColor="#cdcdcd"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"

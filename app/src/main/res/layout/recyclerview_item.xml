@@ -28,11 +28,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary"
+                android:background="#ababab"
                 android:gravity="center"
                 android:typeface="monospace"
                 android:paddingBottom="1dp"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorPrimary"
                 android:textSize="10sp" />
 
             <ImageView

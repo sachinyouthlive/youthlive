@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
     tools:context="com.yl.youthlive.Activitys.RattingActivity">
 
 
@@ -21,9 +23,12 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#E3E3E3"
-            android:elevation="6dp"
-            android:minHeight="?attr/actionBarSize" />
+            app:tabIndicatorColor="@color/colorAccent"
+            app:tabSelectedTextColor="@color/colorAccent"
+            android:background="@color/colorPrimary"
+            app:tabTextColor="#cdcdcd"
+            android:elevation="2dp"
+            />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"

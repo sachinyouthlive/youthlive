@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    app:cardBackgroundColor="#ffffff"
+    app:cardBackgroundColor="#424242"
     app:cardCornerRadius="8dp"
     app:cardElevation="1dp"
     app:cardUseCompatPadding="true">
@@ -41,7 +41,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:text="1"
-                android:textColor="#666666"
+                android:textColor="#ffffff"
                 android:textSize="@dimen/dimen_14sp"
                 tools:ignore="RtlSymmetry" />
 
@@ -52,7 +52,7 @@
                 android:layout_gravity="center_vertical"
                 android:typeface="monospace"
                 android:gravity="center"
-                android:textColor="#666666"
+                android:textColor="#ffffff"
                 android:textSize="@dimen/dimen_16sp"
                 android:textStyle="bold"
                 android:visibility="gone"
@@ -63,7 +63,6 @@
             android:id="@+id/profilelayout_click"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-
             android:layout_marginRight="@dimen/dimen_10dp"
             android:layout_weight="1">
 
@@ -83,7 +82,7 @@
                 android:layout_marginStart="@dimen/dimen_8dp"
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/image"
-                android:textColor="#4c4c4c"
+                android:textColor="#ffffff"
                 android:typeface="monospace"
                 android:textSize="18sp"
                 tools:text="User Name" />

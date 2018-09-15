@@ -219,10 +219,9 @@
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:layout_height="1dp"
+                android:background="#424242"
                 android:elevation="4dp"
-                android:visibility="gone"
                 app:tabGravity="fill"
                 app:tabIndicatorColor="#ffffff"
                 app:tabMode="fixed"
