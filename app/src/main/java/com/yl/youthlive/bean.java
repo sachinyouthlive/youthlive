@@ -69,4 +69,98 @@ public class bean extends Application {
         return BuildConfig.FLAVOR.equals("withExtensions");
     }
 
+
+    String names[] = {
+            "heart",
+            "gun",
+            "scooter",
+            "rakhi",
+            "teddy",
+            "chocolates",
+            "treasure",
+            "clap",
+            "clock",
+            "bike",
+            "car",
+            "bird",
+            "rose",
+            "dancing girl",
+            "diamond",
+            "superbee",
+            "hug",
+            "heart beat",
+            "golden egg",
+            "love",
+            "rabbits",
+            "loving heart",
+            "ring",
+            "kiss",
+            "fire",
+            "head phone",
+            "weapon"
+    };
+
+
+    Integer gifts[] = new Integer[]
+            {
+                    R.drawable.g52,
+                    R.drawable.g20,
+                    R.drawable.g32,
+                    R.drawable.g1500,
+                    R.drawable.g72,
+                    R.drawable.g112,
+                    R.drawable.g152,
+                    R.drawable.g172,
+                    R.drawable.g180,
+                    R.drawable.g192,
+                    R.drawable.g212,
+                    R.drawable.g240,
+                    R.drawable.g252,
+                    R.drawable.g280,
+                    R.drawable.g300,
+                    R.drawable.g312,
+                    R.drawable.g352,
+                    R.drawable.g380,
+                    R.drawable.g452,
+                    R.drawable.g500,
+                    R.drawable.g612,
+                    R.drawable.g700,
+                    R.drawable.g800,
+                    R.drawable.g900,
+                    R.drawable.g1000,
+                    R.drawable.g1100,
+                    R.drawable.g1200
+            };
+
+
+    String diamonds[] = {
+            "12",
+            "20",
+            "32",
+            "52",
+            "72",
+            "112",
+            "152",
+            "172",
+            "180",
+            "192",
+            "212",
+            "240",
+            "252",
+            "280",
+            "300",
+            "312",
+            "352",
+            "380",
+            "452",
+            "500",
+            "612",
+            "700",
+            "800",
+            "900",
+            "1000",
+            "1100",
+            "1200"
+    };
+
 }
