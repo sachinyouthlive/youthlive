@@ -1651,7 +1651,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 //        asdasdakjsdkjaskjhsakd
 
-        Integer gifts[] = new Integer[]
+        /*Integer gifts[] = new Integer[]
                 {
                         R.drawable.g52,
                         R.drawable.g20,
@@ -1680,7 +1680,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         R.drawable.g1000,
                         R.drawable.g1100,
                         R.drawable.g1200
-                };
+                };*/
 
 
         public CommentsAdapter(Context context, List<Comment> list) {
@@ -1806,7 +1806,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 holder.name.setText(us + " has sent a  ");
 
 
-                Drawable drawable = context.getResources().getDrawable(gifts[Integer.parseInt(gid) - 1]);
+                Drawable drawable = context.getResources().getDrawable(b.gifts[Integer.parseInt(gid) - 1]);
 
                 drawable.setBounds(0, 0, 50, 50);
 
