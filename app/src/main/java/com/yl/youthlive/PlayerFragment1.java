@@ -1649,6 +1649,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         Context context;
 
 
+//        asdasdakjsdkjaskjhsakd
+
         Integer gifts[] = new Integer[]
                 {
                         R.drawable.g52,
@@ -2431,7 +2433,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         Context context;
         ProgressBar progressBar;
         Dialog dialog;
-        Integer gifs[] = new Integer[]
+
+        //wasdljalsjdasldakjds
+
+        /*Integer gifs[] = new Integer[]
                 {
                         R.drawable.g52,
                         R.drawable.g20,
@@ -2460,10 +2465,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         R.drawable.g1000,
                         R.drawable.g1100,
                         R.drawable.g1200
-                };
+                };*/
+//lkasldkjaslkdjasd
 
-
-        String diamonds[] = {
+        /*String diamonds[] = {
                 "12",
                 "20",
                 "32",
@@ -2491,10 +2496,12 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 "1000",
                 "1100",
                 "1200"
-        };
+        };*/
 
 
-        String names[] = {
+//asjdhljasldjpaspdojasd
+
+        /*String names[] = {
                 "heart",
                 "gun",
                 "scooter",
@@ -2522,7 +2529,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 "fire",
                 "head phone",
                 "weapon"
-        };
+        };*/
 
 
         public GiftAdapter(Context context, ProgressBar progress, Dialog dialog) {
@@ -2542,11 +2549,13 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-            Glide.with(context).load(gifs[position]).into(holder.image);
+            bean b = (bean)context.getApplicationContext();
 
-            holder.send.setText(diamonds[position]);
+            Glide.with(context).load(b.gifts[position]).into(holder.image);
 
-            holder.name.setText(names[position]);
+            holder.send.setText(b.diamonds[position]);
+
+            holder.name.setText(b.names[position]);
 
             holder.send.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -2565,7 +2574,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    retrofit2.Call<sendGiftBean> call = cr.sendGift(SharePreferenceUtils.getInstance().getString("userId"), liveId, timelineId, String.valueOf(position + 1), "1", diamonds[position]);
+                    retrofit2.Call<sendGiftBean> call = cr.sendGift(SharePreferenceUtils.getInstance().getString("userId"), liveId, timelineId, String.valueOf(position + 1), "1", b.diamonds[position]);
 
 
                     call.enqueue(new retrofit2.Callback<sendGiftBean>() {
@@ -2610,7 +2619,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
         @Override
         public int getItemCount() {
-            return 27;
+            bean b = (bean)context.getApplicationContext();
+            return b.diamonds.length;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -2630,7 +2640,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         }
     }
 
-    Integer gifts[] = new Integer[]
+
+    //jhsalduliawdhoislda
+
+    /*Integer gifts[] = new Integer[]
             {
                     R.drawable.g52,
                     R.drawable.g20,
@@ -2659,9 +2672,12 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     R.drawable.g1000,
                     R.drawable.g1100,
                     R.drawable.g1200
-            };
+            };*/
 
-    String names[] = {
+
+    //askdalwjdlkadjqjasdhwoe
+
+    /*String names[] = {
             "heart",
             "gun",
             "scooter",
@@ -2689,14 +2705,15 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             "fire",
             "head phone",
             "weapon"
-    };
+    };*/
 
     public void showGift(String giftId, String text, String profile, String user) {
 
         Log.d("ggiidd", giftId);
 
+        bean b = (bean)player.getApplicationContext();
 
-        giftText.setText(names[Integer.parseInt(giftId) - 1]);
+        giftText.setText(b.names[Integer.parseInt(giftId) - 1]);
 
         //Toast.makeText(player, profile, Toast.LENGTH_SHORT).show();
 
@@ -2713,7 +2730,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         giftLayout.startAnimation(animate);
         giftLayout.setVisibility(View.VISIBLE);
 
-        Glide.with(player).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
+        Glide.with(player).load(b.gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
 
         Timer t = new Timer();
 

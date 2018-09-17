@@ -2535,8 +2535,8 @@ public class BroadcasterFragment1 extends Fragment {
 
         List<Comment> list = new ArrayList<>();
         Context context;
-
-        Integer gifts[] = new Integer[]
+//jnaskjdhkasjhdlkajdklkjdsaaaaaaaaaaaaaue
+        /*Integer gifts[] = new Integer[]
                 {
                         R.drawable.g52,
                         R.drawable.g20,
@@ -2565,7 +2565,7 @@ public class BroadcasterFragment1 extends Fragment {
                         R.drawable.g1000,
                         R.drawable.g1100,
                         R.drawable.g1200
-                };
+                };*/
 
         public CommentsAdapter(Context context, List<Comment> list) {
             this.context = context;
@@ -2688,7 +2688,7 @@ public class BroadcasterFragment1 extends Fragment {
                 String gid = item.getComment().replace("\"", "");
                 holder.name.setText(us + " has sent a  ");
 
-                Drawable drawable = context.getResources().getDrawable(gifts[Integer.parseInt(gid) - 1]);
+                Drawable drawable = context.getResources().getDrawable(b.gifts[Integer.parseInt(gid) - 1]);
 
                 drawable.setBounds(0, 0, 40, 40);
 
@@ -3647,7 +3647,9 @@ public class BroadcasterFragment1 extends Fragment {
     }
 
 
-    Integer gifts[] = new Integer[]
+
+    //,asnd,kmalksd;awjdlojad
+    /*Integer gifts[] = new Integer[]
             {
                     R.drawable.g52,
                     R.drawable.g20,
@@ -3676,9 +3678,11 @@ public class BroadcasterFragment1 extends Fragment {
                     R.drawable.g1000,
                     R.drawable.g1100,
                     R.drawable.g1200
-            };
+            };*/
 
-    String names[] = {
+
+    //askdmkeaj;jas;dj;qw
+    /*String names[] = {
             "heart",
             "gun",
             "scooter",
@@ -3706,14 +3710,15 @@ public class BroadcasterFragment1 extends Fragment {
             "fire",
             "head phone",
             "weapon"
-    };
+    };*/
 
 
     public void showGift(String giftId, String text, String profile, String user) {
 
+        bean b = (bean)broadcaster.getApplicationContext();
 
-        Glide.with(broadcaster).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
-        giftText.setText(names[Integer.parseInt(giftId) - 1]);
+        Glide.with(broadcaster).load(b.gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
+        giftText.setText(b.names[Integer.parseInt(giftId) - 1]);
 
         //Toast.makeText(broadcaster , profile , Toast.LENGTH_SHORT).show();
 

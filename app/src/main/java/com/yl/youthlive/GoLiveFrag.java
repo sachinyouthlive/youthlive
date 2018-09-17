@@ -116,11 +116,105 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
         goLive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), VideoBroadcaster.class);
-                //Intent intent = new Intent(getContext() , LiveScreenNew.class);
-                //Intent intent = new Intent(getContext() , WowzaLive.class);
-                //intent.putExtra("title" , title.getText().toString());
-                startActivityForResult(intent , 112);
+
+
+                goLive.setClickable(false);
+                goLive.setEnabled(false);
+
+
+                String offline = offlinePref.getString("offline" , "");
+
+                final String liveId = offlinePref.getString("liveId" , "");
+
+                if (offline.length() > 0 && liveId.length() > 0)
+                {
+
+
+                    final Dialog dialog = new Dialog(getActivity());
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setCancelable(false);
+                    dialog.setContentView(R.layout.offline_sync_dialog);
+                    dialog.show();
+
+
+
+
+                    bean b = (bean)getActivity().getApplicationContext();
+
+                    final Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(b.BASE_URL)
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                    Call<endLiveBean> call = cr.syncLive(offline , liveId);
+
+                    call.enqueue(new Callback<endLiveBean>() {
+                        @Override
+                        public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
+
+
+                            if (response.body().getStatus().equals("1"))
+                            {
+
+                                offlineEdit.remove("offline");
+                                offlineEdit.remove("liveId");
+                                offlineEdit.apply();
+
+                                dialog.dismiss();
+
+
+                                Intent intent = new Intent(getContext(), VideoBroadcaster.class);
+                                //Intent intent = new Intent(getContext() , LiveScreenNew.class);
+                                //Intent intent = new Intent(getContext() , WowzaLive.class);
+                                //intent.putExtra("title" , title.getText().toString());
+                                startActivityForResult(intent , 112);
+
+                                goLive.setClickable(true);
+                                goLive.setEnabled(true);
+
+                            }
+
+
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<endLiveBean> call, Throwable t) {
+
+                            goLive.setClickable(true);
+                            goLive.setEnabled(true);
+
+                        }
+                    });
+
+
+
+
+
+
+
+                }
+                else
+                {
+                    Intent intent = new Intent(getContext(), VideoBroadcaster.class);
+                    //Intent intent = new Intent(getContext() , LiveScreenNew.class);
+                    //Intent intent = new Intent(getContext() , WowzaLive.class);
+                    //intent.putExtra("title" , title.getText().toString());
+                    startActivityForResult(intent , 112);
+                    goLive.setClickable(true);
+                    goLive.setEnabled(true);
+
+                }
+
+
+
+
+
+
             }
         });
 
