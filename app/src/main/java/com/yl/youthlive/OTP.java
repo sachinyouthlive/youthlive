@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -89,7 +90,7 @@ public class OTP extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                regenerateOTP();
+                otp_resend();
 
 
 
@@ -151,7 +152,6 @@ public class OTP extends AppCompatActivity {
 
     public void regenerateOTP() {
 
-
         progress.setVisibility(View.VISIBLE);
 
         final bean b = (bean) getApplicationContext();
@@ -165,17 +165,18 @@ public class OTP extends AppCompatActivity {
         final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<loginResponseBean> call = cr.resend(getIntent().getStringExtra("phone"), getIntent().getStringExtra("country"));
+        Call<loginResponseBean> call = cr.resend(getIntent().getStringExtra("phone"));
 
         call.enqueue(new Callback<loginResponseBean>() {
             @Override
             public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
 
 
-                // Toast.makeText(OTP.this , response.body().getMessage() , Toast.LENGTH_SHORT).show();
+                Toast.makeText(OTP.this, "OTP Resend Request Send", Toast.LENGTH_SHORT).show();
 
                 // Toast.makeText(OTP.this , response.body().getData().getVerificationCode() , Toast.LENGTH_SHORT).show();
-
+                regeneratepassword.setTextColor(Color.parseColor("#bdbdbd"));
+                regeneratepassword.setClickable(false);
 
                 progress.setVisibility(View.GONE);
             }
@@ -186,6 +187,52 @@ public class OTP extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    public void otp_resend() {
+
+        String phone = getIntent().getStringExtra("phone");
+
+        if (phone.length() > 0) {
+
+            progress.setVisibility(View.VISIBLE);
+
+            final bean b = (bean) getApplicationContext();
+
+            final Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(b.BASE_URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+            Call<loginResponseBean> call = cr.resend(phone);
+
+            call.enqueue(new Callback<loginResponseBean>() {
+                @Override
+                public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
+
+
+                    Toast.makeText(OTP.this, "OTP Resend Request Send", Toast.LENGTH_SHORT).show();
+
+                    // Toast.makeText(OTP.this , response.body().getData().getVerificationCode() , Toast.LENGTH_SHORT).show();
+                    regeneratepassword.setTextColor(Color.parseColor("#bdbdbd"));
+                    regeneratepassword.setClickable(false);
+
+                    progress.setVisibility(View.GONE);
+
+                    progress.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onFailure(Call<loginResponseBean> call, Throwable t) {
+                    progress.setVisibility(View.GONE);
+                }
+            });
+
+        }
 
     }
 
