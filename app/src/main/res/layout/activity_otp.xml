@@ -60,7 +60,9 @@
             <TextView
                 android:id="@+id/regeneratepassword"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
+                android:background="@drawable/ripple_effect_transparentbg"
+                android:padding="@dimen/dimen_4dp"
                 android:typeface="monospace"
                 android:gravity="center"
                 android:text="resend OTP"

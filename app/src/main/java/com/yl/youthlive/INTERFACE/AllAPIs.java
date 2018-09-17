@@ -148,8 +148,7 @@ public interface AllAPIs {
     @Multipart
     @POST("api/resend_code.php")
     Call<loginResponseBean> resend(
-            @Part("phone") String phone,
-            @Part("countryCode") String code
+            @Part("phone") String phone
     );
 
     @Multipart
