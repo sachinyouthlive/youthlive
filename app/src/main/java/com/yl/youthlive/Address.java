@@ -210,7 +210,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
                 List<String> genders = new ArrayList<>();
 
                 final DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getContext(), new DatePickerDialog.OnDateSetListener() {
+                        getContext(), R.style.DatePickerTheme, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
 
