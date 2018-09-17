@@ -2619,7 +2619,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
         @Override
         public int getItemCount() {
-            return 27;
+            bean b = (bean)context.getApplicationContext();
+            return b.diamonds.length;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
