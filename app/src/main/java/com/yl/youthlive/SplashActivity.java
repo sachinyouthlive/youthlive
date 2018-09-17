@@ -5,15 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
@@ -160,29 +157,57 @@ public class SplashActivity extends AppCompatActivity {
 
 
                 if (Objects.equals(response.body().getStatus(), "1")) {
-                    Toast.makeText(SplashActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
-                    SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
-                    SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+                    if (response.body().getData().getUserName().length() > 0) {
+                        Toast.makeText(SplashActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                        SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                        SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
 
 
-                    try {
-                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        try {
+                            SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        SharePreferenceUtils.getInstance().putString("type", "phone");
+                        SharePreferenceUtils.getInstance().putString("user", phone);
+                        SharePreferenceUtils.getInstance().putString("pass", pass);
+                        SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
+                        SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
+
+
+                        Intent Inbt = new Intent(SplashActivity.this, HomeActivity.class);
+                        Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(Inbt);
+                        SplashActivity.this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+                    } else {
+                        SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                        SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
+
+                        try {
+                            SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        SharePreferenceUtils.getInstance().putString("type", "phone");
+                        SharePreferenceUtils.getInstance().putString("user", phone);
+                        SharePreferenceUtils.getInstance().putString("pass", pass);
+
+                        Toast.makeText(SplashActivity.this, "Please update your info", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(SplashActivity.this, UserInformation.class);
+                        intent.putExtra("userId", response.body().getData().getUserId());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+
+
                     }
 
-                    SharePreferenceUtils.getInstance().putString("type", "phone");
-                    SharePreferenceUtils.getInstance().putString("user", phone);
-                    SharePreferenceUtils.getInstance().putString("pass", pass);
-                    SharePreferenceUtils.getInstance().putString("userType" , response.body().getData().getType());
-                    SharePreferenceUtils.getInstance().putString("yid" , response.body().getData().getYouthLiveId());
-
-
-                    Intent Inbt = new Intent(SplashActivity.this, HomeActivity.class);
-                    Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(Inbt);
-                    SplashActivity.this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
                 } else {
                     //  Toast.makeText(SplashActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();

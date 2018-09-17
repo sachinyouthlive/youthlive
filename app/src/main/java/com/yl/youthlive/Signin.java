@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -39,13 +38,10 @@ import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,7 +49,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.yl.youthlive.Activitys.UserInformation;
 import com.yl.youthlive.DBHandler.SessionManager;
@@ -345,28 +340,56 @@ public class Signin extends AppCompatActivity {
 
 
                         if (Objects.equals(response.body().getStatus(), "1")) {
-                            Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
 
-                            SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
-                            SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+                            if (response.body().getData().getUserName().length() > 0) {
+                                Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                                SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
 
 
-                            try {
-                                SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                                try {
+                                    SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                SharePreferenceUtils.getInstance().putString("type", "phone");
+                                SharePreferenceUtils.getInstance().putString("user", phone);
+                                SharePreferenceUtils.getInstance().putString("pass", password);
+                                SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
+                                SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
+
+
+                                Intent Inbt = new Intent(Signin.this, HomeActivity.class);
+                                Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(Inbt);
+
+                            } else {
+                                SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                                SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
+
+                                try {
+                                    SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+
+                                SharePreferenceUtils.getInstance().putString("type", "phone");
+                                SharePreferenceUtils.getInstance().putString("user", phone);
+                                SharePreferenceUtils.getInstance().putString("pass", password);
+
+                                Toast.makeText(Signin.this, "Please update your info", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(Signin.this, UserInformation.class);
+                                intent.putExtra("userId", response.body().getData().getUserId());
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+
+
                             }
 
-                            SharePreferenceUtils.getInstance().putString("type", "phone");
-                            SharePreferenceUtils.getInstance().putString("user", phone);
-                            SharePreferenceUtils.getInstance().putString("pass", password);
-                            SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
-                            SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
-
-
-                            Intent Inbt = new Intent(Signin.this, HomeActivity.class);
-                            Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(Inbt);
 
                         } else {
                             Toast.makeText(Signin.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();

@@ -394,6 +394,8 @@ public class VideoBroadcaster extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                end.setClickable(false);
+                end.setEnabled(false);
 
                 progress.setVisibility(View.VISIBLE);
 
@@ -433,6 +435,9 @@ public class VideoBroadcaster extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<endLiveBean> call, Throwable t) {
+
+                        end.setEnabled(true);
+                        end.setClickable(true);
 
                     }
                 });
