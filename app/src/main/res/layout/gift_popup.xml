@@ -3,11 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f2f2f2"
+    android:background="#00000000"
     android:clickable="true"
-    android:focusable="true"
-    android:minHeight="400dp"
-    android:minWidth="300dp">
+    android:focusable="true">
 
     <ProgressBar
         android:id="@+id/progressBar8"
@@ -25,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:visibility="gone"
         android:layout_marginTop="8dp"
         android:background="@drawable/close"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +38,7 @@
         android:typeface="monospace"
         android:layout_marginTop="8dp"
         android:text="Send Gifts"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,8 +47,10 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/grid"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:padding="2dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.975"

@@ -1302,7 +1302,13 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onClick(View v) {
 
 
-                final Dialog dialog = new Dialog(player);
+
+                BottomGiftSheet bottomSheetDialog = new BottomGiftSheet();
+                bottomSheetDialog.setData(liveId , timelineId);
+                bottomSheetDialog.show(getChildFragmentManager(), "Custom Bottom Sheet");
+
+
+                /*final Dialog dialog = new Dialog(player);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.setCancelable(true);
@@ -1327,7 +1333,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 GiftAdapter giftAdapter = new GiftAdapter(player, bar, dialog);
 
                 giftGrid.setLayoutManager(giftManager);
-                giftGrid.setAdapter(giftAdapter);
+                giftGrid.setAdapter(giftAdapter);*/
 
 
             }
@@ -1659,7 +1665,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         R.drawable.g1500,
                         R.drawable.g72,
                         R.drawable.g112,
-                        R.drawable.g152,
+                        R.drawable.g153,
                         R.drawable.g172,
                         R.drawable.g180,
                         R.drawable.g192,
@@ -2444,7 +2450,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         R.drawable.g1500,
                         R.drawable.g72,
                         R.drawable.g112,
-                        R.drawable.g152,
+                        R.drawable.g153,
                         R.drawable.g172,
                         R.drawable.g180,
                         R.drawable.g192,
@@ -2651,7 +2657,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     R.drawable.g1500,
                     R.drawable.g72,
                     R.drawable.g112,
-                    R.drawable.g152,
+                    R.drawable.g153,
                     R.drawable.g172,
                     R.drawable.g180,
                     R.drawable.g192,

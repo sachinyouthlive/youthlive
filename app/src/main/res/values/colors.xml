@@ -27,6 +27,7 @@
     <color name="darkfont">#515056</color>
     <color name="greyborder">#dfdfdf</color>
 
+    <color name="transparent">#88000000</color>
 
     <color name="inke_color_86">#99ffffff</color>
     <color name="inke_color_29">#00000000</color>

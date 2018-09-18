@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:minWidth="300dp"
-    android:minHeight="400dp"
-    android:layout_height="match_parent">
+    android:minHeight="300dp"
+    android:layout_height="wrap_content">
 
     <ImageButton
         android:id="@+id/imageButton11"
@@ -14,21 +14,23 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/circle_white"
+        android:contentDescription="image"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/cross"
-        android:contentDescription="image" />
+        app:srcCompat="@drawable/cross" />
 
     <TextView
         android:id="@+id/tabLayout"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:typeface="monospace"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textColor="#000000"
         android:text="Guest live requests"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton11" />
@@ -36,12 +38,13 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/grid"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ProgressBar
         android:id="@+id/progressBar2"
