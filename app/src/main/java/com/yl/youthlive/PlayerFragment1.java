@@ -1308,6 +1308,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 bottomSheetDialog.show(getChildFragmentManager(), "Custom Bottom Sheet");
 
 
+
                 /*final Dialog dialog = new Dialog(player);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);

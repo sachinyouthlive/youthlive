@@ -75,7 +75,7 @@ public class BottomGuestSheet extends BottomSheetDialogFragment {
         return view;
     }
 
-    static class DialogAdapter2 extends RecyclerView.Adapter<DialogAdapter2.ViewHolder> {
+    class DialogAdapter2 extends RecyclerView.Adapter<DialogAdapter2.ViewHolder> {
 
         Context context;
         List<guestBean> list = new ArrayList<>();
@@ -185,6 +185,8 @@ public class BottomGuestSheet extends BottomSheetDialogFragment {
 
 
                             dialogProgress.setVisibility(View.GONE);
+
+                            dismiss();
 
                             removeItem(position);
                         }

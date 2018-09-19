@@ -101,8 +101,8 @@ public class BottomGiftSheet extends BottomSheetDialogFragment {
                 @Override
                 public void onClick(View v) {
 
-                    holder.send.setEnabled(false);
-                    holder.send.setClickable(false);
+                    holder.itemView.setEnabled(false);
+                    holder.itemView.setClickable(false);
 
 
                     final Dialog dialog = new Dialog(context);
@@ -163,8 +163,8 @@ public class BottomGiftSheet extends BottomSheetDialogFragment {
                                         e.printStackTrace();
                                     }
 
-                                    holder.send.setEnabled(true);
-                                    holder.send.setClickable(true);
+                                    holder.itemView.setEnabled(true);
+                                    holder.itemView.setClickable(true);
                                     progressBar.setVisibility(View.GONE);
 
                                 }
@@ -173,8 +173,8 @@ public class BottomGiftSheet extends BottomSheetDialogFragment {
                                 public void onFailure(retrofit2.Call<sendGiftBean> call, Throwable t) {
                                     Log.d("asdasd", t.toString());
                                     progressBar.setVisibility(View.GONE);
-                                    holder.send.setEnabled(true);
-                                    holder.send.setClickable(true);
+                                    holder.itemView.setEnabled(true);
+                                    holder.itemView.setClickable(true);
                                 }
                             });
 
@@ -185,6 +185,8 @@ public class BottomGiftSheet extends BottomSheetDialogFragment {
                         @Override
                         public void onClick(View view) {
                             dialog.dismiss();
+                            holder.itemView.setEnabled(true);
+                            holder.itemView.setClickable(true);
                         }
                     });
 

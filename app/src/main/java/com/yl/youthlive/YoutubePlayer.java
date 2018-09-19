@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
@@ -897,7 +898,7 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.setCancelable(true);
-                dialog.setContentView(R.layout.gift_popup);
+                dialog.setContentView(R.layout.send_gift_popup2);
                 dialog.show();
 
 
@@ -1271,36 +1272,7 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
         Context context;
 
 
-        Integer gifts[] = new Integer[]
-                {
-                        R.drawable.g52,
-                        R.drawable.g20,
-                        R.drawable.g32,
-                        R.drawable.g1500,
-                        R.drawable.g72,
-                        R.drawable.g112,
-                        R.drawable.g153,
-                        R.drawable.g172,
-                        R.drawable.g180,
-                        R.drawable.g192,
-                        R.drawable.g212,
-                        R.drawable.g240,
-                        R.drawable.g252,
-                        R.drawable.g280,
-                        R.drawable.g300,
-                        R.drawable.g312,
-                        R.drawable.g352,
-                        R.drawable.g380,
-                        R.drawable.g452,
-                        R.drawable.g500,
-                        R.drawable.g612,
-                        R.drawable.g700,
-                        R.drawable.g800,
-                        R.drawable.g900,
-                        R.drawable.g1000,
-                        R.drawable.g1100,
-                        R.drawable.g1200
-                };
+
 
 
         public CommentsAdapter(Context context, List<Comment> list) {
@@ -1426,7 +1398,7 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
                 holder.name.setText(us + " has sent a  ");
 
 
-                Drawable drawable = context.getResources().getDrawable(gifts[Integer.parseInt(gid) - 1]);
+                Drawable drawable = context.getResources().getDrawable(b.gifts[Integer.parseInt(gid) - 1]);
 
                 drawable.setBounds(0, 0, 50, 50);
 
@@ -2069,98 +2041,6 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
         Context context;
         ProgressBar progressBar;
         Dialog dialog;
-        Integer gifs[] = new Integer[]
-                {
-                        R.drawable.g52,
-                        R.drawable.g20,
-                        R.drawable.g32,
-                        R.drawable.g1500,
-                        R.drawable.g72,
-                        R.drawable.g112,
-                        R.drawable.g153,
-                        R.drawable.g172,
-                        R.drawable.g180,
-                        R.drawable.g192,
-                        R.drawable.g212,
-                        R.drawable.g240,
-                        R.drawable.g252,
-                        R.drawable.g280,
-                        R.drawable.g300,
-                        R.drawable.g312,
-                        R.drawable.g352,
-                        R.drawable.g380,
-                        R.drawable.g452,
-                        R.drawable.g500,
-                        R.drawable.g612,
-                        R.drawable.g700,
-                        R.drawable.g800,
-                        R.drawable.g900,
-                        R.drawable.g1000,
-                        R.drawable.g1100,
-                        R.drawable.g1200
-                };
-
-
-        String diamonds[] = {
-                "12",
-                "20",
-                "32",
-                "52",
-                "72",
-                "112",
-                "152",
-                "172",
-                "180",
-                "192",
-                "212",
-                "240",
-                "252",
-                "280",
-                "300",
-                "312",
-                "352",
-                "380",
-                "452",
-                "500",
-                "612",
-                "700",
-                "800",
-                "900",
-                "1000",
-                "1100",
-                "1200"
-        };
-
-
-        String names[] = {
-                "heart",
-                "gun",
-                "scooter",
-                "rakhi",
-                "teddy",
-                "chocolates",
-                "treasure",
-                "clap",
-                "clock",
-                "bike",
-                "car",
-                "bird",
-                "rose",
-                "dancing girl",
-                "diamond",
-                "superbee",
-                "hug",
-                "heart beat",
-                "golden egg",
-                "love",
-                "rabbits",
-                "loving heart",
-                "ring",
-                "kiss",
-                "fire",
-                "head phone",
-                "weapon"
-        };
 
 
         public GiftAdapter(Context context, ProgressBar progress, Dialog dialog) {
@@ -2178,21 +2058,114 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
-            Glide.with(context).load(gifs[position]).into(holder.image);
+            bean b = (bean)context.getApplicationContext();
 
-            holder.send.setText(diamonds[position]);
+            Glide.with(context).load(b.gifts[position]).into(holder.image);
 
-            holder.name.setText(names[position]);
+            holder.send.setText(b.diamonds[position]);
 
-            holder.send.setOnClickListener(new View.OnClickListener() {
+            holder.name.setText(b.names[position]);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    progressBar.setVisibility(View.VISIBLE);
+                    holder.itemView.setEnabled(false);
+                    holder.itemView.setClickable(false);
 
-                    final bean b = (bean) getApplicationContext();
+
+                    final Dialog dialog1 = new Dialog(context);
+                    dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog1.setCancelable(true);
+                    dialog1.setContentView(R.layout.send_gift_popup);
+                    dialog1.show();
+
+
+                    ImageView gif = dialog1.findViewById(R.id.imageView23);
+                    Button yes = dialog1.findViewById(R.id.button14);
+                    Button no = dialog1.findViewById(R.id.button15);
+
+
+                    Glide.with(context).load(R.drawable.tenor).into(gif);
+
+
+                    yes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            dialog1.dismiss();
+                            progressBar.setVisibility(View.VISIBLE);
+
+                            final bean b = (bean) context.getApplicationContext();
+
+                            final Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl(b.BASE_URL)
+                                    .addConverterFactory(ScalarsConverterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+
+                            final AllAPIs cr = retrofit.create(AllAPIs.class);
+
+
+                            retrofit2.Call<sendGiftBean> call = cr.sendGift(SharePreferenceUtils.getInstance().getString("userId"), liveId, timelineId, String.valueOf(position + 1), "1", b.diamonds[position]);
+
+
+                            call.enqueue(new retrofit2.Callback<sendGiftBean>() {
+                                @Override
+                                public void onResponse(retrofit2.Call<sendGiftBean> call, retrofit2.Response<sendGiftBean> response) {
+
+                                    //Log.d("Asdasdsa", response.body().getMessage());
+
+
+                                    try {
+                                        if (Objects.equals(response.body().getStatus(), "1")) {
+                                            //Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                                        } else {
+                                            Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (Exception e) {
+                                        Toast.makeText(context, "Some Error Occurred, Please try again", Toast.LENGTH_SHORT).show();
+
+                                        e.printStackTrace();
+                                    }
+
+                                    holder.itemView.setEnabled(true);
+                                    holder.itemView.setClickable(true);
+                                    progressBar.setVisibility(View.GONE);
+                                    dialog.dismiss();
+
+
+                                }
+
+                                @Override
+                                public void onFailure(retrofit2.Call<sendGiftBean> call, Throwable t) {
+                                    Log.d("asdasd", t.toString());
+                                    progressBar.setVisibility(View.GONE);
+                                    holder.itemView.setEnabled(true);
+                                    holder.itemView.setClickable(true);
+                                }
+                            });
+
+                        }
+                    });
+
+                    no.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog1.dismiss();
+                            holder.itemView.setEnabled(true);
+                            holder.itemView.setClickable(true);
+                        }
+                    });
+
+                    /*progressBar.setVisibility(View.VISIBLE);
+
+                    final bean b = (bean) getContext().getApplicationContext();
 
                     final Retrofit retrofit = new Retrofit.Builder()
                             .baseUrl(b.BASE_URL)
@@ -2203,7 +2176,7 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
                     final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    retrofit2.Call<sendGiftBean> call = cr.sendGift(SharePreferenceUtils.getInstance().getString("userId"), liveId, timelineId, String.valueOf(position + 1), "1", diamonds[position]);
+                    retrofit2.Call<sendGiftBean> call = cr.sendGift(SharePreferenceUtils.getInstance().getString("userId"), liveId, timelineId, String.valueOf(position + 1), "1", b.diamonds[position]);
 
 
                     call.enqueue(new retrofit2.Callback<sendGiftBean>() {
@@ -2215,19 +2188,22 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
 
                             try {
                                 if (Objects.equals(response.body().getStatus(), "1")) {
-                                    Toast.makeText(YoutubePlayer.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                    dialog.dismiss();
+                                    //Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+
+
                                 } else {
-                                    Toast.makeText(YoutubePlayer.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
 
                             } catch (Exception e) {
-                                Toast.makeText(YoutubePlayer.this, "Some Error Occurred, Please try again", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Some Error Occurred, Please try again", Toast.LENGTH_SHORT).show();
 
                                 e.printStackTrace();
                             }
 
-
+                            holder.send.setEnabled(true);
+                            holder.send.setClickable(true);
                             progressBar.setVisibility(View.GONE);
 
                         }
@@ -2236,19 +2212,25 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
                         public void onFailure(retrofit2.Call<sendGiftBean> call, Throwable t) {
                             Log.d("asdasd", t.toString());
                             progressBar.setVisibility(View.GONE);
+                            holder.send.setEnabled(true);
+                            holder.send.setClickable(true);
                         }
-                    });
+                    });*/
 
 
                 }
             });
 
 
+
         }
 
         @Override
         public int getItemCount() {
-            return 27;
+
+            bean b = (bean)context.getApplicationContext();
+
+            return b.diamonds.length;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -2268,72 +2250,14 @@ public class YoutubePlayer extends YouTubeBaseActivity implements YouTubePlayer.
         }
     }
 
-    Integer gifts[] = new Integer[]
-            {
-                    R.drawable.g52,
-                    R.drawable.g20,
-                    R.drawable.g32,
-                    R.drawable.g1500,
-                    R.drawable.g72,
-                    R.drawable.g112,
-                    R.drawable.g153,
-                    R.drawable.g172,
-                    R.drawable.g180,
-                    R.drawable.g192,
-                    R.drawable.g212,
-                    R.drawable.g240,
-                    R.drawable.g252,
-                    R.drawable.g280,
-                    R.drawable.g300,
-                    R.drawable.g312,
-                    R.drawable.g352,
-                    R.drawable.g380,
-                    R.drawable.g452,
-                    R.drawable.g500,
-                    R.drawable.g612,
-                    R.drawable.g700,
-                    R.drawable.g800,
-                    R.drawable.g900,
-                    R.drawable.g1000,
-                    R.drawable.g1100,
-                    R.drawable.g1200
-            };
 
-    String names[] = {
-            "heart",
-            "gun",
-            "scooter",
-            "rakhi",
-            "teddy",
-            "chocolates",
-            "treasure",
-            "clap",
-            "clock",
-            "bike",
-            "car",
-            "bird",
-            "rose",
-            "dancing girl",
-            "diamond",
-            "superbee",
-            "hug",
-            "heart beat",
-            "golden egg",
-            "love",
-            "rabbits",
-            "loving heart",
-            "ring",
-            "kiss",
-            "fire",
-            "head phone",
-            "weapon"
-    };
 
     public void showGift(String giftId, String text , String profile , String user) {
 
+        bean b = (bean)getApplicationContext();
 
-        Glide.with(YoutubePlayer.this).load(gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
-        giftText.setText(names[Integer.parseInt(giftId) - 1]);
+        Glide.with(YoutubePlayer.this).load(b.gifts[Integer.parseInt(giftId) - 1]).into(giftImage);
+        giftText.setText(b.names[Integer.parseInt(giftId) - 1]);
 
         //Toast.makeText(YoutubePlayer.this , profile , Toast.LENGTH_SHORT).show();
 
