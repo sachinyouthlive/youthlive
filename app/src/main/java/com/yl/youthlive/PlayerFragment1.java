@@ -1456,6 +1456,20 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         });
 
 
+        timelineProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+/*
+
+                BroadcasterProfileSheet bottomSheetDialog = new BroadcasterProfileSheet();
+                bottomSheetDialog.setData(timelineId);
+                bottomSheetDialog.show(getChildFragmentManager(), "Custom Bottom Sheet");
+*/
+
+
+            }
+        });
+
         liveId = getArguments().getString("liveId");
         schedule(liveId);
 
