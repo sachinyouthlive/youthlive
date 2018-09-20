@@ -70,6 +70,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+
         pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
         edit = pref.edit();
         progress = findViewById(R.id.progress);
@@ -417,6 +418,5 @@ startApp();
 
 
     }
-
 
 }

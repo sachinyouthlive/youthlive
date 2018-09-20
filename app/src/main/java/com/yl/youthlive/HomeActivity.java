@@ -44,16 +44,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.facebook.share.Share;
+import com.github.javiersantos.appupdater.AppUpdaterUtils;
+import com.github.javiersantos.appupdater.enums.AppUpdaterError;
+import com.github.javiersantos.appupdater.objects.Update;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.yl.youthlive.Activitys.SearchActivity;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -69,9 +72,9 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 
+import io.fabric.sdk.android.Fabric;
 import io.github.memfis19.annca.Annca;
 import io.github.memfis19.annca.internal.configuration.AnncaConfiguration;
-import io.github.memfis19.annca.internal.ui.view.MediaActionSwitchView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -123,7 +126,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     SharedPreferences.Editor offlineEdit;
 
     public String fragTag;
-
+    AppUpdaterUtils appUpdaterUtils;
 
     ImageView live, vlog, golive, channel, profile;
 
@@ -132,6 +135,60 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
+        Fabric.with(this, new Answers());
+        Crashlytics.setUserIdentifier(SharePreferenceUtils.getInstance().getString("userId"));
+        appUpdaterUtils = new AppUpdaterUtils(this)
+                //.setUpdateFrom(UpdateFrom.AMAZON)
+                //.setUpdateFrom(UpdateFrom.GITHUB)
+                //.setGitHubUserAndRepo("javiersantos", "AppUpdater")
+                //...
+                .withListener(new AppUpdaterUtils.UpdateListener() {
+                    @Override
+                    public void onSuccess(Update update, Boolean isUpdateAvailable) {
+                        final String nv = update.getLatestVersion();
+                        final String url = update.getUrlToDownload().toString();
+                        if (isUpdateAvailable) {
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this, R.style.AlertDialogCustom);
+                            alertDialogBuilder.setTitle("New Update Available");
+                            alertDialogBuilder.setMessage("Version " + nv + " is available to download." + "\n" + "Downloading the latest update you will get the latest features and improvements in YouthLive App.");
+                            alertDialogBuilder.setPositiveButton("Update",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface arg0, int arg1) {
+                                            Intent i = new Intent(Intent.ACTION_VIEW);
+                                            i.setData(Uri.parse(url));
+                                            startActivity(i);
+                                        }
+                                    });
+
+                            alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    dialog.dismiss();
+
+                                }
+                            });
+
+                            AlertDialog alertDialog = alertDialogBuilder.create();
+                            alertDialog.show();
+                        }
+
+                        //    Log.d("Latest Version", update.getLatestVersion());
+                        //    Log.d("Latest Version Code", update.getLatestVersionCode());
+                        //     Log.d("Release notes", update.getReleaseNotes());
+                        //    Log.d("URL", update.getUrlToDownload());
+                        //   Log.d("Is update available?", Boolean.toString(isUpdateAvailable));
+                    }
+
+                    @Override
+                    public void onFailed(AppUpdaterError error) {
+                        Log.d("AppUpdater Error", "Something went wrong");
+                    }
+                });
+        appUpdaterUtils.start();
+
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_home);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -1127,4 +1184,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         void onRefresh();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        appUpdaterUtils.stop();
+    }
 }

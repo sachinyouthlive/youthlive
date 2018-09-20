@@ -120,6 +120,22 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
+    <style name="AlertDialognew" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:textColorPrimary">#f2f2f2</item>
+        <item name="android:labelTextSize">14sp</item>
+        <item name="android:colorAccent">#1b5e20</item>
+        <item name="android:colorButtonNormal">#1b5e20</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="AlertDialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorPrimary">#00397F</item>
+        <item name="android:colorAccent">#0AAEEF</item>
+    </style>
+
     <style name="DatePickerTheme" parent="Theme.AppCompat.DayNight.Dialog">
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:layout_width">wrap_content</item>

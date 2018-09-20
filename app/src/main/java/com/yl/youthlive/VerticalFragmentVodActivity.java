@@ -9,10 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 import com.yl.youthlive.vlogListPOJO.Datum;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
 
 public class VerticalFragmentVodActivity extends AppCompatActivity {
 
@@ -26,6 +30,9 @@ public class VerticalFragmentVodActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vertical_fragment_vod2);
+        Fabric.with(this, new Crashlytics());
+        Fabric.with(this, new Answers());
+        Crashlytics.setUserIdentifier(SharePreferenceUtils.getInstance().getString("userId"));
         toolbar = findViewById(R.id.toolbar);
         bean b = (bean) getApplicationContext();
 
