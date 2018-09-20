@@ -197,9 +197,12 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
     HomeActivity homeActivity;
 
+    LinearLayout profileClick;
+
     public void setHomeActivity(HomeActivity homeActivity) {
         this.homeActivity = homeActivity;
     }
+
 
 
     @Nullable
@@ -211,6 +214,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         player = ((VideoPlayer)getActivity());
 
         ylId = view.findViewById(R.id.ylid);
+
+        profileClick = view.findViewById(R.id.linearLayout2);
 
         mProjectionManager = (MediaProjectionManager) player.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         //giftImage = view.findViewById(R.id.imageView13);
@@ -1456,15 +1461,15 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         });
 
 
-        timelineProfile.setOnClickListener(new View.OnClickListener() {
+        profileClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-/*
+
 
                 BroadcasterProfileSheet bottomSheetDialog = new BroadcasterProfileSheet();
                 bottomSheetDialog.setData(timelineId);
                 bottomSheetDialog.show(getChildFragmentManager(), "Custom Bottom Sheet");
-*/
+
 
 
             }
