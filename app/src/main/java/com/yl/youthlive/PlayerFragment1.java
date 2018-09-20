@@ -1467,7 +1467,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 
                 BroadcasterProfileSheet bottomSheetDialog = new BroadcasterProfileSheet();
-                bottomSheetDialog.setData(timelineId);
+                bottomSheetDialog.setData(timelineId , timeLineFollow);
                 bottomSheetDialog.show(getChildFragmentManager(), "Custom Bottom Sheet");
 
 

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,9 +39,11 @@ public class BroadcasterProfileSheet extends BottomSheetDialogFragment {
     Button follow;
     TextView name, yid;
     ProgressBar progress;
+    ImageButton timelineFollow;
 
-    public void setData(String timelineId) {
+    public void setData(String timelineId , ImageButton timelineFollow) {
         this.timelineId = timelineId;
+        this.timelineFollow = timelineFollow;
     }
 
     @Override
@@ -93,11 +96,13 @@ public class BroadcasterProfileSheet extends BottomSheetDialogFragment {
                             if (response.body().getMessage().equals("Follow Success")) {
                                 follow.setText("UNFOLLOW");
                                 follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
+                                timelineFollow.setVisibility(View.GONE);
                                 // Toast.makeText(TimelineProfile.this, "You started to follow " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
                             }
                             if (response.body().getMessage().equals("Unfollow Success")) {
                                 follow.setText("FOLLOW");
                                 follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_white, 0, 0, 0);
+                                timelineFollow.setVisibility(View.VISIBLE);
                                 //  Toast.makeText(TimelineProfile.this, "You Unfollowed " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
                             }
                             loadData();
@@ -214,13 +219,13 @@ public class BroadcasterProfileSheet extends BottomSheetDialogFragment {
                 try {
 
                     if (response.body().getMessage().equals("Following")) {
-                        following.setText("UNFOLLOW");
-                        following.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
+                        follow.setText("UNFOLLOW");
+                        follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.minus, 0, 0, 0);
                         //  Toast.makeText(TimelineProfile.this, "You started to following " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
                     }
                     if (response.body().getMessage().equals("Not Following")) {
-                        following.setText("FOLLOW");
-                        following.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus, 0, 0, 0);
+                        follow.setText("FOLLOW");
+                        follow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus, 0, 0, 0);
                         //  Toast.makeText(TimelineProfile.this, "You started to notfollowing " + toolbar.getTitle().toString(), Toast.LENGTH_SHORT).show();
                     }
 
