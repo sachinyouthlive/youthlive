@@ -134,6 +134,8 @@
     <style name="AlertDialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
         <item name="android:colorPrimary">#00397F</item>
         <item name="android:colorAccent">#0AAEEF</item>
+        <item name="android:windowNoTitle">true</item>
+
     </style>
 
     <style name="DatePickerTheme" parent="Theme.AppCompat.DayNight.Dialog">

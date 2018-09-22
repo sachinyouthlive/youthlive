@@ -5,7 +5,6 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseApp;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -15,7 +14,6 @@ import com.yl.youthlive.vlogListPOJO.Datum;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.fabric.sdk.android.Fabric;
 
 public class bean extends Application {
 
@@ -46,7 +44,6 @@ public class bean extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
         MultiDex.install(this);
         mInstance = this;
         context = getApplicationContext();

@@ -267,9 +267,7 @@
         <activity android:name=".TnC"
             android:screenOrientation="portrait"/>
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="74c567b40e9f313eaba7ea7918ebcbb679eb1f78" />
+
     </application>
 
 </manifest>

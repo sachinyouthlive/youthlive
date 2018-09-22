@@ -44,8 +44,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.github.javiersantos.appupdater.AppUpdaterUtils;
@@ -72,7 +70,6 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Random;
 
-import io.fabric.sdk.android.Fabric;
 import io.github.memfis19.annca.Annca;
 import io.github.memfis19.annca.internal.configuration.AnncaConfiguration;
 import okhttp3.MediaType;
@@ -135,9 +132,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
-        Fabric.with(this, new Answers());
-        Crashlytics.setUserIdentifier(SharePreferenceUtils.getInstance().getString("userId"));
+
         appUpdaterUtils = new AppUpdaterUtils(this)
                 //.setUpdateFrom(UpdateFrom.AMAZON)
                 //.setUpdateFrom(UpdateFrom.GITHUB)
