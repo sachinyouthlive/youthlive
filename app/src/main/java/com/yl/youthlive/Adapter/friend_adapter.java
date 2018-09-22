@@ -91,16 +91,8 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.friendad
         });
         // loading follow unfollow data check
         final bean b = (bean) context.getApplicationContext();
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
 
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
+        Call<followBean> call = b.getRetrofit().followcheck(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
 
         call.enqueue(new Callback<followBean>() {
             @Override
@@ -176,16 +168,9 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.friendad
 
                             bean b = (bean) context.getApplicationContext();
 
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                            Call<sendMessageBean> call = cr.sendMessage(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId(), comm);
+                            Call<sendMessageBean> call = b.getRetrofit().sendMessage(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId(), comm);
 
                             call.enqueue(new Callback<sendMessageBean>() {
                                 @Override
@@ -229,16 +214,8 @@ public class friend_adapter extends RecyclerView.Adapter<friend_adapter.friendad
 
                 final bean b = (bean) context.getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
 
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
+                Call<followBean> call = b.getRetrofit().follow(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
 
                 call.enqueue(new Callback<followBean>() {
                     @Override

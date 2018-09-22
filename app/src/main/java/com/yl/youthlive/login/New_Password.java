@@ -96,13 +96,8 @@ public class New_Password extends AppCompatActivity {
 
 
             final bean b = (bean) getContext().getApplicationContext();
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-            Call<NewPassword> call = cr.UserNewPassword(userid, password.getText().toString());
+
+            Call<NewPassword> call = b.getRetrofit().UserNewPassword(userid, password.getText().toString());
 
             Log.d("password", password.getText().toString());
             ///////

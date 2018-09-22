@@ -226,15 +226,7 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
                                     Log.d("neetu", "log");
                                     bean b = (bean) getContext().getApplicationContext();
 
-                                    final Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(b.BASE_URL)
-                                            .addConverterFactory(ScalarsConverterFactory.create())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
-
-                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                                    Call<loginResponseBean> call = cr.updatePhone(userId, pho);
+                                    Call<loginResponseBean> call = b.getRetrofit().updatePhone(userId, pho);
 
                                     call.enqueue(new Callback<loginResponseBean>() {
                                         @Override
@@ -356,15 +348,7 @@ public class Address2 extends Fragment implements GoogleApiClient.ConnectionCall
 
                                             final bean b = (bean) getContext().getApplicationContext();
 
-                                            final Retrofit retrofit = new Retrofit.Builder()
-                                                    .baseUrl(b.BASE_URL)
-                                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                                    .addConverterFactory(GsonConverterFactory.create())
-                                                    .build();
-
-                                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                                            Call<updateBean> call = cr.updateUserData(u, gend[0], bday[0], bi, userId);
+                                            Call<updateBean> call = b.getRetrofit().updateUserData(u, gend[0], bday[0], bi, userId);
 
                                             call.enqueue(new Callback<updateBean>() {
                                                 @Override

@@ -177,13 +177,8 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
             public void onClick(View view) {
                 progress.setVisibility(View.VISIBLE);
                 final bean b = (bean) getApplicationContext();
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-                Call<singleVideoBean> call = cr.likeVideo(SharePreferenceUtils.getInstance().getString("userId"), videoId);
+
+                Call<singleVideoBean> call = b.getRetrofit().likeVideo(SharePreferenceUtils.getInstance().getString("userId"), videoId);
                 call.enqueue(new Callback<singleVideoBean>() {
                     @Override
                     public void onResponse(Call<singleVideoBean> call, Response<singleVideoBean> response) {
@@ -215,16 +210,8 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
 
                                 final bean b = (bean) getApplicationContext();
 
-                                final Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl(b.BASE_URL)
-                                        .addConverterFactory(ScalarsConverterFactory.create())
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build();
 
-                                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                                Call<shareBean> call = cr.share(SharePreferenceUtils.getInstance().getString("userId"), videoId);
+                                Call<shareBean> call = b.getRetrofit().share(SharePreferenceUtils.getInstance().getString("userId"), videoId);
 
                                 call.enqueue(new Callback<shareBean>() {
                                     @Override
@@ -278,16 +265,7 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
 
                     final bean b = (bean) getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    Call<commentBean> call = cr.comment(SharePreferenceUtils.getInstance().getString("userId"), videoId, mess);
+                    Call<commentBean> call = b.getRetrofit().comment(SharePreferenceUtils.getInstance().getString("userId"), videoId, mess);
 
                     call.enqueue(new Callback<commentBean>() {
                         @Override
@@ -351,16 +329,9 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
 
                 final bean b = (bean) getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), getArguments().getString("userId"));
+                Call<followBean> call = b.getRetrofit().follow(SharePreferenceUtils.getInstance().getString("userId"), getArguments().getString("userId"));
 
                 call.enqueue(new Callback<followBean>() {
                     @Override
@@ -463,16 +434,8 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
 
                 final bean b = (bean) getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
 
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                Call<singleVideoBean> call = cr.getsingleVideo(SharePreferenceUtils.getInstance().getString("userId"), videoId);
+                Call<singleVideoBean> call = b.getRetrofit().getsingleVideo(SharePreferenceUtils.getInstance().getString("userId"), videoId);
 
                 call.enqueue(new Callback<singleVideoBean>() {
                     @Override
@@ -650,16 +613,8 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
         progress.setVisibility(View.VISIBLE);
 
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<singleVideoBean> call = cr.getsingleVideo(SharePreferenceUtils.getInstance().getString("userId"), videoId);
+        Call<singleVideoBean> call = b.getRetrofit().getsingleVideo(SharePreferenceUtils.getInstance().getString("userId"), videoId);
 
         call.enqueue(new Callback<singleVideoBean>() {
             @Override
@@ -812,16 +767,9 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
     public void loadfollowstatus(String userids) {
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
+        Call<followBean> call = b.getRetrofit().followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
 
         call.enqueue(new Callback<followBean>() {
             @Override

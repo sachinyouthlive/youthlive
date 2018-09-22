@@ -152,15 +152,8 @@ public class BottomGuestSheet extends BottomSheetDialogFragment {
 
                     final bean b = (bean) context.getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
 
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(item.getConnid(), liveId + uid, "2", uid);
+                    Call<acceptRejectBean> call1 = b.getRetrofit().acceptRejectBroadcaster(item.getConnid(), liveId + uid, "2", uid);
                     call1.enqueue(new Callback<acceptRejectBean>() {
                         @Override
                         public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -211,15 +204,8 @@ public class BottomGuestSheet extends BottomSheetDialogFragment {
 
                     final bean b = (bean) context.getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
 
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(item.getConnid(), liveId + uid, "1", uid);
+                    Call<acceptRejectBean> call1 = b.getRetrofit().acceptRejectBroadcaster(item.getConnid(), liveId + uid, "1", uid);
                     call1.enqueue(new Callback<acceptRejectBean>() {
                         @Override
                         public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {

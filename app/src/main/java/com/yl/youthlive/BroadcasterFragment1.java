@@ -316,16 +316,8 @@ public class BroadcasterFragment1 extends Fragment {
 
                         final bean b = (bean) getActivity().getApplicationContext();
 
-                        final Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(b.BASE_URL)
-                                .addConverterFactory(ScalarsConverterFactory.create())
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
 
-                        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                        Call<liveCommentBean> call = cr.commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
+                        Call<liveCommentBean> call = b.getRetrofit().commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                         call.enqueue(new Callback<liveCommentBean>() {
                             @Override
@@ -377,16 +369,7 @@ public class BroadcasterFragment1 extends Fragment {
 
         final bean b = (bean) getActivity().getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        final Call<dummyBean> call = cr.getDummy();
+        final Call<dummyBean> call = b.getRetrofit().getDummy();
 
         call.enqueue(new Callback<dummyBean>() {
             @Override
@@ -414,7 +397,7 @@ public class BroadcasterFragment1 extends Fragment {
         if (userType.equals("user")) {
             progress.setVisibility(View.VISIBLE);
 
-            Call<goLiveBean> call3 = cr.goLive(SharePreferenceUtils.getInstance().getString("userId"), SharePreferenceUtils.getInstance().getString("userId"), "");
+            Call<goLiveBean> call3 = b.getRetrofit().goLive(SharePreferenceUtils.getInstance().getString("userId"), SharePreferenceUtils.getInstance().getString("userId"), "");
 
             call3.enqueue(new Callback<goLiveBean>() {
                 @Override
@@ -505,15 +488,8 @@ public class BroadcasterFragment1 extends Fragment {
 
                 final bean b = (bean) getContext().getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
 
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                Call<String> call = cr.endConnection(connId);
+                Call<String> call = b.getRetrofit().endConnection(connId);
 
                 call.enqueue(new Callback<String>() {
                     @Override
@@ -1031,16 +1007,8 @@ public class BroadcasterFragment1 extends Fragment {
 
                     final bean b = (bean) getActivity().getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
 
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    Call<liveCommentBean> call = cr.commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
+                    Call<liveCommentBean> call = b.getRetrofit().commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                     call.enqueue(new Callback<liveCommentBean>() {
                         @Override
@@ -1323,14 +1291,6 @@ public class BroadcasterFragment1 extends Fragment {
     public void schedule(String liveId) {
         final bean b = (bean) getActivity().getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
 
         SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
@@ -1338,7 +1298,7 @@ public class BroadcasterFragment1 extends Fragment {
 
         Log.d("keeey", keey);
 
-        Call<getUpdatedBean> call = cr.getUpdatedData(SharePreferenceUtils.getInstance().getString("userId"), liveId, keey);
+        Call<getUpdatedBean> call = b.getRetrofit().getUpdatedData(SharePreferenceUtils.getInstance().getString("userId"), liveId, keey);
 
         Log.d("asdasd", SharePreferenceUtils.getInstance().getString("userId"));
 
@@ -1551,15 +1511,8 @@ public class BroadcasterFragment1 extends Fragment {
 
                     final bean b = (bean) context.getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
 
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(item.getConnid(), liveId + uid, "2", uid);
+                    Call<acceptRejectBean> call1 = b.getRetrofit().acceptRejectBroadcaster(item.getConnid(), liveId + uid, "2", uid);
                     call1.enqueue(new Callback<acceptRejectBean>() {
                         @Override
                         public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -1609,15 +1562,8 @@ public class BroadcasterFragment1 extends Fragment {
 
                     final bean b = (bean) context.getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
 
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                    Call<acceptRejectBean> call1 = cr.acceptRejectBroadcaster(item.getConnid(), liveId + uid, "1", uid);
+                    Call<acceptRejectBean> call1 = b.getRetrofit().acceptRejectBroadcaster(item.getConnid(), liveId + uid, "1", uid);
                     call1.enqueue(new Callback<acceptRejectBean>() {
                         @Override
                         public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
@@ -1732,15 +1678,8 @@ public class BroadcasterFragment1 extends Fragment {
                 progress.setVisibility(View.VISIBLE);
                 final bean b = (bean) getActivity().getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
 
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                Call<goLiveBean> call3 = cr.goLive(SharePreferenceUtils.getInstance().getString("userId"), SharePreferenceUtils.getInstance().getString("userId"), "");
+                Call<goLiveBean> call3 = b.getRetrofit().goLive(SharePreferenceUtils.getInstance().getString("userId"), SharePreferenceUtils.getInstance().getString("userId"), "");
 
                 call3.enqueue(new Callback<goLiveBean>() {
                     @Override
@@ -1901,16 +1840,9 @@ public class BroadcasterFragment1 extends Fragment {
 
                             final bean b = (bean) context.getApplicationContext();
 
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                            Call<requestConnectionBean> call = cr.requestConnection(liveId, SharePreferenceUtils.getInstance().getString("userId"), uid);
+                            Call<requestConnectionBean> call = b.getRetrofit().requestConnection(liveId, SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                             call.enqueue(new Callback<requestConnectionBean>() {
                                 @Override
@@ -2210,16 +2142,9 @@ public class BroadcasterFragment1 extends Fragment {
 
                                 final bean b = (bean) context.getApplicationContext();
 
-                                final Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl(b.BASE_URL)
-                                        .addConverterFactory(ScalarsConverterFactory.create())
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build();
-
-                                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
+                                retrofit2.Call<followBean> call = b.getRetrofit().follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                 call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
@@ -2255,16 +2180,8 @@ public class BroadcasterFragment1 extends Fragment {
 
                                     final bean b = (bean) context.getApplicationContext();
 
-                                    final Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(b.BASE_URL)
-                                            .addConverterFactory(ScalarsConverterFactory.create())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
 
-                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                                    Call<requestConnectionBean> call = cr.requestConnection(liveId, SharePreferenceUtils.getInstance().getString("userId"), uid);
+                                    Call<requestConnectionBean> call = b.getRetrofit().requestConnection(liveId, SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                     call.enqueue(new Callback<requestConnectionBean>() {
                                         @Override
@@ -2658,16 +2575,9 @@ public class BroadcasterFragment1 extends Fragment {
                         MultipartBody.Part body2 = null;
                         body2 = MultipartBody.Part.createFormData("image", file2.getName(), reqFile2);
 
-                        final Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(b.BASE_URL)
-                                .addConverterFactory(ScalarsConverterFactory.create())
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-
-                        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                        Call<String> call = cr.addScreenshot(SharePreferenceUtils.getInstance().getString("userId"), liveId, body2);
+                        Call<String> call = b.getRetrofit().addScreenshot(SharePreferenceUtils.getInstance().getString("userId"), liveId, body2);
 
                         call.enqueue(new Callback<String>() {
                             @Override
@@ -2961,16 +2871,9 @@ public class BroadcasterFragment1 extends Fragment {
 
                                 final bean b = (bean) context.getApplicationContext();
 
-                                final Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl(b.BASE_URL)
-                                        .addConverterFactory(ScalarsConverterFactory.create())
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build();
-
-                                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
+                                retrofit2.Call<followBean> call = b.getRetrofit().follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                 call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
@@ -3034,16 +2937,9 @@ public class BroadcasterFragment1 extends Fragment {
 
                                         final bean b = (bean) context.getApplicationContext();
 
-                                        final Retrofit retrofit = new Retrofit.Builder()
-                                                .baseUrl(b.BASE_URL)
-                                                .addConverterFactory(ScalarsConverterFactory.create())
-                                                .addConverterFactory(GsonConverterFactory.create())
-                                                .build();
-
-                                        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                        Call<requestConnectionBean> call = cr.requestConnection(liveId, SharePreferenceUtils.getInstance().getString("userId"), uid);
+                                        Call<requestConnectionBean> call = b.getRetrofit().requestConnection(liveId, SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                         call.enqueue(new Callback<requestConnectionBean>() {
                                             @Override
@@ -3236,16 +3132,9 @@ public class BroadcasterFragment1 extends Fragment {
 
                         final bean b = (bean) broadcaster.getApplicationContext();
 
-                        final Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(b.BASE_URL)
-                                .addConverterFactory(ScalarsConverterFactory.create())
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-
-                        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                        Call<getUpdatedBean> call = cr.getDummyUpdatedData(dummyList.get(r).getUserId(), liveId, "dummy");
+                        Call<getUpdatedBean> call = b.getRetrofit().getDummyUpdatedData(dummyList.get(r).getUserId(), liveId, "dummy");
 
 
                         call.enqueue(new Callback<getUpdatedBean>() {

@@ -142,16 +142,7 @@ public class LiveEndedPlayer extends AppCompatActivity {
 
                 final bean b = (bean) getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), id);
+                retrofit2.Call<followBean> call = b.getRetrofit().follow(SharePreferenceUtils.getInstance().getString("userId"), id);
 
                 call.enqueue(new retrofit2.Callback<followBean>() {
                     @Override
@@ -210,15 +201,8 @@ public class LiveEndedPlayer extends AppCompatActivity {
 
         // loading follow unfollow data check
         final bean b = (bean) getApplicationContext();
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), uid);
+        Call<followBean> call = b.getRetrofit().followcheck(SharePreferenceUtils.getInstance().getString("userId"), uid);
 
         call.enqueue(new Callback<followBean>() {
             @Override

@@ -8,15 +8,21 @@ import android.util.Log;
 import com.google.firebase.FirebaseApp;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 import com.yl.youthlive.vlogListPOJO.Datum;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
 
 public class bean extends Application {
 
+    private static AllAPIs cr;
     public static ArrayList<String> mylist;
     private static Context context;
     private static bean mInstance;
@@ -41,6 +47,14 @@ public class bean extends Application {
         return mInstance;
     }
 
+
+    public AllAPIs getRetrofit()
+    {
+        return cr;
+    }
+
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -48,6 +62,14 @@ public class bean extends Application {
         mInstance = this;
         context = getApplicationContext();
         Log.e(TAG, "  myapp stater");
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        cr = retrofit.create(AllAPIs.class);
 
         try {
             FirebaseApp.initializeApp(this);

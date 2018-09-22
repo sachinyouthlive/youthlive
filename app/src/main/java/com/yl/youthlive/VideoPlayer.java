@@ -723,15 +723,8 @@ public class VideoPlayer extends AppCompatActivity {
 
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-        Call<String> call1 = cr.acceptReject2(connId, liveId + SharePreferenceUtils.getInstance().getString("userId"), "2", SharePreferenceUtils.getInstance().getString("userId"));
+        Call<String> call1 = b.getRetrofit().acceptReject2(connId, liveId + SharePreferenceUtils.getInstance().getString("userId"), "2", SharePreferenceUtils.getInstance().getString("userId"));
         call1.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -1143,16 +1136,8 @@ public class VideoPlayer extends AppCompatActivity {
 
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<String> call = cr.exitPlayer(SharePreferenceUtils.getInstance().getString("userId"), liveId);
+        Call<String> call = b.getRetrofit().exitPlayer(SharePreferenceUtils.getInstance().getString("userId"), liveId);
 
         call.enqueue(new Callback<String>() {
             @Override

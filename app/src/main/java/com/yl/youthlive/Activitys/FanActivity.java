@@ -160,16 +160,9 @@ public class FanActivity extends AppCompatActivity implements ConnectivityReceiv
 
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<FanListPOJO> call = cr.fanList(userId);
+        Call<FanListPOJO> call = b.getRetrofit().fanList(userId);
 
         call.enqueue(new Callback<FanListPOJO>() {
             @Override

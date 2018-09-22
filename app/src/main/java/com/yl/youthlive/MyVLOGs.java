@@ -76,13 +76,8 @@ public class MyVLOGs extends Fragment {
     public void loadData() {
 
         final bean b = (bean) getContext().getApplicationContext();
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<vlogListBean> call = cr.getVlog(SharePreferenceUtils.getInstance().getString("userId"));
+
+        Call<vlogListBean> call = b.getRetrofit().getVlog(SharePreferenceUtils.getInstance().getString("userId"));
 
         Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 
@@ -169,16 +164,7 @@ public class MyVLOGs extends Fragment {
 
                     final bean b = (bean) context.getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    Call<deleteVLOGBean> call = cr.removeVideo(SharePreferenceUtils.getInstance().getString("userId"), item.getVideoId());
+                    Call<deleteVLOGBean> call = b.getRetrofit().removeVideo(SharePreferenceUtils.getInstance().getString("userId"), item.getVideoId());
 
                     call.enqueue(new Callback<deleteVLOGBean>() {
                         @Override

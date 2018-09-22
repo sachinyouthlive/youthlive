@@ -245,13 +245,8 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
 
 
         final bean b = (bean) getContext().getApplicationContext();
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<Data> call = cr.postdiamondpurchase(Integer.valueOf(SharePreferenceUtils.getInstance().getString("userId")), productId, orderId, fullorderinfo);
+
+        Call<Data> call = b.getRetrofit().postdiamondpurchase(Integer.valueOf(SharePreferenceUtils.getInstance().getString("userId")), productId, orderId, fullorderinfo);
 
         Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 

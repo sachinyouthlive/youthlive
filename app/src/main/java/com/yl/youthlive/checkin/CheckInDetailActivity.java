@@ -78,13 +78,8 @@ public class CheckInDetailActivity extends AppCompatActivity {
         final int monthFinal = month + 1;
 
         final bean b = (bean) getContext().getApplicationContext();
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<CheckinPOJO> call = cr.getcheckin(SharePreferenceUtils.getInstance().getString("userId"), day, String.valueOf(monthFinal));
+
+        Call<CheckinPOJO> call = b.getRetrofit().getcheckin(SharePreferenceUtils.getInstance().getString("userId"), day, String.valueOf(monthFinal));
 
         Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 

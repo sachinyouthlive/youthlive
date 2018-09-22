@@ -144,13 +144,6 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
 
                                             final bean b = (bean) getApplicationContext();
 
-                                            final Retrofit retrofit = new Retrofit.Builder()
-                                                    .baseUrl(b.BASE_URL)
-                                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                                    .addConverterFactory(GsonConverterFactory.create())
-                                                    .build();
-
-                                            final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
                                             SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
@@ -158,7 +151,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                                             String keey = fcmPref.getString("token", "");
 
 
-                                            Call<socialBean> call = cr.socialSignIn(id, email, keey);
+                                            Call<socialBean> call = b.getRetrofit().socialSignIn(id, email, keey);
 
                                             call.enqueue(new Callback<socialBean>() {
                                                 @Override
@@ -572,20 +565,13 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
 
             final bean b = (bean) getApplicationContext();
 
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
 
             SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
             String keey = fcmPref.getString("token", "");
 
 
-            Call<socialBean> call = cr.socialSignIn(account.getId(), account.getEmail(), keey);
+            Call<socialBean> call = b.getRetrofit().socialSignIn(account.getId(), account.getEmail(), keey);
 
             call.enqueue(new Callback<socialBean>() {
                 @Override

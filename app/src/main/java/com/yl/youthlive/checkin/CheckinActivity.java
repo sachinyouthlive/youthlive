@@ -162,13 +162,8 @@ public class CheckinActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         final bean b = (bean) getContext().getApplicationContext();
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<TotalbroadcastPOJO> call = cr.totalbroadcast(SharePreferenceUtils.getInstance().getString("userId"), month);
+
+        Call<TotalbroadcastPOJO> call = b.getRetrofit().totalbroadcast(SharePreferenceUtils.getInstance().getString("userId"), month);
 
         Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 

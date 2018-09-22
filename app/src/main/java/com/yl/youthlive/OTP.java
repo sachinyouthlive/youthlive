@@ -156,16 +156,8 @@ public class OTP extends AppCompatActivity {
 
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<loginResponseBean> call = cr.resend(getIntent().getStringExtra("phone"));
+        Call<loginResponseBean> call = b.getRetrofit().resend(getIntent().getStringExtra("phone"));
 
         call.enqueue(new Callback<loginResponseBean>() {
             @Override
@@ -200,15 +192,7 @@ public class OTP extends AppCompatActivity {
 
             final bean b = (bean) getApplicationContext();
 
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-            Call<loginResponseBean> call = cr.resend(phone);
+            Call<loginResponseBean> call = b.getRetrofit().resend(phone);
 
             call.enqueue(new Callback<loginResponseBean>() {
                 @Override
@@ -247,15 +231,7 @@ public class OTP extends AppCompatActivity {
 
             final bean b = (bean) getApplicationContext();
 
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-            Call<otpBean> call = cr.verify(phone, codee);
+            Call<otpBean> call = b.getRetrofit().verify(phone, codee);
 
             call.enqueue(new Callback<otpBean>() {
                 @Override

@@ -92,13 +92,7 @@ public class Diamond_purchase_history_Activity extends AppCompatActivity impleme
 
 
         final bean b = (bean) getContext().getApplicationContext();
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<DiamondpurchaselistPOJO> call = cr.getdiamondpurchasehistory(Integer.valueOf(SharePreferenceUtils.getInstance().getString("userId")));
+        Call<DiamondpurchaselistPOJO> call = b.getRetrofit().getdiamondpurchasehistory(Integer.valueOf(SharePreferenceUtils.getInstance().getString("userId")));
 
         Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 

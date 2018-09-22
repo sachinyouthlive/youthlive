@@ -137,20 +137,12 @@ public class SplashActivity extends AppCompatActivity {
 
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
         SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
         String keey = fcmPref.getString("token", "");
 
-
-        Call<login2Bean> call = cr.signIn(phone, pass , keey);
+        Call<login2Bean> call = b.getRetrofit().signIn(phone, pass , keey);
 
         call.enqueue(new Callback<login2Bean>() {
             @Override
@@ -241,19 +233,11 @@ public class SplashActivity extends AppCompatActivity {
 
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
         SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
         String keey = fcmPref.getString("token", "");
 
-        Call<socialBean> call = cr.socialSignIn(pid, email , keey);
+        Call<socialBean> call = b.getRetrofit().socialSignIn(pid, email , keey);
 
         call.enqueue(new Callback<socialBean>() {
             @Override

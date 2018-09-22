@@ -104,13 +104,8 @@ public class Beans extends Fragment {
 
 
         final bean b = (bean) getContext().getApplicationContext();
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<walletBean> call = cr.getWalletData(SharePreferenceUtils.getInstance().getString("userId"));
+
+        Call<walletBean> call = b.getRetrofit().getWalletData(SharePreferenceUtils.getInstance().getString("userId"));
 
         Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 

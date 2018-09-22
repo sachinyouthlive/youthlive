@@ -249,16 +249,8 @@ public class Register extends AppCompatActivity {
 
             final bean b = (bean) getApplicationContext();
 
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
 
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-            Call<loginResponseBean> call = cr.signUp(phone);
+            Call<loginResponseBean> call = b.getRetrofit().signUp(phone);
 
             call.enqueue(new Callback<loginResponseBean>() {
                 @Override
@@ -551,21 +543,13 @@ public class Register extends AppCompatActivity {
 
             final bean b = (bean) getApplicationContext();
 
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
 
             SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
             String keey = fcmPref.getString("token", "");
 
 
-            Call<socialBean> call = cr.socialSignIn(account.getId(), account.getEmail() , keey);
+            Call<socialBean> call = b.getRetrofit().socialSignIn(account.getId(), account.getEmail() , keey);
 
             call.enqueue(new Callback<socialBean>() {
                 @Override
@@ -627,13 +611,6 @@ public class Register extends AppCompatActivity {
 
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
         SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
@@ -641,7 +618,7 @@ public class Register extends AppCompatActivity {
         String keey = fcmPref.getString("token", "");
 
 
-        Call<socialBean> call = cr.socialSignIn(pid, email, keey);
+        Call<socialBean> call = b.getRetrofit().socialSignIn(pid, email, keey);
 
         call.enqueue(new Callback<socialBean>() {
             @Override

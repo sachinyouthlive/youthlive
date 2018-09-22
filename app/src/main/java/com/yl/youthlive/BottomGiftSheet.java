@@ -129,16 +129,7 @@ public class BottomGiftSheet extends BottomSheetDialogFragment {
 
                             final bean b = (bean) getContext().getApplicationContext();
 
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                            retrofit2.Call<sendGiftBean> call = cr.sendGift(SharePreferenceUtils.getInstance().getString("userId"), liveId, timelineId, String.valueOf(position + 1), "1", b.diamonds[position]);
+                            retrofit2.Call<sendGiftBean> call = b.getRetrofit().sendGift(SharePreferenceUtils.getInstance().getString("userId"), liveId, timelineId, String.valueOf(position + 1), "1", b.diamonds[position]);
 
 
                             call.enqueue(new retrofit2.Callback<sendGiftBean>() {

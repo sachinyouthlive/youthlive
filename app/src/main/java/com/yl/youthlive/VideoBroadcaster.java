@@ -401,16 +401,8 @@ public class VideoBroadcaster extends AppCompatActivity {
 
                 bean b = (bean) getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
 
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                Call<endLiveBean> call = cr.endLive(SharePreferenceUtils.getInstance().getString("userId"), liveId);
+                Call<endLiveBean> call = b.getRetrofit().endLive(SharePreferenceUtils.getInstance().getString("userId"), liveId);
 
                 call.enqueue(new Callback<endLiveBean>() {
                     @Override
@@ -772,15 +764,7 @@ public class VideoBroadcaster extends AppCompatActivity {
 
                                     final bean b = (bean) getApplicationContext();
 
-                                    final Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(b.BASE_URL)
-                                            .addConverterFactory(ScalarsConverterFactory.create())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
-
-                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                                    Call<String> call = cr.endConnection(connId);
+                                    Call<String> call = b.getRetrofit().endConnection(connId);
 
                                     call.enqueue(new Callback<String>() {
                                         @Override
@@ -851,16 +835,8 @@ public class VideoBroadcaster extends AppCompatActivity {
 
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<String> call = cr.updateLive(liveId);
+        Call<String> call = b.getRetrofit().updateLive(liveId);
 
         call.enqueue(new Callback<String>() {
             @Override

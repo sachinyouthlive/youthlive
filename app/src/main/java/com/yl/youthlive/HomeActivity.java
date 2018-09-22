@@ -478,16 +478,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
                             final bean b = (bean) getApplicationContext();
 
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
 
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                            Call<feedBackBean> call = cr.feedback(SharePreferenceUtils.getInstance().getString("userId"), com);
+                            Call<feedBackBean> call = b.getRetrofit().feedback(SharePreferenceUtils.getInstance().getString("userId"), com);
 
                             call.enqueue(new Callback<feedBackBean>() {
                                 @Override
@@ -936,15 +928,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         MultipartBody.Part body2 = null;
         body2 = MultipartBody.Part.createFormData("image", file2.getName(), reqFile2);
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-        Call<addVideoBean> call = cr.addVideo(SharePreferenceUtils.getInstance().getString("userId"), "", "", body, body2);
+        Call<addVideoBean> call = b.getRetrofit().addVideo(SharePreferenceUtils.getInstance().getString("userId"), "", "", body, body2);
 
         call.enqueue(new Callback<addVideoBean>() {
             @Override

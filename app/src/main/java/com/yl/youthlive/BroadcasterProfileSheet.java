@@ -76,16 +76,9 @@ public class BroadcasterProfileSheet extends BottomSheetDialogFragment {
 
                 final bean b = (bean) getContext().getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), timelineId);
+                Call<followBean> call = b.getRetrofit().follow(SharePreferenceUtils.getInstance().getString("userId"), timelineId);
 
                 call.enqueue(new Callback<followBean>() {
                     @Override
@@ -145,16 +138,9 @@ public class BroadcasterProfileSheet extends BottomSheetDialogFragment {
     public void loadfollowstatus(String userids) {
         final bean b = (bean) getActivity().getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
+        Call<followBean> call = b.getRetrofit().followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
 
         call.enqueue(new Callback<followBean>() {
             @Override
@@ -201,16 +187,9 @@ public class BroadcasterProfileSheet extends BottomSheetDialogFragment {
     public void followingstatus(String userids) {
         final bean b = (bean) getActivity().getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
+        Call<followBean> call = b.getRetrofit().followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
 
         call.enqueue(new Callback<followBean>() {
             @Override
@@ -256,16 +235,8 @@ public class BroadcasterProfileSheet extends BottomSheetDialogFragment {
 
         final bean b = (bean) getActivity().getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<timelineProfileBean> call = cr.getProfile2(SharePreferenceUtils.getInstance().getString("userId"), timelineId);
+        Call<timelineProfileBean> call = b.getRetrofit().getProfile2(SharePreferenceUtils.getInstance().getString("userId"), timelineId);
 
         call.enqueue(new retrofit2.Callback<timelineProfileBean>() {
             @Override

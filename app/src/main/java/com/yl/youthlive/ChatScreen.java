@@ -95,14 +95,7 @@ public class ChatScreen extends AppCompatActivity {
 
                     final bean b = (bean) getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-                    Call<sendMessageBean> call = cr.sendMessage(SharePreferenceUtils.getInstance().getString("userId"), id, comm);
+                    Call<sendMessageBean> call = b.getRetrofit().sendMessage(SharePreferenceUtils.getInstance().getString("userId"), id, comm);
 
                     call.enqueue(new Callback<sendMessageBean>() {
                         @Override
@@ -148,15 +141,8 @@ public class ChatScreen extends AppCompatActivity {
 
         bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
         //  Toast.makeText(b, "" + chat + " frnd id" + id + " usrid" + SharePreferenceUtils.getInstance().getString("userId"), Toast.LENGTH_SHORT).show();
-        Call<singleMessageBean> call = cr.singleChatList(SharePreferenceUtils.getInstance().getString("userId"), id, chat);
+        Call<singleMessageBean> call = b.getRetrofit().singleChatList(SharePreferenceUtils.getInstance().getString("userId"), id, chat);
 
         call.enqueue(new Callback<singleMessageBean>() {
             @Override
@@ -191,16 +177,8 @@ public class ChatScreen extends AppCompatActivity {
 
                 final bean b = (bean) getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
 
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                Call<singleMessageBean> call = cr.singleChatList(SharePreferenceUtils.getInstance().getString("userId"), id, chat);
+                Call<singleMessageBean> call = b.getRetrofit().singleChatList(SharePreferenceUtils.getInstance().getString("userId"), id, chat);
 
                 call.enqueue(new Callback<singleMessageBean>() {
                     @Override

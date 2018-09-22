@@ -76,16 +76,7 @@ public class Rating3 extends Fragment {
 
         bean b = (bean) getContext().getApplicationContext();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<RankingBean> call = cr.ranking(SharePreferenceUtils.getInstance().getString("userId"), "weekly");
+        Call<RankingBean> call = b.getRetrofit().ranking(SharePreferenceUtils.getInstance().getString("userId"), "weekly");
 
         call.enqueue(new Callback<RankingBean>() {
             @Override
@@ -181,16 +172,7 @@ public class Rating3 extends Fragment {
 
             final bean b = (bean) getApplicationContext();
 
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-            Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
+            Call<followBean> call = b.getRetrofit().followcheck(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
 
             call.enqueue(new Callback<followBean>() {
                 @Override
@@ -240,16 +222,8 @@ public class Rating3 extends Fragment {
 
                     final bean b = (bean) context.getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
 
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
+                    Call<followBean> call = b.getRetrofit().follow(SharePreferenceUtils.getInstance().getString("userId"), item.getUserId());
 
                     call.enqueue(new Callback<followBean>() {
                         @Override

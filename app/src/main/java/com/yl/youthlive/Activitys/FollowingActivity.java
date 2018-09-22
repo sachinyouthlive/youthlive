@@ -164,16 +164,8 @@ public class FollowingActivity extends AppCompatActivity implements Connectivity
 
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<followListBean> call = cr.followList(userId);
+        Call<followListBean> call = b.getRetrofit().followList(userId);
 
         call.enqueue(new Callback<followListBean>() {
             @Override

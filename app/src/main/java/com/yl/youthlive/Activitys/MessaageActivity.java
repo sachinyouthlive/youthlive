@@ -162,16 +162,8 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
 
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<allMessageBean> call = cr.allMessageList(SharePreferenceUtils.getInstance().getString("userId"));
+        Call<allMessageBean> call = b.getRetrofit().allMessageList(SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<allMessageBean>() {
             @Override

@@ -190,16 +190,9 @@ public class SearchActivity extends AppCompatActivity implements ConnectivityRec
         progress.setVisibility(View.VISIBLE);
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
         String search = searchtext.getText().toString();
-        Call<SearchListPOJO> call = cr.getSearchList(search);
+        Call<SearchListPOJO> call = b.getRetrofit().getSearchList(search);
 
         call.enqueue(new Callback<SearchListPOJO>() {
             @Override
@@ -232,16 +225,9 @@ public class SearchActivity extends AppCompatActivity implements ConnectivityRec
 
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
 
         String search = "sachin";
-        Call<SearchListPOJO> call = cr.getumaylikeList(search);
+        Call<SearchListPOJO> call = b.getRetrofit().getumaylikeList(search);
 
         call.enqueue(new Callback<SearchListPOJO>() {
             @Override

@@ -141,16 +141,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
 
                     bean b = (bean)getActivity().getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    Call<endLiveBean> call = cr.syncLive(offline , liveId);
+                    Call<endLiveBean> call = b.getRetrofit().syncLive(offline , liveId);
 
                     call.enqueue(new Callback<endLiveBean>() {
                         @Override
@@ -331,16 +322,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
 
                 bean b = (bean)getActivity().getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                Call<endLiveBean> call = cr.syncLive(offline , liveId);
+                Call<endLiveBean> call = b.getRetrofit().syncLive(offline , liveId);
 
                 call.enqueue(new Callback<endLiveBean>() {
                     @Override

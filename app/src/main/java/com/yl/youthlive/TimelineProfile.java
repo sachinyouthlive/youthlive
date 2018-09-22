@@ -155,15 +155,7 @@ public class TimelineProfile extends AppCompatActivity {
 
                             bean b = (bean) getApplicationContext();
 
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                            Call<sendMessageBean> call = cr.sendMessage(SharePreferenceUtils.getInstance().getString("userId"), userid, comm);
+                            Call<sendMessageBean> call = b.getRetrofit().sendMessage(SharePreferenceUtils.getInstance().getString("userId"), userid, comm);
 
                             call.enqueue(new Callback<sendMessageBean>() {
                                 @Override
@@ -214,16 +206,8 @@ public class TimelineProfile extends AppCompatActivity {
 
                 final bean b = (bean) getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
 
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), userid);
+                Call<followBean> call = b.getRetrofit().follow(SharePreferenceUtils.getInstance().getString("userId"), userid);
 
                 call.enqueue(new Callback<followBean>() {
                     @Override
@@ -363,16 +347,8 @@ public class TimelineProfile extends AppCompatActivity {
     public void loadfollowstatus(String userids) {
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
+        Call<followBean> call = b.getRetrofit().followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
 
         call.enqueue(new Callback<followBean>() {
             @Override
@@ -419,16 +395,8 @@ public class TimelineProfile extends AppCompatActivity {
     public void followingstatus(String userids) {
         final bean b = (bean) getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<followBean> call = cr.followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
+        Call<followBean> call = b.getRetrofit().followcheck(SharePreferenceUtils.getInstance().getString("userId"), userids);
 
         call.enqueue(new Callback<followBean>() {
             @Override
@@ -494,16 +462,8 @@ public class TimelineProfile extends AppCompatActivity {
 
         final bean b = (bean) appContext;
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<timelineProfileBean> call = cr.getProfile2(SharePreferenceUtils.getInstance().getString("userId"), userid);
+        Call<timelineProfileBean> call = b.getRetrofit().getProfile2(SharePreferenceUtils.getInstance().getString("userId"), userid);
 
         Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
         Log.d("friendId", userid);

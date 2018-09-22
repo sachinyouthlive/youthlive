@@ -83,15 +83,7 @@ public class PhoneUpdateActivity extends AppCompatActivity {
                     String pho = getIntent().getStringExtra("phoneno");
                     final bean b = (bean) getContext().getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                    Call<PhoneupdateminiPOJO> call = cr.updatePhonemini(SharePreferenceUtils.getInstance().getString("userId"), pho);
+                    Call<PhoneupdateminiPOJO> call = b.getRetrofit().updatePhonemini(SharePreferenceUtils.getInstance().getString("userId"), pho);
 
                     call.enqueue(new Callback<PhoneupdateminiPOJO>() {
                         @Override
@@ -162,15 +154,8 @@ public class PhoneUpdateActivity extends AppCompatActivity {
     public void updatenumber() {
         final bean b = (bean) getContext().getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
         String phone = getIntent().getStringExtra("phoneno");
-        Call<UpdatephonePOJO> call = cr.updatePhoneno(phone);
+        Call<UpdatephonePOJO> call = b.getRetrofit().updatePhoneno(phone);
 
         call.enqueue(new Callback<UpdatephonePOJO>() {
             @Override

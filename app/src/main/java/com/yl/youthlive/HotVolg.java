@@ -64,13 +64,8 @@ public class HotVolg extends Fragment {
     public void loadData() {
         progress.setVisibility(View.VISIBLE);
         final bean b = (bean) getContext().getApplicationContext();
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-        Call<vlogListBean> call = cr.getVlogList(SharePreferenceUtils.getInstance().getString("userId"));
+
+        Call<vlogListBean> call = b.getRetrofit().getVlogList(SharePreferenceUtils.getInstance().getString("userId"));
 
         Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 

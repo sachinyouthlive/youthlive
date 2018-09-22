@@ -85,16 +85,9 @@ public class CreatePassword extends AppCompatActivity {
 
                 bean b = (bean) getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                Call<otpBean> call = cr.createPassword(getIntent().getStringExtra("userId"), pass);
+                Call<otpBean> call = b.getRetrofit().createPassword(getIntent().getStringExtra("userId"), pass);
 
                 call.enqueue(new Callback<otpBean>() {
                     @Override

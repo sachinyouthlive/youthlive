@@ -537,16 +537,8 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
         final bean b = (bean) getContext().getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<loginResponseBean> call = cr.getProfile(userID);
+        Call<loginResponseBean> call = b.getRetrofit().getProfile(userID);
 
         call.enqueue(new retrofit2.Callback<loginResponseBean>() {
             @Override
@@ -613,16 +605,8 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
             final bean b = (bean) getContext().getApplicationContext();
 
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
 
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-            Call<updateProfileBean> call = cr.updateProfile(SharePreferenceUtils.getInstance().getString("userId"), body);
+            Call<updateProfileBean> call = b.getRetrofit().updateProfile(SharePreferenceUtils.getInstance().getString("userId"), body);
 
             call.enqueue(new retrofit2.Callback<updateProfileBean>() {
                 @Override
@@ -665,16 +649,8 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
             final bean b = (bean) getContext().getApplicationContext();
 
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
 
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-            Call<loginResponseBean> call = cr.addCover(SharePreferenceUtils.getInstance().getString("userId"), "", body);
+            Call<loginResponseBean> call = b.getRetrofit().addCover(SharePreferenceUtils.getInstance().getString("userId"), "", body);
 
             call.enqueue(new retrofit2.Callback<loginResponseBean>() {
                 @Override

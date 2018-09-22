@@ -96,17 +96,7 @@ public class Channel extends Fragment implements ConnectivityReceiver.Connectivi
 */
 
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                //.client(okHttpClient)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<List<liveBean>> call = cr.getLives2(SharePreferenceUtils.getInstance().getString("userId"));
+        Call<List<liveBean>> call = b.getRetrofit().getLives2(SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<List<liveBean>>() {
             @Override

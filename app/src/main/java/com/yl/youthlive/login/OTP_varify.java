@@ -106,13 +106,7 @@ public class OTP_varify extends AppCompatActivity {
 ////////////////////////////
 
             final bean b = (bean) getContext().getApplicationContext();
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-            Call<ForgotPassword> call = cr.UserForgotPassword(phoneno);
+            Call<ForgotPassword> call = b.getRetrofit().UserForgotPassword(phoneno);
 
             Log.d("phoneno", phoneno);
 

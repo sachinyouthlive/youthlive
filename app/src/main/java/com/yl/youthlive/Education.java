@@ -123,16 +123,7 @@ public class Education extends Fragment {
 
                                 bean b = (bean) getContext().getApplicationContext();
 
-                                final Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl(b.BASE_URL)
-                                        .addConverterFactory(ScalarsConverterFactory.create())
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build();
-
-                                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                                Call<addEducationBean> call = cr.addEducation(userId, e, y);
+                                Call<addEducationBean> call = b.getRetrofit().addEducation(userId, e, y);
 
                                 call.enqueue(new Callback<addEducationBean>() {
                                     @Override
@@ -235,16 +226,7 @@ public class Education extends Fragment {
 
                             bean b = (bean) getContext().getApplicationContext();
 
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                            Call<editEducationBean> call = cr.deleteEducation(userId, item.getEducationId());
+                            Call<editEducationBean> call = b.getRetrofit().deleteEducation(userId, item.getEducationId());
 
                             call.enqueue(new Callback<editEducationBean>() {
                                 @Override
@@ -286,16 +268,7 @@ public class Education extends Fragment {
 
                                     bean b = (bean) getContext().getApplicationContext();
 
-                                    final Retrofit retrofit = new Retrofit.Builder()
-                                            .baseUrl(b.BASE_URL)
-                                            .addConverterFactory(ScalarsConverterFactory.create())
-                                            .addConverterFactory(GsonConverterFactory.create())
-                                            .build();
-
-                                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                                    Call<editEducationBean> call = cr.editEducation(userId, item.getEducationId(), e, y);
+                                    Call<editEducationBean> call = b.getRetrofit().editEducation(userId, item.getEducationId(), e, y);
 
                                     call.enqueue(new Callback<editEducationBean>() {
                                         @Override

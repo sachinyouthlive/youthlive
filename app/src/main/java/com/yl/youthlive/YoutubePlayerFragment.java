@@ -374,16 +374,8 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
                         final bean b = (bean) getContext().getApplicationContext();
 
-                        final Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(b.BASE_URL)
-                                .addConverterFactory(ScalarsConverterFactory.create())
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
 
-                        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                        Call<liveCommentBean> call = cr.commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
+                        Call<liveCommentBean> call = b.getRetrofit().commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                         call.enqueue(new Callback<liveCommentBean>() {
                             @Override
@@ -467,16 +459,9 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
                 final bean b = (bean) getContext().getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                retrofit2.Call<liveLikeBean> call = cr.likeLive(SharePreferenceUtils.getInstance().getString("userId"), liveId);
+                retrofit2.Call<liveLikeBean> call = b.getRetrofit().likeLive(SharePreferenceUtils.getInstance().getString("userId"), liveId);
 
                 call.enqueue(new retrofit2.Callback<liveLikeBean>() {
                     @Override
@@ -506,15 +491,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
                 final bean b = (bean) getContext().getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                Call<String> call = cr.endConnection(connId);
+                Call<String> call = b.getRetrofit().endConnection(connId);
 
                 call.enqueue(new Callback<String>() {
                     @Override
@@ -848,16 +825,9 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
                     final bean b = (bean) getContext().getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                    Call<liveCommentBean> call = cr.commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
+                    Call<liveCommentBean> call = b.getRetrofit().commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                     call.enqueue(new Callback<liveCommentBean>() {
                         @Override
@@ -972,16 +942,8 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
                 final bean b = (bean) getContext().getApplicationContext();
 
-                final Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(b.BASE_URL)
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
 
-                final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                retrofit2.Call<followBean> call = cr.followLiveUser(SharePreferenceUtils.getInstance().getString("userId"), timelineId, liveId);
+                retrofit2.Call<followBean> call = b.getRetrofit().followLiveUser(SharePreferenceUtils.getInstance().getString("userId"), timelineId, liveId);
 
                 call.enqueue(new retrofit2.Callback<followBean>() {
                     @Override
@@ -1126,14 +1088,6 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
     public void schedule(String liveId) {
         final bean b = (bean) getActivity().getApplicationContext();
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
 
         SharedPreferences fcmPref = getContext().getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
@@ -1141,7 +1095,7 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
         Log.d("keeey", keey);
 
-        Call<getUpdatedBean> call = cr.getPlayerUpdatedData(SharePreferenceUtils.getInstance().getString("userId"), liveId, keey);
+        Call<getUpdatedBean> call = b.getRetrofit().getPlayerUpdatedData(SharePreferenceUtils.getInstance().getString("userId"), liveId, keey);
 
 
         call.enqueue(new Callback<getUpdatedBean>() {
@@ -1513,16 +1467,9 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
                                 final bean b = (bean) context.getApplicationContext();
 
-                                final Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl(b.BASE_URL)
-                                        .addConverterFactory(ScalarsConverterFactory.create())
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build();
-
-                                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
+                                retrofit2.Call<followBean> call = b.getRetrofit().follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                 call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
@@ -2001,16 +1948,9 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
                                 final bean b = (bean) context.getApplicationContext();
 
-                                final Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl(b.BASE_URL)
-                                        .addConverterFactory(ScalarsConverterFactory.create())
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build();
-
-                                final AllAPIs cr = retrofit.create(AllAPIs.class);
 
 
-                                retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
+                                retrofit2.Call<followBean> call = b.getRetrofit().follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
 
                                 call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
@@ -2208,16 +2148,8 @@ public class YoutubePlayerFragment extends Fragment implements YouTubePlayer.OnI
 
                     final bean b = (bean) getContext().getApplicationContext();
 
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
 
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    retrofit2.Call<sendGiftBean> call = cr.sendGift(SharePreferenceUtils.getInstance().getString("userId"), liveId, timelineId, String.valueOf(position + 1), "1", diamonds[position]);
+                    retrofit2.Call<sendGiftBean> call = b.getRetrofit().sendGift(SharePreferenceUtils.getInstance().getString("userId"), liveId, timelineId, String.valueOf(position + 1), "1", diamonds[position]);
 
 
                     call.enqueue(new retrofit2.Callback<sendGiftBean>() {

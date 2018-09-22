@@ -67,13 +67,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         } else {
 //////////////////////
             final bean b = (bean) getContext().getApplicationContext();
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-            Call<ForgotPassword> call = cr.UserForgotPassword(phoneno.getText().toString());
+
+            Call<ForgotPassword> call = b.getRetrofit().UserForgotPassword(phoneno.getText().toString());
 
             Log.d("phoneno", phoneno.getText().toString());
 

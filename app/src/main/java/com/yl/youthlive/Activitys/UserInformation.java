@@ -326,15 +326,7 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
 
             final bean b = (bean) getApplicationContext();
 
-            final Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(b.BASE_URL)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-            Call<loginResponseBean> call = cr.addUserData(body, name, gender, BirthDay.getText().toString(), Biodata.getText().toString(), getIntent().getStringExtra("userId"));
+            Call<loginResponseBean> call = b.getRetrofit().addUserData(body, name, gender, BirthDay.getText().toString(), Biodata.getText().toString(), getIntent().getStringExtra("userId"));
 
             call.enqueue(new Callback<loginResponseBean>() {
                 @Override
@@ -349,7 +341,7 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
                         String keey = fcmPref.getString("token", "");
 
 
-                        Call<login2Bean> call1 = cr.signIn(response.body().getData().getPhone(), response.body().getData().getPassword(), keey);
+                        Call<login2Bean> call1 = b.getRetrofit().signIn(response.body().getData().getPhone(), response.body().getData().getPassword(), keey);
 
 
                         call1.enqueue(new Callback<login2Bean>() {

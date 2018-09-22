@@ -218,16 +218,7 @@ public class MyVlog extends AppCompatActivity implements ConnectivityReceiver.Co
 
         bean b = (bean) appContext;
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(b.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-        Call<loginResponseBean> call = cr.getProfile(userid);
+        Call<loginResponseBean> call = b.getRetrofit().getProfile(userid);
 
         call.enqueue(new retrofit2.Callback<loginResponseBean>() {
             @Override

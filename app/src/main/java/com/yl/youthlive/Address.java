@@ -283,15 +283,8 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
                             final bean b = (bean) getContext().getApplicationContext();
 
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
 
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                            Call<UpdatephonePOJO> call = cr.updatePhoneno(pho);
+                            Call<UpdatephonePOJO> call = b.getRetrofit().updatePhoneno(pho);
 
                             call.enqueue(new Callback<UpdatephonePOJO>() {
                                 @Override
@@ -398,15 +391,7 @@ public class Address extends Fragment implements GoogleApiClient.ConnectionCallb
 
                             final bean b = (bean) getContext().getApplicationContext();
 
-                            final Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl(b.BASE_URL)
-                                    .addConverterFactory(ScalarsConverterFactory.create())
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-
-                            final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-                            Call<updateBean> call = cr.updateUserData(username1.getText().toString(), gender.getSelectedItem().toString(), birth1.getText().toString(), bio1.getText().toString(), userId);
+                            Call<updateBean> call = b.getRetrofit().updateUserData(username1.getText().toString(), gender.getSelectedItem().toString(), birth1.getText().toString(), bio1.getText().toString(), userId);
 
                             call.enqueue(new Callback<updateBean>() {
                                 @Override
