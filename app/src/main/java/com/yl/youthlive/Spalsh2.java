@@ -23,10 +23,8 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -35,6 +33,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -42,8 +41,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.yl.youthlive.Activitys.UserInformation;
-import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.socialPOJO.socialBean;
 
 import org.json.JSONObject;
@@ -53,9 +52,6 @@ import java.util.Arrays;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class Spalsh2 extends AppCompatActivity {
 
@@ -97,13 +93,9 @@ public class Spalsh2 extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
+        //FacebookSdk.sdkInitialize(getApplicationContext());
+        //AppEventsLogger.activateApp(this);
         mCallbackManager = CallbackManager.Factory.create();
-        // FacebookSdk.addLoggingBehavior(LoggingBehavior.REQUESTS);
-
-        // Manually checking internet connection
-
 
         LoginManager.getInstance().registerCallback(mCallbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -125,7 +117,7 @@ public class Spalsh2 extends AppCompatActivity {
                                             Log.d("FACEBOOKNAME", name + " Email > " + email);
                                             Log.d("FACEBOOKNAME", name + " Email > " + id);
                                             //   String profilePicUrl = json.getJSONObject("picture").getJSONObject("data").getString("url");
-                                            String image = "https://graph.facebook.com/" + id + "/picture?type=large";
+                                            //String image = "https://graph.facebook.com/" + id + "/picture?type=large";
 
 
                                             socialLogin(email , id);
@@ -183,15 +175,28 @@ public class Spalsh2 extends AppCompatActivity {
         fcmEdit = fcmPref.edit();
 
 
-        try {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+
+                String tok = instanceIdResult.getToken();
+
+                Log.d("token", tok);
+
+                fcmEdit.putString("token", tok);
+
+                fcmEdit.apply();
+
+            }
+        });
+
+
+        /*try {
+
+
 
             String tok = FirebaseInstanceId.getInstance().getToken();
 
-            Log.d("token", tok);
-
-            fcmEdit.putString("token", tok);
-
-            fcmEdit.apply();
 
         } catch (Exception e) {
 
@@ -206,7 +211,7 @@ public class Spalsh2 extends AppCompatActivity {
 
             e.printStackTrace();
         }
-
+*/
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_CODE_ASK_PERMISSIONS);
         }
@@ -297,63 +302,65 @@ public class Spalsh2 extends AppCompatActivity {
 
         call.enqueue(new Callback<socialBean>() {
             @Override
-            public void onResponse(Call<socialBean> call, Response<socialBean> response) {
+            public void onResponse(@NonNull Call<socialBean> call, @NonNull Response<socialBean> response) {
 
-                if (response.body().getData().getUserName().length() > 0) {
+                if (response.body() != null) {
+                    if (response.body().getData().getUserName().length() > 0) {
 
-                    SharePreferenceUtils.getInstance().putString("userId" , response.body().getData().getUserId());
-                    SharePreferenceUtils.getInstance().putString("userName" , response.body().getData().getUserName());
+                        SharePreferenceUtils.getInstance().putString("userId" , response.body().getData().getUserId());
+                        SharePreferenceUtils.getInstance().putString("userName" , response.body().getData().getUserName());
 
 
 
-                    try {
-                        SharePreferenceUtils.getInstance().putString("userImage" , response.body().getData().getUserImage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        try {
+                            SharePreferenceUtils.getInstance().putString("userImage" , response.body().getData().getUserImage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        SharePreferenceUtils.getInstance().putString("type", "social");
+                        SharePreferenceUtils.getInstance().putString("user", email);
+                        SharePreferenceUtils.getInstance().putString("pass", pid);
+                        if (response.body() != null) {
+                            SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
+                        }
+                        if (response.body() != null) {
+                            SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
+                        }
+
+
+                        //    Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Spalsh2.this, HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+
+
+                    } else {
+
+                        SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                        SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
+
+                        try {
+                            SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        SharePreferenceUtils.getInstance().putString("type", "social");
+                        SharePreferenceUtils.getInstance().putString("user", email);
+                        SharePreferenceUtils.getInstance().putString("pass", pid);
+
+                        Toast.makeText(Spalsh2.this, "Please update your info", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Spalsh2.this, UserInformation.class);
+                        intent.putExtra("userId", response.body().getData().getUserId());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+
+
                     }
-
-
-                    SharePreferenceUtils.getInstance().putString("type", "social");
-                    SharePreferenceUtils.getInstance().putString("user", email);
-                    SharePreferenceUtils.getInstance().putString("pass", pid);
-                    if (response.body() != null) {
-                        SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
-                    }
-                    if (response.body() != null) {
-                        SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
-                    }
-
-
-                    //    Toast.makeText(Login.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Spalsh2.this, HomeActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-
-
-                } else {
-
-                    SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
-                    SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
-
-
-                    try {
-                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-
-                    SharePreferenceUtils.getInstance().putString("type", "social");
-                    SharePreferenceUtils.getInstance().putString("user", email);
-                    SharePreferenceUtils.getInstance().putString("pass", pid);
-
-                    Toast.makeText(Spalsh2.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Spalsh2.this, UserInformation.class);
-                    intent.putExtra("userId", response.body().getData().getUserId());
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-
-
                 }
 
 
@@ -363,7 +370,7 @@ public class Spalsh2 extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<socialBean> call, Throwable t) {
+            public void onFailure(@NonNull Call<socialBean> call, @NonNull Throwable t) {
                 progress.setVisibility(View.GONE);
             }
         });
@@ -404,10 +411,16 @@ public class Spalsh2 extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("asdasd", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            String email = user.getEmail();
-                            String pid = user.getUid();
+                            String email = null;
+                            if (user != null) {
+                                email = user.getEmail();
+                            }
+                            String pid = null;
+                            if (user != null) {
+                                pid = user.getUid();
+                            }
 
-Log.d("googlee" , email);
+                            Log.d("googlee" , email);
 Log.d("googlee" , pid);
 
                             socialLogin(email , pid);
@@ -438,6 +451,8 @@ Log.d("googlee" , pid);
                             ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.MODIFY_AUDIO_SETTINGS) == PackageManager.PERMISSION_GRANTED
                     ) {
 //
+
+                Log.d("permissions" , "granted");
 
             } else {
                 if (

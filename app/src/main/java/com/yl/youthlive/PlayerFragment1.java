@@ -26,7 +26,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -59,7 +58,6 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yasic.bubbleview.BubbleView;
-import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.acceptRejectPOJO.acceptRejectBean;
 import com.yl.youthlive.endLivePOJO.Data;
 import com.yl.youthlive.followPOJO.followBean;
@@ -68,12 +66,10 @@ import com.yl.youthlive.getIpdatedPOJO.getUpdatedBean;
 import com.yl.youthlive.liveCommentPOJO.liveCommentBean;
 import com.yl.youthlive.liveLikePOJO.liveLikeBean;
 import com.yl.youthlive.requestConnectionPOJO.requestConnectionBean;
-import com.yl.youthlive.sendGiftPOJO.sendGiftBean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -90,21 +86,17 @@ import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordListener, RtmpHandler.RtmpListener, EncoderHandler.EncodeListener
-{
+public class PlayerFragment1 extends Fragment {
 
     TextView newMessage;
 
-    private int previousTotal = 0; // The total number of items in the dataset after the last load
-    private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
+    private int previousTotal = 0;
+    private boolean loading = true;
+    private int visibleThreshold = 5;
     int firstVisibleItem, visibleItemCount, totalItemCount;
 
-    private int current_page = 1;
+    int current_page = 1;
 
     ImageButton emoji, message, send, gift, crop;
 
@@ -129,10 +121,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     BroadcastReceiver statusReceiverPlayer;
     BroadcastReceiver exitReceiver;
 
-
     View rootView;
-    private EmojIconActions emojIcon;
-
 
     ProgressBar progress;
     String liveId;
@@ -143,7 +132,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     private static final int REQUEST_CODE = 100;
 
     private MediaProjectionManager mProjectionManager;
-    //SimpleExoPlayerView thumb;
+
     private static MediaProjection sMediaProjection;
     private Display mDisplay;
 
@@ -195,14 +184,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
     TextView ylId;
 
-    HomeActivity homeActivity;
-
     LinearLayout profileClick;
-
-    public void setHomeActivity(HomeActivity homeActivity) {
-        this.homeActivity = homeActivity;
-    }
-
 
 
     @Nullable
@@ -211,7 +193,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         View view = inflater.inflate(R.layout.player_fragment_layout1, container, false);
 
 
-        player = ((VideoPlayer)getActivity());
+        player = ((VideoPlayer) getActivity());
 
         ylId = view.findViewById(R.id.ylid);
 
@@ -235,19 +217,11 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
         thumbCameraContainer1 = view.findViewById(R.id.view3);
 
-        bubbleView = (BubbleView) view.findViewById(R.id.bubble);
+        bubbleView = view.findViewById(R.id.bubble);
         timeLineFollow = view.findViewById(R.id.folloview_friends);
 
 
         List<Drawable> drawableList = new ArrayList<>();
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_indigo_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_cyan_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_blue_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_deep_purple_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_light_blue_900_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_lime_a200_24dp));
-        //drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_pink_900_24dp));
         drawableList.add(getResources().getDrawable(R.drawable.ic_favorite_red_900_24dp));
 
         bubbleView.setDrawableList(drawableList);
@@ -286,7 +260,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         viewersGrid.setLayoutManager(viewersManager);
 
 
-        emojIcon = new EmojIconActions(getActivity(), rootView, comment, emoji);
+        EmojIconActions emojIcon = new EmojIconActions(getActivity(), rootView, comment, emoji);
         emojIcon.ShowEmojIcon();
 
 
@@ -294,23 +268,22 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    //do here your stuff f
 
                     String mess = comment.getText().toString();
 
                     if (mess.length() > 0) {
                         progress.setVisibility(View.VISIBLE);
 
-                        final bean b = (bean) getActivity().getApplicationContext();
+                        final bean b = (bean) Objects.requireNonNull(getActivity()).getApplicationContext();
 
                         Call<liveCommentBean> call = b.getRetrofit().commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                         call.enqueue(new Callback<liveCommentBean>() {
                             @Override
-                            public void onResponse(Call<liveCommentBean> call, retrofit2.Response<liveCommentBean> response) {
+                            public void onResponse(@NonNull Call<liveCommentBean> call, @NonNull retrofit2.Response<liveCommentBean> response) {
 
 
-                                if (Objects.equals(response.body().getMessage(), "Video Comment Success")) {
+                                if (response.body() != null && Objects.equals(response.body().getMessage(), "Video Comment Success")) {
                                     comment.setText("");
                                 }
 
@@ -319,7 +292,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                             }
 
                             @Override
-                            public void onFailure(Call<liveCommentBean> call, Throwable t) {
+                            public void onFailure(@NonNull Call<liveCommentBean> call, @NonNull Throwable t) {
                                 progress.setVisibility(View.GONE);
                                 Log.d("Video upload find ", t.toString());
                             }
@@ -363,19 +336,16 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                 call.enqueue(new Callback<String>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
 
                         progress.setVisibility(View.GONE);
-
-
-                        //homeActivity.removeFrag();
 
                         player.finish();
 
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
 
                         progress.setVisibility(View.GONE);
 
@@ -385,43 +355,24 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         });
 
 
-        /*start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Uri uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/videochat/demo");
-                StreamaxiaPlayer mStreamaxiaPlayer = new StreamaxiaPlayer();
-
-                mStreamaxiaPlayer.initStreamaxiaPlayer(surfaceView, frameLayout,
-                        stateText, VideoBroadcaster.this, VideoBroadcaster.this, uri);
-
-
-                mStreamaxiaPlayer.play(uri, StreamaxiaPlayer.TYPE_RTMP);
-
-
-            }
-        });*/
-
-
         heart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                final bean b = (bean) getContext().getApplicationContext();
+                final bean b = (bean) Objects.requireNonNull(getContext()).getApplicationContext();
 
                 retrofit2.Call<liveLikeBean> call = b.getRetrofit().likeLive(SharePreferenceUtils.getInstance().getString("userId"), liveId);
 
                 call.enqueue(new retrofit2.Callback<liveLikeBean>() {
                     @Override
-                    public void onResponse(retrofit2.Call<liveLikeBean> call, retrofit2.Response<liveLikeBean> response) {
+                    public void onResponse(@NonNull retrofit2.Call<liveLikeBean> call, @NonNull retrofit2.Response<liveLikeBean> response) {
 
                         bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
 
                     }
 
                     @Override
-                    public void onFailure(retrofit2.Call<liveLikeBean> call, Throwable t) {
+                    public void onFailure(@NonNull retrofit2.Call<liveLikeBean> call, @NonNull Throwable t) {
 
                     }
                 });
@@ -438,13 +389,13 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                 progress.setVisibility(View.VISIBLE);
 
-                final bean b = (bean) getContext().getApplicationContext();
+                final bean b = (bean) Objects.requireNonNull(getContext()).getApplicationContext();
 
                 Call<String> call = b.getRetrofit().endConnection(connId);
 
                 call.enqueue(new Callback<String>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
 
 
                         progress.setVisibility(View.GONE);
@@ -452,7 +403,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                         progress.setVisibility(View.GONE);
                     }
                 });
@@ -462,10 +413,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         });
 
 
-        commentGrid.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        commentGrid.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 if (dy > 0) {
@@ -507,7 +458,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onReceive(Context context, Intent intent) {
 
                 // checking for type intent filter
-                if (intent.getAction().equals("commentData")) {
+                if (Objects.equals(intent.getAction(), "commentData")) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
@@ -536,15 +487,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
+                }
             }
         };
 
@@ -553,7 +496,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onReceive(Context context, Intent intent) {
 
                 // checking for type intent filter
-                if (intent.getAction().equals("like")) {
+                if (Objects.equals(intent.getAction(), "like")) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
@@ -595,7 +538,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onReceive(Context context, Intent intent) {
 
                 // checking for type intent filter
-                if (intent.getAction().equals("view")) {
+                if (Objects.equals(intent.getAction(), "view")) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
@@ -610,7 +553,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     final String uid = item.getUserId().replace("\"", "");
 
-                    String id = item.getUserId();
                     if (!uid.equals(timelineId)) {
                         viewsAdapter.addView(item);
                         viewersGrid.smoothScrollToPosition(0);
@@ -619,15 +561,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
+                }
             }
         };
 
@@ -637,7 +571,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onReceive(Context context, Intent intent) {
 
                 // checking for type intent filter
-                if (intent.getAction().equals("gift")) {
+                if (Objects.equals(intent.getAction(), "gift")) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
@@ -678,7 +612,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         //comm.set
 
 
-                        showGift(item.getGiftId(), item.getGiftName(), item.getIcon(), item.getSenbdId());
+                        showGift(item.getGiftId(), item.getIcon(), item.getSenbdId());
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -687,15 +621,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     //displayFirebaseRegId();
 
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
+                }
             }
         };
 
@@ -705,10 +631,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onReceive(Context context, Intent intent) {
 
                 // checking for type intent filter
-                if (intent.getAction().equals("live_end")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
+                if (Objects.equals(intent.getAction(), "live_end")) {
 
                     Log.d("data", intent.getStringExtra("data"));
 
@@ -721,20 +644,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     try {
 
-/*
-                        Intent registrationComplete = new Intent("eenndd");
-                        registrationComplete.putExtra("image", image);
-                        registrationComplete.putExtra("tid", timelineId);
-                        registrationComplete.putExtra("tname", timelineName.getText().toString());
-                        registrationComplete.putExtra("ltime", item.getLiveTime());
-                        registrationComplete.putExtra("views", item.getViewers());
-
-                        LocalBroadcastManager.getInstance(player).sendBroadcast(registrationComplete);
-
-                        //mCallback.onEndListener(image , timelineId , timelineName.getText().toString() , item.getLiveTime() , item.getViewers());
-*/
-
-
                         Intent intent1 = new Intent(getContext(), LiveEndedPlayer.class);
                         intent1.putExtra("image", image);
                         intent1.putExtra("id", timelineId);
@@ -742,8 +651,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         intent1.putExtra("time", item.getLiveTime());
                         intent1.putExtra("views", item.getViewers());
                         startActivity(intent1);
-                        player.overridePendingTransition(0,0);
-                        getActivity().finish();
+                        player.overridePendingTransition(0, 0);
+                        player.finish();
 
 
                     } catch (Exception e) {
@@ -751,17 +660,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     }
 
 
-                    //displayFirebaseRegId();
-
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
+                }
             }
         };
 
@@ -770,7 +669,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onReceive(Context context, Intent intent) {
 
                 // checking for type intent filter
-                if (intent.getAction().equals("request")) {
+                if (Objects.equals(intent.getAction(), "request")) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
@@ -790,7 +689,11 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setCancelable(false);
                             dialog.setContentView(R.layout.new_connection_dialog);
-                            dialog.show();
+
+                            if (!Objects.requireNonNull(getActivity()).isFinishing()) {
+                                dialog.show();
+                            }
+
 
                             Button accept = dialog.findViewById(R.id.button11);
                             Button deny = dialog.findViewById(R.id.button12);
@@ -825,14 +728,11 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                                     Call<acceptRejectBean> call1 = b.getRetrofit().acceptReject(connId, liveId, "1", SharePreferenceUtils.getInstance().getString("userId"));
                                     call1.enqueue(new Callback<acceptRejectBean>() {
                                         @Override
-                                        public void onResponse(Call<acceptRejectBean> call, Response<acceptRejectBean> response) {
+                                        public void onResponse(@NonNull Call<acceptRejectBean> call, @NonNull Response<acceptRejectBean> response) {
 
                                             try {
 
-
                                                 isConnection = false;
-                                                //cameraLayout1.setVisibility(View.VISIBLE);
-
 
                                                 reject1.setVisibility(View.GONE);
 
@@ -846,7 +746,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                                         }
 
                                         @Override
-                                        public void onFailure(Call<acceptRejectBean> call, Throwable t) {
+                                        public void onFailure(@NonNull Call<acceptRejectBean> call, @NonNull Throwable t) {
                                             dp.setVisibility(View.GONE);
                                             t.printStackTrace();
                                         }
@@ -865,18 +765,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         e.printStackTrace();
                     }
 
-
-                    //displayFirebaseRegId();
-
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
+                }
             }
         };
 
@@ -886,10 +775,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onReceive(Context context, Intent intent) {
 
                 // checking for type intent filter
-                if (intent.getAction().equals("status")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
+                if (Objects.equals(intent.getAction(), "status")) {
 
                     Log.d("ddata", intent.getStringExtra("data"));
 
@@ -945,16 +831,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     }
 
 
-                    //displayFirebaseRegId();
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
+                }
             }
         };
 
@@ -964,7 +841,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onReceive(Context context, Intent intent) {
 
                 // checking for type intent filter
-                if (intent.getAction().equals("connection_end")) {
+                if (Objects.equals(intent.getAction(), "connection_end")) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
@@ -977,7 +854,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         JSONObject obj = new JSONObject(json);
 
 
-                        String conn = obj.getString("connId");
                         String uid = obj.getString("userId");
 
 
@@ -999,16 +875,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     }
 
 
-                    //displayFirebaseRegId();
-                }/* else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    txtMessage.setText(message);
-                }*/
+                }
             }
         };
 
@@ -1018,10 +885,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onReceive(Context context, Intent intent) {
 
                 // checking for type intent filter
-                if (intent.getAction().equals("status_player")) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
+                if (Objects.equals(intent.getAction(), "status_player")) {
 
                     Log.d("uurrii", intent.getStringExtra("data"));
 
@@ -1122,7 +986,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onReceive(Context context, Intent intent) {
 
                 // checking for type intent filter
-                if (intent.getAction().equals("request_player")) {
+                if (Objects.equals(intent.getAction(), "request_player")) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
 
@@ -1136,8 +1000,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         JSONObject object = new JSONObject(json);
 
                         connId = object.getString("conId");
-
-                        final String uid = object.getString("uid");
 
 
                     } catch (JSONException e) {
@@ -1164,7 +1026,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             @Override
             public void onReceive(Context context, Intent intent) {
 
-                if (intent.getAction().equals("exit")) {
+                if (Objects.equals(intent.getAction(), "exit")) {
 
 
                     try {
@@ -1178,14 +1040,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                         final String uid = item.getUserId().replace("\"", "");
 
-                        final bean b = (bean) homeActivity.getApplicationContext();
-
-                        String id = item.getUserId();
                         if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
                             viewsAdapter.removeView(item);
                         }
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -1205,17 +1063,17 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 if (mess.length() > 0) {
                     progress.setVisibility(View.VISIBLE);
 
-                    final bean b = (bean) getActivity().getApplicationContext();
+                    final bean b = (bean) Objects.requireNonNull(getActivity()).getApplicationContext();
 
 
                     Call<liveCommentBean> call = b.getRetrofit().commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");
 
                     call.enqueue(new Callback<liveCommentBean>() {
                         @Override
-                        public void onResponse(Call<liveCommentBean> call, retrofit2.Response<liveCommentBean> response) {
+                        public void onResponse(@NonNull Call<liveCommentBean> call, @NonNull retrofit2.Response<liveCommentBean> response) {
 
 
-                            if (Objects.equals(response.body().getMessage(), "Video Comment Success")) {
+                            if (response.body() != null && Objects.equals(response.body().getMessage(), "Video Comment Success")) {
                                 comment.setText("");
                             }
 
@@ -1224,7 +1082,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         }
 
                         @Override
-                        public void onFailure(Call<liveCommentBean> call, Throwable t) {
+                        public void onFailure(@NonNull Call<liveCommentBean> call, @NonNull Throwable t) {
                             progress.setVisibility(View.GONE);
                             Log.d("Video upload find ", t.toString());
                         }
@@ -1257,9 +1115,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public void onClick(View v) {
 
 
-
                 BottomGiftSheet bottomSheetDialog = new BottomGiftSheet();
-                bottomSheetDialog.setData(liveId , timelineId);
+                bottomSheetDialog.setData(liveId, timelineId);
                 bottomSheetDialog.show(getChildFragmentManager(), "Custom Bottom Sheet");
 
 
@@ -1313,14 +1170,14 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                     call.enqueue(new Callback<requestConnectionBean>() {
                         @Override
-                        public void onResponse(Call<requestConnectionBean> call, retrofit2.Response<requestConnectionBean> response) {
+                        public void onResponse(@NonNull Call<requestConnectionBean> call, @NonNull retrofit2.Response<requestConnectionBean> response) {
                             Toast.makeText(player, "Your request has been sent to the broadcaster", Toast.LENGTH_SHORT).show();
 
                             progress.setVisibility(View.GONE);
                         }
 
                         @Override
-                        public void onFailure(Call<requestConnectionBean> call, Throwable t) {
+                        public void onFailure(@NonNull Call<requestConnectionBean> call, @NonNull Throwable t) {
                             progress.setVisibility(View.GONE);
                             Log.d("asdasdasdas", t.toString());
                         }
@@ -1370,9 +1227,9 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                 call.enqueue(new retrofit2.Callback<followBean>() {
                     @Override
-                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+                    public void onResponse(@NonNull retrofit2.Call<followBean> call, @NonNull retrofit2.Response<followBean> response) {
 
-                        if (response.body().getStatus().equals("1")) {
+                        if (response.body() != null && response.body().getStatus().equals("1")) {
                             Toast.makeText(player, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                             timeLineFollow.setVisibility(View.GONE);
                         }
@@ -1383,7 +1240,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     }
 
                     @Override
-                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+                    public void onFailure(@NonNull retrofit2.Call<followBean> call, @NonNull Throwable t) {
 
                         progress.setVisibility(View.GONE);
 
@@ -1401,15 +1258,16 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 
                 BroadcasterProfileSheet bottomSheetDialog = new BroadcasterProfileSheet();
-                bottomSheetDialog.setData(timelineId , timeLineFollow);
+                bottomSheetDialog.setData(timelineId, timeLineFollow);
                 bottomSheetDialog.show(getChildFragmentManager(), "Custom Bottom Sheet");
-
 
 
             }
         });
 
-        liveId = getArguments().getString("liveId");
+        if (getArguments() != null) {
+            liveId = getArguments().getString("liveId");
+        }
         schedule(liveId);
 
 
@@ -1417,7 +1275,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     }
 
     public void schedule(String liveId) {
-        final bean b = (bean) getActivity().getApplicationContext();
+        final bean b = (bean) Objects.requireNonNull(getActivity()).getApplicationContext();
 
 
         SharedPreferences fcmPref = getActivity().getSharedPreferences("fcm", Context.MODE_PRIVATE);
@@ -1431,13 +1289,15 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
         call.enqueue(new Callback<getUpdatedBean>() {
             @Override
-            public void onResponse(Call<getUpdatedBean> call, retrofit2.Response<getUpdatedBean> response) {
+            public void onResponse(@NonNull Call<getUpdatedBean> call, @NonNull retrofit2.Response<getUpdatedBean> response) {
 
                 try {
 
                     bubbleChecker.run();
 
-                    ylId.setText(response.body().getData().getYouthliveId());
+                    if (response.body() != null) {
+                        ylId.setText(response.body().getData().getYouthliveId());
+                    }
 
                     timelineId = response.body().getData().getTimelineId();
 
@@ -1464,7 +1324,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     likeCount.setText(String.valueOf(count1));
 
                     totalBeans.setText(response.body().getData().getBeans2() + " Coins");
-
 
                     liveUsers.setText(response.body().getData().getViewsCount());
 
@@ -1537,7 +1396,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     }*/
 
 
-                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(commentReceiver,
+                    LocalBroadcastManager.getInstance(Objects.requireNonNull(getContext())).registerReceiver(commentReceiver,
                             new IntentFilter("commentData"));
 
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(likeReceiver,
@@ -1582,7 +1441,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             }
 
             @Override
-            public void onFailure(Call<getUpdatedBean> call, Throwable t) {
+            public void onFailure(@NonNull Call<getUpdatedBean> call, @NonNull Throwable t) {
 
 
                 t.printStackTrace();
@@ -1597,45 +1456,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
 
-        List<Comment> list = new ArrayList<>();
+        List<Comment> list;
         Context context;
 
-
-//        asdasdakjsdkjaskjhsakd
-
-        /*Integer gifts[] = new Integer[]
-                {
-                        R.drawable.g52,
-                        R.drawable.g20,
-                        R.drawable.g32,
-                        R.drawable.g1500,
-                        R.drawable.g72,
-                        R.drawable.g112,
-                        R.drawable.g153,
-                        R.drawable.g172,
-                        R.drawable.g180,
-                        R.drawable.g192,
-                        R.drawable.g212,
-                        R.drawable.g240,
-                        R.drawable.g252,
-                        R.drawable.g280,
-                        R.drawable.g300,
-                        R.drawable.g312,
-                        R.drawable.g352,
-                        R.drawable.g380,
-                        R.drawable.g452,
-                        R.drawable.g500,
-                        R.drawable.g612,
-                        R.drawable.g700,
-                        R.drawable.g800,
-                        R.drawable.g900,
-                        R.drawable.g1000,
-                        R.drawable.g1100,
-                        R.drawable.g1200
-                };*/
-
-
-        public CommentsAdapter(Context context, List<Comment> list) {
+        CommentsAdapter(Context context, List<Comment> list) {
             this.context = context;
             this.list = list;
         }
@@ -1646,21 +1470,25 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         }
 
 
-        public void addComment(Comment item) {
+        void addComment(Comment item) {
             list.add(0, item);
             notifyItemInserted(0);
         }
 
 
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.chat_model, parent, false);
+            View view = null;
+            if (inflater != null) {
+                view = inflater.inflate(R.layout.chat_model, parent, false);
+            }
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
             holder.setIsRecyclable(false);
 
@@ -1686,120 +1514,107 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
             //Log.d("ttyyppee" , type);
 
-            if (type.equals("basic")) {
+            switch (type) {
+                case "basic": {
 
-                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
-                ImageLoader loader = ImageLoader.getInstance();
+                    ImageLoader loader = ImageLoader.getInstance();
 
-                String im = item.getUserImage().replace("\"", "");
+                    String im = item.getUserImage().replace("\"", "");
 
-                loader.displayImage(im, holder.index, options);
-
-
-                String com = item.getComment().replace("\"", "");
-
-                String us = item.getUserName().replace("\"", "");
-
-                holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
+                    loader.displayImage(im, holder.index, options);
 
 
-                holder.container.setBackground(context.getResources().getDrawable(R.drawable.gray_round2));
+                    String com = item.getComment().replace("\"", "");
 
-                holder.index.setVisibility(View.VISIBLE);
+                    String us = item.getUserName().replace("\"", "");
 
-                //holder.index.setVisibility(View.GONE);
-                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
+                    holder.name.setText(Html.fromHtml("<font color=\"#cdcdcd\">" + us + ":</font> " + com));
+
+
+                    holder.container.setBackground(context.getResources().getDrawable(R.drawable.gray_round2));
+
+                    holder.index.setVisibility(View.VISIBLE);
+
+                    //holder.index.setVisibility(View.GONE);
+                    if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
+                        holder.add.setVisibility(View.GONE);
+                    } else {
+                        holder.add.setVisibility(View.VISIBLE);
+                    }
+
+                    if (Objects.equals(uid, SharePreferenceUtils.getInstance().getString("userId"))) {
+                        holder.add.setVisibility(View.GONE);
+                    } else {
+                        holder.add.setVisibility(View.VISIBLE);
+                    }
+
                     holder.add.setVisibility(View.GONE);
-                } else {
-                    holder.add.setVisibility(View.VISIBLE);
-                }
 
-                if (Objects.equals(uid, SharePreferenceUtils.getInstance().getString("userId"))) {
+                    break;
+                }
+                case "follow": {
+
+                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+                    ImageLoader loader = ImageLoader.getInstance();
+
+                    String im = item.getUserImage().replace("\"", "");
+
+                    loader.displayImage(im, holder.index, options);
+
+
+                    String us = item.getUserName().replace("\"", "");
+
+                    holder.name.setText("YL: " + us + " became a fan. Won't miss the next live");
+
                     holder.add.setVisibility(View.GONE);
-                } else {
-                    holder.add.setVisibility(View.VISIBLE);
-                }
 
-                holder.add.setVisibility(View.GONE);
+                    holder.container.setBackground(context.getResources().getDrawable(R.drawable.red_round2));
 
-            } else if (type.equals("follow")) {
+                    holder.index.setVisibility(View.GONE);
+                    if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
+                        holder.add.setVisibility(View.GONE);
+                    } else {
+                        holder.add.setVisibility(View.VISIBLE);
+                    }
 
-                DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
-
-                ImageLoader loader = ImageLoader.getInstance();
-
-                String im = item.getUserImage().replace("\"", "");
-
-                loader.displayImage(im, holder.index, options);
-
-
-                String us = item.getUserName().replace("\"", "");
-
-                holder.name.setText("YL: " + us + " became a fan. Won't miss the next live");
-
-                holder.add.setVisibility(View.GONE);
-
-                holder.container.setBackground(context.getResources().getDrawable(R.drawable.red_round2));
-
-                holder.index.setVisibility(View.GONE);
-                if (Objects.equals(item.getFriendStatus().getFollow(), "true")) {
                     holder.add.setVisibility(View.GONE);
-                } else {
-                    holder.add.setVisibility(View.VISIBLE);
+
+                    break;
                 }
+                case "gift": {
 
-                holder.add.setVisibility(View.GONE);
-
-            } else if (type.equals("gift")) {
-
-                String us = item.getUserId().replace("\"", "");
-                String gid = item.getComment().replace("\"", "");
-                holder.name.setText(us + " has sent a  ");
+                    String us = item.getUserId().replace("\"", "");
+                    String gid = item.getComment().replace("\"", "");
+                    holder.name.setText(us + " has sent a  ");
 
 
-                Drawable drawable = context.getResources().getDrawable(b.gifts[Integer.parseInt(gid) - 1]);
+                    Drawable drawable = context.getResources().getDrawable(b.gifts[Integer.parseInt(gid) - 1]);
 
-                drawable.setBounds(0, 0, 50, 50);
+                    drawable.setBounds(0, 0, 50, 50);
 
-                int selectionCursor = holder.name.getSelectionStart();
-                //holder.name.getText().insert(selectionCursor, ".");
-                selectionCursor = holder.name.getText().length();
+                    int selectionCursor;
+                    selectionCursor = holder.name.getText().length();
 
-                SpannableStringBuilder builder = new SpannableStringBuilder(holder.name.getText());
-                builder.setSpan(new ImageSpan(drawable), selectionCursor - ".".length(), selectionCursor, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                holder.name.setText(builder);
+                    SpannableStringBuilder builder = new SpannableStringBuilder(holder.name.getText());
+                    builder.setSpan(new ImageSpan(drawable), selectionCursor - ".".length(), selectionCursor, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    holder.name.setText(builder);
 
-                holder.add.setVisibility(View.GONE);
+                    holder.add.setVisibility(View.GONE);
 
-                holder.container.setBackground(context.getResources().getDrawable(R.drawable.blue_round2));
+                    holder.container.setBackground(context.getResources().getDrawable(R.drawable.blue_round2));
 
-                holder.index.setVisibility(View.GONE);
+                    holder.index.setVisibility(View.GONE);
+                    break;
+                }
             }
 
 
-            //holder.user.setText(us);
-
-/*
             holder.index.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    */
-/*Intent intent = new Intent(context, TimelineProfile.class);
-                    intent.putExtra("userId", uid);
-                    startActivity(intent);*//*
-
-
-                }
-            });
-
-*/
-
-            holder.index.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
 
                     bean b = (bean) context.getApplicationContext();
 
@@ -1811,9 +1626,9 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         dialog.show();
 
 
-                        CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
-                        TextView name = (TextView) dialog.findViewById(R.id.name);
-                        Button follo = (Button) dialog.findViewById(R.id.follow);
+                        CircleImageView image = dialog.findViewById(R.id.image);
+                        TextView name = dialog.findViewById(R.id.name);
+                        Button follo = dialog.findViewById(R.id.follow);
                         final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
 
 
@@ -1835,9 +1650,11 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                                 call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
-                                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+                                    public void onResponse(@NonNull retrofit2.Call<followBean> call, @NonNull retrofit2.Response<followBean> response) {
 
-                                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                        if (response.body() != null) {
+                                            Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
 
                                         bar.setVisibility(View.GONE);
 
@@ -1846,7 +1663,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                                     }
 
                                     @Override
-                                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+                                    public void onFailure(@NonNull retrofit2.Call<followBean> call, @NonNull Throwable t) {
 
                                         bar.setVisibility(View.GONE);
 
@@ -1858,47 +1675,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     }
 
 
-
-
-
-
-                    /*progress.setVisibility(View.VISIBLE);
-
-                    final bean b = (bean) context.getApplicationContext();
-
-                    final Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(b.BASE_URL)
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    final AllAPIs cr = retrofit.create(AllAPIs.class);
-
-
-                    retrofit2.Call<followBean> call = cr.follow(SharePreferenceUtils.getInstance().getString("userId"), uid);
-
-                    call.enqueue(new retrofit2.Callback<followBean>() {
-                        @Override
-                        public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
-
-                            if (response.body().getStatus().equals("1")) {
-                                Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                holder.add.setVisibility(View.GONE);
-                            }
-
-
-                            progress.setVisibility(View.GONE);
-
-                        }
-
-                        @Override
-                        public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
-
-                            progress.setVisibility(View.GONE);
-
-                        }
-                    });
-*/
 
                 }
             });
@@ -1922,10 +1698,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             public ViewHolder(View itemView) {
                 super(itemView);
 
-                index = (CircleImageView) itemView.findViewById(R.id.index);
-                name = (TextView) itemView.findViewById(R.id.name);
+                index = itemView.findViewById(R.id.index);
+                name = itemView.findViewById(R.id.name);
                 container = itemView.findViewById(R.id.container);
-                add = (ImageButton) itemView.findViewById(R.id.add);
+                add = itemView.findViewById(R.id.add);
 
             }
         }
@@ -1968,21 +1744,17 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                     return;
                 }
 
-                // display metrics
                 DisplayMetrics metrics = getResources().getDisplayMetrics();
                 mDensity = metrics.densityDpi;
-                mDisplay = getActivity().getWindowManager().getDefaultDisplay();
+                mDisplay = Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay();
 
-                // create virtual display depending on device width / height
                 createVirtualDisplay();
 
-                // register orientation change callback
                 mOrientationChangeCallback = new OrientationChangeCallback(getContext());
                 if (mOrientationChangeCallback.canDetectOrientation()) {
                     mOrientationChangeCallback.enable();
                 }
 
-                // register media projection stop callback
                 sMediaProjection.registerCallback(new MediaProjectionStopCallback(), mHandler);
             }
         }
@@ -2005,17 +1777,16 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     private Handler mHandler;
 
     private void createVirtualDisplay() {
-        // get width and height
+
         Point size = new Point();
         mDisplay.getSize(size);
         mWidth = size.x;
         mHeight = size.y;
 
-
-        // start capture reader
         mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
         mVirtualDisplay = sMediaProjection.createVirtualDisplay(SCREENCAP_NAME, mWidth, mHeight, mDensity, VIRTUAL_DISPLAY_FLAGS, mImageReader.getSurface(), null, mHandler);
         mImageReader.setOnImageAvailableListener(new ImageAvailableListener(), mHandler);
+
     }
 
     private static int IMAGES_PRODUCED;
@@ -2053,12 +1824,12 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         Log.e(TAG, "captured image: " + IMAGES_PRODUCED);
 
 
-                        final String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "Title", null);
+                        final String path = MediaStore.Images.Media.insertImage(Objects.requireNonNull(getActivity()).getContentResolver(), bitmap, "Title", null);
 
 
                         final Dialog dialog = new Dialog(player);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
                         dialog.setContentView(R.layout.screenshot_dialog);
                         dialog.setCancelable(false);
                         dialog.show();
@@ -2088,8 +1859,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                         Log.e(TAG, "4");
 
-                        final Bitmap finalBitmap = bitmap;
-
                         Log.e(TAG, "5");
                         share.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -2098,11 +1867,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                                 Intent i = new Intent(Intent.ACTION_SEND);
 
                                 i.setType("image/*");
-                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-
-                                //byte[] bytes = stream.toByteArray();
-
 
                                 i.putExtra(Intent.EXTRA_STREAM, Uri.parse(path));
                                 try {
@@ -2127,8 +1891,6 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         stopProjection();
 
                     }
-                } else {
-
                 }
 
 
@@ -2209,20 +1971,12 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     }
 
 
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
     class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder> {
 
         Context context;
-        List<com.yl.youthlive.getIpdatedPOJO.View> list = new ArrayList<>();
+        List<com.yl.youthlive.getIpdatedPOJO.View> list;
 
-        public ViewsAdapter(Context context, List<com.yl.youthlive.getIpdatedPOJO.View> list) {
+        ViewsAdapter(Context context, List<com.yl.youthlive.getIpdatedPOJO.View> list) {
             this.context = context;
             this.list = list;
         }
@@ -2238,7 +1992,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             liveUsers.setText(String.valueOf(list.size()));
         }
 
-        public void removeView(com.yl.youthlive.getIpdatedPOJO.View item) {
+        void removeView(com.yl.youthlive.getIpdatedPOJO.View item) {
             list.remove(item);
             notifyDataSetChanged();
             liveUsers.setText(String.valueOf(list.size()));
@@ -2248,7 +2002,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.viewers_model, parent, false);
+            View view = null;
+            if (inflater != null) {
+                view = inflater.inflate(R.layout.viewers_model, parent, false);
+            }
 
             return new ViewHolder(view);
         }
@@ -2286,9 +2043,9 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         dialog.show();
 
 
-                        CircleImageView image = (CircleImageView) dialog.findViewById(R.id.image);
-                        TextView name = (TextView) dialog.findViewById(R.id.name);
-                        Button follo = (Button) dialog.findViewById(R.id.follow);
+                        CircleImageView image = dialog.findViewById(R.id.image);
+                        TextView name = dialog.findViewById(R.id.name);
+                        Button follo = dialog.findViewById(R.id.follow);
                         final ProgressBar bar = dialog.findViewById(R.id.progressBar10);
 
 
@@ -2311,9 +2068,11 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
                                 call.enqueue(new retrofit2.Callback<followBean>() {
                                     @Override
-                                    public void onResponse(retrofit2.Call<followBean> call, retrofit2.Response<followBean> response) {
+                                    public void onResponse(@NonNull retrofit2.Call<followBean> call, @NonNull retrofit2.Response<followBean> response) {
 
-                                        Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                        if (response.body() != null) {
+                                            Toast.makeText(context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
 
                                         bar.setVisibility(View.GONE);
 
@@ -2322,7 +2081,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                                     }
 
                                     @Override
-                                    public void onFailure(retrofit2.Call<followBean> call, Throwable t) {
+                                    public void onFailure(@NonNull retrofit2.Call<followBean> call, @NonNull Throwable t) {
 
                                         bar.setVisibility(View.GONE);
 
@@ -2349,7 +2108,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                image = (CircleImageView) itemView.findViewById(R.id.image);
+                image = itemView.findViewById(R.id.image);
 
             }
         }
@@ -2361,7 +2120,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
 
     }
-
+/*
 
     class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
 
@@ -2371,7 +2130,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
         //wasdljalsjdasldakjds
 
-        /*Integer gifs[] = new Integer[]
+        */
+/*Integer gifs[] = new Integer[]
                 {
                         R.drawable.g52,
                         R.drawable.g20,
@@ -2400,10 +2160,12 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                         R.drawable.g1000,
                         R.drawable.g1100,
                         R.drawable.g1200
-                };*/
+                };*//*
+
 //lkasldkjaslkdjasd
 
-        /*String diamonds[] = {
+        */
+/*String diamonds[] = {
                 "12",
                 "20",
                 "32",
@@ -2431,12 +2193,14 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 "1000",
                 "1100",
                 "1200"
-        };*/
+        };*//*
+
 
 
 //asjdhljasldjpaspdojasd
 
-        /*String names[] = {
+        */
+/*String names[] = {
                 "heart",
                 "gun",
                 "scooter",
@@ -2464,7 +2228,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
                 "fire",
                 "head phone",
                 "weapon"
-        };*/
+        };*//*
+
 
 
         public GiftAdapter(Context context, ProgressBar progress, Dialog dialog) {
@@ -2484,7 +2249,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-            bean b = (bean)context.getApplicationContext();
+            bean b = (bean) context.getApplicationContext();
 
             Glide.with(context).load(b.gifts[position]).into(holder.image);
 
@@ -2546,7 +2311,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
         @Override
         public int getItemCount() {
-            bean b = (bean)context.getApplicationContext();
+            bean b = (bean) context.getApplicationContext();
             return b.diamonds.length;
         }
 
@@ -2566,6 +2331,8 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             }
         }
     }
+
+*/
 
 
     //jhsalduliawdhoislda
@@ -2634,15 +2401,13 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
             "weapon"
     };*/
 
-    public void showGift(String giftId, String text, String profile, String user) {
+    public void showGift(String giftId, String profile, String user) {
 
         Log.d("ggiidd", giftId);
 
-        bean b = (bean)player.getApplicationContext();
+        bean b = (bean) player.getApplicationContext();
 
         giftText.setText(b.names[Integer.parseInt(giftId) - 1]);
-
-        //Toast.makeText(player, profile, Toast.LENGTH_SHORT).show();
 
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).resetViewBeforeLoading(false).build();
         ImageLoader loader = ImageLoader.getInstance();
@@ -2687,15 +2452,10 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
         @Override
         public void run() {
             try {
-                //this function can change value of mInterval.
-
                 if (randomBoolean()) {
                     bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
                 }
-
             } finally {
-                // 100% guarantee that this always happens, even if
-                // your update method throws an exception
                 mHandler.postDelayed(bubbleChecker, 800);
             }
         }
@@ -2710,7 +2470,7 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
     public void onDestroy() {
         super.onDestroy();
 
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(commentReceiver);
+        LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity())).unregisterReceiver(commentReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(likeReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(viewReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(giftReceiver);
@@ -2725,29 +2485,9 @@ public class PlayerFragment1 extends Fragment //implements RecordHandler.RecordL
 
     }
 
-
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof endListener) {
-            mCallback = (endListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnGreenFragmentListener");
-        }
-    }*/
-
     @Override
     public void onDetach() {
         super.onDetach();
-        mCallback = null;
-    }
-
-
-    endListener mCallback;
-
-    public interface endListener{
-        public void onEndListener(String image , String timelineId , String timelineName , String liveTime , String viewers);
     }
 
 }

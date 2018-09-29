@@ -84,7 +84,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PlayerFragment1.endListener {
+public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
 
     public final int MEDIA_TYPE_VIDEO = 2;
@@ -1138,20 +1138,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
 
-
-    }
-
-
-    @Override
-    public void onEndListener(String image, String timelineId, String timelineName, String liveTime, String viewers) {
-
-/*
-
-        VideoPlayerFragment f = (VideoPlayerFragment) getSupportFragmentManager().findFragmentByTag(fragTag);
-
-        f.onEndListener(image , timelineId , timelineName , liveTime , viewers);
-
-*/
 
     }
 

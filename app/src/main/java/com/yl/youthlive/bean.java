@@ -71,11 +71,7 @@ public class bean extends Application {
 
         cr = retrofit.create(AllAPIs.class);
 
-        try {
             FirebaseApp.initializeApp(this);
-        }
-        catch (Exception e) {
-        }
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
 

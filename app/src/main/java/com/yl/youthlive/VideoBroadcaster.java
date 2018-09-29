@@ -1,6 +1,7 @@
 package com.yl.youthlive;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +44,6 @@ import com.flashphoner.fpwcsapi.session.Stream;
 import com.flashphoner.fpwcsapi.session.StreamOptions;
 import com.flashphoner.fpwcsapi.session.StreamStatusEvent;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
-import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.endLivePOJO.endLiveBean;
 
 import org.webrtc.RendererCommon;
@@ -51,29 +51,17 @@ import org.webrtc.SurfaceViewRenderer;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-
-//import com.google.android.exoplayer.AspectRatioFrameLayout;
-/**/
-//import com.streamaxia.player.StreamaxiaPlayer;
-//import com.streamaxia.player.listener.StreamaxiaPlayerState;
 
 public class VideoBroadcaster extends AppCompatActivity {
 
-    //CameraPreview cameraPreview;
-    //private StreamaxiaPublisher mPublisher;
     ProgressBar progress;
 
-    //
-
     TextView stateText;
-
 
     boolean torchStatus = false;
 
@@ -84,9 +72,6 @@ public class VideoBroadcaster extends AppCompatActivity {
 
     View popup;
     Button end, cancel;
-    //ImageButton start;
-
-
     RelativeLayout thumbContainer1;
 
 
@@ -107,15 +92,7 @@ public class VideoBroadcaster extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
-
-    //private SrsPublisher mPublisher;
-    //SrsCameraView cameraPreview;
-
-
     BroadcastReceiver headsetPlug;
-
-
-    //TextView earphones;
 
     int flag = 0;
 
@@ -130,24 +107,19 @@ public class VideoBroadcaster extends AppCompatActivity {
 
     private SurfaceViewRenderer localRender;
 
-    private PercentFrameLayout localRenderLayout;
-
 
     private Stream playStream;
 
     private SurfaceViewRenderer remoteRender;
 
-    private PercentFrameLayout remoteRenderLayout;
 
-
+    @SuppressLint({"CommitPrefEdits", "ShowToast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_broadcaster);
 
         Flashphoner.init(this);
-
-
 
         pref = getSharedPreferences("offline", Context.MODE_PRIVATE);
         editor = pref.edit();
@@ -170,7 +142,7 @@ public class VideoBroadcaster extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
 
 
-                if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
+                if (Objects.equals(intent.getAction(), Intent.ACTION_HEADSET_PLUG)) {
                     boolean connectedHeadphones = (intent.getIntExtra("state", 0) == 1);
 
                     if (connectedHeadphones) {
@@ -202,7 +174,7 @@ public class VideoBroadcaster extends AppCompatActivity {
         localRender = findViewById(R.id.local_video_view);
 
 
-        localRenderLayout = findViewById(R.id.local_video_layout);
+        PercentFrameLayout localRenderLayout = findViewById(R.id.local_video_layout);
 
 
         localRender.setZOrderMediaOverlay(true);
@@ -214,7 +186,7 @@ public class VideoBroadcaster extends AppCompatActivity {
         localRender.requestLayout();
 
         remoteRender = findViewById(R.id.remote_video_view);
-        remoteRenderLayout = findViewById(R.id.remote_video_layout);
+        PercentFrameLayout remoteRenderLayout = findViewById(R.id.remote_video_layout);
 
         remoteRender.setZOrderOnTop(true);
 
@@ -352,7 +324,6 @@ public class VideoBroadcaster extends AppCompatActivity {
         countdown.setFactory(new ViewSwitcher.ViewFactory() {
 
             public View makeView() {
-                // TODO Auto-generated method stub
                 // create a TextView
                 TextView t = new TextView(VideoBroadcaster.this);
                 // set the gravity of text to top and center horizontal
@@ -406,10 +377,10 @@ public class VideoBroadcaster extends AppCompatActivity {
 
                 call.enqueue(new Callback<endLiveBean>() {
                     @Override
-                    public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
+                    public void onResponse(@NonNull Call<endLiveBean> call, @NonNull Response<endLiveBean> response) {
 
 
-                        if (response.body().getStatus().equals("1")) {
+                        if (response.body() != null && response.body().getStatus().equals("1")) {
 
                             isEnded = true;
 
@@ -426,7 +397,7 @@ public class VideoBroadcaster extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<endLiveBean> call, Throwable t) {
+                    public void onFailure(@NonNull Call<endLiveBean> call, @NonNull Throwable t) {
 
                         end.setEnabled(true);
                         end.setClickable(true);
@@ -451,10 +422,9 @@ public class VideoBroadcaster extends AppCompatActivity {
     }
 
 
-
     public class FragAdapter extends FragmentStatePagerAdapter {
 
-        public FragAdapter(FragmentManager fm) {
+        FragAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -473,34 +443,7 @@ public class VideoBroadcaster extends AppCompatActivity {
         }
     }
 
-    /*@Override
-    protected void onResume() {
-        if (mPublisher != null)
-        {
-            cameraPreview.startCamera();
 
-        }
-
-
-
-        super.onResume();
-
-    }*/
-
-    /*@Override
-    protected void onPause() {
-
-        if (session != null)
-        {
-            //mPublisher.stopPublish();
-            //Toast.makeText(getApplicationContext(), "Camera Released", Toast.LENGTH_SHORT).show();
-
-            //mPublisher.stopRecord();
-        }
-
-        super.onPause();
-
-    }*/
 
     @Override
     protected void onStop() {
@@ -530,7 +473,6 @@ public class VideoBroadcaster extends AppCompatActivity {
         }
 
 
-
         try {
 
             if (session != null) {
@@ -548,13 +490,7 @@ public class VideoBroadcaster extends AppCompatActivity {
     }
 
     public void switchTorch() {
-        if (torchStatus) {
-
-            torchStatus = false;
-        } else {
-            //cameraPreview.startTorch();
-            torchStatus = true;
-        }
+        torchStatus = !torchStatus;
     }
 
 
@@ -567,22 +503,19 @@ public class VideoBroadcaster extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String url = u.getScheme() + "://" + u.getHost() + ":" + u.getPort();
+        String url = null;
+        if (u != null) {
+            url = u.getScheme() + "://" + u.getHost() + ":" + u.getPort();
+        }
 
         SessionOptions sessionOptions = new SessionOptions(url);
         sessionOptions.setLocalRenderer(localRender);
         sessionOptions.setRemoteRenderer(remoteRender);
 
 
-        /**
-         * Session for connection to WCS server is created with method createSession().
-         */
         session = Flashphoner.createSession(sessionOptions);
 
 
-        /**
-         * Callback functions for session status events are added to make appropriate changes in controls of the interface and publish stream when connection is established.
-         */
         session.on(new SessionEvent() {
             @Override
             public void onAppData(Data data) {
@@ -595,20 +528,10 @@ public class VideoBroadcaster extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        /**
-                         * The options for the stream to publish are set.
-                         * The stream name is passed when StreamOptions object is created.
-                         */
                         StreamOptions streamOptions = new StreamOptions(liveId);
 
-                        /**
-                         * Stream is created with method Session.createStream().
-                         */
                         publishStream = session.createStream(streamOptions);
 
-                        /**
-                         * Callback function for stream status change is added to play the stream when it is published.
-                         */
                         publishStream.on(new StreamStatusEvent() {
                             @Override
                             public void onStreamStatus(final Stream stream, final StreamStatus streamStatus) {
@@ -618,11 +541,12 @@ public class VideoBroadcaster extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (StreamStatus.PUBLISHING.equals(streamStatus)) {
+
+                                        /*if (StreamStatus.PUBLISHING.equals(streamStatus)) {
 
                                         } else {
                                             Log.e("Streamer", "Can not publish stream " + stream.getName() + " " + streamStatus);
-                                        }
+                                        }*/
 
                                     }
                                 });
@@ -653,11 +577,6 @@ public class VideoBroadcaster extends AppCompatActivity {
         });
 
 
-        /**
-         * Connection to WCS server is established with method Session.connect().
-         */
-
-
         session.connect(new Connection());
 
 
@@ -678,8 +597,6 @@ public class VideoBroadcaster extends AppCompatActivity {
             }
         });
 
-        //mPublisher.switchCameraFace((mPublisher.getCamraId() + 1) % Camera.getNumberOfCameras());
-        //mPublisher.switchCamera();
     }
 
 
@@ -698,7 +615,7 @@ public class VideoBroadcaster extends AppCompatActivity {
     }
 
 
-    public void startThumbPlayer1(final String url, String thumbPic, final String connId) {
+    public void startThumbPlayer1(final String url, final String connId) {
 
         thumbContainer1.setVisibility(View.VISIBLE);
         remoteRender.setVisibility(View.VISIBLE);
@@ -716,13 +633,6 @@ public class VideoBroadcaster extends AppCompatActivity {
                 thumbCount.setText(String.valueOf(millisUntilFinished / 1000));
 
 
-
-                /*if (millisUntilFinished / 1000 == 2)
-                {
-
-                }
-*/
-
             }
 
             @Override
@@ -731,14 +641,8 @@ public class VideoBroadcaster extends AppCompatActivity {
 
                 StreamOptions streamOptions = new StreamOptions(url);
 
-                /**
-                 * Stream is created with method Session.createStream().
-                 */
                 playStream = session.createStream(streamOptions);
 
-                /**
-                 * Callback function for stream status change is added to display the status.
-                 */
                 playStream.on(new StreamStatusEvent() {
                     @Override
                     public void onStreamStatus(final Stream stream, final StreamStatus streamStatus) {
@@ -752,14 +656,11 @@ public class VideoBroadcaster extends AppCompatActivity {
 
                                     thumbLoading.setVisibility(View.GONE);
 
-
                                 } else if (StreamStatus.NOT_ENOUGH_BANDWIDTH.equals(streamStatus)) {
                                     Log.d("ssttaattuuss", "Not enough bandwidth stream " + stream.getName() + ", consider using lower video resolution or bitrate. " +
                                             "Bandwidth " + (Math.round(stream.getNetworkBandwidth() / 1000)) + " " +
                                             "bitrate " + (Math.round(stream.getRemoteBitrate() / 1000)));
-                                }
-                                else if (StreamStatus.FAILED.equals(streamStatus))
-                                {
+                                } else if (StreamStatus.FAILED.equals(streamStatus)) {
                                     progress.setVisibility(View.VISIBLE);
 
                                     final bean b = (bean) getApplicationContext();
@@ -768,7 +669,7 @@ public class VideoBroadcaster extends AppCompatActivity {
 
                                     call.enqueue(new Callback<String>() {
                                         @Override
-                                        public void onResponse(Call<String> call, Response<String> response) {
+                                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
 
 
                                             progress.setVisibility(View.GONE);
@@ -776,7 +677,7 @@ public class VideoBroadcaster extends AppCompatActivity {
                                         }
 
                                         @Override
-                                        public void onFailure(Call<String> call, Throwable t) {
+                                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                                             progress.setVisibility(View.GONE);
                                         }
                                     });
@@ -840,28 +741,30 @@ public class VideoBroadcaster extends AppCompatActivity {
 
         call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
 
-                if (response.body().equals("success")) {
+                if (response.body() != null) {
+                    if (response.body().equals("success")) {
 
-                    chronometer.setBase(SystemClock.elapsedRealtime());
+                        chronometer.setBase(SystemClock.elapsedRealtime());
 
-                    countDownPopup.setVisibility(View.GONE);
+                        countDownPopup.setVisibility(View.GONE);
 
-                    chronometer.start();
+                        chronometer.start();
 
 
-                } else {
+                    } else {
 
-                    Toast.makeText(VideoBroadcaster.this, "Error going live", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VideoBroadcaster.this, "Error going live", Toast.LENGTH_SHORT).show();
 
+                    }
                 }
 
                 progress.setVisibility(View.GONE);
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 progress.setVisibility(View.GONE);
             }
         });
@@ -878,30 +781,10 @@ public class VideoBroadcaster extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-        //thumbPlayerView1.setVisibility(View.GONE);
-
         remoteRender.release();
         remoteRender.setVisibility(View.GONE);
         thumbContainer1.setVisibility(View.GONE);
 
-        //localRender.release();
-        //localRender.requestLayout();
-
-
-    }
-
-    public void handleException(Exception e) {
-        try {
-
-            session.disconnect();
-
-            //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            //mPublisher.stopPublish();
-            //mPublisher.stopRecord();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
     }
 
     private static final int PUBLISH_REQUEST_CODE = 100;
@@ -918,11 +801,7 @@ public class VideoBroadcaster extends AppCompatActivity {
                     session.disconnect();
 
                 } else {
-                    /**
-                     * Method Stream.publish() is called to publish stream.
-                     */
                     publishStream.publish();
-
                 }
             }
         }

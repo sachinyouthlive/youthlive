@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -42,21 +41,18 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.yl.youthlive.INTERFACE.AllAPIs;
 
 import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class VideoPlayer extends AppCompatActivity {
 
@@ -64,8 +60,6 @@ public class VideoPlayer extends AppCompatActivity {
 
 
     ProgressBar progress;
-
-    private Uri uri;
 
 
     String TAG = "VideoPlayer";
@@ -87,14 +81,9 @@ public class VideoPlayer extends AppCompatActivity {
     RelativeLayout container;
     ImageView loading;
 
-    //PLVideoTextureView mainPlayerView;
-    //SimpleExoPlayer mainPlayer;
-
     ProgressBar loadingProgress;
 
-
     PlayerView thumbSurface2;
-    //SimpleExoPlayer thumbPlayer1, thumbPlayer2;
 
     View loadingPopup;
 
@@ -102,22 +91,15 @@ public class VideoPlayer extends AppCompatActivity {
 
     TextView thumbCount;
 
-
     private Session session;
 
     private Stream playStream;
 
     private SurfaceViewRenderer remoteRender;
 
-    private PercentFrameLayout remoteRenderLayout;
-
-
     private Stream publishStream;
 
     private SurfaceViewRenderer localRender;
-
-    private PercentFrameLayout localRenderLayout;
-
 
     private Stream thumbStream;
 
@@ -125,13 +107,11 @@ public class VideoPlayer extends AppCompatActivity {
 
     private PercentFrameLayout thumbRenderLayout;
 
-
     boolean isThumbCamera1 = false;
 
     ProgressBar thumbProgress1;
 
     BroadcastReceiver headsetPlug;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +129,8 @@ public class VideoPlayer extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
 
 
-                if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
+
+                if (Objects.equals(intent.getAction(), Intent.ACTION_HEADSET_PLUG)) {
                     boolean connectedHeadphones = (intent.getIntExtra("state", 0) == 1);
 
                     if (connectedHeadphones) {
@@ -161,6 +142,7 @@ public class VideoPlayer extends AppCompatActivity {
                         Flashphoner.getAudioManager().setUseSpeakerPhone(true);
 
                     }
+
 
 
                 }
@@ -176,16 +158,13 @@ public class VideoPlayer extends AppCompatActivity {
         liveId = getIntent().getStringExtra("uri");
         loadingpic = getIntent().getStringExtra("pic");
 
-
         thumbProgress1 = findViewById(R.id.thumb_progress1);
 
         DoubleBounce doubleBounce = new DoubleBounce();
         thumbProgress1.setIndeterminateDrawable(doubleBounce);
 
-
         thumbCountdown = findViewById(R.id.thumb_countdown);
         thumbCount = findViewById(R.id.textView33);
-
 
         loadingPopup = findViewById(R.id.loading_popup);
 
@@ -230,10 +209,6 @@ public class VideoPlayer extends AppCompatActivity {
 
         player_camera_layout1 = findViewById(R.id.thumb_camera_layout1);
 
-
-        //thumbCamera2 = findViewById(R.id.thumb_camera2);
-
-
         thumbRender = findViewById(R.id.thumb_renderer);
 
         thumbRenderLayout = findViewById(R.id.thumb_renderer_layout);
@@ -244,281 +219,19 @@ public class VideoPlayer extends AppCompatActivity {
         pager = findViewById(R.id.pager);
 
 
-        //SurfaceHolder holder = surfaceView.getHolder();
-        //holder.setFormat(PixelFormat.UNKNOWN);
-        //holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
-        //surfaceView.setZ(6);
-        //thumbCamera1.setZ(12);
-
-        //thumbCamera1.getParent().requestTransparentRegion(surfaceView);
-
-        uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
-        //uri = Uri.parse("rtmp://192.168.1.103:1935/live/test");
-        //uri = Uri.parse("rtmp://ec2-13-58-47-70.us-east-2.compute.amazonaws.com:1935/vod/sample.mp4");
-        //uri = Uri.parse("rtmp://192.168.1.103:1935/vod/sample.mp4");
-
-        Log.d("statusss", "rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
-
-
-        //loadingProgress.setVisibility(View.VISIBLE);
-
-        /*BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-
-
-        MediaController mMediaController = new MediaController(this, false, true);
-
-        //mainPlayerView.setMediaController(mMediaController);
-
-
-        mainPlayerView.setBufferingIndicator(loadingPopup);
-
-        mainPlayerView.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(PLMediaPlayer plMediaPlayer) {
-                Log.d("completecode", "completed");
-                onEror(loadingpic);
-            }
-        });
-        mainPlayerView.setOnErrorListener(new PLMediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(PLMediaPlayer plMediaPlayer, int i) {
-
-                Log.d("errorcode", String.valueOf(i));
-
-                if (i == -1)
-                {
-                    onEror(loadingpic);
-                }
-
-                return true;
-            }
-        });
-
-        mainPlayerView.setOnInfoListener(new PLMediaPlayer.OnInfoListener() {
-            @Override
-            public boolean onInfo(PLMediaPlayer plMediaPlayer, int i, int i1) {
-
-                Log.d("infocode", String.valueOf(i));
-
-                return true;
-            }
-        });
-        mainPlayerView.setOnSeekCompleteListener(new PLMediaPlayer.OnSeekCompleteListener() {
-            @Override
-            public void onSeekComplete(PLMediaPlayer plMediaPlayer) {
-                Log.d("seekcode", "seek completed");
-            }
-        });
-        mainPlayerView.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(PLMediaPlayer plMediaPlayer) {
-                //thumbProgress1.setVisibility(View.GONE);
-            }
-        });
-
-        mainPlayerView.setDisplayAspectRatio(PLVideoTextureView.ASPECT_RATIO_PAVED_PARENT);
-        initAVOptions();
-        mainPlayerView.setAVOptions(options2);
-
-        mainPlayerView.setDebugLoggingEnabled(true);
-
-        mainPlayerView.setDisplayOrientation(0);
-
-        mainPlayerView.setMirror(true);
-
-        mainPlayerView.setVideoPath("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/vod/mi6.mp4");
-        //mainPlayerView.setVideoPath("rtmp://ec2-52-15-208-193.us-east-2.compute.amazonaws.com:1935/connection/" + liveId);
-        //mainPlayerView.setVideoPath("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/connection/" + liveId);
-        mainPlayerView.start();
-*/
-//Create the player
-        /*mainPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(
-                new DefaultAllocator(true, 1000),
-                1000,  // min buffer 0.5s
-                3000, //max buffer 3s
-                1000, // playback 1s
-                1000,   //playback after rebuffer 1s
-                1,
-                true
-        ));
-
-        mainPlayerView.setPlayer(mainPlayer);
-
-        mainPlayerView.setUseController(false);
-
-        mainPlayer.addAudioDebugListener(new AudioRendererEventListener() {
-            @Override
-            public void onAudioEnabled(DecoderCounters counters) {
-
-            }
-
-            @Override
-            public void onAudioSessionId(int audioSessionId) {
-
-
-            }
-
-            @Override
-            public void onAudioDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
-
-            }
-
-            @Override
-            public void onAudioInputFormatChanged(Format format) {
-
-            }
-
-            @Override
-            public void onAudioSinkUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
-
-            }
-
-            @Override
-            public void onAudioDisabled(DecoderCounters counters) {
-
-            }
-        });
-
-        RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
-// This is the MediaSource representing the media to be played.
-        final MediaSource videoSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
-                .createMediaSource(uri);
-
-        mainPlayer.prepare(videoSource);
-
-
-        mainPlayer.setPlayWhenReady(true);
-
-
-        mainPlayer.addListener(new Player.EventListener() {
-            @Override
-            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
-
-            }
-
-            @Override
-            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-                Log.d("parameters", String.valueOf(trackSelections.length));
-
-            }
-
-            @Override
-            public void onLoadingChanged(boolean isLoading) {
-
-            }
-
-            @Override
-            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                Log.d("ssttaattee", String.valueOf(playbackState));
-
-                if (playWhenReady) {
-                    loadingPopup.setVisibility(View.GONE);
-                    loading.setVisibility(View.GONE);
-
-                }
-
-                *//*if (playbackState == 4) {
-
-
-                    Dialog dialog = new Dialog(VideoPlayer.this);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setCancelable(false);
-                    dialog.setContentView(R.layout.ended_dialog);
-                    dialog.show();
-
-                    Button ok = dialog.findViewById(R.id.button2);
-
-                    ok.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            finish();
-
-                        }
-                    });
-
-
-                }*//*
-
-            }
-
-            @Override
-            public void onRepeatModeChanged(int repeatMode) {
-
-            }
-
-            @Override
-            public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
-            }
-
-            @Override
-            public void onPlayerError(ExoPlaybackException error) {
-
-                Log.d("eerroorr", error.toString());
-
-
-                Dialog dialog = new Dialog(VideoPlayer.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setCancelable(false);
-                dialog.setContentView(R.layout.ended_dialog);
-                dialog.show();
-
-                Button ok = dialog.findViewById(R.id.button2);
-
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        finish();
-
-                    }
-                });
-
-
-            }
-
-
-            @Override
-            public void onPositionDiscontinuity(int reason) {
-
-            }
-
-            @Override
-            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-                Log.d("parameters", String.valueOf(playbackParameters.pitch));
-
-            }
-
-            @Override
-            public void onSeekProcessed() {
-
-            }
-        });*/
-
-
         remoteRender = findViewById(R.id.remote_video_view);
-        remoteRenderLayout = findViewById(R.id.remote_video_layout);
+        PercentFrameLayout remoteRenderLayout = findViewById(R.id.remote_video_layout);
 
         remoteRenderLayout.setPosition(0, 0, 100, 100);
         remoteRender.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
         remoteRender.setMirror(false);
         remoteRender.requestLayout();
 
-
         localRender = findViewById(R.id.local_video_view);
 
-
-        localRenderLayout = findViewById(R.id.local_video_layout);
-
+        PercentFrameLayout localRenderLayout = findViewById(R.id.local_video_layout);
 
         localRender.setZOrderMediaOverlay(true);
-
 
         localRenderLayout.setPosition(0, 0, 100, 100);
         localRender.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
@@ -542,21 +255,18 @@ public class VideoPlayer extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String url = u.getScheme() + "://" + u.getHost() + ":" + u.getPort();
+        String url = null;
+        if (u != null) {
+            url = u.getScheme() + "://" + u.getHost() + ":" + u.getPort();
+        }
 
 
         SessionOptions sessionOptions = new SessionOptions(url);
         sessionOptions.setRemoteRenderer(remoteRender);
         sessionOptions.setLocalRenderer(localRender);
 
-        /**
-         * Session for connection to WCS server is created with method createSession().
-         */
         session = Flashphoner.createSession(sessionOptions);
 
-        /**
-         * Callback functions for session status events are added to make appropriate changes in controls of the interface and play stream when connection is established.
-         */
         session.on(new SessionEvent() {
             @Override
             public void onAppData(Data data) {
@@ -569,21 +279,11 @@ public class VideoPlayer extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        /**
-                         * The options for the stream to play are set.
-                         * The stream name is passed when StreamOptions object is created.
-                         */
                         StreamOptions streamOptions = new StreamOptions(liveId);
 
 
-                        /**
-                         * Stream is created with method Session.createStream().
-                         */
                         playStream = session.createStream(streamOptions);
 
-                        /**
-                         * Callback function for stream status change is added to display the status.
-                         */
                         playStream.on(new StreamStatusEvent() {
                             @Override
                             public void onStreamStatus(final Stream stream, final StreamStatus streamStatus) {
@@ -593,20 +293,17 @@ public class VideoPlayer extends AppCompatActivity {
 
                                         Log.d("ssttaattuuss", String.valueOf(streamStatus));
 
-                                        //Log.d("ssttaattuuss", String.valueOf(streamStatus));
-
                                         if (StreamStatus.PLAYING.equals(streamStatus)) {
                                             loadingPopup.setVisibility(View.GONE);
                                             loading.setVisibility(View.GONE);
                                             Log.d("ssttaattuuss", "playing " + stream.getName() + " " + streamStatus);
-                                            //mStatusView.setText(streamStatus.toString());
+
                                         } else if (StreamStatus.NOT_ENOUGH_BANDWIDTH.equals(streamStatus)) {
                                             Log.d("ssttaattuuss", "Not enough bandwidth stream " + stream.getName() + ", consider using lower video resolution or bitrate. " +
                                                     "Bandwidth " + (Math.round(stream.getNetworkBandwidth() / 1000)) + " " +
                                                     "bitrate " + (Math.round(stream.getRemoteBitrate() / 1000)));
                                         } else if (StreamStatus.FAILED.equals(streamStatus)){
                                             onEror(loadingpic);
-                                            //mStatusView.setText(streamStatus.toString());
                                         }
 
 
@@ -615,9 +312,6 @@ public class VideoPlayer extends AppCompatActivity {
                             }
                         });
 
-                        /*
-                         * Method Stream.play() is called to start playback of the stream.
-                         */
                         playStream.play();
 
                     }
@@ -640,12 +334,7 @@ public class VideoPlayer extends AppCompatActivity {
             }
         });
 
-
-        /**
-         * Connection to WCS server is established with method Session.connect().
-         */
         session.connect(new Connection());
-
 
         FragAdapter adapter = new FragAdapter(getSupportFragmentManager());
 
@@ -678,18 +367,9 @@ public class VideoPlayer extends AppCompatActivity {
 
     }
 
-
-/*
-    @Override
-    public void onRtmpAuthenticationg(String s) {
-
-    }
-*/
-
-
     public class FragAdapter extends FragmentStatePagerAdapter {
 
-        public FragAdapter(FragmentManager fm) {
+        FragAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -712,8 +392,6 @@ public class VideoPlayer extends AppCompatActivity {
         }
     }
 
-    //SrsPublisher mPublisher;
-
     public void startThumbCamera1(final String connId) {
 
 
@@ -727,7 +405,7 @@ public class VideoPlayer extends AppCompatActivity {
         Call<String> call1 = b.getRetrofit().acceptReject2(connId, liveId + SharePreferenceUtils.getInstance().getString("userId"), "2", SharePreferenceUtils.getInstance().getString("userId"));
         call1.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
 
                 Log.d("rreess", response.body());
 
@@ -743,18 +421,10 @@ public class VideoPlayer extends AppCompatActivity {
 
                 VideoPlayer.this.connId = connId;
 
-                final bean b = (bean) getApplicationContext();
-
                 StreamOptions streamOptions = new StreamOptions(liveId + SharePreferenceUtils.getInstance().getString("userId"));
 
-                /**
-                 * Stream is created with method Session.createStream().
-                 */
                 publishStream = session.createStream(streamOptions);
 
-                /**
-                 * Callback function for stream status change is added to play the stream when it is published.
-                 */
                 publishStream.on(new StreamStatusEvent() {
                     @Override
                     public void onStreamStatus(final Stream stream, final StreamStatus streamStatus) {
@@ -764,11 +434,11 @@ public class VideoPlayer extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (StreamStatus.PUBLISHING.equals(streamStatus)) {
+                                /*if (StreamStatus.PUBLISHING.equals(streamStatus)) {
 
                                 } else {
                                     Log.e("Streamer", "Can not publish stream " + stream.getName() + " " + streamStatus);
-                                }
+                                }*/
 
                             }
                         });
@@ -803,7 +473,7 @@ public class VideoPlayer extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 progress.setVisibility(View.GONE);
                 Log.d("rreess", t.toString());
                 t.printStackTrace();
@@ -820,25 +490,14 @@ public class VideoPlayer extends AppCompatActivity {
 
         localRender.setVisibility(View.VISIBLE);
 
-        //thumbCamera1.setVisibility(View.VISIBLE);
         thumbCountdown.setVisibility(View.VISIBLE);
-
 
         this.connId = connId;
 
-        final bean b = (bean) getApplicationContext();
-
-
         StreamOptions streamOptions = new StreamOptions(liveId + SharePreferenceUtils.getInstance().getString("userId"));
 
-        /**
-         * Stream is created with method Session.createStream().
-         */
         publishStream = session.createStream(streamOptions);
 
-        /**
-         * Callback function for stream status change is added to play the stream when it is published.
-         */
         publishStream.on(new StreamStatusEvent() {
             @Override
             public void onStreamStatus(final Stream stream, final StreamStatus streamStatus) {
@@ -848,12 +507,12 @@ public class VideoPlayer extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (StreamStatus.PUBLISHING.equals(streamStatus)) {
+                        /*if (StreamStatus.PUBLISHING.equals(streamStatus)) {
 
                         } else {
                             Log.e("Streamer", "Can not publish stream " + stream.getName() + " " + streamStatus);
                         }
-
+*/
                     }
                 });
             }
@@ -892,34 +551,16 @@ public class VideoPlayer extends AppCompatActivity {
     public void startThumbPlayer1(String connId) {
 
 
-        Uri uri = Uri.parse("rtmp://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com:1935/videochat/" + connId);
-
         thumbRenderLayout.setVisibility(View.VISIBLE);
         thumbRender.setVisibility(View.VISIBLE);
 
         thumbRenderLayout.getParent().requestTransparentRegion(remoteRender);
 
-        URI u = null;
-        try {
-            u = new URI("ws://13.232.31.52:8080");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
-        String url = u.getScheme() + "://" + u.getHost() + ":" + u.getPort();
-
-
         StreamOptions streamOptions = new StreamOptions(connId);
         streamOptions.setRenderer(thumbRender);
 
-        /**
-         * Stream is created with method Session.createStream().
-         */
         thumbStream = session.createStream(streamOptions);
 
-        /**
-         * Callback function for stream status change is added to display the status.
-         */
         thumbStream.on(new StreamStatusEvent() {
             @Override
             public void onStreamStatus(final Stream stream, final StreamStatus streamStatus) {
@@ -1141,7 +782,7 @@ public class VideoPlayer extends AppCompatActivity {
 
         call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
 
                 progress.setVisibility(View.GONE);
 
@@ -1150,7 +791,7 @@ public class VideoPlayer extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
 
                 progress.setVisibility(View.GONE);
 
@@ -1196,11 +837,7 @@ public class VideoPlayer extends AppCompatActivity {
                     session.disconnect();
 
                 } else {
-                    /**
-                     * Method Stream.publish() is called to publish stream.
-                     */
                     publishStream.publish();
-
                 }
             }
         }
