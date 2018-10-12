@@ -165,6 +165,8 @@ public class MuteSlide extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
 
+                progress.setVisibility(View.VISIBLE);
+
                 final bean b = (bean) Objects.requireNonNull(getContext()).getApplicationContext();
 
                 Call<String> call = b.getRetrofit().mute(name , liveId , uid);
@@ -175,13 +177,14 @@ public class MuteSlide extends BottomSheetDialogFragment {
 
                         Toast.makeText(getContext(), response.body(), Toast.LENGTH_SHORT).show();
 
+                        progress.setVisibility(View.GONE);
 
 
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-
+                        progress.setVisibility(View.GONE);
                     }
                 });
 

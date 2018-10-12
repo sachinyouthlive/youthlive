@@ -2984,7 +2984,7 @@ public class BroadcasterFragment1 extends Fragment {
                 }
 
             } finally {
-                bubbleHandler.postDelayed(dummyChecker, 2000);
+                bubbleHandler.postDelayed(dummyChecker, 8000);
             }
         }
     };

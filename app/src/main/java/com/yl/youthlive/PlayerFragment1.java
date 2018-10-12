@@ -120,6 +120,7 @@ public class PlayerFragment1 extends Fragment {
     BroadcastReceiver statusReceiver;
     BroadcastReceiver statusReceiverPlayer;
     BroadcastReceiver exitReceiver;
+    BroadcastReceiver muteReceiver;
 
     View rootView;
 
@@ -1053,6 +1054,67 @@ public class PlayerFragment1 extends Fragment {
         };
 
 
+        muteReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                if (Objects.equals(intent.getAction(), "mute")) {
+
+
+                    try {
+
+                        Log.d("mute", intent.getStringExtra("data"));
+
+                        String json = intent.getStringExtra("data");
+
+                        JSONObject object = new JSONObject(json);
+
+                        String uuiidd = object.getString("userId");
+                        String uname = object.getString("userName");
+
+                        Comment comm = new Comment();
+
+                        comm.setType("mute");
+                        comm.setUserId(uuiidd);
+                        comm.setComment(uname + " has been muted by the broadcaster");
+
+                        String uid = uuiidd.replace("\"", "");
+
+                        Log.d("asdasd" , uuiidd);
+
+                        if (uid.equals(SharePreferenceUtils.getInstance().getString("userId")))
+                        {
+                            comment.setVisibility(View.GONE);
+                            send.setVisibility(View.GONE);
+                            message.setVisibility(View.GONE);
+                        }
+
+                        commentsAdapter.addComment(comm);
+
+                        if (loading) {
+                            commentGrid.scrollToPosition(0);
+                            loading = true;
+                            newMessage.setVisibility(View.GONE);
+                        } else {
+                            Log.d("lloogg", "new message");
+
+                            newMessage.setVisibility(View.VISIBLE);
+                        }
+
+                        //comm.set
+
+
+                    } catch (Exception e) {
+                        Log.d("mute" , e.toString());
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        };
+
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1321,6 +1383,16 @@ public class PlayerFragment1 extends Fragment {
 
                     }
 
+
+                    if (response.body().getData().getIsMuted().equals("1"))
+                    {
+                        comment.setVisibility(View.GONE);
+                        send.setVisibility(View.GONE);
+                        message.setVisibility(View.GONE);
+                        Toast.makeText(player, "The broadcaster has muted your messages", Toast.LENGTH_SHORT).show();
+                    }
+
+
                     //viewsAdapter.setGridData(response.body().getData().getViews());
 
                     int count1 = Integer.parseInt(response.body().getData().getLikesCount());
@@ -1426,6 +1498,8 @@ public class PlayerFragment1 extends Fragment {
                             new IntentFilter("status_player"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(exitReceiver,
                             new IntentFilter("exit"));
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(muteReceiver,
+                            new IntentFilter("mute"));
                     /*LocalBroadcastManager.getInstance(getContext()).registerReceiver(viewReceiver,
                             new IntentFilter("view"));
 
@@ -1611,6 +1685,20 @@ public class PlayerFragment1 extends Fragment {
                     holder.container.setBackground(context.getResources().getDrawable(R.drawable.blue_round2));
 
                     holder.index.setVisibility(View.GONE);
+                    break;
+                }
+                case "mute": {
+
+
+                    String us = item.getComment().replace("\"", "");
+
+                    holder.name.setText("YL: " + us);
+
+                    holder.add.setVisibility(View.GONE);
+
+                    holder.container.setBackground(context.getResources().getDrawable(R.drawable.red_round2));
+
+
                     break;
                 }
             }
@@ -2485,6 +2573,7 @@ public class PlayerFragment1 extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(statusReceiverPlayer);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(exitReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(muteReceiver);
 
 
     }

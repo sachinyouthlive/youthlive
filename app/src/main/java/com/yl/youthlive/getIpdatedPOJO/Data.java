@@ -86,6 +86,9 @@ public class Data {
     @SerializedName("youthliveId")
     @Expose
     private String youthliveId;
+    @SerializedName("isMuted")
+    @Expose
+    private String isMuted;
 
     public String getUserId() {
         return userId;
@@ -286,5 +289,13 @@ public class Data {
 
     public void setYouthliveId(String youthliveId) {
         this.youthliveId = youthliveId;
+    }
+
+    public String getIsMuted() {
+        return isMuted;
+    }
+
+    public void setIsMuted(String isMuted) {
+        this.isMuted = isMuted;
     }
 }
