@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.util.Log;
-
-import com.google.firebase.FirebaseApp;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -34,7 +32,6 @@ public class bean extends Application {
     String userImage = "";
     String liveId = "";
 
-    private String TAG = "myApp";
     List<Datum> vlist = new ArrayList<>();
     public bean() {
         mylist = new ArrayList<String>();
@@ -61,6 +58,7 @@ public class bean extends Application {
         MultiDex.install(this);
         mInstance = this;
         context = getApplicationContext();
+        String TAG = "myApp";
         Log.e(TAG, "  myapp stater");
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -71,8 +69,6 @@ public class bean extends Application {
 
         cr = retrofit.create(AllAPIs.class);
 
-            FirebaseApp.initializeApp(this);
-
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
 
         FontsOverride.setDefaultFont(this, "MONOSPACE", "calibri.ttf");
@@ -81,11 +77,6 @@ public class bean extends Application {
 
     public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener) {
         ConnectivityReceiver.connectivityReceiverListener = listener;
-    }
-
-
-    public boolean useExtensionRenderers() {
-        return BuildConfig.FLAVOR.equals("withExtensions");
     }
 
 

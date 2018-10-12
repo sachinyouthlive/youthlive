@@ -218,6 +218,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
                     break;
                 }
+                case "mute": {
+                    String dat = data2.getString("data");
+
+                    Log.d("mute", "called");
+
+                    Intent registrationComplete = new Intent("mute");
+                    registrationComplete.putExtra("data", dat);
+
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+                    break;
+                }
             }
 
 

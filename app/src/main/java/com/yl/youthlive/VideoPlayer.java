@@ -121,8 +121,8 @@ public class VideoPlayer extends AppCompatActivity {
 
         Flashphoner.init(this);
 
-
-
+        //Flashphoner.getAudioManager().setUseProximitySensor(true);
+        Flashphoner.getAudioManager().setUseSpeakerPhone(true);
 
         headsetPlug = new BroadcastReceiver() {
             @Override
@@ -142,7 +142,6 @@ public class VideoPlayer extends AppCompatActivity {
                         Flashphoner.getAudioManager().setUseSpeakerPhone(true);
 
                     }
-
 
 
                 }
@@ -265,7 +264,9 @@ public class VideoPlayer extends AppCompatActivity {
         sessionOptions.setRemoteRenderer(remoteRender);
         sessionOptions.setLocalRenderer(localRender);
 
+
         session = Flashphoner.createSession(sessionOptions);
+
 
         session.on(new SessionEvent() {
             @Override

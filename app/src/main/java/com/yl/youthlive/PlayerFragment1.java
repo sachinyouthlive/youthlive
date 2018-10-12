@@ -1274,7 +1274,7 @@ public class PlayerFragment1 extends Fragment {
         return view;
     }
 
-    public void schedule(String liveId) {
+    public void schedule(final String liveId) {
         final bean b = (bean) Objects.requireNonNull(getActivity()).getApplicationContext();
 
 
@@ -1285,6 +1285,9 @@ public class PlayerFragment1 extends Fragment {
         Log.d("keeey", keey);
 
         Call<getUpdatedBean> call = b.getRetrofit().getPlayerUpdatedData(SharePreferenceUtils.getInstance().getString("userId"), liveId, keey);
+
+
+        Log.d("userId" , SharePreferenceUtils.getInstance().getString("userId"));
 
 
         call.enqueue(new Callback<getUpdatedBean>() {
@@ -1301,6 +1304,7 @@ public class PlayerFragment1 extends Fragment {
 
                     timelineId = response.body().getData().getTimelineId();
 
+                    Log.d("lliivvee" , liveId);
 
                     commentsAdapter.setGridData(response.body().getData().getComments());
 

@@ -121,6 +121,8 @@ public class VideoBroadcaster extends AppCompatActivity {
 
         Flashphoner.init(this);
 
+        Flashphoner.getAudioManager().setUseSpeakerPhone(true);
+
         pref = getSharedPreferences("offline", Context.MODE_PRIVATE);
         editor = pref.edit();
 
@@ -515,10 +517,13 @@ public class VideoBroadcaster extends AppCompatActivity {
 
         session = Flashphoner.createSession(sessionOptions);
 
-
         session.on(new SessionEvent() {
             @Override
             public void onAppData(Data data) {
+
+
+                Log.d("fffffffff" , data.toString());
+
 
             }
 
@@ -533,6 +538,7 @@ public class VideoBroadcaster extends AppCompatActivity {
                         publishStream = session.createStream(streamOptions);
 
                         publishStream.on(new StreamStatusEvent() {
+
                             @Override
                             public void onStreamStatus(final Stream stream, final StreamStatus streamStatus) {
 

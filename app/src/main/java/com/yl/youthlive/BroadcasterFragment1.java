@@ -376,6 +376,8 @@ public class BroadcasterFragment1 extends Fragment {
 
                             liveId = response.body().getData().getLiveId();
 
+                            Log.d("lliivvee" , liveId);
+
                             broadcaster.setLiveId(liveId);
 
                             broadcaster.startPublish(liveId);
@@ -940,6 +942,48 @@ public class BroadcasterFragment1 extends Fragment {
 
                         break;
                     }
+                    case "mute": {
+
+
+                        try {
+
+                            Log.d("mute", intent.getStringExtra("data"));
+
+                            String json = intent.getStringExtra("data");
+
+                            JSONObject object = new JSONObject(json);
+
+                            String uuiidd = object.getString("userId");
+                            String uname = object.getString("userName");
+
+                            Comment comm = new Comment();
+
+                            comm.setType("mute");
+                            comm.setUserId(uuiidd);
+                            comm.setComment(uname + " has been muted by the broadcaster");
+
+                            commentsAdapter.addComment(comm);
+
+                            if (loading) {
+                                commentGrid.scrollToPosition(0);
+                                loading = true;
+                                newMessage.setVisibility(View.GONE);
+                            } else {
+                                Log.d("lloogg", "new message");
+
+                                newMessage.setVisibility(View.VISIBLE);
+                            }
+
+                            //comm.set
+
+
+                        } catch (Exception e) {
+                            Log.d("mute" , e.toString());
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    }
 
 
                 }
@@ -1324,7 +1368,8 @@ public class BroadcasterFragment1 extends Fragment {
                             new IntentFilter("status_player"));
                     LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
                             new IntentFilter("exit"));
-
+                    LocalBroadcastManager.getInstance(getContext()).registerReceiver(singleReceiver,
+                            new IntentFilter("mute"));
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1955,6 +2000,20 @@ public class BroadcasterFragment1 extends Fragment {
                     holder.index.setVisibility(View.GONE);
                     break;
                 }
+                case "mute": {
+
+
+                    String us = item.getComment().replace("\"", "");
+
+                    holder.name.setText("YL: " + us);
+
+                    holder.add.setVisibility(View.GONE);
+
+                    holder.container.setBackground(context.getResources().getDrawable(R.drawable.red_round2));
+
+
+                    break;
+                }
             }
 
 
@@ -1963,7 +2022,14 @@ public class BroadcasterFragment1 extends Fragment {
                 public void onClick(View view) {
 
                     if (!uid.equals(SharePreferenceUtils.getInstance().getString("userId"))) {
-                        final Dialog dialog = new Dialog(context);
+
+                        String us = item.getUserName().replace("\"", "");
+
+                        MuteSlide bottomSheetDialog = new MuteSlide();
+                        bottomSheetDialog.setData(us , uid , isConnection , liveId , thumbPic1 , item);
+                        bottomSheetDialog.show(getChildFragmentManager(), "Custom Bottom Sheet");
+
+                        /*final Dialog dialog = new Dialog(context);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.connect_dialog);
                         dialog.setCancelable(true);
@@ -2062,7 +2128,7 @@ public class BroadcasterFragment1 extends Fragment {
                                 }
 
                             }
-                        });
+                        });*/
                     }
 
 

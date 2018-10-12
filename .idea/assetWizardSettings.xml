@@ -28,9 +28,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_arrow_drop_down_black_24dp" />
-                            <entry key="sourceFile" value="C:\Users\sachin\Desktop\close.svg" />
+                            <entry key="outputName" value="ic_phones" />
+                            <entry key="sourceFile" value="C:\Users\mukul\Downloads\phones.svg" />
                           </map>
                         </option>
                       </PersistentState>

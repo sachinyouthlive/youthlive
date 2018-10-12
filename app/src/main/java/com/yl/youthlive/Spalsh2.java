@@ -33,7 +33,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -120,7 +119,7 @@ public class Spalsh2 extends AppCompatActivity {
                                             //String image = "https://graph.facebook.com/" + id + "/picture?type=large";
 
 
-                                            socialLogin(email , id);
+                                            socialLogin(email, id);
 
 
                                         } catch (Exception e) {
@@ -154,12 +153,9 @@ public class Spalsh2 extends AppCompatActivity {
 
         try {
             mAuth = FirebaseAuth.getInstance();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
 
         signup = findViewById(R.id.create);
@@ -175,27 +171,54 @@ public class Spalsh2 extends AppCompatActivity {
         fcmEdit = fcmPref.edit();
 
 
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(
+                new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (task.isSuccessful()) {
+                            final InstanceIdResult iidResult = task.getResult();
+                            String tok = null;
+                            if (iidResult != null) {
+                                tok = iidResult.getToken();
+                            }
+                            Log.d("ASDASD", "token=" + tok);
+
+                            Log.d("token", tok);
+
+                            fcmEdit.putString("token", tok);
+
+                            fcmEdit.apply();
+
+                            // process token as you need...
+                        } else {
+                            Log.e("ASDASD", "get IID/token failed", task.getException());
+                        }
+                    }
+                });
+
+
+/*
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
 
-                String tok = instanceIdResult.getToken();
 
-                Log.d("token", tok);
-
-                fcmEdit.putString("token", tok);
-
-                fcmEdit.apply();
 
             }
+
         });
+*/
 
 
         /*try {
 
-
-
             String tok = FirebaseInstanceId.getInstance().getToken();
+
+            Log.d("token", tok);
+
+            fcmEdit.putString("token", tok);
+
+            fcmEdit.apply();
 
 
         } catch (Exception e) {
@@ -210,8 +233,10 @@ public class Spalsh2 extends AppCompatActivity {
             }.start();
 
             e.printStackTrace();
-        }
-*/
+        }*/
+
+
+
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_CODE_ASK_PERMISSIONS);
         }
@@ -292,7 +317,6 @@ public class Spalsh2 extends AppCompatActivity {
         final bean b = (bean) getApplicationContext();
 
 
-
         SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
 
         String keey = fcmPref.getString("token", "");
@@ -307,13 +331,12 @@ public class Spalsh2 extends AppCompatActivity {
                 if (response.body() != null) {
                     if (response.body().getData().getUserName().length() > 0) {
 
-                        SharePreferenceUtils.getInstance().putString("userId" , response.body().getData().getUserId());
-                        SharePreferenceUtils.getInstance().putString("userName" , response.body().getData().getUserName());
-
+                        SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                        SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
 
 
                         try {
-                            SharePreferenceUtils.getInstance().putString("userImage" , response.body().getData().getUserImage());
+                            SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -389,7 +412,9 @@ public class Spalsh2 extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
+                if (account != null) {
+                    firebaseAuthWithGoogle(account);
+                }
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("asdasdasd", "Google sign in failed", e);
@@ -420,10 +445,10 @@ public class Spalsh2 extends AppCompatActivity {
                                 pid = user.getUid();
                             }
 
-                            Log.d("googlee" , email);
-Log.d("googlee" , pid);
+                            Log.d("googlee", email);
+                            Log.d("googlee", pid);
 
-                            socialLogin(email , pid);
+                            socialLogin(email, pid);
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -452,7 +477,7 @@ Log.d("googlee" , pid);
                     ) {
 //
 
-                Log.d("permissions" , "granted");
+                Log.d("permissions", "granted");
 
             } else {
                 if (

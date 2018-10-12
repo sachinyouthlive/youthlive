@@ -735,6 +735,13 @@ public interface AllAPIs {
             @Part("password") String password
     );
 
+    @Multipart
+    @POST("api/mute_user.php")
+    Call<String> mute(
+            @Part("name") String name,
+            @Part("videoId") String liveId,
+            @Part("userId") String userId
+    );
 
     //@Multipart
     @Headers({"Content-Type: application/json", "wsc-api-key: dicLNKTWDjmx14cgVpw1sLVuQxBQVbOVE0tpkf3y6VijiUln4sn3QJ2W5zKr3524", "wsc-access-key: tsaCoQS07GnFTTcel0L3gY59ELa7ouYykKFXLQLBApzjPV7a3IWfKXkYt0e3323e"})
