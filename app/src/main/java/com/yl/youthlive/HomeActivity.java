@@ -146,7 +146,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                         if (isUpdateAvailable) {
                             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this, R.style.AlertDialogCustom);
                             alertDialogBuilder.setTitle("New Update Available");
-                            alertDialogBuilder.setMessage("Version " + nv + " is available to download." + "\n" + "Downloading the latest update you will get the latest features and improvements in YouthLive App.");
+                            alertDialogBuilder.setMessage("Version " + nv + " is available to download." + "\n" + "Downloading the latest update you will get the latest features and improvements in YouthLive App.\nIf the update is not available at play store, then uninstall this app and install again from play store.");
                             alertDialogBuilder.setPositiveButton("Update",
                                     new DialogInterface.OnClickListener() {
                                         @Override
