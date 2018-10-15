@@ -1,7 +1,6 @@
 package com.yl.youthlive;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,8 +40,8 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
 
-        tabs.addTab(tabs.newTab().setText("HOT"));
         tabs.addTab(tabs.newTab().setText("POPULAR"));
+        tabs.addTab(tabs.newTab().setText("NEW"));
 
         /*FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getChildFragmentManager(), FragmentPagerItems.with(getContext())
@@ -57,8 +56,8 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
         tabs.setupWithViewPager(viewPager);
 
 
-        tabs.getTabAt(0).setText("HOT");
-        tabs.getTabAt(1).setText("POPULAR");
+        tabs.getTabAt(0).setText("POPULAR");
+        tabs.getTabAt(1).setText("NEW");
 
         setCustomFont();
 
@@ -168,7 +167,18 @@ public class Vlog extends Fragment implements ConnectivityReceiver.ConnectivityR
 
         @Override
         public Fragment getItem(int position) {
-            return new HotVolg();
+
+            if (position == 0) {
+
+                return new popularVolg();
+            } else if (position == 1) {
+
+                return new HotVolg();
+            }
+
+            return null;
+
+
         }
 
         @Override
