@@ -194,6 +194,10 @@ public class BroadcasterFragment1 extends Fragment {
     static List<guestBean> guestList;
     ImageView notificationDot;
 
+    ImageButton preview;
+
+    boolean previ = false;
+
 
     @Nullable
     @Override
@@ -221,6 +225,7 @@ public class BroadcasterFragment1 extends Fragment {
         giftText = view.findViewById(R.id.textView50);
         giftProfile = view.findViewById(R.id.circleImageView);
         giftUser = view.findViewById(R.id.textView49);
+        preview = view.findViewById(R.id.imageButton15);
 
         giftLayout = view.findViewById(R.id.gift_layout);
 
@@ -413,6 +418,27 @@ public class BroadcasterFragment1 extends Fragment {
 
                 bubbleView.startAnimation(bubbleView.getWidth(), bubbleView.getHeight());
 
+
+            }
+        });
+
+        preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+if (!previ)
+{
+
+    broadcaster.startPreview();
+
+    previ = true;
+}
+else
+{
+    broadcaster.stopPreview();
+
+    previ = false;
+}
 
             }
         });

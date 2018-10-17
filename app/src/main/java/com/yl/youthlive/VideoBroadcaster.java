@@ -24,6 +24,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextSwitcher;
@@ -101,6 +102,8 @@ public class VideoBroadcaster extends AppCompatActivity {
     View thumbLoading;
 
 
+    LinearLayout previewLayout;
+
     private Session session;
 
     private Stream publishStream;
@@ -112,6 +115,10 @@ public class VideoBroadcaster extends AppCompatActivity {
 
     private SurfaceViewRenderer remoteRender;
 
+
+    private Stream testStream;
+
+    private SurfaceViewRenderer testRender;
 
     @SuppressLint({"CommitPrefEdits", "ShowToast"})
     @Override
@@ -130,6 +137,7 @@ public class VideoBroadcaster extends AppCompatActivity {
 
 
         thumbLoading = findViewById(R.id.thumb_loading);
+        previewLayout = findViewById(R.id.preview_layout);
 
         thumbProgress1 = findViewById(R.id.progressBar13);
 
@@ -196,6 +204,18 @@ public class VideoBroadcaster extends AppCompatActivity {
         remoteRender.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
         remoteRender.setMirror(false);
         remoteRender.requestLayout();
+
+
+        testRender = findViewById(R.id.test_video_view);
+        PercentFrameLayout testRenderLayout = findViewById(R.id.test_video_layout);
+
+        testRender.setZOrderOnTop(true);
+
+        testRenderLayout.setPosition(0, 0, 100, 100);
+        testRender.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
+        testRender.setMirror(false);
+        testRender.requestLayout();
+
 
 
         progress = findViewById(R.id.progressBar5);
@@ -513,6 +533,7 @@ public class VideoBroadcaster extends AppCompatActivity {
         SessionOptions sessionOptions = new SessionOptions(url);
         sessionOptions.setLocalRenderer(localRender);
         sessionOptions.setRemoteRenderer(remoteRender);
+        sessionOptions.setRemoteRenderer(testRender);
 
 
         session = Flashphoner.createSession(sessionOptions);
@@ -548,11 +569,6 @@ public class VideoBroadcaster extends AppCompatActivity {
                                     @Override
                                     public void run() {
 
-                                        /*if (StreamStatus.PUBLISHING.equals(streamStatus)) {
-
-                                        } else {
-                                            Log.e("Streamer", "Can not publish stream " + stream.getName() + " " + streamStatus);
-                                        }*/
 
                                     }
                                 });
@@ -813,5 +829,38 @@ public class VideoBroadcaster extends AppCompatActivity {
         }
     }
 
+    public void startPreview()
+    {
+        StreamOptions streamOptions = new StreamOptions(liveId);
+
+        testStream = session.createStream(streamOptions);
+
+        testStream.muteAudio();
+
+        testStream.on(new StreamStatusEvent() {
+            @Override
+            public void onStreamStatus(final Stream stream, final StreamStatus streamStatus) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+        });
+
+
+        testStream.play();
+        testRender.setVisibility(View.VISIBLE);
+        previewLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void stopPreview()
+    {
+        testStream.stop();
+        testRender.release();
+        testRender.setVisibility(View.GONE);
+        previewLayout.setVisibility(View.GONE);
+    }
 
 }

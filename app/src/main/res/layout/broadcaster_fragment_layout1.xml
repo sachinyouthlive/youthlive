@@ -199,8 +199,8 @@
         android:typeface="monospace"
         android:inputType="textPersonName"
         android:padding="10dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton3"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton2"
         app:layout_constraintEnd_toStartOf="@+id/imageButton5"
         app:layout_constraintStart_toEndOf="@+id/imageButton4" />
 
@@ -447,5 +447,16 @@
         app:layout_constraintEnd_toEndOf="@+id/connect"
         app:layout_constraintTop_toTopOf="@+id/connect"
         app:srcCompat="@drawable/notification_dot" />
+
+    <ImageButton
+        android:id="@+id/imageButton15"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/circle"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/connect"
+        app:srcCompat="@drawable/ic_preview" />
 
 </android.support.constraint.ConstraintLayout>

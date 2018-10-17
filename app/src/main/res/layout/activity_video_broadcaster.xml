@@ -2,49 +2,47 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root_view"
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context=".VideoBroadcaster">
 
     <Chronometer
+        android:id="@+id/chronometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:id="@+id/chronometer"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
+        android:id="@+id/thumb_container1"
         android:layout_width="93dp"
         android:layout_height="144dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:layout_marginBottom="110dp"
-        android:id="@+id/thumb_container1"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:elevation="4dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guideline4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        >
+        app:layout_constraintVertical_bias="1.0">
+
         <com.flashphoner.fpwcsapi.layout.PercentFrameLayout
             android:id="@+id/remote_video_layout"
             android:layout_width="93dp"
             android:layout_height="124dp"
             android:layout_alignParentTop="true"
-            app:surface_type="texture_view"
             app:resize_mode="zoom"
-            >
+            app:surface_type="texture_view">
 
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/remote_video_view"
@@ -55,21 +53,19 @@
 
 
         <include
+            android:id="@+id/thumb_loading"
             layout="@layout/thumb_player_progress_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/thumb_loading"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
 
         <include
+            android:id="@+id/thumb_countdown"
             layout="@layout/thumb_count_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/thumb_countdown"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
 
     </RelativeLayout>
@@ -84,34 +80,55 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <org.webrtc.SurfaceViewRenderer
             android:id="@+id/local_video_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
     </com.flashphoner.fpwcsapi.layout.PercentFrameLayout>
 
 
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:id="@+id/video_frame1"
+    <LinearLayout
         android:layout_width="93dp"
         android:layout_height="124dp"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/preview_layout"
         android:elevation="4dp"
-        android:visibility="gone"
+        android:orientation="vertical"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/thumb_container1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:resize_mode="fit"
-        app:surface_type="texture_view"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Preview"
+            android:textColor="#ffffff"/>
+
+        <com.flashphoner.fpwcsapi.layout.PercentFrameLayout
+            android:id="@+id/test_video_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:resize_mode="zoom"
+            app:surface_type="texture_view">
+
+            <org.webrtc.SurfaceViewRenderer
+                android:id="@+id/test_video_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </com.flashphoner.fpwcsapi.layout.PercentFrameLayout>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView3"
@@ -121,17 +138,17 @@
         android:layout_marginTop="8dp"
         android:background="#000000"
         android:text="TextView"
-        android:typeface="monospace"
         android:textColor="#ffffff"
+        android:typeface="monospace"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/pager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,19 +159,19 @@
         android:id="@+id/earphones"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:typeface="monospace"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:ellipsize="marquee"
-        android:textSize="16sp"
-        android:visibility="gone"
-        android:singleLine="true"
-        android:marqueeRepeatLimit="marquee_forever"
         android:gravity="center"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
         android:text="Please use earphones for better experience"
         android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:typeface="monospace"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -162,10 +179,10 @@
 
 
     <include
+        android:id="@+id/countdown_popup"
         layout="@layout/count_down_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/countdown_popup"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -174,10 +191,10 @@
 
 
     <include
+        android:id="@+id/finish_popup"
         layout="@layout/finish_popup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/finish_popup"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -190,15 +207,22 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:visibility="gone"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="110dp" />
 
 
 </android.support.constraint.ConstraintLayout>
