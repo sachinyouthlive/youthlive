@@ -60,6 +60,7 @@ import com.yl.youthlive.updatePOJO.updateBean;
 import com.yl.youthlive.updateProfilePOJO.updateProfileBean;
 import com.yl.youthlive.updatephonePOJO.UpdatephonePOJO;
 import com.yl.youthlive.vlogListPOJO.vlogListBean;
+import com.yl.youthlive.vlogListPopularPOJO.vlogListPopularBean;
 import com.yl.youthlive.vlogsearchListPOJO.vlogsearchListBean;
 import com.yl.youthlive.walletPOJO.walletBean;
 import com.yl.youthlive.wowzaAPIPOJO.wowzaAPIBean;
@@ -400,6 +401,11 @@ public interface AllAPIs {
             @Part("message") String message
     );
 
+    @Multipart
+    @POST("api/all_videolist_popular.php")
+    Call<vlogListPopularBean> getVlogListpopular(
+            @Part("userId") String userId
+    );
     @Multipart
     @POST("api/all_live_user.php")
     Call<List<liveBean>> getLives(

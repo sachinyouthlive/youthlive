@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.util.Log;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.yl.youthlive.INTERFACE.AllAPIs;
@@ -33,6 +34,7 @@ public class bean extends Application {
     String liveId = "";
 
     List<Datum> vlist = new ArrayList<>();
+    List<com.yl.youthlive.vlogListPopularPOJO.Datum> plist = new ArrayList<>();
     public bean() {
         mylist = new ArrayList<String>();
     }

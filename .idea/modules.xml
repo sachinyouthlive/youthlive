@@ -3,8 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wcs-android-sdk-1.0.1.50/wcs-android-sdk-1.0.1.50.iml" filepath="$PROJECT_DIR$/wcs-android-sdk-1.0.1.50/wcs-android-sdk-1.0.1.50.iml" />
       <module fileurl="file://$PROJECT_DIR$/wcs-android-sdk-1.0.1.50/wcs-android-sdk-1.0.1.50.iml" filepath="$PROJECT_DIR$/wcs-android-sdk-1.0.1.50/wcs-android-sdk-1.0.1.50.iml" />
       <module fileurl="file://$PROJECT_DIR$/youthlive4.iml" filepath="$PROJECT_DIR$/youthlive4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/youthliveS35.iml" filepath="$PROJECT_DIR$/.idea/youthliveS35.iml" />
     </modules>
   </component>
 </project>

@@ -262,6 +262,9 @@
             android:screenOrientation="portrait" />
         <activity android:name=".TnC"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".VerticalFragmentVodPopularActivity"
+            android:screenOrientation="portrait" />
 
 
     </application>
