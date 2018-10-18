@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -31,6 +32,7 @@ import com.yl.youthlive.wowzaAPIPOJO.wowzaAPIBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,7 +46,6 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
     RecyclerView grid;
     GridLayoutManager manager;
-    //LiveAdapter adapter;
     LiveAdapter2 adapter2;
     ProgressBar progress;
     List<wowzaAPIBean> list;
@@ -62,23 +63,21 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.live_layout, container, false);
         checkConnection();
 
-        offlinePref = getContext().getSharedPreferences("offline" , Context.MODE_PRIVATE);
+        offlinePref = Objects.requireNonNull(getContext()).getSharedPreferences("offline" , Context.MODE_PRIVATE);
         offlineEdit = offlinePref.edit();
 
 
         list = new ArrayList<>();
         list2 = new ArrayList<>();
-        grid = (RecyclerView) view.findViewById(R.id.grid);
+        grid = view.findViewById(R.id.grid);
         manager = new GridLayoutManager(getContext(), 2);
 
-        progress = (ProgressBar) view.findViewById(R.id.progress);
+        progress = view.findViewById(R.id.progress);
 
-
-        //adapter = new LiveAdapter(getContext(), list);
         adapter2 = new LiveAdapter2(getContext(), list2);
 
         grid.setAdapter(adapter2);
@@ -91,7 +90,6 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
     @Override
     public void onResume() {
         super.onResume();
-        // register connection status listener
         bean.getInstance().setConnectivityListener(this);
 
 
@@ -103,7 +101,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
         {
 
 
-            final Dialog dialog = new Dialog(getActivity());
+            final Dialog dialog = new Dialog(Objects.requireNonNull(getActivity()));
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.offline_sync_dialog);
@@ -118,11 +116,10 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
             call.enqueue(new Callback<endLiveBean>() {
                 @Override
-                public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
+                public void onResponse(@NonNull Call<endLiveBean> call, @NonNull Response<endLiveBean> response) {
 
 
-                    if (response.body().getStatus().equals("1"))
-                    {
+                    if (response.body() != null && response.body().getStatus().equals("1")) {
 
                         offlineEdit.remove("offline");
                         offlineEdit.remove("liveId");
@@ -133,11 +130,10 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                     }
 
 
-
                 }
 
                 @Override
-                public void onFailure(Call<endLiveBean> call, Throwable t) {
+                public void onFailure(@NonNull Call<endLiveBean> call, @NonNull Throwable t) {
 
                 }
             });
@@ -153,7 +149,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
         progress.setVisibility(View.VISIBLE);
 
-        final bean b = (bean) getContext().getApplicationContext();
+        final bean b = (bean) Objects.requireNonNull(getContext()).getApplicationContext();
 
 
 /*
@@ -165,19 +161,27 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 */
 
 
-        Call<List<liveBean>> call = b.getRetrofit().getLives2(SharePreferenceUtils.getInstance().getString("userId"));
+        Call<List<liveBean>> call = b.getRetrofit().getLives3();
 
         call.enqueue(new Callback<List<liveBean>>() {
             @Override
-            public void onResponse(Call<List<liveBean>> call, Response<List<liveBean>> response) {
+            public void onResponse(@NonNull Call<List<liveBean>> call, @NonNull Response<List<liveBean>> response) {
 
                 List<liveBean> ll = new ArrayList<>();
 
-                for (int i = 0 ; i < response.body().size() ; i++)
-                {
-                    if (response.body().get(i).getType().equals("live"))
+                if (response.body() != null) {
+                    for (int i = 0 ; i < response.body().size() ; i++)
                     {
-                        ll.add(response.body().get(i));
+                        try {
+                            if (response.body().get(i).getType().equals("live"))
+                            {
+                                ll.add(response.body().get(i));
+                            }
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
                     }
                 }
 
@@ -188,7 +192,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
             }
 
             @Override
-            public void onFailure(Call<List<liveBean>> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<List<liveBean>> call, @NonNull Throwable throwable) {
                 progress.setVisibility(View.GONE);
                 throwable.printStackTrace();
             }
@@ -263,7 +267,6 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
 
     }
-    ////////////////////internet connectivity check///////////////
     private void checkConnection() {
         boolean isConnected = ConnectivityReceiver.isConnected();
         showalert(isConnected);
@@ -279,9 +282,9 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+                    builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), android.R.style.Theme_Material_Dialog_Alert);
                 } else {
-                    builder = new AlertDialog.Builder(getActivity());
+                    builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
                 }
                 builder.setTitle("NO INTERNET CONNECTION")
                         .setMessage("Please check your internet connection setting and click refresh")
@@ -289,8 +292,13 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                             public void onClick(DialogInterface dialog, int which) {
 
                                 // Reload current fragment
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.detach(Live.this).attach(Live.this).commit();
+                                FragmentTransaction ft = null;
+                                if (getFragmentManager() != null) {
+                                    ft = getFragmentManager().beginTransaction();
+                                }
+                                if (ft != null) {
+                                    ft.detach(Live.this).attach(Live.this).commit();
+                                }
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -320,9 +328,9 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
     public class LiveAdapter2 extends RecyclerView.Adapter<LiveAdapter2.ViewHolder> {
 
         Context context;
-        List<liveBean> list = new ArrayList<>();
+        List<liveBean> list;
 
-        public LiveAdapter2(Context context, List<liveBean> list) {
+        LiveAdapter2(Context context, List<liveBean> list) {
             this.context = context;
             this.list = list;
         }
@@ -332,16 +340,20 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
             notifyDataSetChanged();
         }
 
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.live_list_model, parent, false);
+            View view = null;
+            if (inflater != null) {
+                view = inflater.inflate(R.layout.live_list_model, parent, false);
+            }
 
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
             holder.setIsRecyclable(false);
 
@@ -377,17 +389,6 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                     if (item.getType().equals("live"))
                     {
 
-  /*                      b.frag = true;
-
-                        FragmentTransaction ft = ((HomeActivity)context).getSupportFragmentManager().beginTransaction();
-                        VerticalFragment frag1 = new VerticalFragment();
-                        frag1.setHomeActivity(homeActivity);
-                        frag1.setList(list , position);
-                        ft.replace(R.id.replace2, frag1);
-                        ft.addToBackStack(null);
-                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-                        ft.commit();
-*/
 
 
                         Intent intent = new Intent(context, VideoPlayer.class);
@@ -427,9 +428,9 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
             public ViewHolder(View itemView) {
                 super(itemView);
 
-                image = (ImageView) itemView.findViewById(R.id.image);
-                title = (TextView) itemView.findViewById(R.id.title);
-                viewCount = (TextView) itemView.findViewById(R.id.view_count);
+                image = itemView.findViewById(R.id.image);
+                title = itemView.findViewById(R.id.title);
+                viewCount = itemView.findViewById(R.id.view_count);
 
             }
         }

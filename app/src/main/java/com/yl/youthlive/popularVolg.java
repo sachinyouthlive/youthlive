@@ -15,6 +15,7 @@ import com.yl.youthlive.vlogListPopularPOJO.vlogListPopularBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,7 +60,7 @@ public class popularVolg extends Fragment {
 
     public void loadData() {
         progress.setVisibility(View.VISIBLE);
-        final bean b = (bean) getContext().getApplicationContext();
+        final bean b = (bean) Objects.requireNonNull(getContext()).getApplicationContext();
 
         Call<vlogListPopularBean> call = b.getRetrofit().getVlogListpopular(SharePreferenceUtils.getInstance().getString("userId"));
 

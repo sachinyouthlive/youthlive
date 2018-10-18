@@ -25,10 +25,9 @@ public class bean extends Application {
     public static ArrayList<String> mylist;
     private static Context context;
     private static bean mInstance;
-    public String BASE_URL = "http://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com/softcode/";
+    public String BASE_URL = "http://ec2-13-126-246-74.ap-south-1.compute.amazonaws.com/softcode/";
     //public String BASE_URL = "http://youthlive.in/softcode/";
     public String userId = "";
-    protected String userAgent;
     String userName = "";
     String userImage = "";
     String liveId = "";
@@ -36,7 +35,7 @@ public class bean extends Application {
     List<Datum> vlist = new ArrayList<>();
     List<com.yl.youthlive.vlogListPopularPOJO.Datum> plist = new ArrayList<>();
     public bean() {
-        mylist = new ArrayList<String>();
+        mylist = new ArrayList<>();
     }
     public static Context getContext() {
         return context;

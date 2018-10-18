@@ -199,7 +199,7 @@
         android:typeface="monospace"
         android:inputType="textPersonName"
         android:padding="10dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/imageButton2"
         app:layout_constraintEnd_toStartOf="@+id/imageButton5"
         app:layout_constraintStart_toEndOf="@+id/imageButton4" />

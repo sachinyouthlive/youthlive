@@ -418,6 +418,9 @@ public interface AllAPIs {
             @Part("userId") String userId
     );
 
+    @GET("api/test_live_users.php")
+    Call<List<liveBean>> getLives3();
+
     @Multipart
     @POST("api/get_timelinelist.php")
     Call<timelineBean> getTimeline(

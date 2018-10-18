@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -21,18 +22,15 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class Channel extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
     RecyclerView grid;
@@ -53,16 +51,16 @@ public class Channel extends Fragment implements ConnectivityReceiver.Connectivi
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.live_layout, container, false);
         checkConnection();
 
 
         list2 = new ArrayList<>();
-        grid = (RecyclerView) view.findViewById(R.id.grid);
+        grid = view.findViewById(R.id.grid);
         manager = new GridLayoutManager(getContext(), 2);
 
-        progress = (ProgressBar) view.findViewById(R.id.progress);
+        progress = view.findViewById(R.id.progress);
 
 
         //adapter = new LiveAdapter(getContext(), list);
@@ -84,31 +82,24 @@ public class Channel extends Fragment implements ConnectivityReceiver.Connectivi
 
         progress.setVisibility(View.VISIBLE);
 
-        final bean b = (bean) getContext().getApplicationContext();
-
-
-/*
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .build();
-*/
+        final bean b = (bean) Objects.requireNonNull(getContext()).getApplicationContext();
 
 
         Call<List<liveBean>> call = b.getRetrofit().getLives2(SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<List<liveBean>>() {
             @Override
-            public void onResponse(Call<List<liveBean>> call, Response<List<liveBean>> response) {
+            public void onResponse(@NonNull Call<List<liveBean>> call, @NonNull Response<List<liveBean>> response) {
 
                 List<liveBean> ll = new ArrayList<>();
 
-                for (int i = 0 ; i < response.body().size() ; i++)
-                {
-                    if (!response.body().get(i).getType().equals("live"))
+                if (response.body() != null) {
+                    for (int i = 0 ; i < response.body().size() ; i++)
                     {
-                        ll.add(response.body().get(i));
+                        if (!response.body().get(i).getType().equals("live"))
+                        {
+                            ll.add(response.body().get(i));
+                        }
                     }
                 }
 
@@ -119,7 +110,7 @@ public class Channel extends Fragment implements ConnectivityReceiver.Connectivi
             }
 
             @Override
-            public void onFailure(Call<List<liveBean>> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<List<liveBean>> call, @NonNull Throwable throwable) {
                 progress.setVisibility(View.GONE);
                 throwable.printStackTrace();
             }
@@ -221,8 +212,13 @@ public class Channel extends Fragment implements ConnectivityReceiver.Connectivi
                             public void onClick(DialogInterface dialog, int which) {
 
                                 // Reload current fragment
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.detach(Channel.this).attach(Channel.this).commit();
+                                FragmentTransaction ft = null;
+                                if (getFragmentManager() != null) {
+                                    ft = getFragmentManager().beginTransaction();
+                                }
+                                if (ft != null) {
+                                    ft.detach(Channel.this).attach(Channel.this).commit();
+                                }
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -252,9 +248,9 @@ public class Channel extends Fragment implements ConnectivityReceiver.Connectivi
     public class LiveAdapter2 extends RecyclerView.Adapter<LiveAdapter2.ViewHolder> {
 
         Context context;
-        List<liveBean> list = new ArrayList<>();
+        List<liveBean> list;
 
-        public LiveAdapter2(Context context, List<liveBean> list) {
+        LiveAdapter2(Context context, List<liveBean> list) {
             this.context = context;
             this.list = list;
         }
@@ -264,16 +260,20 @@ public class Channel extends Fragment implements ConnectivityReceiver.Connectivi
             notifyDataSetChanged();
         }
 
+        @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.live_list_model, parent, false);
+            View view = null;
+            if (inflater != null) {
+                view = inflater.inflate(R.layout.live_list_model, parent, false);
+            }
 
             return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
             holder.setIsRecyclable(false);
 
@@ -368,9 +368,9 @@ public class Channel extends Fragment implements ConnectivityReceiver.Connectivi
             public ViewHolder(View itemView) {
                 super(itemView);
 
-                image = (ImageView) itemView.findViewById(R.id.image);
-                title = (TextView) itemView.findViewById(R.id.title);
-                viewCount = (TextView) itemView.findViewById(R.id.view_count);
+                image = itemView.findViewById(R.id.image);
+                title = itemView.findViewById(R.id.title);
+                viewCount = itemView.findViewById(R.id.view_count);
 
             }
         }

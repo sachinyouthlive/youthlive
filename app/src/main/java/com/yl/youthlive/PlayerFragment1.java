@@ -2081,7 +2081,10 @@ public class PlayerFragment1 extends Fragment {
         public void addView(com.yl.youthlive.getIpdatedPOJO.View item) {
             list.add(0, item);
             notifyItemInserted(0);
-            liveUsers.setText(String.valueOf(list.size()));
+
+            int cc = Integer.parseInt(liveUsers.getText().toString());
+
+            liveUsers.setText(String.valueOf(cc + 1));
         }
 
         void removeView(com.yl.youthlive.getIpdatedPOJO.View item) {
