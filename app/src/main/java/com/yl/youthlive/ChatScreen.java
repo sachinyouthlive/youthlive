@@ -3,6 +3,7 @@ package com.yl.youthlive;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,22 +14,19 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.sendMessagePOJO.sendMessageBean;
 import com.yl.youthlive.singleMessagePOJO.Datum;
 import com.yl.youthlive.singleMessagePOJO.singleMessageBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class ChatScreen extends AppCompatActivity {
 
@@ -54,17 +52,17 @@ public class ChatScreen extends AppCompatActivity {
         image = getIntent().getStringExtra("image");
         chat = getIntent().getStringExtra("chat");
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        grid = (RecyclerView) findViewById(R.id.grid);
-        progress = (ProgressBar) findViewById(R.id.progress);
-        comment = (EditText) findViewById(R.id.comment);
-        send = (FloatingActionButton) findViewById(R.id.send);
+        toolbar = findViewById(R.id.toolbar);
+        grid = findViewById(R.id.grid);
+        progress = findViewById(R.id.progress);
+        comment = findViewById(R.id.comment);
+        send = findViewById(R.id.send);
 
         manager = new LinearLayoutManager(this);
         manager.setStackFromEnd(true);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationIcon(R.drawable.arrow);
 
@@ -99,14 +97,14 @@ public class ChatScreen extends AppCompatActivity {
 
                     call.enqueue(new Callback<sendMessageBean>() {
                         @Override
-                        public void onResponse(Call<sendMessageBean> call, Response<sendMessageBean> response) {
+                        public void onResponse(@NonNull Call<sendMessageBean> call, @NonNull Response<sendMessageBean> response) {
 
                             comment.setText("");
                             progress.setVisibility(View.GONE);
                         }
 
                         @Override
-                        public void onFailure(Call<sendMessageBean> call, Throwable t) {
+                        public void onFailure(@NonNull Call<sendMessageBean> call, @NonNull Throwable t) {
 
                             progress.setVisibility(View.GONE);
 
@@ -146,9 +144,11 @@ public class ChatScreen extends AppCompatActivity {
 
         call.enqueue(new Callback<singleMessageBean>() {
             @Override
-            public void onResponse(Call<singleMessageBean> call, Response<singleMessageBean> response) {
+            public void onResponse(@NonNull Call<singleMessageBean> call, @NonNull Response<singleMessageBean> response) {
 
-                adapter.setGridData(response.body().getData());
+                if (response.body() != null) {
+                    adapter.setGridData(response.body().getData());
+                }
                 progress.setVisibility(View.GONE);
 
                 //     Toast.makeText(ChatScreen.this, "loaddata", Toast.LENGTH_SHORT).show();
@@ -157,7 +157,7 @@ public class ChatScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<singleMessageBean> call, Throwable t) {
+            public void onFailure(@NonNull Call<singleMessageBean> call, @NonNull Throwable t) {
 
                 progress.setVisibility(View.GONE);
 
@@ -182,11 +182,11 @@ public class ChatScreen extends AppCompatActivity {
 
                 call.enqueue(new Callback<singleMessageBean>() {
                     @Override
-                    public void onResponse(Call<singleMessageBean> call, Response<singleMessageBean> response) {
+                    public void onResponse(@NonNull Call<singleMessageBean> call, @NonNull Response<singleMessageBean> response) {
 
 
                         try {
-                            if (response.body().getData() != null) {
+                            if (response.body() != null && response.body().getData() != null) {
                                 adapter.setGridData(response.body().getData());
                                 grid.scrollBy(0, 200);
                             }
@@ -199,7 +199,7 @@ public class ChatScreen extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<singleMessageBean> call, Throwable t) {
+                    public void onFailure(@NonNull Call<singleMessageBean> call, @NonNull Throwable t) {
 
                     }
                 });

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.yl.youthlive.Adapter.MassageAdapter;
-import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.R;
 import com.yl.youthlive.SharePreferenceUtils;
 import com.yl.youthlive.allMessagePOJO.Datum;
@@ -26,13 +26,11 @@ import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class MessaageActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
@@ -49,12 +47,12 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
         setContentView(R.layout.activity_messaage);
         checkConnection();
 
-        recyclerView = (RecyclerView) findViewById(R.id.messagerecycler);
-        progress = (ProgressBar) findViewById(R.id.progress);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        recyclerView = findViewById(R.id.messagerecycler);
+        progress = findViewById(R.id.progress);
+        toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationIcon(R.drawable.arrow);
 
@@ -103,8 +101,6 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
     }
 
     private void showAlert(boolean isConnected) {
-        String message;
-        int color;
         if (isConnected) {
 
             //    message = "Good! Connected to Internet";
@@ -167,17 +163,19 @@ public class MessaageActivity extends AppCompatActivity implements ConnectivityR
 
         call.enqueue(new Callback<allMessageBean>() {
             @Override
-            public void onResponse(Call<allMessageBean> call, Response<allMessageBean> response) {
+            public void onResponse(@NonNull Call<allMessageBean> call, @NonNull Response<allMessageBean> response) {
 
 
-                holder.setgrid(response.body().getData());
+                if (response.body() != null) {
+                    holder.setgrid(response.body().getData());
+                }
 
                 progress.setVisibility(View.GONE);
 
             }
 
             @Override
-            public void onFailure(Call<allMessageBean> call, Throwable t) {
+            public void onFailure(@NonNull Call<allMessageBean> call, @NonNull Throwable t) {
 
                 progress.setVisibility(View.GONE);
 
