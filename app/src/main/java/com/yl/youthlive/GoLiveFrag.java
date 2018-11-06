@@ -51,6 +51,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
 
     SharedPreferences offlinePref;
     SharedPreferences.Editor offlineEdit;
+    int flag = 0;
 
     @Nullable
     @Override

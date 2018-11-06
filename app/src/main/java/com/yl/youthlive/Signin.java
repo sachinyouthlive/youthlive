@@ -50,9 +50,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.yl.youthlive.Activitys.UserInformation;
 import com.yl.youthlive.DBHandler.SessionManager;
-import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.login.ForgotPasswordActivity;
 import com.yl.youthlive.login2POJO.login2Bean;
 import com.yl.youthlive.socialPOJO.socialBean;
@@ -67,9 +65,6 @@ import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class Signin extends AppCompatActivity {
     public static final String MyPREFERENCES = "userSession";
@@ -374,7 +369,7 @@ public class Signin extends AppCompatActivity {
                                 SharePreferenceUtils.getInstance().putString("pass", password);
 
                                 Toast.makeText(Signin.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(Signin.this, UserInformation.class);
+                                Intent intent = new Intent(Signin.this, UserInfo2.class);
                                 intent.putExtra("userId", response.body().getData().getUserId());
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
@@ -621,7 +616,7 @@ public class Signin extends AppCompatActivity {
                     SharePreferenceUtils.getInstance().putString("pass", pid);
 
                     Toast.makeText(Signin.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Signin.this, UserInformation.class);
+                    Intent intent = new Intent(Signin.this, UserInfo2.class);
                     intent.putExtra("userId", response.body().getData().getUserId());
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

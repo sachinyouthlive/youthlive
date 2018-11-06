@@ -54,7 +54,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.yl.youthlive.Activitys.UserInformation;
+import com.yl.youthlive.UserInfo2;
 import com.yl.youthlive.DBHandler.SessionManager;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.loginResponsePOJO.loginResponseBean;
@@ -578,7 +578,7 @@ public class Register extends AppCompatActivity {
                         edit.commit();
 
                         Toast.makeText(Register.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Register.this, UserInformation.class);
+                        Intent intent = new Intent(Register.this, UserInfo2.class);
                         intent.putExtra("userId", response.body().getData().getUserId());
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
@@ -672,7 +672,7 @@ public class Register extends AppCompatActivity {
                     SharePreferenceUtils.getInstance().putString("pass", pid);
 
                     Toast.makeText(Register.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Register.this, UserInformation.class);
+                    Intent intent = new Intent(Register.this, UserInfo2.class);
                     intent.putExtra("userId", response.body().getData().getUserId());
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

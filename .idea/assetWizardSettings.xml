@@ -30,8 +30,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_phones" />
-                            <entry key="sourceFile" value="C:\Users\mukul\Downloads\phones.svg" />
+                            <entry key="outputName" value="ic_picture" />
+                            <entry key="sourceFile" value="C:\Users\mukul\Downloads\picture.svg" />
                           </map>
                         </option>
                       </PersistentState>

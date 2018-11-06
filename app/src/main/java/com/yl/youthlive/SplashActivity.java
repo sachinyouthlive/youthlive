@@ -17,8 +17,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.yl.youthlive.Activitys.UserInformation;
-import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.login2POJO.login2Bean;
 import com.yl.youthlive.socialPOJO.socialBean;
 
@@ -28,9 +26,6 @@ import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 
 public class SplashActivity extends AppCompatActivity {
@@ -193,7 +188,7 @@ public class SplashActivity extends AppCompatActivity {
                         SharePreferenceUtils.getInstance().putString("pass", pass);
 
                         Toast.makeText(SplashActivity.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(SplashActivity.this, UserInformation.class);
+                        Intent intent = new Intent(SplashActivity.this, UserInfo2.class);
                         intent.putExtra("userId", response.body().getData().getUserId());
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
@@ -289,7 +284,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
                     Toast.makeText(SplashActivity.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SplashActivity.this, UserInformation.class);
+                    Intent intent = new Intent(SplashActivity.this, UserInfo2.class);
                     intent.putExtra("userId", response.body().getData().getUserId());
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

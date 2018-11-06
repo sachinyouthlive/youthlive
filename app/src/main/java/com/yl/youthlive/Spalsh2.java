@@ -41,7 +41,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.yl.youthlive.Activitys.UserInformation;
+import com.yl.youthlive.UserInfo2;
 import com.yl.youthlive.socialPOJO.socialBean;
 
 import org.json.JSONObject;
@@ -377,7 +377,7 @@ public class Spalsh2 extends AppCompatActivity {
                         SharePreferenceUtils.getInstance().putString("pass", pid);
 
                         Toast.makeText(Spalsh2.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Spalsh2.this, UserInformation.class);
+                        Intent intent = new Intent(Spalsh2.this, UserInfo2.class);
                         intent.putExtra("userId", response.body().getData().getUserId());
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

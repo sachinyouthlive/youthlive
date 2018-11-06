@@ -43,7 +43,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.yl.youthlive.Activitys.UserInformation;
+import com.yl.youthlive.UserInfo2;
 import com.yl.youthlive.DBHandler.SessionManager;
 import com.yl.youthlive.INTERFACE.AllAPIs;
 import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
@@ -200,7 +200,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                                                         edit.apply();
 
                                                         Toast.makeText(Login.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(Login.this, UserInformation.class);
+                                                        Intent intent = new Intent(Login.this, UserInfo2.class);
                                                         intent.putExtra("userId", response.body().getData().getUserId());
                                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
@@ -622,7 +622,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                         edit.commit();
 
                         Toast.makeText(Login.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Login.this, UserInformation.class);
+                        Intent intent = new Intent(Login.this, UserInfo2.class);
                         intent.putExtra("userId", response.body().getData().getUserId());
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

@@ -1,8 +1,15 @@
 package com.yl.youthlive;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -16,6 +23,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     SharedPreferences pref;
     SharedPreferences.Editor edit;
+
 
 
     @Override
@@ -44,7 +52,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+/////////////////
 
+
+        ////////////////////////
         //if(remoteMessage.getData().size() > 0){
 
         //    Log.d("asdasd" , "asdasasdasdasd");
@@ -241,6 +252,48 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void handleNotification(String message) {
 
         Log.d("notificationData", message);
+        String idChannel = "youthlive messages";
+        Intent mainIntent;
+
+        mainIntent = new Intent(bean.getContext(), MyFirebaseMessagingService.class);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(bean.getContext(), 0, mainIntent, 0);
+
+        NotificationManager mNotificationManager = (NotificationManager) bean.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationChannel mChannel = null;
+        // The id of the channel.
+
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(bean.getContext(), idChannel);
+        builder.setContentTitle(bean.getContext().getString(R.string.app_name))
+                .setSmallIcon(R.drawable.ic_action_action_search)
+                .setContentIntent(pendingIntent)
+                .setContentText(message);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mChannel = new NotificationChannel(idChannel, bean.getContext().getString(R.string.app_name), importance);
+            // Configure the notification channel.
+            mChannel.setDescription(bean.getContext().getString(R.string.alarm_notification));
+            mChannel.enableLights(true);
+            mChannel.setLightColor(Color.RED);
+            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            if (mNotificationManager != null) {
+                mNotificationManager.createNotificationChannel(mChannel);
+            }
+        } else {
+            builder.setContentTitle(bean.getContext().getString(R.string.app_name))
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setColor(ContextCompat.getColor(bean.getContext(), R.color.transparent))
+                    .setVibrate(new long[]{100, 250})
+                    .setLights(Color.YELLOW, 500, 5000)
+                    .setAutoCancel(true);
+        }
+        if (mNotificationManager != null) {
+            mNotificationManager.notify(1, builder.build());
+        }
+
 
     }
 

@@ -145,6 +145,8 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
 
         progress.setVisibility(View.GONE);
 
+        skus.clear();
+
         skus.add(bp.getPurchaseListingDetails(ids.get(0)));
         skus.add(bp.getPurchaseListingDetails(ids.get(1)));
         skus.add(bp.getPurchaseListingDetails(ids.get(2)));
