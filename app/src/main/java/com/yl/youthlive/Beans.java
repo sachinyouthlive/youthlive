@@ -1,5 +1,6 @@
 package com.yl.youthlive;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,21 +15,18 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.yl.youthlive.INTERFACE.AllAPIs;
+import com.yl.youthlive.Activitys.Exchange2diamondActivity;
 import com.yl.youthlive.walletPOJO.walletBean;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class Beans extends Fragment {
     static String rate;
     ScrollView scrollView;
     ProgressBar progress;
-    TextView coins, conversion_rate;
+    TextView coins, conversion_rate, exchangetodiamonds;
 
     @Nullable
     @Override
@@ -40,6 +38,9 @@ public class Beans extends Fragment {
         scrollView = view.findViewById(R.id.scroll);
         scrollView.setVerticalScrollBarEnabled(false);
         scrollView.setHorizontalScrollBarEnabled(false);
+        exchangetodiamonds = view.findViewById(R.id.textView16);
+
+
 
         conversion_rate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +88,15 @@ public class Beans extends Fragment {
 */
 
 
+            }
+        });
+
+        exchangetodiamonds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), Exchange2diamondActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
