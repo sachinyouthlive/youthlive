@@ -274,6 +274,9 @@
             android:name="com.app.youthlive.VerticalFragmentVodPopularActivity"
             android:screenOrientation="portrait" />
         <activity android:name="com.app.youthlive.UserInfo2"></activity>
+        <activity android:name=".UserInfo2" />
+        <activity android:name=".Activitys.Exchange2diamondActivity" />
+        <activity android:name=".Activitys.HistoryActivity"></activity>
     </application>
 
 </manifest>

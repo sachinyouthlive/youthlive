@@ -45,6 +45,7 @@ public class WalletNew extends AppCompatActivity {
 
         tabs.addTab(tabs.newTab().setText("DIAMONDS"));
         tabs.addTab(tabs.newTab().setText("COINS"));
+        tabs.addTab(tabs.newTab().setText("HISTORY"));
 
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
 
@@ -54,6 +55,7 @@ public class WalletNew extends AppCompatActivity {
 
         tabs.getTabAt(0).setText("DIAMONDS");
         tabs.getTabAt(1).setText("COINS");
+        tabs.getTabAt(2).setText("HISTORY");
 
         Typeface typeFace = Typeface.MONOSPACE;
         ((TextView)toolbar.getChildAt(0)).setTypeface(typeFace);
@@ -95,14 +97,17 @@ public class WalletNew extends AppCompatActivity {
         public Fragment getItem(int position) {
             if (position == 0) {
                 return new Diamonds();
-            } else {
+            }
+            if (position == 1) {
                 return new Beans();
+            } else {
+                return new WalletHistory();
             }
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
     }
 

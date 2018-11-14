@@ -64,7 +64,7 @@
             android:textColor="@color/colorAccent"
             android:paddingStart="10dp"
             android:paddingTop="13dp"
-            android:text="Exchange Diamonds"
+            android:text="Exchange to Diamonds"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -159,6 +159,7 @@
             android:layout_marginTop="18dp"
             android:textColor="#cdcdcd"
             android:text="1."
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView42" />
 
@@ -173,6 +174,7 @@
             android:typeface="monospace"
             android:text="Exchange Rewards starts from 10,000 Current Coins. No more than 1,000,000 Current Coins."
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/textView43"
             app:layout_constraintTop_toBottomOf="@+id/textView42" />
 
@@ -184,7 +186,7 @@
             android:textColor="#cdcdcd"
             android:layout_marginTop="12dp"
             android:typeface="monospace"
-            android:text="2."
+            android:text="1."
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView44" />
 
