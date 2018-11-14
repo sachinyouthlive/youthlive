@@ -1,4 +1,4 @@
-package com.yl.youthlive;
+package com.app.youthlive;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,9 +13,11 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.yl.youthlive.Activitys.Diamond_purchase_history_Activity;
-import com.yl.youthlive.Activitys.HistoryActivity;
-import com.yl.youthlive.walletPOJO.walletBean;
+import com.app.youthlive.Activitys.Diamond_purchase_history_Activity;
+import com.app.youthlive.Activitys.HistoryActivity;
+import com.app.youthlive.walletPOJO.walletBean;
+
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,7 +49,7 @@ public class WalletHistory extends Fragment {
 
                 Intent intent = new Intent(getContext(), Diamond_purchase_history_Activity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
 
             }
@@ -59,7 +61,7 @@ public class WalletHistory extends Fragment {
 
                 Intent intent = new Intent(getContext(), HistoryActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
 
             }
@@ -71,7 +73,7 @@ public class WalletHistory extends Fragment {
 
                 Intent intent = new Intent(getContext(), HistoryActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
 
             }
@@ -83,7 +85,7 @@ public class WalletHistory extends Fragment {
 
                 Intent intent = new Intent(getContext(), HistoryActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });
@@ -101,16 +103,16 @@ public class WalletHistory extends Fragment {
         progress.setVisibility(View.VISIBLE);
 
 
-        final bean b = (bean) getContext().getApplicationContext();
+        final bean b = (bean) Objects.requireNonNull(getContext()).getApplicationContext();
         Call<walletBean> call = b.getRetrofit().getWalletData(SharePreferenceUtils.getInstance().getString("userId"));
         Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 
         call.enqueue(new Callback<walletBean>() {
             @Override
-            public void onResponse(Call<walletBean> call, Response<walletBean> response) {
+            public void onResponse(@NonNull Call<walletBean> call, @NonNull Response<walletBean> response) {
 
                 try {
-                    if (!response.body().getData().getDiamond().isEmpty()) {
+                    if (response.body() != null && !response.body().getData().getDiamond().isEmpty()) {
                         //  Toast.makeText(BuyDiamonds.this, "Purchase done", Toast.LENGTH_SHORT).show();
                         coins.setText(response.body().getData().getBeans());
                     }
@@ -126,7 +128,7 @@ public class WalletHistory extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<walletBean> call, Throwable t) {
+            public void onFailure(@NonNull Call<walletBean> call, @NonNull Throwable t) {
                 progress.setVisibility(View.GONE);
             }
 

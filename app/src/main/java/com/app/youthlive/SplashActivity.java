@@ -1,10 +1,7 @@
 package com.app.youthlive;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -23,11 +20,14 @@ import android.widget.Toast;
 
 import com.app.youthlive.login2POJO.login2Bean;
 import com.app.youthlive.socialPOJO.socialBean;
-import com.google.android.vending.licensing.AESObfuscator;
-import com.google.android.vending.licensing.LicenseChecker;
-import com.google.android.vending.licensing.LicenseCheckerCallback;
-import com.google.android.vending.licensing.Policy;
-import com.google.android.vending.licensing.ServerManagedPolicy;
+import com.github.javiersantos.piracychecker.PiracyChecker;
+import com.github.javiersantos.piracychecker.callbacks.PiracyCheckerCallback;
+import com.github.javiersantos.piracychecker.enums.Display;
+import com.github.javiersantos.piracychecker.enums.InstallerID;
+import com.github.javiersantos.piracychecker.enums.PiracyCheckerError;
+import com.github.javiersantos.piracychecker.enums.PirateApp;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Timer;
@@ -57,6 +57,8 @@ public class SplashActivity extends AppCompatActivity {
             Manifest.permission.MODIFY_AUDIO_SETTINGS
     };
 
+    private PiracyChecker checker;
+
     private static final String BASE64_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgyeBlAF+Tb5RcId3Y9sAnK7EoGEklDr24FByrgxwhQNsIOkhYfDH+KW4OGxqR47D+RjH3uHBgtKjD62qgvSsqiJR4KiHAq5gVZLZJ3nP0YDvnfWwyhg+t6FYnchGVGt2FbuNyw+XqPuZvoxUQmfB4qsIOQlbf9HI69uisnOZzuJ5b2VIVg3yIymF45jAm9+U5DdqP3vO7pHF4Y3yycOS6EIYs3VoZJ8JmJIOVHpFc//fxBaV4OKgKJij/28v5C94RRay55wHO0+ysW4fAQW52SxXX2vsQMGWYRmMzLs+N87PUixYJP96BbkUh4mkGFC1RMq8iUaeWLKIut74VhmCLQIDAQAB";
 
     // Generate 20 random bytes, and put them here.
@@ -65,8 +67,8 @@ public class SplashActivity extends AppCompatActivity {
             -45, 77, -117, -36, -113, -11, 32, -64, 89
     };
 
-    private LicenseCheckerCallback mLicenseCheckerCallback;
-    private LicenseChecker mChecker;
+    //private LicenseCheckerCallback mLicenseCheckerCallback;
+    //private LicenseChecker mChecker;
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
@@ -89,12 +91,14 @@ public class SplashActivity extends AppCompatActivity {
         String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         // Library calls this when it's done.
-        mLicenseCheckerCallback = new MyLicenseCheckerCallback();
+        /*mLicenseCheckerCallback = new MyLicenseCheckerCallback();
         // Construct the LicenseChecker with a policy.
         mChecker = new LicenseChecker(
                 this, new ServerManagedPolicy(this,
                 new AESObfuscator(SALT, getPackageName(), deviceId)),
                 BASE64_PUBLIC_KEY);
+        */
+
         doCheck();
 
         pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
@@ -111,12 +115,31 @@ public class SplashActivity extends AppCompatActivity {
 
 
     private void doCheck() {
-        //mCheckLicenseButton.setEnabled(false);
-        setProgressBarIndeterminateVisibility(true);
-        //mStatusText.setText(R.string.checking_license);
-        mChecker.checkAccess(mLicenseCheckerCallback);
+        checker = new PiracyChecker(this)
+                .enableGooglePlayLicensing(BASE64_PUBLIC_KEY)
+                .enableInstallerId(InstallerID.GOOGLE_PLAY)
+                .enableEmulatorCheck(true)
+                .display(Display.ACTIVITY);
+                /*.callback(new PiracyCheckerCallback() {
+                    @Override
+                    public void allow() {
+                        if (hasPermissions(SplashActivity.this, PERMISSIONS)) {
+                            startApp();
+                        } else {
+                            ActivityCompat.requestPermissions(SplashActivity.this, PERMISSIONS, REQUEST_CODE_ASK_PERMISSIONS);
+                        }
+                    }
+
+                    @Override
+                    public void doNotAllow(@NotNull PiracyCheckerError piracyCheckerError, @org.jetbrains.annotations.Nullable PirateApp pirateApp) {
+                        Toast.makeText(SplashActivity.this, "Invalid Liscense", Toast.LENGTH_SHORT).show();
+                    }
+                });*/
+
+        checker.start();
     }
 
+/*
 
     private class MyLicenseCheckerCallback implements LicenseCheckerCallback {
         public void allow(int policyReason) {
@@ -171,8 +194,9 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+*/
 
-    protected Dialog onCreateDialog(int id) {
+    /*protected Dialog onCreateDialog(int id) {
         final boolean bRetry = id == 1;
         return new AlertDialog.Builder(this)
                 .setTitle(R.string.unlicensed_dialog_title)
@@ -194,7 +218,7 @@ public class SplashActivity extends AppCompatActivity {
                         finish();
                     }
                 }).create();
-    }
+    }*/
 
 
     public void startApp() {
@@ -509,7 +533,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mChecker.onDestroy();
+        checker.destroy();
     }
 
 

@@ -1,4 +1,4 @@
-package com.yl.youthlive.Activitys;
+package com.app.youthlive.Activitys;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -16,22 +16,23 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.yl.youthlive.Adapter.diamondPHAdapter;
-import com.yl.youthlive.R;
-import com.yl.youthlive.SharePreferenceUtils;
-import com.yl.youthlive.bean;
-import com.yl.youthlive.diamondpurchasehistoryPOJO.DiamondpurchaselistPOJO;
-import com.yl.youthlive.diamondpurchasehistoryPOJO.Information;
-import com.yl.youthlive.internetConnectivity.ConnectivityReceiver;
+import com.app.youthlive.Adapter.diamondPHAdapter;
+import com.app.youthlive.R;
+import com.app.youthlive.SharePreferenceUtils;
+import com.app.youthlive.bean;
+import com.app.youthlive.diamondpurchasehistoryPOJO.DiamondpurchaselistPOJO;
+import com.app.youthlive.diamondpurchasehistoryPOJO.Information;
+import com.app.youthlive.internetConnectivity.ConnectivityReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.yl.youthlive.bean.getContext;
+import static com.app.youthlive.bean.getContext;
 
 public class HistoryActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
@@ -47,9 +48,9 @@ public class HistoryActivity extends AppCompatActivity implements ConnectivityRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         checkConnection();
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         toolbar.setTitle("History");
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationIcon(R.drawable.arrow);
@@ -61,9 +62,9 @@ public class HistoryActivity extends AppCompatActivity implements ConnectivityRe
         });
 
 
-        progress = (ProgressBar) findViewById(R.id.progress);
+        progress = findViewById(R.id.progress);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView = findViewById(R.id.recycler);
         manager = new GridLayoutManager(getContext(), 1);
         adapter = new diamondPHAdapter(getContext(), list);
         recyclerView.setAdapter(adapter);

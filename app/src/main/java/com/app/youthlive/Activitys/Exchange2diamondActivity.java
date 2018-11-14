@@ -1,9 +1,9 @@
-package com.yl.youthlive.Activitys;
+package com.app.youthlive.Activitys;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.yl.youthlive.R;
+import com.app.youthlive.R;
 
 public class Exchange2diamondActivity extends AppCompatActivity {
 

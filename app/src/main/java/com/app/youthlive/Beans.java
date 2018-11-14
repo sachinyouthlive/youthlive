@@ -15,8 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.yl.youthlive.Activitys.Exchange2diamondActivity;
-import com.yl.youthlive.walletPOJO.walletBean;
+import com.app.youthlive.Activitys.Exchange2diamondActivity;
 import com.app.youthlive.walletPOJO.walletBean;
 
 import retrofit2.Call;
