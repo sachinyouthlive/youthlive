@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.yl.youthlive">
+    package="com.app.youthlive">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -18,6 +18,8 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="com.android.vending.BILLING" />
+
+    <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -42,7 +44,7 @@
         android:required="false" />
     -->
     <application
-        android:name=".bean"
+        android:name="com.app.youthlive.bean"
         android:allowBackup="true"
         android:icon="@mipmap/ylive"
         android:label="@string/app_name"
@@ -50,7 +52,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-        <service android:name=".MyFirebaseMessagingService">
+        <service android:name="com.app.youthlive.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -75,10 +77,10 @@
             android:value="@string/default_notification_channel_id" />
 
         <activity
-            android:name=".Login"
+            android:name="com.app.youthlive.Login"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SplashActivity"
+            android:name="com.app.youthlive.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -87,28 +89,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Register"
+            android:name="com.app.youthlive.Register"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Signin"
+            android:name="com.app.youthlive.Signin"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".OTP"
+            android:name="com.app.youthlive.OTP"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activitys.MessaageActivity"
+            android:name="com.app.youthlive.Activitys.MessaageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activitys.FollowingActivity"
+            android:name="com.app.youthlive.Activitys.FollowingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activitys.RattingActivity"
+            android:name="com.app.youthlive.Activitys.RattingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activitys.CreatePassword"
+            android:name="com.app.youthlive.Activitys.CreatePassword"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activitys.UserInformation"
+            android:name="com.app.youthlive.Activitys.UserInformation"
             android:screenOrientation="portrait" />
 
         <meta-data
@@ -132,10 +134,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activitys.PersonalInfo"
+            android:name="com.app.youthlive.Activitys.PersonalInfo"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activitys.MyVlog"
+            android:name="com.app.youthlive.Activitys.MyVlog"
             android:screenOrientation="portrait" />
 
         <provider
@@ -159,25 +161,25 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         -->
         <activity
-            android:name=".HomeActivity"
+            android:name="com.app.youthlive.HomeActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ChatScreen"
+            android:name="com.app.youthlive.ChatScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".TimelineProfile"
+            android:name="com.app.youthlive.TimelineProfile"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Content"
+            android:name="com.app.youthlive.Content"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Terms"
+            android:name="com.app.youthlive.Terms"
             android:screenOrientation="portrait" />
 
         <receiver
-            android:name=".internetConnectivity.ConnectivityReceiver"
+            android:name="com.app.youthlive.internetConnectivity.ConnectivityReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -185,71 +187,71 @@
         </receiver>
 
         <activity
-            android:name=".Activitys.MycheckinActivity"
+            android:name="com.app.youthlive.Activitys.MycheckinActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".VideoBroadcaster"
+            android:name="com.app.youthlive.VideoBroadcaster"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".VideoPlayer"
+            android:name="com.app.youthlive.VideoPlayer"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".checkin.CheckinActivity"
-            android:parentActivityName=".HomeActivity"
+            android:name="com.app.youthlive.checkin.CheckinActivity"
+            android:parentActivityName="com.app.youthlive.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".checkin.CheckInDetailActivity"
-            android:parentActivityName=".checkin.CheckinActivity"
+            android:name="com.app.youthlive.checkin.CheckInDetailActivity"
+            android:parentActivityName="com.app.youthlive.checkin.CheckinActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".WalletNew"
+            android:name="com.app.youthlive.WalletNew"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".BuyDiamonds"
+            android:name="com.app.youthlive.BuyDiamonds"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LiveEndedPlayer"
+            android:name="com.app.youthlive.LiveEndedPlayer"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LiveEndedBroadcaster"
+            android:name="com.app.youthlive.LiveEndedBroadcaster"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activitys.FanActivity"
+            android:name="com.app.youthlive.Activitys.FanActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activitys.FriendActivity"
+            android:name="com.app.youthlive.Activitys.FriendActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activitys.SearchActivity"
+            android:name="com.app.youthlive.Activitys.SearchActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activitys.Diamond_purchase_history_Activity"
+            android:name="com.app.youthlive.Activitys.Diamond_purchase_history_Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".login.ForgotPasswordActivity"
+            android:name="com.app.youthlive.login.ForgotPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".login.New_Password"
+            android:name="com.app.youthlive.login.New_Password"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".login.OTP_varify"
+            android:name="com.app.youthlive.login.OTP_varify"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activitys.PhoneUpdateActivity"
+            android:name="com.app.youthlive.Activitys.PhoneUpdateActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".YoutubePlayer"
+            android:name="com.app.youthlive.YoutubePlayer"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name=".pl.MainVideoActivity"
+            android:name="com.app.youthlive.pl.MainVideoActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".VerticalFragmentVodActivity"
+            android:name="com.app.youthlive.VerticalFragmentVodActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".VideoChatTest" />
-        <activity android:name=".Login2" />
+        <activity android:name="com.app.youthlive.VideoChatTest" />
+        <activity android:name="com.app.youthlive.Login2" />
         <activity
             android:name="io.github.memfis19.annca.internal.ui.camera.Camera1Activity"
             android:screenOrientation="portrait"
@@ -263,15 +265,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/ThemeFullscreen" />
         <activity
-            android:name=".Spalsh2"
+            android:name="com.app.youthlive.Spalsh2"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".TnC"
+            android:name="com.app.youthlive.TnC"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".VerticalFragmentVodPopularActivity"
+            android:name="com.app.youthlive.VerticalFragmentVodPopularActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".UserInfo2"></activity>
+        <activity android:name="com.app.youthlive.UserInfo2"></activity>
     </application>
 
 </manifest>

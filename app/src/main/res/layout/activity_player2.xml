@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yl.youthlive.Player2">
+    tools:context="com.app.youthlive.Player2">
 
     <veg.mediaplayer.sdk.MediaPlayer
         android:id="@+id/player"
