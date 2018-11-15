@@ -1,7 +1,9 @@
 package com.app.youthlive;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,6 +14,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
@@ -20,6 +25,11 @@ import android.widget.Toast;
 
 import com.app.youthlive.login2POJO.login2Bean;
 import com.app.youthlive.socialPOJO.socialBean;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.github.javiersantos.piracychecker.PiracyChecker;
 import com.github.javiersantos.piracychecker.callbacks.PiracyCheckerCallback;
 import com.github.javiersantos.piracychecker.enums.Display;
@@ -29,12 +39,18 @@ import com.github.javiersantos.piracychecker.enums.PirateApp;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SplashActivity extends AppCompatActivity {
@@ -58,6 +74,8 @@ public class SplashActivity extends AppCompatActivity {
     };
 
     private PiracyChecker checker;
+
+    DBHelper db;
 
     private static final String BASE64_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgyeBlAF+Tb5RcId3Y9sAnK7EoGEklDr24FByrgxwhQNsIOkhYfDH+KW4OGxqR47D+RjH3uHBgtKjD62qgvSsqiJR4KiHAq5gVZLZJ3nP0YDvnfWwyhg+t6FYnchGVGt2FbuNyw+XqPuZvoxUQmfB4qsIOQlbf9HI69uisnOZzuJ5b2VIVg3yIymF45jAm9+U5DdqP3vO7pHF4Y3yycOS6EIYs3VoZJ8JmJIOVHpFc//fxBaV4OKgKJij/28v5C94RRay55wHO0+ysW4fAQW52SxXX2vsQMGWYRmMzLs+N87PUixYJP96BbkUh4mkGFC1RMq8iUaeWLKIut74VhmCLQIDAQAB";
 
@@ -88,6 +106,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        db = new DBHelper(this);
+
         String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         // Library calls this when it's done.
@@ -99,7 +119,7 @@ public class SplashActivity extends AppCompatActivity {
                 BASE64_PUBLIC_KEY);
         */
 
-        doCheck();
+
 
         pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
         edit = pref.edit();
@@ -109,35 +129,133 @@ public class SplashActivity extends AppCompatActivity {
         //bindLogo();
 
         //  Glide.with(this).load(R.drawable.splashyl).into(bg);
-
+        doCheck();
 
     }
 
 
     private void doCheck() {
         checker = new PiracyChecker(this)
-                .enableGooglePlayLicensing(BASE64_PUBLIC_KEY)
-                .enableInstallerId(InstallerID.GOOGLE_PLAY)
+                //.enableGooglePlayLicensing(BASE64_PUBLIC_KEY)
+                //.enableInstallerId(InstallerID.GOOGLE_PLAY)
                 .enableEmulatorCheck(true)
-                .display(Display.ACTIVITY);
-                /*.callback(new PiracyCheckerCallback() {
+                //.display(Display.ACTIVITY);
+                .callback(new PiracyCheckerCallback() {
                     @Override
                     public void allow() {
-                        if (hasPermissions(SplashActivity.this, PERMISSIONS)) {
+
+                        updateCheck();
+
+                        /*if (hasPermissions(SplashActivity.this, PERMISSIONS)) {
                             startApp();
                         } else {
                             ActivityCompat.requestPermissions(SplashActivity.this, PERMISSIONS, REQUEST_CODE_ASK_PERMISSIONS);
-                        }
+                        }*/
                     }
 
                     @Override
                     public void doNotAllow(@NotNull PiracyCheckerError piracyCheckerError, @org.jetbrains.annotations.Nullable PirateApp pirateApp) {
-                        Toast.makeText(SplashActivity.this, "Invalid Liscense", Toast.LENGTH_SHORT).show();
+
+
+                        Dialog dialog = new Dialog(SplashActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.piracy_dialog);
+                        dialog.setCancelable(true);
+                        dialog.show();
+
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+
+                                finish();
+
+                            }
+                        });
+
+
                     }
-                });*/
+                });
 
         checker.start();
     }
+
+
+    public void updateCheck()
+    {
+
+        progress.setVisibility(View.VISIBLE);
+
+        final bean b = (bean) getApplicationContext();
+
+
+        Call<List<giftBeanss>> call = b.getRetrofit().getGifts();
+
+        call.enqueue(new Callback<List<giftBeanss>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<giftBeanss>> call, @NonNull Response<List<giftBeanss>> response) {
+
+
+
+                if (response.body() != null) {
+                    for (int i = 0 ; i < response.body().size() ; i++)
+                    {
+                        final String gid = response.body().get(i).getGiftId();
+                        final String name = response.body().get(i).getGiftName();
+                        final String file = response.body().get(i).getFile();
+                        String url = b.BASE_URL + "upload/gift/" + response.body().get(i).getFile();
+                        final String price = response.body().get(i).getPrice();
+
+                        Log.d("uurrll" , url);
+
+                        Glide.with(SplashActivity.this)
+                                .download(url)
+                                .listener(new RequestListener<File>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<File> target, boolean isFirstResource) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(File resource, Object model, Target<File> target, DataSource dataSource, boolean isFirstResource) {
+                                        byte[] bytesArray = new byte[(int) resource.length()];
+
+                                        FileInputStream fis = null;
+                                        try {
+                                            fis = new FileInputStream(resource);
+                                            fis.read(bytesArray); //read file into bytes[]
+                                            fis.close();
+
+
+                                            long res = db.insertGift(gid , name , file , price , bytesArray);
+
+                                            Log.d("result" , String.valueOf(res));
+
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
+
+                                        return false;
+                                    }
+                                }).submit();
+
+
+                    }
+                }
+
+                progress.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<giftBeanss>> call, @NonNull Throwable t) {
+                progress.setVisibility(View.GONE);
+            }
+        });
+
+
+    }
+
 
 /*
 

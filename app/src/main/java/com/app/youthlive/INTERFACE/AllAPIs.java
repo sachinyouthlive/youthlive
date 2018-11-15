@@ -32,6 +32,7 @@ import com.app.youthlive.friendListPOJO.FriendListPOJO;
 import com.app.youthlive.getConnectionPOJO.getConnectionBean;
 import com.app.youthlive.getIpdatedPOJO.getUpdatedBean;
 import com.app.youthlive.getLivePOJO.getLiveBean;
+import com.app.youthlive.giftBeanss;
 import com.app.youthlive.giftPOJO.giftBean;
 import com.app.youthlive.goLivePOJO.goLiveBean;
 import com.app.youthlive.liveBean;
@@ -420,6 +421,9 @@ public interface AllAPIs {
 
     @GET("api/test_live_users.php")
     Call<List<liveBean>> getLives3();
+
+    @GET("api/get_gifts.php")
+    Call<List<giftBeanss>> getGifts();
 
     @Multipart
     @POST("api/get_timelinelist.php")
