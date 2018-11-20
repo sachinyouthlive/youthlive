@@ -141,7 +141,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void doCheck() {
         checker = new PiracyChecker(this)
-                .enableGooglePlayLicensing(BASE64_PUBLIC_KEY)
+                //.enableGooglePlayLicensing(BASE64_PUBLIC_KEY)
                 .enableInstallerId(InstallerID.GOOGLE_PLAY)
                 .enableEmulatorCheck(true)
                 //.display(Display.ACTIVITY);
@@ -161,8 +161,8 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void doNotAllow(@NotNull PiracyCheckerError piracyCheckerError, @org.jetbrains.annotations.Nullable PirateApp pirateApp) {
 
-                        progress.setVisibility(View.GONE);
-                        status.setText("");
+                        //progress.setVisibility(View.GONE);
+                        //status.setText("");
 
                         Dialog dialog = new Dialog(SplashActivity.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
