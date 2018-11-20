@@ -16,6 +16,33 @@
         android:paddingEnd="2dp"
         android:paddingBottom="?attr/actionBarSize" />
 
+    <LinearLayout
+        android:id="@+id/nobroadcast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerCrop"
+            android:src="@drawable/mainlogo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:typeface="monospace"
+            android:textColor="#cdcdcd"
+            android:paddingStart="10dp"
+            android:layout_gravity="center_vertical"
+            android:text="No Broadcasts right now"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"
@@ -23,11 +50,5 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#00000000"
-        android:id="@+id/replace1"/>
 
 </RelativeLayout>

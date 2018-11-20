@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "yl_db";
 
 
-    public DBHelper(Context context) {
+    DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -37,7 +36,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public long insertGift(String gid , String name , String file , String price , byte[] fl) {
+    long insertGift(String gid, String name, String file, String price, byte[] fl) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -61,7 +60,18 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public List<gift> getAllGifts() {
+    void deleteAll() {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(gift.TABLE_NAME, null, null);
+
+        db.close();
+
+    }
+
+
+    List<gift> getAllGifts() {
         List<gift> notes = new ArrayList<>();
 
         // Select All Query

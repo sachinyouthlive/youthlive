@@ -18,7 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.youthlive.R;
-import com.app.youthlive.UserInfo2;
+import com.app.youthlive.Activitys.UserInformation;
 import com.app.youthlive.bean;
 import com.app.youthlive.otpPOJO.otpBean;
 
@@ -93,7 +93,7 @@ public class CreatePassword extends AppCompatActivity {
 
                         if (Objects.equals(response.body().getStatus(), "1")) {
 
-                            Intent intent = new Intent(CreatePassword.this, UserInfo2.class);
+                            Intent intent = new Intent(CreatePassword.this, UserInformation.class);
                             intent.putExtra("userId", getIntent().getStringExtra("userId"));
                             startActivity(intent);
                             finish();
@@ -137,7 +137,7 @@ public class CreatePassword extends AppCompatActivity {
                         Pass = user.getString("password");
                         Toast.makeText(CreatePassword.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
                         //String verificationCode=jObj.getString("message");
-                        Intent i = new Intent(CreatePassword.this, UserInfo2.class);
+                        Intent i = new Intent(CreatePassword.this, UserInformation.class);
                         startActivity(i);
 
                     } else {

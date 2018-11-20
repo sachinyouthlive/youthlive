@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.app.youthlive.Activitys.UserInformation;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -195,7 +196,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                                                         edit.apply();
 
                                                         Toast.makeText(Login.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(Login.this, UserInfo2.class);
+                                                        Intent intent = new Intent(Login.this, UserInformation.class);
                                                         intent.putExtra("userId", response.body().getData().getUserId());
                                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
@@ -617,7 +618,7 @@ public class Login extends AppCompatActivity implements ConnectivityReceiver.Con
                         edit.commit();
 
                         Toast.makeText(Login.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Login.this, UserInfo2.class);
+                        Intent intent = new Intent(Login.this, UserInformation.class);
                         intent.putExtra("userId", response.body().getData().getUserId());
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

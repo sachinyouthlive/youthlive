@@ -29,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.app.youthlive.Activitys.UserInformation;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -369,7 +370,7 @@ public class Signin extends AppCompatActivity {
                                 SharePreferenceUtils.getInstance().putString("pass", password);
 
                                 Toast.makeText(Signin.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(Signin.this, UserInfo2.class);
+                                Intent intent = new Intent(Signin.this, UserInformation.class);
                                 intent.putExtra("userId", response.body().getData().getUserId());
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
@@ -616,7 +617,7 @@ public class Signin extends AppCompatActivity {
                     SharePreferenceUtils.getInstance().putString("pass", pid);
 
                     Toast.makeText(Signin.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Signin.this, UserInfo2.class);
+                    Intent intent = new Intent(Signin.this, UserInformation.class);
                     intent.putExtra("userId", response.body().getData().getUserId());
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

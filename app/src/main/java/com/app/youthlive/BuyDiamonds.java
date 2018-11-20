@@ -64,9 +64,10 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
 
 
         ids.add("diamond_70");
+        ids.add("diamond_210");
         ids.add("diamond_570");
         ids.add("diamond_970");
-        ids.add("diamonds_1950");
+        ids.add("diamond_1950");
         ids.add("diamond_4000");
         ids.add("diamond_7000");
 
@@ -149,6 +150,7 @@ public class BuyDiamonds extends AppCompatActivity implements BillingProcessor.I
         skus.add(bp.getPurchaseListingDetails(ids.get(3)));
         skus.add(bp.getPurchaseListingDetails(ids.get(4)));
         skus.add(bp.getPurchaseListingDetails(ids.get(5)));
+        skus.add(bp.getPurchaseListingDetails(ids.get(6)));
 /*
         skus = bp.getPurchaseListingDetails(ids);
         Log.d(TAG , String.valueOf(skus.size()));*/

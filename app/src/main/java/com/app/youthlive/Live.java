@@ -20,8 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,6 +51,8 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
 
     HomeActivity homeActivity;
 
+    LinearLayout noBroadcast;
+
     SharedPreferences offlinePref;
     SharedPreferences.Editor offlineEdit;
 
@@ -73,7 +77,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
         manager = new GridLayoutManager(getContext(), 2);
 
         progress = view.findViewById(R.id.progress);
-
+noBroadcast = view.findViewById(R.id.nobroadcast);
         adapter2 = new LiveAdapter2(getContext(), list2);
 
         grid.setAdapter(adapter2);
@@ -166,22 +170,56 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
                 List<liveBean> ll = new ArrayList<>();
 
                 if (response.body() != null) {
-                    for (int i = 0 ; i < response.body().size() ; i++)
+
+
+                    if (response.body().size() > 0)
                     {
-                        try {
-                            if (response.body().get(i).getType().equals("live"))
-                            {
-                                ll.add(response.body().get(i));
-                            }
-                        }catch (Exception e)
+                        for (int i = 0 ; i < response.body().size() ; i++)
                         {
-                            e.printStackTrace();
+                            //try {
+
+                            if (response.body().get(i).getType() != null)
+                            {
+                                if (response.body().get(i).getType().equals("live"))
+                                {
+                                    ll.add(response.body().get(i));
+                                }
+                            }
+
+
+                            //}catch (Exception e)
+                            /*{
+                                Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                                noBroadcast.setVisibility(View.VISIBLE);
+                                e.printStackTrace();
+                            }*/
+
                         }
 
+                        adapter2.setGridData(ll);
+
+                        if (ll.size() > 0)
+                        {
+                            noBroadcast.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            noBroadcast.setVisibility(View.VISIBLE);
+                        }
+
+
+
                     }
+                    else
+                    {
+                        noBroadcast.setVisibility(View.VISIBLE);
+                    }
+
+
+
                 }
 
-                adapter2.setGridData(ll);
+
 
                 progress.setVisibility(View.GONE);
 
@@ -191,6 +229,7 @@ public class Live extends Fragment implements ConnectivityReceiver.ConnectivityR
             public void onFailure(@NonNull Call<List<liveBean>> call, @NonNull Throwable throwable) {
                 progress.setVisibility(View.GONE);
                 throwable.printStackTrace();
+                noBroadcast.setVisibility(View.VISIBLE);
             }
         });
 

@@ -21,8 +21,10 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.youthlive.Activitys.UserInformation;
 import com.app.youthlive.login2POJO.login2Bean;
 import com.app.youthlive.socialPOJO.socialBean;
 import com.bumptech.glide.Glide;
@@ -75,12 +77,14 @@ public class SplashActivity extends AppCompatActivity {
 
     private PiracyChecker checker;
 
+    TextView status;
+
     DBHelper db;
 
     private static final String BASE64_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgyeBlAF+Tb5RcId3Y9sAnK7EoGEklDr24FByrgxwhQNsIOkhYfDH+KW4OGxqR47D+RjH3uHBgtKjD62qgvSsqiJR4KiHAq5gVZLZJ3nP0YDvnfWwyhg+t6FYnchGVGt2FbuNyw+XqPuZvoxUQmfB4qsIOQlbf9HI69uisnOZzuJ5b2VIVg3yIymF45jAm9+U5DdqP3vO7pHF4Y3yycOS6EIYs3VoZJ8JmJIOVHpFc//fxBaV4OKgKJij/28v5C94RRay55wHO0+ysW4fAQW52SxXX2vsQMGWYRmMzLs+N87PUixYJP96BbkUh4mkGFC1RMq8iUaeWLKIut74VhmCLQIDAQAB";
 
     // Generate 20 random bytes, and put them here.
-    private static final byte[] SALT = new byte[] {
+    private static final byte[] SALT = new byte[]{
             -46, 65, 30, -128, -103, -57, 74, -64, 51, 88, -95,
             -45, 77, -117, -36, -113, -11, 32, -64, 89
     };
@@ -120,10 +124,11 @@ public class SplashActivity extends AppCompatActivity {
         */
 
 
-
         pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
         edit = pref.edit();
         progress = findViewById(R.id.progress);
+
+        status = findViewById(R.id.textView67);
 
         bg = findViewById(R.id.splashbg);
         //bindLogo();
@@ -136,8 +141,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private void doCheck() {
         checker = new PiracyChecker(this)
-                //.enableGooglePlayLicensing(BASE64_PUBLIC_KEY)
-                //.enableInstallerId(InstallerID.GOOGLE_PLAY)
+                .enableGooglePlayLicensing(BASE64_PUBLIC_KEY)
+                .enableInstallerId(InstallerID.GOOGLE_PLAY)
                 .enableEmulatorCheck(true)
                 //.display(Display.ACTIVITY);
                 .callback(new PiracyCheckerCallback() {
@@ -156,6 +161,8 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void doNotAllow(@NotNull PiracyCheckerError piracyCheckerError, @org.jetbrains.annotations.Nullable PirateApp pirateApp) {
 
+                        progress.setVisibility(View.GONE);
+                        status.setText("");
 
                         Dialog dialog = new Dialog(SplashActivity.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -180,8 +187,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
 
-    public void updateCheck()
-    {
+    public void updateCheck() {
+
+        status.setText("checking for updates");
 
         progress.setVisibility(View.VISIBLE);
 
@@ -195,55 +203,93 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<List<giftBeanss>> call, @NonNull Response<List<giftBeanss>> response) {
 
 
-
                 if (response.body() != null) {
-                    for (int i = 0 ; i < response.body().size() ; i++)
+
+
+                    List<gift> glist = db.getAllGifts();
+
+                    boolean flag = false;
+
+                    if (glist.size() != response.body().size()) {
+                        flag = true;
+                    } else {
+                        for (int j = 0; j < glist.size(); j++) {
+
+                            if (!glist.get(j).getFile().equals(response.body().get(j).getFile())) {
+                                flag = true;
+                            }
+
+                        }
+                    }
+
+                    if (flag)
                     {
-                        final String gid = response.body().get(i).getGiftId();
-                        final String name = response.body().get(i).getGiftName();
-                        final String file = response.body().get(i).getFile();
-                        String url = b.BASE_URL + "upload/gift/" + response.body().get(i).getFile();
-                        final String price = response.body().get(i).getPrice();
-
-                        Log.d("uurrll" , url);
-
-                        Glide.with(SplashActivity.this)
-                                .download(url)
-                                .listener(new RequestListener<File>() {
-                                    @Override
-                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<File> target, boolean isFirstResource) {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean onResourceReady(File resource, Object model, Target<File> target, DataSource dataSource, boolean isFirstResource) {
-                                        byte[] bytesArray = new byte[(int) resource.length()];
-
-                                        FileInputStream fis = null;
-                                        try {
-                                            fis = new FileInputStream(resource);
-                                            fis.read(bytesArray); //read file into bytes[]
-                                            fis.close();
 
 
-                                            long res = db.insertGift(gid , name , file , price , bytesArray);
+                        status.setText("downloading resources");
 
-                                            Log.d("result" , String.valueOf(res));
 
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
+                        db.deleteAll();
+
+
+                        for (int i = 0; i < response.body().size(); i++) {
+
+                            final String gid = response.body().get(i).getGiftId();
+                            final String name = response.body().get(i).getGiftName();
+                            final String file = response.body().get(i).getFile();
+                            String url = b.BASE_URL + "upload/gift/" + response.body().get(i).getFile();
+                            final String price = response.body().get(i).getPrice();
+
+                            Log.d("uurrll", url);
+
+
+                            Glide.with(SplashActivity.this)
+                                    .download(url)
+                                    .listener(new RequestListener<File>() {
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<File> target, boolean isFirstResource) {
+                                            return false;
                                         }
 
+                                        @Override
+                                        public boolean onResourceReady(File resource, Object model, Target<File> target, DataSource dataSource, boolean isFirstResource) {
+                                            byte[] bytesArray = new byte[(int) resource.length()];
 
-                                        return false;
-                                    }
-                                }).submit();
+                                            FileInputStream fis = null;
+                                            try {
+                                                fis = new FileInputStream(resource);
+                                                fis.read(bytesArray); //read file into bytes[]
+                                                fis.close();
 
+
+                                                long res = db.insertGift(gid, name, file, price, bytesArray);
+
+                                                Log.d("result", String.valueOf(res));
+
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                            return false;
+                                        }
+                                    }).submit();
+
+
+                        }
+
+                        startApp();
 
                     }
+                    else
+                    {
+                        startApp();
+                    }
+
+
                 }
 
-                progress.setVisibility(View.GONE);
+                //progress.setVisibility(View.GONE);
 
             }
 
@@ -348,15 +394,22 @@ public class SplashActivity extends AppCompatActivity {
         if (type.length() > 0 && em.length() > 0 && pa.length() > 0) {
             if (Objects.equals(type, "social")) {
 
+                status.setText("signing in");
+
                 socialLogin(em, pa);
 
             } else if (Objects.equals(type, "phone")) {
+
+                status.setText("signing in");
 
                 phoneLogin(em, pa);
 
             }
 
         } else {
+
+
+            status.setText("starting app");
 
             Timer t = new Timer();
 
@@ -437,7 +490,7 @@ public class SplashActivity extends AppCompatActivity {
                         SharePreferenceUtils.getInstance().putString("pass", pass);
 
                         Toast.makeText(SplashActivity.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(SplashActivity.this, UserInfo2.class);
+                        Intent intent = new Intent(SplashActivity.this, UserInformation.class);
                         intent.putExtra("userId", response.body().getData().getUserId());
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
@@ -533,7 +586,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
                     Toast.makeText(SplashActivity.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SplashActivity.this, UserInfo2.class);
+                    Intent intent = new Intent(SplashActivity.this, UserInformation.class);
                     intent.putExtra("userId", response.body().getData().getUserId());
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

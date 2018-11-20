@@ -298,90 +298,93 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
 
         String name = user_name.getText().toString();
 
-        if (name.length() > 0) {
-            progress.setVisibility(View.VISIBLE);
+
+        if (selectedImage != null)
+        {
+            if (name.length() > 0) {
+                progress.setVisibility(View.VISIBLE);
 
 
-            MultipartBody.Part body = null;
+                MultipartBody.Part body = null;
 
-            try {
+                try {
 
-                String mCurrentPhotoPath = getPath(UserInformation.this, selectedImage);
+                    String mCurrentPhotoPath = getPath(UserInformation.this, selectedImage);
 
-                File file = new File(mCurrentPhotoPath);
-
-
-                RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-
-                body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                    File file = new File(mCurrentPhotoPath);
 
 
-            final bean b = (bean) getApplicationContext();
+                    RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-            Call<loginResponseBean> call = b.getRetrofit().addUserData(body, name, gender, BirthDay.getText().toString(), Biodata.getText().toString(), getIntent().getStringExtra("userId"));
+                    body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
 
-            call.enqueue(new Callback<loginResponseBean>() {
-                @Override
-                public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
-
-                    if (Objects.equals(response.body().getStatus(), "1")) {
-
-                        progress.setVisibility(View.VISIBLE);
-
-                        SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
-
-                        String keey = fcmPref.getString("token", "");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 
-                        Call<login2Bean> call1 = b.getRetrofit().signIn(response.body().getData().getPhone(), response.body().getData().getPassword(), keey);
+                final bean b = (bean) getApplicationContext();
+
+                Call<loginResponseBean> call = b.getRetrofit().addUserData(body, name, gender, BirthDay.getText().toString(), Biodata.getText().toString(), getIntent().getStringExtra("userId"));
+
+                call.enqueue(new Callback<loginResponseBean>() {
+                    @Override
+                    public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
+
+                        if (Objects.equals(response.body().getStatus(), "1")) {
+
+                            progress.setVisibility(View.VISIBLE);
+
+                            SharedPreferences fcmPref = getSharedPreferences("fcm", Context.MODE_PRIVATE);
+
+                            String keey = fcmPref.getString("token", "");
 
 
-                        call1.enqueue(new Callback<login2Bean>() {
-                            @Override
-                            public void onResponse(Call<login2Bean> call, retrofit2.Response<login2Bean> response) {
+                            Call<login2Bean> call1 = b.getRetrofit().signIn(response.body().getData().getPhone(), response.body().getData().getPassword(), keey);
 
 
-                                if (Objects.equals(response.body().getStatus(), "1")) {
-                                    Toast.makeText(UserInformation.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-
-                                    SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
-                                    SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+                            call1.enqueue(new Callback<login2Bean>() {
+                                @Override
+                                public void onResponse(Call<login2Bean> call, retrofit2.Response<login2Bean> response) {
 
 
-                                    try {
-                                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+                                    if (Objects.equals(response.body().getStatus(), "1")) {
+                                        Toast.makeText(UserInformation.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                        SharePreferenceUtils.getInstance().putString("userId", response.body().getData().getUserId());
+                                        SharePreferenceUtils.getInstance().putString("userName", response.body().getData().getUserName());
+
+
+                                        try {
+                                            SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        SharePreferenceUtils.getInstance().putString("type", "phone");
+                                        SharePreferenceUtils.getInstance().putString("user", response.body().getData().getPhone());
+                                        SharePreferenceUtils.getInstance().putString("pass", response.body().getData().getPassword());
+                                        SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
+                                        SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
+
+
+                                        Intent Inbt = new Intent(UserInformation.this, HomeActivity.class);
+                                        Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(Inbt);
+
+                                    } else {
+                                        Toast.makeText(UserInformation.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                     }
 
-                                    SharePreferenceUtils.getInstance().putString("type", "phone");
-                                    SharePreferenceUtils.getInstance().putString("user", response.body().getData().getPhone());
-                                    SharePreferenceUtils.getInstance().putString("pass", response.body().getData().getPassword());
-                                    SharePreferenceUtils.getInstance().putString("userType", response.body().getData().getType());
-                                    SharePreferenceUtils.getInstance().putString("yid", response.body().getData().getYouthLiveId());
 
-
-                                    Intent Inbt = new Intent(UserInformation.this, HomeActivity.class);
-                                    Inbt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(Inbt);
-
-                                } else {
-                                    Toast.makeText(UserInformation.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                    progress.setVisibility(View.GONE);
                                 }
 
-
-                                progress.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onFailure(Call<login2Bean> call, Throwable t) {
-                                progress.setVisibility(View.GONE);
-                            }
-                        });
+                                @Override
+                                public void onFailure(Call<login2Bean> call, Throwable t) {
+                                    progress.setVisibility(View.GONE);
+                                }
+                            });
 
 
                         /*Toast.makeText(UserInformation.this, "Profile Updated, Continue to login", Toast.LENGTH_SHORT).show();
@@ -390,19 +393,30 @@ public class UserInformation extends AppCompatActivity implements ConnectivityRe
                         finish();*/
 
 
-                    } else {
-                        Toast.makeText(UserInformation.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(UserInformation.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
                     }
 
-                }
+                    @Override
+                    public void onFailure(Call<loginResponseBean> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                    }
+                });
 
-                @Override
-                public void onFailure(Call<loginResponseBean> call, Throwable t) {
-                    progress.setVisibility(View.GONE);
-                }
-            });
+            }
+            else
+            {
+                Toast.makeText(this, "Invalid name", Toast.LENGTH_SHORT).show();
+            }
 
         }
+        else
+        {
+            Toast.makeText(this, "Invalid profile pic", Toast.LENGTH_SHORT).show();
+        }
+
 
 
     }

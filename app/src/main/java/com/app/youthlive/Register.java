@@ -33,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.app.youthlive.Activitys.UserInformation;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -573,7 +574,7 @@ public class Register extends AppCompatActivity {
                         edit.commit();
 
                         Toast.makeText(Register.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Register.this, UserInfo2.class);
+                        Intent intent = new Intent(Register.this, UserInformation.class);
                         intent.putExtra("userId", response.body().getData().getUserId());
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
@@ -667,7 +668,7 @@ public class Register extends AppCompatActivity {
                     SharePreferenceUtils.getInstance().putString("pass", pid);
 
                     Toast.makeText(Register.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Register.this, UserInfo2.class);
+                    Intent intent = new Intent(Register.this, UserInformation.class);
                     intent.putExtra("userId", response.body().getData().getUserId());
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

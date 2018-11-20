@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.youthlive.Activitys.UserInformation;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -376,7 +377,7 @@ public class Spalsh2 extends AppCompatActivity {
                         SharePreferenceUtils.getInstance().putString("pass", pid);
 
                         Toast.makeText(Spalsh2.this, "Please update your info", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Spalsh2.this, UserInfo2.class);
+                        Intent intent = new Intent(Spalsh2.this, UserInformation.class);
                         intent.putExtra("userId", response.body().getData().getUserId());
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

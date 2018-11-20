@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -43,6 +44,8 @@ public class Channel extends Fragment implements ConnectivityReceiver.Connectivi
 
     HomeActivity homeActivity;
 
+    LinearLayout noBroadcast;
+
     public void setHomeActivity(HomeActivity homeActivity)
     {
         this.homeActivity = homeActivity;
@@ -58,9 +61,12 @@ public class Channel extends Fragment implements ConnectivityReceiver.Connectivi
 
         list2 = new ArrayList<>();
         grid = view.findViewById(R.id.grid);
+        noBroadcast = view.findViewById(R.id.nobroadcast);
         manager = new GridLayoutManager(getContext(), 2);
 
         progress = view.findViewById(R.id.progress);
+
+        noBroadcast.setVisibility(View.GONE);
 
 
         //adapter = new LiveAdapter(getContext(), list);
