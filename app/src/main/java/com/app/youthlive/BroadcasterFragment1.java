@@ -284,10 +284,15 @@ public class BroadcasterFragment1 extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     String mess = comment.getText().toString();
 
+                    Log.d("uuserId" , mess);
+
                     if (mess.length() > 0) {
                         progress.setVisibility(View.VISIBLE);
 
                         final bean b = (bean) Objects.requireNonNull(getActivity()).getApplicationContext();
+
+                        Log.d("uuserId" , SharePreferenceUtils.getInstance().getString("userId"));
+                        Log.d("uuserId" , liveId);
 
 
                         Call<liveCommentBean> call = b.getRetrofit().commentLive(SharePreferenceUtils.getInstance().getString("userId"), liveId, mess, "basic");

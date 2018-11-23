@@ -119,7 +119,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     SharedPreferences.Editor offlineEdit;
 
     public String fragTag;
-    AppUpdaterUtils appUpdaterUtils;
+    //AppUpdaterUtils appUpdaterUtils;
 
     ImageView live, vlog, golive, channel, profile;
 
@@ -129,7 +129,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        appUpdaterUtils = new AppUpdaterUtils(this)
+        /*appUpdaterUtils = new AppUpdaterUtils(this)
                 //.setUpdateFrom(UpdateFrom.AMAZON)
                 //.setUpdateFrom(UpdateFrom.GITHUB)
                 //.setGitHubUserAndRepo("javiersantos", "AppUpdater")
@@ -178,7 +178,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                         Log.d("AppUpdater Error", "Something went wrong");
                     }
                 });
-        appUpdaterUtils.start();
+        appUpdaterUtils.start();*/
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_home);
@@ -1148,6 +1148,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onStop() {
         super.onStop();
-        appUpdaterUtils.stop();
+        //appUpdaterUtils.stop();
     }
 }
