@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -21,12 +22,15 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.app.youthlive.endLivePOJO.endLiveBean;
 import com.app.youthlive.internetConnectivity.ConnectivityReceiver;
+
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.blurry.Blurry;
@@ -47,15 +51,14 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
 
     SharedPreferences offlinePref;
     SharedPreferences.Editor offlineEdit;
-    int flag = 0;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_go_live, container, false);
 
 
-        offlinePref = getContext().getSharedPreferences("offline" , Context.MODE_PRIVATE);
+        offlinePref = Objects.requireNonNull(getContext()).getSharedPreferences("offline", Context.MODE_PRIVATE);
         offlineEdit = offlinePref.edit();
 
 
@@ -70,45 +73,9 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getContext()));
 
 
-        profile = (CircleImageView) view.findViewById(R.id.profile);
-        goLive = (Button) view.findViewById(R.id.golive);
+        profile = view.findViewById(R.id.profile);
+        goLive = view.findViewById(R.id.golive);
 
-
-        bean b = (bean) getContext().getApplicationContext();
-
-        ImageLoader loader = ImageLoader.getInstance();
-
-        loader.loadImage(SharePreferenceUtils.getInstance().getString("userImage"), new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-
-                profile.setImageBitmap(loadedImage);
-
-                try {
-                    Blurry.with(getActivity()).from(loadedImage).into(image);
-                }catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-
-            }
-        });
 
         goLive.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,34 +86,30 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
                 goLive.setEnabled(false);
 
 
-                String offline = offlinePref.getString("offline" , "");
+                String offline = offlinePref.getString("offline", "");
 
-                final String liveId = offlinePref.getString("liveId" , "");
+                final String liveId = offlinePref.getString("liveId", "");
 
-                if (offline.length() > 0 && liveId.length() > 0)
-                {
+                if (offline.length() > 0 && liveId.length() > 0) {
 
 
-                    final Dialog dialog = new Dialog(getActivity());
+                    final Dialog dialog = new Dialog(Objects.requireNonNull(getActivity()));
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setCancelable(false);
                     dialog.setContentView(R.layout.offline_sync_dialog);
                     dialog.show();
 
 
+                    bean b = (bean) getActivity().getApplicationContext();
 
-
-                    bean b = (bean)getActivity().getApplicationContext();
-
-                    Call<endLiveBean> call = b.getRetrofit().syncLive(offline , liveId);
+                    Call<endLiveBean> call = b.getRetrofit().syncLive(offline, liveId);
 
                     call.enqueue(new Callback<endLiveBean>() {
                         @Override
-                        public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
+                        public void onResponse(@NonNull Call<endLiveBean> call, @NonNull Response<endLiveBean> response) {
 
 
-                            if (response.body().getStatus().equals("1"))
-                            {
+                            if (response.body() != null && response.body().getStatus().equals("1")) {
 
                                 offlineEdit.remove("offline");
                                 offlineEdit.remove("liveId");
@@ -159,7 +122,7 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
                                 //Intent intent = new Intent(getContext() , LiveScreenNew.class);
                                 //Intent intent = new Intent(getContext() , WowzaLive.class);
                                 //intent.putExtra("title" , title.getText().toString());
-                                startActivityForResult(intent , 112);
+                                startActivityForResult(intent, 112);
 
                                 goLive.setClickable(true);
                                 goLive.setEnabled(true);
@@ -167,11 +130,10 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
                             }
 
 
-
                         }
 
                         @Override
-                        public void onFailure(Call<endLiveBean> call, Throwable t) {
+                        public void onFailure(@NonNull Call<endLiveBean> call, @NonNull Throwable t) {
 
                             goLive.setClickable(true);
                             goLive.setEnabled(true);
@@ -180,27 +142,16 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
                     });
 
 
-
-
-
-
-
-                }
-                else
-                {
+                } else {
                     Intent intent = new Intent(getContext(), VideoBroadcaster.class);
                     //Intent intent = new Intent(getContext() , LiveScreenNew.class);
                     //Intent intent = new Intent(getContext() , WowzaLive.class);
                     //intent.putExtra("title" , title.getText().toString());
-                    startActivityForResult(intent , 112);
+                    startActivityForResult(intent, 112);
                     goLive.setClickable(true);
                     goLive.setEnabled(true);
 
                 }
-
-
-
-
 
 
             }
@@ -216,36 +167,55 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
         // register connection status listener
         bean.getInstance().setConnectivityListener(this);
 
+        ImageLoader loader = ImageLoader.getInstance();
 
-        try {
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
 
-            //cameraPreview.start();
+        loader.loadImage(SharePreferenceUtils.getInstance().getString("userImage"), options , new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
 
-    }
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                Log.d("eeee", failReason.getCause().getMessage());
+            }
 
-    ////////////////////internet connectivity check///////////////
-    private void checkConnection() {
-        boolean isConnected = ConnectivityReceiver.isConnected();
-        showalert(isConnected);
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                profile.setImageBitmap(loadedImage);
+
+                try {
+                    Blurry.with(getActivity()).from(loadedImage).into(image);
+                } catch (Exception e) {
+
+                    Log.d("eeee", e.toString());
+
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
+
+
     }
 
     private void showalert(boolean isConnected) {
-        if (isConnected) {
-
-            //    message = "Good! Connected to Internet";
-            //    color = Color.WHITE;
-        } else {
-
+        if (!isConnected) {
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+                    builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), android.R.style.Theme_Material_Dialog_Alert);
                 } else {
-                    builder = new AlertDialog.Builder(getActivity());
+                    builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
                 }
                 builder.setTitle("NO INTERNET CONNECTION")
                         .setMessage("Please check your internet connection setting and click refresh")
@@ -253,8 +223,13 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
                             public void onClick(DialogInterface dialog, int which) {
 
                                 // Reload current fragment
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.detach(GoLiveFrag.this).attach(GoLiveFrag.this).commit();
+                                FragmentTransaction ft = null;
+                                if (getFragmentManager() != null) {
+                                    ft = getFragmentManager().beginTransaction();
+                                }
+                                if (ft != null) {
+                                    ft.detach(GoLiveFrag.this).attach(GoLiveFrag.this).commit();
+                                }
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -296,38 +271,33 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 112 && resultCode == Activity.RESULT_OK)
-        {
+        if (requestCode == 112 && resultCode == Activity.RESULT_OK) {
 
 
-            String offline = offlinePref.getString("offline" , "");
+            String offline = offlinePref.getString("offline", "");
 
-            final String liveId = offlinePref.getString("liveId" , "");
+            final String liveId = offlinePref.getString("liveId", "");
 
-            if (offline.length() > 0 && liveId.length() > 0)
-            {
+            if (offline.length() > 0 && liveId.length() > 0) {
 
 
-                final Dialog dialog = new Dialog(getActivity());
+                final Dialog dialog = new Dialog(Objects.requireNonNull(getActivity()));
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setCancelable(false);
                 dialog.setContentView(R.layout.offline_sync_dialog);
                 dialog.show();
 
 
+                bean b = (bean) getActivity().getApplicationContext();
 
-
-                bean b = (bean)getActivity().getApplicationContext();
-
-                Call<endLiveBean> call = b.getRetrofit().syncLive(offline , liveId);
+                Call<endLiveBean> call = b.getRetrofit().syncLive(offline, liveId);
 
                 call.enqueue(new Callback<endLiveBean>() {
                     @Override
-                    public void onResponse(Call<endLiveBean> call, Response<endLiveBean> response) {
+                    public void onResponse(@NonNull Call<endLiveBean> call, @NonNull Response<endLiveBean> response) {
 
 
-                        if (response.body().getStatus().equals("1"))
-                        {
+                        if (response.body() != null && response.body().getStatus().equals("1")) {
 
                             offlineEdit.remove("offline");
                             offlineEdit.remove("liveId");
@@ -338,26 +308,19 @@ public class GoLiveFrag extends Fragment implements ConnectivityReceiver.Connect
                         }
 
 
-
                     }
 
                     @Override
-                    public void onFailure(Call<endLiveBean> call, Throwable t) {
+                    public void onFailure(@NonNull Call<endLiveBean> call, @NonNull Throwable t) {
 
                     }
                 });
 
 
-
-
-
-
             }
 
 
-
-
-            final Dialog dialog = new Dialog(getActivity());
+            final Dialog dialog = new Dialog(Objects.requireNonNull(getActivity()));
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(true);
             dialog.setContentView(R.layout.no_internet_dialog);

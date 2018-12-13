@@ -90,6 +90,7 @@ import java.util.TimerTask;
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
+import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -2486,19 +2487,21 @@ else
                         //fos = new FileOutputStream(STORE_DIRECTORY + "/myscreen_" + IMAGES_PRODUCED + ".png");
 
 
-                        final File file2 = new File(Environment.getExternalStorageDirectory() + File.separator + "thumb" + String.valueOf(new Random(100)) + ".jpg");
+                        final File fil = new File(Environment.getExternalStorageDirectory() + File.separator + "thumb" + String.valueOf(new Random(100)) + ".jpg");
 
                         OutputStream os = null;
                         try {
-                            os = new BufferedOutputStream(new FileOutputStream(file2));
+                            os = new BufferedOutputStream(new FileOutputStream(fil));
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
 
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-
                         IMAGES_PRODUCED++;
                         Log.e(TAG, "captured image: " + IMAGES_PRODUCED);
+
+
+                        final File file2 = new Compressor(broadcaster).compressToFile(fil);
 
 
                         //final String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "Title", null);
@@ -2521,7 +2524,7 @@ else
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
 
-                                Log.d("asdasdasdss", String.valueOf(file2.delete()));
+                                Log.d("asdasdasdss", String.valueOf(fil.delete()));
 
 
                             }

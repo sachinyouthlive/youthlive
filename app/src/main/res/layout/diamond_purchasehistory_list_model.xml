@@ -14,18 +14,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         android:padding="5dp">
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:typeface="monospace"
-            android:text="May 08 2018 05:59:38"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -51,28 +46,44 @@
                 android:layout_margin="2dp"
                 android:gravity="center_vertical"
                 android:typeface="monospace"
-                android:text="INR ORDER SUCCESS"
+                android:text=" INR   ORDER SUCCESS"
                 android:textColor="@android:color/holo_green_dark"
                 android:textSize="16sp" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:text="GOOGLE order number"
+            android:layout_height="wrap_content"
+            android:text="Order Info"
             android:typeface="monospace"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp" />
+            android:layout_marginTop="16dp"
+            android:textColor="#ffffff"
+            />
 
 
         <TextView
             android:id="@+id/ordernotxt"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="wrap_content"
             android:typeface="monospace"
             android:textColor="@android:color/darker_gray"
             android:textSize="14sp"
+            android:layout_marginTop="8dp"
             tools:text="GPA.3316-2497-2912-44366" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:typeface="monospace"
+            android:gravity="center_vertical|end"
+            android:layout_marginTop="8dp"
+            android:text="May 08 2018 05:59:38"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+
+
+
 
 
     </LinearLayout>

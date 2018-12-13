@@ -81,7 +81,7 @@ public class bean extends Application {
     }
 
 
-    String names[] = {
+    public String names[] = {
             "star",
             "teddy",
             "heart",
@@ -125,7 +125,7 @@ public class bean extends Application {
     };
 
 
-    Integer gifts[] = new Integer[]
+    public Integer gifts[] = new Integer[]
             {
                     R.drawable.g4,
                     R.drawable.g8,
@@ -170,7 +170,7 @@ public class bean extends Application {
             };
 
 
-    String diamonds[] = {
+    public String diamonds[] = {
             "4",
             "8",
             "12",

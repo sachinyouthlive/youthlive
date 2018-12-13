@@ -1,10 +1,12 @@
 package com.app.youthlive;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,9 +26,9 @@ import retrofit2.Response;
 
 public class Beans extends Fragment {
     static String rate;
-    ScrollView scrollView;
+    NestedScrollView scrollView;
     ProgressBar progress;
-    TextView coins, conversion_rate, exchangetodiamonds;
+    TextView coins, conversion_rate, exchangetodiamonds , redeem;
 
     @Nullable
     @Override
@@ -39,6 +41,7 @@ public class Beans extends Fragment {
         scrollView.setVerticalScrollBarEnabled(false);
         scrollView.setHorizontalScrollBarEnabled(false);
         exchangetodiamonds = view.findViewById(R.id.textView16);
+        redeem = view.findViewById(R.id.textView17);
 
 
 
@@ -50,8 +53,9 @@ public class Beans extends Fragment {
                 TextView mTitle = new TextView(getContext());
                 mTitle.setText("Tips" + "\n");
                 mTitle.setTextSize(20);
-                mTitle.setTextColor(getResources().getColor(R.color.colorAccent));
+                mTitle.setTextColor(getResources().getColor(R.color.colorPrimary));
                 mTitle.setGravity(Gravity.CENTER);
+                mTitle.setTypeface(Typeface.MONOSPACE);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setCustomTitle(mTitle);
@@ -60,7 +64,7 @@ public class Beans extends Fragment {
                 AlertDialog dialog = builder.show();
 
 // Must call show() prior to fetching text view
-                TextView messageView = (TextView) dialog.findViewById(android.R.id.message);
+                TextView messageView = dialog.findViewById(android.R.id.message);
                 messageView.setGravity(Gravity.CENTER);
                 messageView.setTextSize(16);
 
@@ -87,6 +91,17 @@ public class Beans extends Fragment {
                 }
 */
 
+
+            }
+        });
+
+        redeem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getContext(), RedeemCoins.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });

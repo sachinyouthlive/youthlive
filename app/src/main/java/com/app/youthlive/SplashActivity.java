@@ -142,14 +142,16 @@ public class SplashActivity extends AppCompatActivity {
     private void doCheck() {
         checker = new PiracyChecker(this)
                 //.enableGooglePlayLicensing(BASE64_PUBLIC_KEY)
-                .enableInstallerId(InstallerID.GOOGLE_PLAY)
+                //.enableInstallerId(InstallerID.GOOGLE_PLAY)
                 .enableEmulatorCheck(true)
                 //.display(Display.ACTIVITY);
                 .callback(new PiracyCheckerCallback() {
                     @Override
                     public void allow() {
 
-                        updateCheck();
+                        //updateCheck();
+
+                        startApp();
 
                         /*if (hasPermissions(SplashActivity.this, PERMISSIONS)) {
                             startApp();

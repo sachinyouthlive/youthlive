@@ -1,8 +1,11 @@
 package com.app.youthlive.Activitys;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -10,21 +13,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.app.youthlive.Adapter.diamondPHAdapter;
 import com.app.youthlive.R;
 import com.app.youthlive.SharePreferenceUtils;
 import com.app.youthlive.bean;
-import com.app.youthlive.diamondpurchasehistoryPOJO.DiamondpurchaselistPOJO;
-import com.app.youthlive.diamondpurchasehistoryPOJO.Information;
+
+import com.app.youthlive.giftHistoryPOJO.Information;
+import com.app.youthlive.giftHistoryPOJO.giftHistoryBean;
 import com.app.youthlive.internetConnectivity.ConnectivityReceiver;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,12 +52,16 @@ public class HistoryActivity extends AppCompatActivity implements ConnectivityRe
     GridLayoutManager manager;
     List<Information> list = new ArrayList<>();
     Toolbar toolbar;
+    String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         checkConnection();
+
+        type = getIntent().getStringExtra("type");
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
@@ -74,6 +88,7 @@ public class HistoryActivity extends AppCompatActivity implements ConnectivityRe
         ((TextView) toolbar.getChildAt(0)).setTypeface(typeFace);
 
 
+
     }
 
     @Override
@@ -89,13 +104,13 @@ public class HistoryActivity extends AppCompatActivity implements ConnectivityRe
 
 
         final bean b = (bean) getContext().getApplicationContext();
-        Call<DiamondpurchaselistPOJO> call = b.getRetrofit().getdiamondpurchasehistory(Integer.valueOf(SharePreferenceUtils.getInstance().getString("userId")));
+        Call<giftHistoryBean> call = b.getRetrofit().getgiftshistory(Integer.valueOf(SharePreferenceUtils.getInstance().getString("userId")));
 
         Log.d("userId", SharePreferenceUtils.getInstance().getString("userId"));
 
-        call.enqueue(new Callback<DiamondpurchaselistPOJO>() {
+        call.enqueue(new Callback<giftHistoryBean>() {
             @Override
-            public void onResponse(Call<DiamondpurchaselistPOJO> call, Response<DiamondpurchaselistPOJO> response) {
+            public void onResponse(Call<giftHistoryBean> call, Response<giftHistoryBean> response) {
 
                 try {
                     if (!response.body().getInformation().isEmpty()) {
@@ -114,7 +129,7 @@ public class HistoryActivity extends AppCompatActivity implements ConnectivityRe
             }
 
             @Override
-            public void onFailure(Call<DiamondpurchaselistPOJO> call, Throwable t) {
+            public void onFailure(Call<giftHistoryBean> call, Throwable t) {
                 progress.setVisibility(View.GONE);
             }
 
@@ -182,6 +197,102 @@ public class HistoryActivity extends AppCompatActivity implements ConnectivityRe
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
         showSnack(isConnected);
+
+    }
+
+
+    public class diamondPHAdapter extends RecyclerView.Adapter<diamondPHAdapter.MyViewHolder> {
+
+        Context context;
+        List<Information> list = new ArrayList<>();
+
+
+        public diamondPHAdapter(Context context, List<Information> list) {
+            this.context = context;
+            this.list = list;
+        }
+
+        public void setGridData(List<Information> list) {
+            this.list = list;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gifts_history_model, parent, false);
+            return new MyViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(MyViewHolder holder, int position) {
+            final Information item = list.get(position);
+
+            final bean b = (bean) context.getApplicationContext();
+
+            holder.ordernotxt.setText(item.getPName());
+
+            holder.amount.setText(b.names[Integer.parseInt(item.getGiftId()) - 1]);
+
+
+            holder.coins.setText("  " + Integer.parseInt(b.diamonds[Integer.parseInt(item.getGiftId()) - 1]) / 4 + " Coins");
+
+
+            Drawable drawable = context.getResources().getDrawable(b.gifts[Integer.parseInt(item.getGiftId()) - 1]);
+
+            drawable.setBounds(0, 0, 40, 40);
+
+            int selectionCursor;
+            selectionCursor = holder.amount.getText().length();
+
+            SpannableStringBuilder builder = new SpannableStringBuilder(". " + holder.amount.getText());
+            builder.setSpan(new ImageSpan(drawable), 0 , 1 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            holder.amount.setText(builder);
+
+
+            String onlytime = item.getCreatedDate();
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = null;
+            try {
+                date = dateFormatter.parse(onlytime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+// Get time from date
+            SimpleDateFormat timeFormatter = new SimpleDateFormat("MMM dd yyyy, HH:mm:ss");
+            String displayValue = timeFormatter.format(date).toUpperCase();
+            holder.date.setText(displayValue);
+
+
+
+            if (type.equals("gift"))
+            {
+                holder.amount.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                holder.amount.setVisibility(View.GONE);
+            }
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView ordernotxt, date, amount , coins;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                amount = itemView.findViewById(R.id.ordercreated);
+                ordernotxt = itemView.findViewById(R.id.ordernotxt);
+                date = itemView.findViewById(R.id.date);
+                coins = itemView.findViewById(R.id.coins);
+            }
+        }
 
     }
 

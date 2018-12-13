@@ -505,8 +505,11 @@ public class VideoPlayerFragmentvod extends Fragment implements ConnectivityRece
                 mediaDataSourceFactory, mainHandler, null);*/
 
         player.setRepeatMode(Player.REPEAT_MODE_ONE);
+
+        bean b = (bean)getContext().getApplicationContext();
+
         MediaSource mediaSource = new ExtractorMediaSource.Factory(mediaDataSourceFactory)
-                .createMediaSource(Uri.parse("http://ec2-13-127-59-58.ap-south-1.compute.amazonaws.com/softcode/upload/video/" + getArguments().getString("uri")));
+                .createMediaSource(Uri.parse(b.BASE_URL + "upload/video/" + getArguments().getString("uri")));
 
         boolean haveStartPosition = currentWindow != C.INDEX_UNSET;
         if (haveStartPosition) {

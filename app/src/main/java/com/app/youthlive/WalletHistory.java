@@ -60,6 +60,7 @@ public class WalletHistory extends Fragment {
 
 
                 Intent intent = new Intent(getContext(), HistoryActivity.class);
+                intent.putExtra("type" , "gift");
                 startActivity(intent);
                 Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
@@ -72,6 +73,7 @@ public class WalletHistory extends Fragment {
 
 
                 Intent intent = new Intent(getContext(), HistoryActivity.class);
+                intent.putExtra("type" , "coins");
                 startActivity(intent);
                 Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
@@ -83,10 +85,9 @@ public class WalletHistory extends Fragment {
             public void onClick(View v) {
 
 
-                Intent intent = new Intent(getContext(), HistoryActivity.class);
+                Intent intent = new Intent(getContext(), RedeemHistory.class);
                 startActivity(intent);
                 Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-
             }
         });
 

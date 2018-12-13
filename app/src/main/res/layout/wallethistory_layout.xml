@@ -20,7 +20,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/ripple_effect_whitebg"
-            android:drawableStart="@drawable/gift"
+            android:drawableStart="@drawable/ic_gift"
             android:drawableEnd="@drawable/righr"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"

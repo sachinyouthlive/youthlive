@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,7 +33,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.app.youthlive.Activitys.FollowingActivity;
 import com.app.youthlive.Activitys.MessaageActivity;
 import com.app.youthlive.Activitys.MyVlog;
@@ -42,11 +42,13 @@ import com.app.youthlive.checkin.CheckinActivity;
 import com.app.youthlive.internetConnectivity.ConnectivityReceiver;
 import com.app.youthlive.loginResponsePOJO.loginResponseBean;
 import com.app.youthlive.updateProfilePOJO.updateProfileBean;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
@@ -59,9 +61,6 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class Profile extends Fragment implements ConnectivityReceiver.ConnectivityReceiverListener {
-    public static final int GALLEY_REQUEST_CODE_CUSTOMER = 10;
-    public static final int REQUEST_IMAGE_CAPTURE = 1;
-    private final int PICK_IMAGE_REQUEST1 = 1;
     private final int PICK_IMAGE_REQUEST2 = 2;
     TextView messagechate, followingAct, ratting_act, mycheckin, personal_info, vlogActivity, beggage, check, blocked, about, policy;
     ImageView choose_file;
@@ -80,10 +79,8 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
     ViewPager coverPager;
     CircleIndicator indicator;
     TextView name, youthId;
-    private Uri realUri;
 
     private static String getPath(final Context context, final Uri uri) {
-        final boolean isKitKatOrAbove = true;
 
         // DocumentProvider
         if (DocumentsContract.isDocumentUri(context, uri)) {
@@ -192,29 +189,24 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
     private static String getDataColumn(Context context, Uri uri, String selection,
                                         String[] selectionArgs) {
 
-        Cursor cursor = null;
         final String column = "_data";
         final String[] projection = {
                 column
         };
 
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
+        try (Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                null)) {
             if (cursor != null && cursor.moveToFirst()) {
                 final int column_index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(column_index);
             }
-        } finally {
-            if (cursor != null)
-                cursor.close();
         }
         return null;
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile, container, false);
         checkConnection();
         choose_file = view.findViewById(R.id.choose_file);
@@ -222,10 +214,10 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         mycheckin = view.findViewById(R.id.mycheckin);
         ratting_act = view.findViewById(R.id.ratting_act);
 
-        wallet = (TextView) view.findViewById(R.id.wallet);
+        wallet = view.findViewById(R.id.wallet);
 
-        name = (TextView) view.findViewById(R.id.name);
-        youthId = (TextView) view.findViewById(R.id.youth_id);
+        name = view.findViewById(R.id.name);
+        youthId = view.findViewById(R.id.youth_id);
 
 
         beggage = view.findViewById(R.id.beggage);
@@ -239,15 +231,15 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
         blocked = view.findViewById(R.id.blocked);
 
 
-        coverPager = (ViewPager) view.findViewById(R.id.cover_pager);
-        indicator = (CircleIndicator) view.findViewById(R.id.indicator);
+        coverPager = view.findViewById(R.id.cover_pager);
+        indicator = view.findViewById(R.id.indicator);
 
 
         //profileimage = view.findViewById(R.id.profile_imagee);
 
-        profileimage = (CircleImageView) view.findViewById(R.id.profile);
+        profileimage = view.findViewById(R.id.profile);
         profileimg = view.findViewById(R.id.ivBlurProfile);
-        progress = (ProgressBar) view.findViewById(R.id.progress);
+        progress = view.findViewById(R.id.progress);
 
         // profile_imagee=view.findViewById(R.id.profile_image);
         vlogActivity = view.findViewById(R.id.vlogActivity);
@@ -261,14 +253,13 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PersonalInfo.class);
-                bean b = (bean) getContext().getApplicationContext();
 
                 intent.putExtra("userId", SharePreferenceUtils.getInstance().getString("userId"));
                 intent.putExtra("ythlive", shareyouth);
                 intent.putExtra("uname", shareName);
                 intent.putExtra("uimage", shareProfile);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
 
             }
@@ -286,7 +277,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 intent.putExtra("uname", shareName);
                 intent.putExtra("uimage", shareProfile);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
         personal_info = view.findViewById(R.id.personal_info);
@@ -297,14 +288,12 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
                 Intent intent = new Intent(getActivity(), PersonalInfo.class);
 
-                bean b = (bean) getContext().getApplicationContext();
-
                 intent.putExtra("userId", SharePreferenceUtils.getInstance().getString("userId"));
                 intent.putExtra("ythlive", shareyouth);
                 intent.putExtra("uname", shareName);
                 intent.putExtra("uimage", shareProfile);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
 
             }
@@ -314,7 +303,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CheckinActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });
@@ -323,7 +312,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RattingActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });
@@ -343,7 +332,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FollowingActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
             }
         });
@@ -353,7 +342,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), WalletNew.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -362,7 +351,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MessaageActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -373,7 +362,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 Intent intent = new Intent(getActivity(), Content.class);
                 intent.putExtra("title", "About Us");
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -384,7 +373,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 Intent intent = new Intent(getActivity(), Terms.class);
                 intent.putExtra("title", "Privacy Policy");
                 startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -393,15 +382,15 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             public void onClick(View view) {
 
 
-                final Dialog dialog = new Dialog(getActivity());
+                final Dialog dialog = new Dialog(Objects.requireNonNull(getActivity()));
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.setCancelable(true);
                 dialog.setContentView(R.layout.profile_coverdialog);
                 dialog.show();
 
                 //   LinearLayout cover = (LinearLayout)dialog.findViewById(R.id.cover_image);
-                LinearLayout profile = (LinearLayout) dialog.findViewById(R.id.profile_image);
+                LinearLayout profile = dialog.findViewById(R.id.profile_image);
 
             /*    cover.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -483,19 +472,13 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
     }
 
     private void showalert(boolean isConnected) {
-        if (isConnected) {
-
-            // Toast.makeText(getActivity(), "Good! Connected to Internet", Toast.LENGTH_SHORT).show();
-            //    message = "Good! Connected to Internet";
-            //    color = Color.WHITE;
-        } else {
-
+        if (!isConnected) {
             try {
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+                    builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), android.R.style.Theme_Material_Dialog_Alert);
                 } else {
-                    builder = new AlertDialog.Builder(getActivity());
+                    builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
                 }
                 builder.setTitle("NO INTERNET CONNECTION")
                         .setMessage("Please check your internet connection setting and click refresh")
@@ -503,8 +486,13 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                             public void onClick(DialogInterface dialog, int which) {
 
                                 // Reload current fragment
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.detach(Profile.this).attach(Profile.this).commit();
+                                FragmentTransaction ft = null;
+                                if (getFragmentManager() != null) {
+                                    ft = getFragmentManager().beginTransaction();
+                                }
+                                if (ft != null) {
+                                    ft.detach(Profile.this).attach(Profile.this).commit();
+                                }
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -531,34 +519,39 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
         progress.setVisibility(View.VISIBLE);
 
-        final bean b = (bean) getContext().getApplicationContext();
+        final bean b = (bean) Objects.requireNonNull(getContext()).getApplicationContext();
 
 
         Call<loginResponseBean> call = b.getRetrofit().getProfile(userID);
 
         call.enqueue(new retrofit2.Callback<loginResponseBean>() {
             @Override
-            public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
+            public void onResponse(@NonNull Call<loginResponseBean> call, @NonNull retrofit2.Response<loginResponseBean> response) {
 
 
                 //   if (Objects.equals(response.body().getStatus(), "1")) {
 
-                    try {
-                        CoverPager pageAdapter = new CoverPager(getChildFragmentManager(), response.body().getData().getCoverImage());
-                        coverPager.setAdapter(pageAdapter);
-                        indicator.setViewPager(coverPager);
-
-                        SharePreferenceUtils.getInstance().putString("userImage", "response.body().getData().getUserImage()");
-
-                        ImageLoader loader = ImageLoader.getInstance();
-                        loader.displayImage(response.body().getData().getUserImage(), profileimage);
-                        // loader.displayImage(response.body().getData().getUserImage() , profileimg);
-
-                        name.setText(response.body().getData().getUserName());
-                        youthId.setText(Html.fromHtml("Youth Live ID: <b>" + response.body().getData().getYouthLiveId() + "</b>"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                try {
+                    CoverPager pageAdapter = null;
+                    if (response.body() != null) {
+                        pageAdapter = new CoverPager(getChildFragmentManager(), response.body().getData().getCoverImage());
                     }
+                    coverPager.setAdapter(pageAdapter);
+                    indicator.setViewPager(coverPager);
+
+                    SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
+
+                    DisplayImageOptions options = new DisplayImageOptions.Builder().cacheOnDisk(true).cacheInMemory(true).resetViewBeforeLoading(false).build();
+
+                    ImageLoader loader = ImageLoader.getInstance();
+                    loader.displayImage(response.body().getData().getUserImage(), profileimage, options);
+                    // loader.displayImage(response.body().getData().getUserImage() , profileimg);
+
+                    name.setText(response.body().getData().getUserName());
+                    youthId.setText(Html.fromHtml("Youth Live ID: <b>" + response.body().getData().getYouthLiveId() + "</b>"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 
                 //  } else {
@@ -571,7 +564,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
             }
 
             @Override
-            public void onFailure(Call<loginResponseBean> call, Throwable t) {
+            public void onFailure(@NonNull Call<loginResponseBean> call, @NonNull Throwable t) {
                 progress.setVisibility(View.GONE);
                 Log.d("error", t.toString());
             }
@@ -583,6 +576,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
     public void onActivityResult(int requestCode, final int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        int PICK_IMAGE_REQUEST1 = 1;
         if (requestCode == PICK_IMAGE_REQUEST2 && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri selectedImageUri = data.getData();
@@ -591,26 +585,35 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
             String mCurrentPhotoPath = getPath(getContext(), selectedImageUri);
 
-            File file = new File(mCurrentPhotoPath);
+            File file = null;
+            if (mCurrentPhotoPath != null) {
+                file = new File(mCurrentPhotoPath);
+            }
 
-            RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            RequestBody reqFile = null;
+            if (file != null) {
+                reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            }
 
-            body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
+            if (file != null) {
+                body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
+            }
 
             progress.setVisibility(View.VISIBLE);
 
-            final bean b = (bean) getContext().getApplicationContext();
+            final bean b = (bean) Objects.requireNonNull(getContext()).getApplicationContext();
 
 
             Call<updateProfileBean> call = b.getRetrofit().updateProfile(SharePreferenceUtils.getInstance().getString("userId"), body);
 
             call.enqueue(new retrofit2.Callback<updateProfileBean>() {
                 @Override
-                public void onResponse(Call<updateProfileBean> call, retrofit2.Response<updateProfileBean> response) {
+                public void onResponse(@NonNull Call<updateProfileBean> call, @NonNull retrofit2.Response<updateProfileBean> response) {
 
                     //b.userImage = response.body().getData().getUserImage();
-                    SharePreferenceUtils.getInstance().putString("userImage", "response.body().getData().getUserImage()");
-
+                    if (response.body() != null) {
+                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
+                    }
 
 
                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -621,7 +624,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 }
 
                 @Override
-                public void onFailure(Call<updateProfileBean> call, Throwable t) {
+                public void onFailure(@NonNull Call<updateProfileBean> call, @NonNull Throwable t) {
                     progress.setVisibility(View.GONE);
                 }
             });
@@ -635,25 +638,35 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
             String mCurrentPhotoPath = getPath(getContext(), selectedImageUri);
 
-            File file = new File(mCurrentPhotoPath);
+            File file = null;
+            if (mCurrentPhotoPath != null) {
+                file = new File(mCurrentPhotoPath);
+            }
 
-            RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            RequestBody reqFile = null;
+            if (file != null) {
+                reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            }
 
-            body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
+            if (file != null) {
+                body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
+            }
 
             progress.setVisibility(View.VISIBLE);
 
-            final bean b = (bean) getContext().getApplicationContext();
+            final bean b = (bean) Objects.requireNonNull(getContext()).getApplicationContext();
 
 
             Call<loginResponseBean> call = b.getRetrofit().addCover(SharePreferenceUtils.getInstance().getString("userId"), "", body);
 
             call.enqueue(new retrofit2.Callback<loginResponseBean>() {
                 @Override
-                public void onResponse(Call<loginResponseBean> call, retrofit2.Response<loginResponseBean> response) {
+                public void onResponse(@NonNull Call<loginResponseBean> call, @NonNull retrofit2.Response<loginResponseBean> response) {
 
                     //b.userImage = response.body().getData().getUserImage();
-                    SharePreferenceUtils.getInstance().putString("userImage", "response.body().getData().getUserImage()");
+                    if (response.body() != null) {
+                        SharePreferenceUtils.getInstance().putString("userImage", response.body().getData().getUserImage());
+                    }
 
                     Toast.makeText(getContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     loadData(SharePreferenceUtils.getInstance().getString("userId"));
@@ -663,7 +676,7 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
                 }
 
                 @Override
-                public void onFailure(Call<loginResponseBean> call, Throwable t) {
+                public void onFailure(@NonNull Call<loginResponseBean> call, @NonNull Throwable t) {
                     progress.setVisibility(View.GONE);
                 }
             });
@@ -676,9 +689,9 @@ public class Profile extends Fragment implements ConnectivityReceiver.Connectivi
 
     public class CoverPager extends FragmentStatePagerAdapter {
 
-        List<com.app.youthlive.loginResponsePOJO.CoverImage> list = new ArrayList<>();
+        List<com.app.youthlive.loginResponsePOJO.CoverImage> list;
 
-        public CoverPager(FragmentManager fm, List<com.app.youthlive.loginResponsePOJO.CoverImage> list) {
+        CoverPager(FragmentManager fm, List<com.app.youthlive.loginResponsePOJO.CoverImage> list) {
             super(fm);
             this.list = list;
         }

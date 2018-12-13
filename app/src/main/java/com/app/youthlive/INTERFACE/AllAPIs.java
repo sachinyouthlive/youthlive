@@ -33,6 +33,7 @@ import com.app.youthlive.getConnectionPOJO.getConnectionBean;
 import com.app.youthlive.getIpdatedPOJO.getUpdatedBean;
 import com.app.youthlive.getLivePOJO.getLiveBean;
 import com.app.youthlive.giftBeanss;
+import com.app.youthlive.giftHistoryPOJO.giftHistoryBean;
 import com.app.youthlive.giftPOJO.giftBean;
 import com.app.youthlive.goLivePOJO.goLiveBean;
 import com.app.youthlive.liveBean;
@@ -42,6 +43,7 @@ import com.app.youthlive.login2POJO.login2Bean;
 import com.app.youthlive.loginResponsePOJO.loginResponseBean;
 import com.app.youthlive.newpasswordPOJO.NewPassword;
 import com.app.youthlive.otpPOJO.otpBean;
+import com.app.youthlive.redeemHistoryPOJO.redeemHistoryBean;
 import com.app.youthlive.reportPOJO.reportBean;
 import com.app.youthlive.requestConnectionPOJO.requestConnectionBean;
 import com.app.youthlive.searchlistPOJO.SearchListPOJO;
@@ -122,6 +124,20 @@ public interface AllAPIs {
 
     );
 
+    @Multipart
+    @POST("api/getGiftsHistory.php")
+    Call<giftHistoryBean> getgiftshistory(
+            @Part("userId") Integer userId
+
+    );
+
+    @Multipart
+    @POST("api/getRedeemHistory.php")
+    Call<redeemHistoryBean> getRedeemHistory(
+            @Part("userId") Integer userId
+
+    );
+
     // post diamond purchase data
     @Multipart
     @POST("api/user_add_diamonds.php")
@@ -151,6 +167,22 @@ public interface AllAPIs {
     @POST("api/resend_code.php")
     Call<loginResponseBean> resend(
             @Part("phone") String phone
+    );
+
+    @Multipart
+    @POST("api/exchange_beans_diamond.php")
+    Call<loginResponseBean> exchangeBeansToDiamond(
+            @Part("userId") String userId,
+            @Part("beans") String beans,
+            @Part("diamond") String diamond
+    );
+
+    @Multipart
+    @POST("api/redeemCoins.php")
+    Call<loginResponseBean> redeemCoins(
+            @Part("userId") String userId,
+            @Part("beans") String beans,
+            @Part("diamond") String diamond
     );
 
     @Multipart
